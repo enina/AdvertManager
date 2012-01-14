@@ -16,21 +16,21 @@ create table author (
     id INT NOT NULL AUTO_INCREMENT,
     authorName varchar(256) not null ,
     email      varchar(256) not null ,
-    PRIMARY KEY (id));
+    CONSTRAINT AUTHOR_PK PRIMARY KEY (id));
 
 create table affiliate (
     id INT NOT NULL AUTO_INCREMENT,
     affiliateName varchar(256) not null ,
     email         varchar(256) not null ,
-    PRIMARY KEY (id));
+    CONSTRAINT AFFILIATE_PK PRIMARY KEY (id));
 
 create table product_group (
     id INT NOT NULL AUTO_INCREMENT,
     affiliate_id int not null ,
     group_name  varchar(256),
     description varchar(256),
-    PRIMARY KEY (id),
-    FOREIGN KEY (affiliate_id) REFERENCES affiliate(id) ON DELETE CASCADE);
+    CONSTRAINT PRODUCT_GROUP_PK PRIMARY KEY (id),
+    CONSTRAINT PRODUCT_GROUP_AFFILIATE_FK FOREIGN KEY (affiliate_id) REFERENCES affiliate(id) ON DELETE CASCADE);
 
 create table product (
     id INT NOT NULL AUTO_INCREMENT,
