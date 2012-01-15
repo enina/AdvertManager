@@ -42,7 +42,7 @@ create table product (
     sync_status  int not null,
     product_link varchar(256) not null,
     redirect_link varchar(256) not null,
-    PRIMARY KEY (id),
+    CONSTRAINT PRODUCT_PK PRIMARY KEY (id),
     FOREIGN KEY (product_group_id)  REFERENCES product_group(id) ON DELETE CASCADE,
     FOREIGN KEY (author_id) REFERENCES author(id) ON DELETE CASCADE);
 
