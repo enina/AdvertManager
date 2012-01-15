@@ -1,6 +1,5 @@
-/conf/doc/
-/conf/tools/
+/conf/ext
 /web/WEB-INF/lib/*.jar
-nbproject/**/*
+nbproject/private/*
 /build/
 /dist/
