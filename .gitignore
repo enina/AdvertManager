@@ -1,10 +1,6 @@
-
-/nbproject/private/
 /conf/doc/
 /conf/tools/
 /web/WEB-INF/lib/*.jar
-nbproject/build-impl.xml
-nbproject/genfiles.properties
+nbproject/**/*
 /build/
 /dist/
-nbproject/project.properties
