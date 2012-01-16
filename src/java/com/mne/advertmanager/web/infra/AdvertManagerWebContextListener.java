@@ -20,7 +20,13 @@ public class AdvertManagerWebContextListener  extends ContextLoaderListener {
 
     @Override
     public void contextInitialized(ServletContextEvent event) {
-        super.contextInitialized(event);
+        int x =0;
+        try {
+            super.contextInitialized(event);
+            x=1;
+        }catch(Exception ex) {
+            x=2;
+        }
     }
     
 }

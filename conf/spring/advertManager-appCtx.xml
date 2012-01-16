@@ -49,14 +49,21 @@
     </bean>
     
     
-    <bean id="advertManagerGenericDao" class="com.mne.advertmanager.dao.GenericDaoHibernateImpl" abstract="true">
+    <bean id="advertManagerGenericDao"  class="com.mne.advertmanager.dao.GenericDaoHibernateImpl" 
+                                        abstract="true" scope="prototype">
         <property name="sessionFactory">
             <ref bean="advertManagerSessionFactory"/>
         </property>
     </bean>
     
     <bean id="advertManagerProductService" class="com.mne.advertmanager.service.ProductService">
-        <property name="productDao" ref="advertManagerGenericDao"/>
+        <property name="productDao">
+            <ref name="advertManagerGenericDao">
+                <constructor-arg >
+                    <value type="java.lang.Class">com.mne.advertmanager.model.Product</value>
+                </constructor-arg>
+            </ref>               
+        </property>
     </bean>
     
     <bean id="advertManagerTxManager" class="org.springframework.transaction.jta.JtaTransactionManager"/>
