@@ -5,6 +5,7 @@
 package com.mne.advertmanager.dao;
 
 import java.io.Serializable;
+import java.util.Collection;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
@@ -21,20 +22,31 @@ public class GenericDaoHibernateImpl<T, PK extends Serializable> implements Gene
         this.type = type;
     }
 
+    @Override
+    @SuppressWarnings(value = "unchecked")
     public PK create(T o) {
         return (PK) getSession().save(o);
     }
 
+    @Override
+    @SuppressWarnings(value = "unchecked")
     public T read(PK id) {
         return (T) getSession().get(type, id);
     }
 
+    @Override
     public void update(T o) {
         getSession().update(o);
     }
 
+    @Override
     public void delete(T o) {
         getSession().delete(o);
+    }
+    
+    @Override
+    public Collection<T> findByQuery(String queryName,Object ...params) {
+        return null;
     }
     
 
@@ -47,5 +59,10 @@ public class GenericDaoHibernateImpl<T, PK extends Serializable> implements Gene
 
     private Session getSession() {
         return sessionFactory.getCurrentSession();
+    }
+
+    @Override
+    public Collection<T> findByExample(T example) {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 }

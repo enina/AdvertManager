@@ -25,12 +25,6 @@
               
               
 
-    <bean id="config" class="org.springframework.beans.factory.config.PropertyOverrideConfigurer">
-        <property name="ignoreInvalidKeys" value="true"/>
-        <property name="ignoreResourceNotFound" value="true" />
-        <property name="locations" />
-    </bean>
-  
     <context:property-override  
                 ignoreInvalidKeys="true" 
                 ignoreResourceNotFound="true"
@@ -55,16 +49,14 @@
     </bean>
     
     
-    <bean id="abstractDao" class="com.mne.advertmanager.dao.GenericDaoHibernateImpl" abstract="true">
+    <bean id="advertManagerGenericDao" class="com.mne.advertmanager.dao.GenericDaoHibernateImpl" abstract="true">
         <property name="sessionFactory">
             <ref bean="advertManagerSessionFactory"/>
         </property>
     </bean>
     
-    <bean id="advertManagerProductDao" parent="abstractDao" class="com.mne.advertmanager.dao.ProductDaoImpl"/>
-    
     <bean id="advertManagerProductService" class="com.mne.advertmanager.service.ProductService">
-        <property name="productDao" ref="advertManagerProductDao"/>
+        <property name="productDao" ref="advertManagerGenericDao"/>
     </bean>
     
     <bean id="advertManagerTxManager" class="org.springframework.transaction.jta.JtaTransactionManager"/>

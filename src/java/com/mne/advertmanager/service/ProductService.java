@@ -4,7 +4,10 @@
  */
 package com.mne.advertmanager.service;
 
-import com.mne.advertmanager.dao.ProductDaoImpl;
+import com.mne.advertmanager.api.Product;
+import com.mne.advertmanager.dao.GenericDao;
+
+
 
 /**
  *
@@ -12,9 +15,9 @@ import com.mne.advertmanager.dao.ProductDaoImpl;
  */
 public class ProductService {
     
-    private ProductDaoImpl productDao;
+    private GenericDao<Product,Long> productDao;
 
-    public void setProductDao(ProductDaoImpl productDao) {
+    public void setProductDao(GenericDao<Product,Long> productDao) {
         this.productDao = productDao;
     }
     
