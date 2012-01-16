@@ -5,6 +5,7 @@
 package com.mne.advertmanager.dao;
 
 import java.io.Serializable;
+import java.util.Collection;
 
 /**
  *
@@ -25,4 +26,8 @@ public interface GenericDao <T, PK extends Serializable> {
 
     /** Remove an object from persistent storage in the database */
     void delete(T persistentObject);
+    
+    public Collection<T> findByQuery(String queryName,Object ...params);
+    
+    public Collection<T> findByExample(T example);
 }
