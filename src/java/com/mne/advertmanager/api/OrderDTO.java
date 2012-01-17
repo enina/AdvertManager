@@ -8,6 +8,6 @@ package com.mne.advertmanager.api;
  *
  * @author tieboss
  */
-public class Order {
+public class OrderDTO {
     
 }
