@@ -4,7 +4,7 @@
  */
 package com.mne.advertmanager.service;
 
-import com.mne.advertmanager.api.Product;
+import com.mne.advertmanager.model.Product;
 import com.mne.advertmanager.dao.GenericDao;
 
 
