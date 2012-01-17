@@ -15,9 +15,12 @@
   <logger name="org.hibernate" level="error">
       <appender-ref ref="STDOUT" />
   </logger>
+  
   <logger name="org.hibernate.SQL" level="error">
       <appender-ref ref="STDOUT" />
   </logger>
+  
+  <logger name="org.springframework.security" level="DEBUG"/>  
   
   
 </configuration>

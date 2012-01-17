@@ -36,7 +36,7 @@
         <property name="hibernateProperties">
             <value>
                 hibernate.dialect=org.hibernate.dialect.MySQLInnoDBDialect
-                hibernate.show_sql=true
+                hibernate.show_sql=false
             </value>
         </property>
     </bean>
