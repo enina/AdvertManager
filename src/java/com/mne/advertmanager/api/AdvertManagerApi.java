@@ -9,11 +9,11 @@ package com.mne.advertmanager.api;
  * @author tieboss
  */
 public interface AdvertManagerApi {
-    public Author[] getAuthors();
-    public Product  getProduct(int productId);
-    public Product[] getAllProducts();
-    public Order     getOrder(int orderId);
-    public Order[]   getAllOrders();
+    public AuthorDTO[] getAuthors();
+    public ProductDTO  getProduct(int productId);
+    public ProductDTO[] getAllProducts();
+    public OrderDTO     getOrder(int orderId);
+    public OrderDTO[]   getAllOrders();
     public int       getTotalAccessNumber();
-    public Access[]  getAccessBulk(int first,int last);
+    public AccessDTO[]  getAccessBulk(int first,int last);
 }
