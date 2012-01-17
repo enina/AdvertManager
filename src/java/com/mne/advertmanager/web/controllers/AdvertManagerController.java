@@ -52,7 +52,7 @@ public class AdvertManagerController {
         }.start();
         
         ModelAndView mav = new ModelAndView();
-        mav.setViewName("AdManFront");
+        mav.setViewName("adman");
         mav.addObject("message", "Greetings from AdMan DataGen .Dummy Data is being generated!");
         return mav;
     }
