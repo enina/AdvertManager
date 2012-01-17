@@ -1,0 +1,17 @@
+.graphicBar { 
+    color:blue;
+    background-color: blue;
+}
+.affTable {
+	border-width: 1px;
+	border-style: solid;
+	border-color: black;
+        border-collapse:collapse;
+}
+
+.affTd {
+	border-width: 1px;
+	border-style: solid;
+	border-color: black;
+    padding:10px;
+}

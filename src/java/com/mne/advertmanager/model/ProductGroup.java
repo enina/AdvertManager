@@ -6,6 +6,7 @@ package com.mne.advertmanager.model;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.HashSet;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -38,7 +39,6 @@ public class ProductGroup implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @NotNull
     @Column(name = "id")
     private Integer id;
     @Size(max = 256)
@@ -54,9 +54,11 @@ public class ProductGroup implements Serializable {
     private Affiliate affiliateId;
 
     public ProductGroup() {
+        productCollection = new HashSet<Product>();
     }
 
     public ProductGroup(Integer id) {
+        super();
         this.id = id;
     }
 
@@ -123,6 +125,10 @@ public class ProductGroup implements Serializable {
     @Override
     public String toString() {
         return "com.mne.advertmanager.model.ProductGroup[ id=" + id + " ]";
+    }
+
+    public void addProduct(Product curProd) {
+        productCollection.add(curProd);
     }
     
 }

@@ -6,6 +6,7 @@ package com.mne.advertmanager.dao;
 
 import java.io.Serializable;
 import java.util.Collection;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
@@ -43,10 +44,22 @@ public class GenericDaoHibernateImpl<T, PK extends Serializable> implements Gene
     public void delete(T o) {
         getSession().delete(o);
     }
+    @Override
+    public void flush() {
+        getSession().flush();
+    }
+
     
     @Override
+    @SuppressWarnings("unchecked")
     public Collection<T> findByQuery(String queryName,Object ...params) {
-        return null;
+       Query q =  getSession().getNamedQuery(queryName);
+       int i =0;
+       for (Object o:params) {
+        q.setEntity(i, o);
+        ++i;
+       }
+       return q.list();
     }
     
 
