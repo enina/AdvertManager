@@ -5,7 +5,9 @@
 package com.mne.advertmanager.model;
 
 import java.io.Serializable;
+import java.util.Collection;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -15,9 +17,11 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -35,11 +39,14 @@ import javax.validation.constraints.Size;
     @NamedQuery(name = "Product.findByProductLink", query = "SELECT p FROM Product p WHERE p.productLink = :productLink"),
     @NamedQuery(name = "Product.findByRedirectLink", query = "SELECT p FROM Product p WHERE p.redirectLink = :redirectLink")})
 public class Product implements Serializable {
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "productId")
+    private Collection<AccessLog> accessLogCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "productId")
+    private Collection<PurchaseOrder> purchaseOrderCollection;
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @NotNull
     @Column(name = "id")
     private Integer id;
     @Size(max = 256)
@@ -185,6 +192,24 @@ public class Product implements Serializable {
     @Override
     public String toString() {
         return "com.mne.advertmanager.model.Product[ id=" + id + " ]";
+    }
+
+    @XmlTransient
+    public Collection<AccessLog> getAccessLogCollection() {
+        return accessLogCollection;
+    }
+
+    public void setAccessLogCollection(Collection<AccessLog> accessLogCollection) {
+        this.accessLogCollection = accessLogCollection;
+    }
+
+    @XmlTransient
+    public Collection<PurchaseOrder> getPurchaseOrderCollection() {
+        return purchaseOrderCollection;
+    }
+
+    public void setPurchaseOrderCollection(Collection<PurchaseOrder> purchaseOrderCollection) {
+        this.purchaseOrderCollection = purchaseOrderCollection;
     }
     
 }

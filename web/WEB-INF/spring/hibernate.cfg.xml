@@ -1,11 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
 <hibernate-configuration>
-    <property name="cache.provider_class">net.sf.ehcache.hibernate.EhCacheProvider</property>
-    <property name="cache.use_query_cache">true</property>
-    <mapping class="com.mne.advertmanager.model.Affiliate"/>
-    <mapping class="com.mne.advertmanager.model.Author"/>
-    <mapping class="com.mne.advertmanager.model.Product"/>
-    <mapping class="com.mne.advertmanager.model.ProductGroup"/>
-    
+    <session-factory>
+        <property name="cache.provider_class">net.sf.ehcache.hibernate.EhCacheProvider</property>
+        <property name="cache.use_query_cache">true</property>
+        <property name="cache.use_second_level_cache">true</property>
+        <property name="cache.use_structured_entries">true</property>
+        <property name="cache.region.factory_class">org.hibernate.cache.EhCacheRegionFactory</property>
+
+        <mapping class="com.mne.advertmanager.model.Affiliate"/>
+        <mapping class="com.mne.advertmanager.model.Author"/>
+        <mapping class="com.mne.advertmanager.model.Partner"/>        
+        <mapping class="com.mne.advertmanager.model.Product"/>
+        <mapping class="com.mne.advertmanager.model.ProductGroup"/>
+        <mapping class="com.mne.advertmanager.model.PurchaseOrder"/>
+        <mapping class="com.mne.advertmanager.model.AccessSource"/>        
+        <mapping class="com.mne.advertmanager.model.AccessLog"/>
+    </session-factory>
 </hibernate-configuration>

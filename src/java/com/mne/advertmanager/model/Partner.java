@@ -5,9 +5,8 @@
 package com.mne.advertmanager.model;
 
 import java.io.Serializable;
-import java.util.Collection;
+import java.util.Date;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -15,23 +14,27 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
  * @author Nina Eidelshtein and Misha Lebedev
  */
 @Entity
-@Table(name = "affiliate")
+@Table(name = "partner")
+@XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Affiliate.findAll", query = "SELECT a FROM Affiliate a"),
-    @NamedQuery(name = "Affiliate.findById", query = "SELECT a FROM Affiliate a WHERE a.id = :id"),
-    @NamedQuery(name = "Affiliate.findByAffiliateName", query = "SELECT a FROM Affiliate a WHERE a.affiliateName = :affiliateName"),
-    @NamedQuery(name = "Affiliate.findByEmail", query = "SELECT a FROM Affiliate a WHERE a.email = :email")})
-public class Affiliate implements Serializable {
+    @NamedQuery(name = "Partner.findAll", query = "SELECT p FROM Partner p"),
+    @NamedQuery(name = "Partner.findById", query = "SELECT p FROM Partner p WHERE p.id = :id"),
+    @NamedQuery(name = "Partner.findByPaymentTransferTime", query = "SELECT p FROM Partner p WHERE p.paymentTransferTime = :paymentTransferTime"),
+    @NamedQuery(name = "Partner.findByPaymentAmount", query = "SELECT p FROM Partner p WHERE p.paymentAmount = :paymentAmount"),
+    @NamedQuery(name = "Partner.findByEmail", query = "SELECT p FROM Partner p WHERE p.email = :email")})
+public class Partner implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,28 +43,31 @@ public class Affiliate implements Serializable {
     private Integer id;
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 256)
-    @Column(name = "affiliateName")
-    private String affiliateName;
+    @Column(name = "payment_transfer_time")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date paymentTransferTime;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "payment_amount")
+    private int paymentAmount;
     // @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="Invalid email")//if the field contains email address consider using this annotation to enforce field validation
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 256)
     @Column(name = "email")
     private String email;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "affiliateId")
-    private Collection<ProductGroup> productGroupCollection;
 
-    public Affiliate() {
+    public Partner() {
     }
 
-    public Affiliate(Integer id) {
+    public Partner(Integer id) {
         this.id = id;
     }
 
-    public Affiliate(Integer id, String affiliateName, String email) {
+    public Partner(Integer id, Date paymentTransferTime, int paymentAmount, String email) {
         this.id = id;
-        this.affiliateName = affiliateName;
+        this.paymentTransferTime = paymentTransferTime;
+        this.paymentAmount = paymentAmount;
         this.email = email;
     }
 
@@ -73,12 +79,20 @@ public class Affiliate implements Serializable {
         this.id = id;
     }
 
-    public String getAffiliateName() {
-        return affiliateName;
+    public Date getPaymentTransferTime() {
+        return paymentTransferTime;
     }
 
-    public void setAffiliateName(String affiliateName) {
-        this.affiliateName = affiliateName;
+    public void setPaymentTransferTime(Date paymentTransferTime) {
+        this.paymentTransferTime = paymentTransferTime;
+    }
+
+    public int getPaymentAmount() {
+        return paymentAmount;
+    }
+
+    public void setPaymentAmount(int paymentAmount) {
+        this.paymentAmount = paymentAmount;
     }
 
     public String getEmail() {
@@ -87,14 +101,6 @@ public class Affiliate implements Serializable {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public Collection<ProductGroup> getProductGroupCollection() {
-        return productGroupCollection;
-    }
-
-    public void setProductGroupCollection(Collection<ProductGroup> productGroupCollection) {
-        this.productGroupCollection = productGroupCollection;
     }
 
     @Override
@@ -107,10 +113,10 @@ public class Affiliate implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Affiliate)) {
+        if (!(object instanceof Partner)) {
             return false;
         }
-        Affiliate other = (Affiliate) object;
+        Partner other = (Partner) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -119,7 +125,7 @@ public class Affiliate implements Serializable {
 
     @Override
     public String toString() {
-        return "com.mne.advertmanager.model.Affiliate[ id=" + id + " ]";
+        return "com.mne.advertmanager.model.Partner[ id=" + id + " ]";
     }
     
 }

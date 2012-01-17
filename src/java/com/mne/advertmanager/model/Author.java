@@ -6,6 +6,7 @@ package com.mne.advertmanager.model;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.HashSet;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -36,7 +37,6 @@ public class Author implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @NotNull
     @Column(name = "id")
     private Integer id;
     @Basic(optional = false)
@@ -54,9 +54,11 @@ public class Author implements Serializable {
     private Collection<Product> productCollection;
 
     public Author() {
+        productCollection = new HashSet<Product>();
     }
 
     public Author(Integer id) {
+        super();
         this.id = id;
     }
 
@@ -121,6 +123,10 @@ public class Author implements Serializable {
     @Override
     public String toString() {
         return "com.mne.advertmanager.model.Author[ id=" + id + " ]";
+    }
+
+    public void addProduct(Product curProd) {
+       productCollection.add(curProd);
     }
     
 }

@@ -30,4 +30,6 @@ public interface GenericDao <T, PK extends Serializable> {
     public Collection<T> findByQuery(String queryName,Object ...params);
     
     public Collection<T> findByExample(T example);
+    
+    public void flush();
 }
