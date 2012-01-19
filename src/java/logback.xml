@@ -20,7 +20,9 @@
       <appender-ref ref="STDOUT" />
   </logger>
   
-  <logger name="org.springframework.security" level="DEBUG"/>  
+  <logger name="org.springframework.security" level="DEBUG">
+    <appender-ref ref="STDOUT" />
+  </logger>
   
   
 </configuration>

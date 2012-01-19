@@ -12,11 +12,11 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <LINK href="css/adman.css" rel="stylesheet" type="text/css">
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <%@ include file="commonheader.jsp" %>
         <title>Affiliates</title>
     </head>
     <body>
+        <%@ include file="toolbar.jsp" %>
         <table border="1" class="affTable">
           <c:forEach items="${data}" var="affiliate">
             <tr>
@@ -31,5 +31,6 @@
                 </td>
           </c:forEach>
         </table>
+        <%@ include file="toolbar.jsp" %>
     </body>
 </html>

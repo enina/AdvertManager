@@ -78,16 +78,17 @@ public class DataGenService {
             rowCounter++;
         }
         
-//////////////////////////////////////////////////////////////////////////////////////////////        
+        //////////////////////////////////////////////////////////////////////////////////////////////        
         ArrayList<ProductGroup> pgList = new ArrayList<ProductGroup>();
         for (int i = 0; i < 10;++i) {
             ProductGroup curProdGroup = entityFactory.makeProductGroup();
-            curProdGroup.setAffiliateId(affList.get(i%5));
+            curProdGroup.setAffiliateId(affList.get(i%affList.size()));
             pgList.add(curProdGroup);        
             productGroupDao.create(curProdGroup);
             rowCounter++;
         }
-//////////////////////////////////////////////////////////////////////////////////////////////                
+        
+        //////////////////////////////////////////////////////////////////////////////////////////////                
         ArrayList<Author> authorSet = new ArrayList<Author>();
         for (int i = 0; i < 10;++i) {
             Author curAuthor = entityFactory.makeAuthor();
@@ -95,13 +96,14 @@ public class DataGenService {
             authorDao.create(curAuthor);
             rowCounter++;
         }
-//////////////////////////////////////////////////////////////////////////////////////////////        
+        
+        //////////////////////////////////////////////////////////////////////////////////////////////        
         ArrayList<Product> productSet = new ArrayList<Product>();
         for (int i = 0; i < 100;++i) {
             Product curProd = entityFactory.makeProduct();
             productSet.add(curProd);
-            curProd.setAuthorId(authorSet.get(i/10));
-            curProd.setProductGroupId(pgList.get(i/10));
+            curProd.setAuthorId(authorSet.get(i/authorSet.size()));
+            curProd.setProductGroupId(pgList.get(i/pgList.size()));
             productDao.create(curProd);
             rowCounter++;
         }
@@ -109,7 +111,7 @@ public class DataGenService {
         productDao.flush();
         
         
-        /////////////////////////////////////////////////////////////////////////////////////////////////////        
+        ///////////////////////////////////////////////////////////////////////////////////////////////        
         ArrayList<AccessSource> accessSourceList = new ArrayList<AccessSource>();
         for (int i = 0; i < 10;++i) {
             AccessSource curAccessSource = entityFactory.makeAccessSource();
@@ -117,14 +119,14 @@ public class DataGenService {
             accessSourceDao.create(curAccessSource);
         }
         
-        /////////////////////////////////////////////////////////////////////////////////////////////////////        
+        ///////////////////////////////////////////////////////////////////////////////////////////////        
         ArrayList<AccessLog> accessLogList = new ArrayList<AccessLog>();
         ArrayList<PurchaseOrder> orderList = new ArrayList<PurchaseOrder>();
         for (int i = 0; i < 100000;++i) {
             AccessLog curAccessLog = entityFactory.makeAccessLog();
-            Product curProduct  = productSet.get(i%100);
+            Product curProduct  = productSet.get(i%productSet.size());
             curAccessLog.setProductId(curProduct);
-            curAccessLog.setSourceDomainId(accessSourceList.get(i%10));
+            curAccessLog.setSourceDomainId(accessSourceList.get(i%accessSourceList.size()));
             accessLogList.add(curAccessLog);  
             accessLogDao.create(curAccessLog);
             rowCounter++;

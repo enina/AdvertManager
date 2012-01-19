@@ -12,10 +12,11 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Advert Manager</title>
+    <%@ include file="commonheader.jsp" %>
+    <title>Advert Manager</title>
     </head>
     <body>
+        <%@ include file="toolbar.jsp" %>
         <h1>
 		<fmt:message key="welcome.title"/>
 	</h1>
@@ -24,5 +25,6 @@
         </p>                
         <div> <a href="/AdvertManager/dataGen.do">Generate Data</a></div>
         <div> <a href="/AdvertManager/affiliates.do">Affiliates</a></div>
+        <%@ include file="toolbar.jsp" %>
   </body>
 </html>

@@ -7,5 +7,5 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <%
-request.getServletContext().getRequestDispatcher("/home.do").forward(request, response);
+response.sendRedirect("home.do");
 %>

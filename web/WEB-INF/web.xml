@@ -5,10 +5,10 @@
         <param-value>/WEB-INF/spring/*appCtx.xml</param-value>
     </context-param>
     
-<!--
+
     <context-param>
         <param-name>webAppRootKey</param-name>
-        <param-value>tutorial.root</param-value>
+        <param-value>addman.root</param-value>
     </context-param>
 
     <filter>
@@ -19,7 +19,8 @@
     <filter-mapping>
       <filter-name>springSecurityFilterChain</filter-name>
       <url-pattern>/*</url-pattern>
-    </filter-mapping> -->
+    </filter-mapping> 
+    
     <listener>
         <listener-class>com.mne.advertmanager.web.infra.AdvertManagerWebContextListener</listener-class>
     </listener>
