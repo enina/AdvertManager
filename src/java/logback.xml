@@ -24,5 +24,10 @@
     <appender-ref ref="STDOUT" />
   </logger>
   
+  <logger name="org.springframework.security.core.userdetails.jdbc.JdbcDaoImpl" level="DEBUG">
+    <appender-ref ref="STDOUT" />
+  </logger>
+  
+  
   
 </configuration>

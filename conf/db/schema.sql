@@ -2,15 +2,27 @@ DROP SCHEMA IF EXISTS advert_manager_schema;
 CREATE  SCHEMA IF NOT EXISTS advert_manager_schema;
 use advert_manager_schema;
 SET storage_engine=innodb;
-drop table if exists affiliate_to_product  CASCADE;
-drop table if exists purchase_order CASCADE;
-drop table if exists access_log  CASCADE;
-drop table if exists product  CASCADE;
-drop table if exists author CASCADE;
-drop table if exists product_group  CASCADE;
-drop table if exists affiliate  CASCADE;
-drop table if exists partner  CASCADE;
-drop table if exists access_source  CASCADE;
+
+------------------ application tables --------------
+drop table if exists affiliate_to_product   CASCADE;
+drop table if exists purchase_order         CASCADE;
+drop table if exists access_log             CASCADE;
+drop table if exists product                CASCADE;
+drop table if exists author                 CASCADE;
+drop table if exists product_group          CASCADE;
+drop table if exists affiliate              CASCADE;
+drop table if exists partner                CASCADE;
+drop table if exists access_source          CASCADE;
+------------------ application tables --------------
+
+---------- spring security tables ------------------
+drop table if exists users              CASCADE;
+drop table if exists authorities        CASCADE;
+drop table if exists groups             CASCADE;
+drop table if exists group_authorities  CASCADE;
+drop table if exists group_members      CASCADE;
+---------- spring security tables ------------------
+
 
 create table author (
     id INT NOT NULL AUTO_INCREMENT,
@@ -92,3 +104,52 @@ create table partner (
     email         varchar(256) not null ,
     PRIMARY KEY (id));
 
+
+--------------------------------------------------- Spring Security tables ---------------------------------------------------
+create table users(
+    username varchar(50) not null primary key,
+    password varchar(50) not null,
+    enabled boolean not null);
+
+create table authorities (
+    username varchar(50) not null,
+    authority varchar(50) not null,
+    constraint fk_authorities_users foreign key(username) references users(username));
+
+create unique index ix_auth_username on authorities (username,authority);
+
+create table groups (
+    id int not null auto_increment,
+    group_name varchar(50) not null,
+    CONSTRAINT group_PK PRIMARY KEY (id));
+
+create table group_authorities (
+    group_id int not null,
+    authority varchar(50) not null,
+    constraint fk_group_authorities_group foreign key(group_id) references groups(id));
+
+create table group_members (
+    id int not null auto_increment,
+    username varchar(50) not null,
+    group_id int not null,
+    CONSTRAINT group_members_PK PRIMARY KEY (id),
+    constraint fk_group_members_group foreign key(group_id) references groups(id));
+------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------default data-------------------------------------------------------------------------------
+insert into users values ('ilya','ilya',1);
+insert into users values ('nina','nina',1);
+insert into users values ('misha','misha',1);
+insert into users values ('root','admin',1);
+insert into users values ('vasya','vasya',1);
+insert into users values ('hacker','hacker',0);
+insert into authorities values ('ilya', 'ROLE_USER');
+insert into authorities values ('ilya', 'ROLE_ADMIN');
+insert into authorities values ('nina', 'ROLE_USER');
+insert into authorities values ('nina', 'ROLE_ADMIN');
+insert into authorities values ('misha', 'ROLE_USER');
+insert into authorities values ('misha', 'ROLE_ADMIN');
+insert into authorities values ('root', 'ROLE_ADMIN');
+insert into authorities values ('vasya', 'ROLE_USER');
+insert into authorities values ('hacker', 'ROLE_USER');
+insert into authorities values ('hacker', 'ROLE_ADMIN');
+-----------------------------------default data-------------------------------------------------------------------------------

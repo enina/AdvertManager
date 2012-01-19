@@ -26,6 +26,8 @@
              adopt a whitelisting approach where access is not allowed by default
           -->
         <form-login />
+        <!--<form-login login-page='/index.jsp' default-target-url='/home.htm'  always-use-default-target='true' />-->
+        
         <logout logout-success-url="/loggedout.jsp" delete-cookies="JSESSIONID"/>
         <remember-me />
 <!--
@@ -47,7 +49,7 @@
         peter/opal
     -->
     <beans:bean id="encoder" class="org.springframework.security.crypto.password.StandardPasswordEncoder"/>
-
+    <!--
     <authentication-manager>
         <authentication-provider>
             <password-encoder ref="encoder"/>
@@ -59,5 +61,14 @@
             </user-service>
         </authentication-provider>
     </authentication-manager>
+    -->
+
+    <authentication-manager>
+        <authentication-provider user-service-ref='myUserDetailsService'/>
+    </authentication-manager>
+
+    <beans:bean id="myUserDetailsService" class="org.springframework.security.core.userdetails.jdbc.JdbcDaoImpl">
+        <beans:property name="dataSource" ref="advertManagerC3P0DataSource"/>
+    </beans:bean>
 
 </beans:beans>
