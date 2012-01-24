@@ -28,7 +28,7 @@
         <form-login />
         <!--<form-login login-page='/index.jsp' default-target-url='/home.htm'  always-use-default-target='true' />-->
         
-        <logout logout-success-url="/loggedout.jsp" delete-cookies="JSESSIONID"/>
+        <logout invalidate-session="true" logout-success-url="/loggedout.jsp" delete-cookies="JSESSIONID"/>
         <remember-me />
 <!--
     Uncomment to enable X509 client authentication support

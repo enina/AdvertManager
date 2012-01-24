@@ -12,11 +12,11 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <%@ include file="commonheader.jsp" %>
+        <%@include file="commonheader.jsp" %>
         <title>Affiliates</title>
     </head>
     <body>
-        <%@ include file="toolbar.jsp" %>
+        <%@include file="toolbar.jsp" %>
         <table border="1" class="affTable">
           <c:forEach items="${data}" var="affiliate">
             <tr>
@@ -29,6 +29,7 @@
                 <td align="left" class="affTd">
                     <c:out value="${affiliate.email}" />
                 </td>
+             </tr>   
           </c:forEach>
         </table>
         <%@ include file="toolbar.jsp" %>

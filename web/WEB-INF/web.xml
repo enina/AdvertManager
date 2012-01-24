@@ -8,7 +8,7 @@
 
     <context-param>
         <param-name>webAppRootKey</param-name>
-        <param-value>addman.root</param-value>
+        <param-value>adman.root</param-value>
     </context-param>
 
     <filter>
@@ -24,6 +24,9 @@
     <listener>
         <listener-class>com.mne.advertmanager.web.infra.AdvertManagerWebContextListener</listener-class>
     </listener>
+    <listener>
+	<listener-class>org.springframework.security.web.session.HttpSessionEventPublisher</listener-class>
+    </listener>    
     <session-config>
         <session-timeout>
             30
