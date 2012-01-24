@@ -26,6 +26,7 @@ public class AdvertManagerController {
     private static Logger logger = LoggerFactory.getLogger(AdvertManagerController.class);
     private DataGenService   dataGenerator;
     private AffiliateService affiliateService;
+    private static final String AFF_REQ_MAPPING = "affiliates";
 
 
     
@@ -37,11 +38,7 @@ public class AdvertManagerController {
     
     @RequestMapping("home")
     public ModelAndView generateHome() {
-        ModelAndView mav = new ModelAndView();
-        mav.setViewName("adman");
-        mav.addObject("message", "Greetings from AdMan !");
-        logger.info("forwarding to view: adman");
-        return mav;
+        return  forwardToView("home","adman","message","Greetings from AdMan !");
     }
     
     
@@ -55,19 +52,22 @@ public class AdvertManagerController {
             }
         }.start();
         
-        ModelAndView mav = new ModelAndView();
-        mav.setViewName("adman");
-        mav.addObject("message", "Greetings from AdMan DataGen .Dummy Data is being generated!");
-        return mav;
+        return  forwardToView("dataGen","adman","message","Greetings from AdMan DataGen .Dummy Data is being generated!");
     }
     
-    @RequestMapping("affiliates")
+    @RequestMapping(AFF_REQ_MAPPING)
     public ModelAndView viewAffiliates() {
         
-        ModelAndView mav = new ModelAndView();
         Collection<Affiliate> affiliates = affiliateService.findAllAffiliates();
-        mav.setViewName("affiliate");
-        mav.addObject("data", affiliates);
+
+        return  forwardToView(AFF_REQ_MAPPING ,"affiliate","data",affiliates);
+    }
+
+    private ModelAndView forwardToView(String requestMapping , String viewName,String key,Object data) {
+        ModelAndView mav = new ModelAndView();
+        mav.setViewName(viewName);
+        mav.addObject(key, data);
+        logger.info("{} --> {}",requestMapping,viewName);
         return mav;
     }
     
