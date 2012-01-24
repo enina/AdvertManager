@@ -8,6 +8,8 @@ import com.mne.advertmanager.model.Affiliate;
 import com.mne.advertmanager.service.AffiliateService;
 import com.mne.advertmanager.service.DataGenService;
 import java.util.Collection;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,7 +23,7 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping("/")
 public class AdvertManagerController {
     
-    
+    private static Logger logger = LoggerFactory.getLogger(AdvertManagerController.class);
     private DataGenService   dataGenerator;
     private AffiliateService affiliateService;
 
@@ -29,6 +31,7 @@ public class AdvertManagerController {
     
     @RequestMapping("/")
     public String redirect() { 
+        logger.info("redirecting to home page");
         return "redirect:home.do/";
     }
     
@@ -37,6 +40,7 @@ public class AdvertManagerController {
         ModelAndView mav = new ModelAndView();
         mav.setViewName("adman");
         mav.addObject("message", "Greetings from AdMan !");
+        logger.info("forwarding to view: adman");
         return mav;
     }
     

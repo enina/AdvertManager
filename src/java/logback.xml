@@ -1,4 +1,4 @@
-<configuration debug="true"> 
+<configuration scan="true"> 
 
   <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender"> 
     <!-- encoders are  by default assigned the type
@@ -12,22 +12,22 @@
     <appender-ref ref="STDOUT" />
   </root>
   
-  <logger name="org.hibernate" level="error">
-      <appender-ref ref="STDOUT" />
-  </logger>
   
-  <logger name="org.hibernate.SQL" level="error">
-      <appender-ref ref="STDOUT" />
-  </logger>
+  <logger name="com.mne" level="debug"/>
   
-  <logger name="org.springframework.security" level="DEBUG">
-    <appender-ref ref="STDOUT" />
-  </logger>
+  <logger name="org.hibernate.SQL" level="debug"/>
+
   
-  <logger name="org.springframework.security.core.userdetails.jdbc.JdbcDaoImpl" level="DEBUG">
-    <appender-ref ref="STDOUT" />
-  </logger>
+  <logger name="org.hibernate" level="error"/>
   
   
+  <logger name="org.springframework" level="error"/>
+  
+  <logger name="org.springframework.web" level="info"/>
+
+  
+  <logger name="com.mchange" level="debug"/>
+  
+  <logger name="org.springframework.security.core.userdetails.jdbc.JdbcDaoImpl" level="DEBUG"/>
   
 </configuration>
