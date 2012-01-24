@@ -29,6 +29,9 @@
         <property name="password" value="admin1234"/>
     </bean>
 
+<!--    <bean id="advertManagerSessionFactory" class="com.mne.adman.test.DummySessionFactory">
+    </bean>-->
+
     <bean id="advertManagerSessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
         <property name="dataSource" ref="advertManagerC3P0DataSource"/>
         
