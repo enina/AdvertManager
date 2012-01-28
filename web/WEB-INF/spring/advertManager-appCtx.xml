@@ -45,8 +45,7 @@
     </bean>
     
     
-    <bean id="adManGenericDao"  class="com.mne.advertmanager.dao.GenericDaoHibernateImpl" 
-                                        abstract="true" scope="prototype">
+    <bean id="adManGenericDao"  class="com.mne.advertmanager.dao.GenericDaoHibernateImpl" abstract="true" scope="prototype">
         <property name="sessionFactory">
             <ref bean="advertManagerSessionFactory"/>
         </property>
@@ -94,11 +93,25 @@
         </constructor-arg>
     </bean>
     
+    <bean id="userDao"  parent="adManGenericDao" class="com.mne.advertmanager.dao.GenericDaoHibernateImpl" >
+        <constructor-arg >
+            <value type="java.lang.Class">com.mne.advertmanager.model.User</value>
+        </constructor-arg>
+    </bean>
+    
+    
     <bean id="advertManagerProductService" class="com.mne.advertmanager.service.ProductService">
         <property name="productDao">
             <ref bean="productDao"/>
         </property>
     </bean>
+    
+    <bean id="adManUserService" class="com.mne.advertmanager.service.UserService">
+        <property name="userDao">
+            <ref bean="userDao"/>
+        </property>
+    </bean>
+    
     
     <bean id="adManEntityFactory" class="com.mne.advertmanager.util.EntityFactory"/>
     
