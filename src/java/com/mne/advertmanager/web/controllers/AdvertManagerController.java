@@ -87,12 +87,21 @@ public class AdvertManagerController {
     }    
     
     @RequestMapping(value=ADDUSER_REQ_MAPPING, method = RequestMethod.POST)
-    public String addUser(@ModelAttribute("user")User user) {
+    public ModelAndView addUser(@ModelAttribute("user")User user) {
         
-        userService.createUser(user);
+        String errMsg=null;
+        try {
+            userService.createUser(user);
+        }catch(Exception e) {
+            errMsg=" Exception:"+e.getClass().getSimpleName()+ ((e.getMessage()==null)?"":" ,Message:"+e.getMessage());
+        }
         
+        ModelAndView mav = viewUsers();
         
-        return  "redirect:"+USERS_REQ_MAPPING+".do";
+        mav.addObject("status", (errMsg!=null)?"failed to create user:"+user.getUsername()+errMsg:
+                                                         "User:"+user.getUsername()+" created successfully");
+
+        return  mav;
     }
 
     private ModelAndView forwardToView(String requestMapping , String viewName,String key,Object data) {

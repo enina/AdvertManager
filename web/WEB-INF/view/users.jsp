@@ -17,6 +17,9 @@
     </head>
     <body>
         <%@include file="toolbar.jsp" %>
+        <c:if test="${status!=null}">
+            <div style="color:red"><c:out value="${status}"/></div>
+        </c:if>    
         <table border="1" class="affTable">
           <c:forEach items="${data}" var="user">
             <tr>
