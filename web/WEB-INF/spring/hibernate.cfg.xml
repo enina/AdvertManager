@@ -16,5 +16,6 @@
         <mapping class="com.mne.advertmanager.model.PurchaseOrder"/>
         <mapping class="com.mne.advertmanager.model.AccessSource"/>        
         <mapping class="com.mne.advertmanager.model.AccessLog"/>
+        <mapping class="com.mne.advertmanager.model.User"/>
     </session-factory>
 </hibernate-configuration>

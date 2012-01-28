@@ -25,6 +25,8 @@
         </p>                
         <div> <a href="/AdvertManager/dataGen.do">Generate Data</a></div>
         <div> <a href="/AdvertManager/affiliates.do">Affiliates</a></div>
+        <div> <a href="/AdvertManager/registration.do">Register New User</a></div>
+        <div> <a href="/AdvertManager/users.do">Show All Users</a></div>
         <%@ include file="toolbar.jsp" %>
   </body>
 </html>
