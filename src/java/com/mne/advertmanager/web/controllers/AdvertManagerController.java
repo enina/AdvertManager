@@ -31,11 +31,17 @@ public class AdvertManagerController {
     private DataGenService   dataGenerator;
     private AffiliateService affiliateService;
     private UserService userService;
-    private static final String AFF_REQ_MAPPING = "affiliates";
-    private static final String REG_REQ_MAPPING = "registration";
-    private static final String ADDUSER_REQ_MAPPING = "addUser";
-    private static final String USERS_REQ_MAPPING = "users";
+    private static final String USERS = "users";
+    private static final String AFFILIATES = "affiliates";
+    private static final String DATAGEN = "dataGen";
+    
+    private static final String AFF_LIST_REQ_MAPPING = AFFILIATES+"/list";
+    private static final String DG_GEN_REQ_MAPPING = DATAGEN+"/generate";
 
+    
+    private static final String USER_LIST_REQ_MAPPING = USERS+"/list";    
+    private static final String USER_NEW_REQ_MAPPING = USERS+"/new";    
+    private static final String USER_ADD_REQ_MAPPING = USERS+"/add";
 
     
     @RequestMapping("/")
@@ -44,63 +50,64 @@ public class AdvertManagerController {
         return "redirect:home.do/";
     }
     
-    @RequestMapping("home")
-    public ModelAndView generateHome() {
-        return  forwardToView("home","adman","message","Greetings from AdMan !");
+    @RequestMapping(value="home", method = RequestMethod.GET)
+    public @ModelAttribute("message") String generateHome() {
+        return  "Greetings from AdMan !";
     }
     
     
     
-    @RequestMapping("dataGen")
+    @RequestMapping(value=DG_GEN_REQ_MAPPING, method = RequestMethod.GET)
     public ModelAndView generateData() {
         new Thread() {
             @Override
             public void run() {
+                setName(DATAGEN+"Thread");
                 dataGenerator.generateDummyData();
             }
         }.start();
         
-        return  forwardToView("dataGen","adman","message","Greetings from AdMan DataGen .Dummy Data is being generated!");
+        return  forwardToView(DG_GEN_REQ_MAPPING,"home","message","Greetings from AdMan DataGen .Dummy Data is being generated!");
     }
     
-    @RequestMapping(AFF_REQ_MAPPING)
-    public ModelAndView viewAffiliates() {
+    @RequestMapping(value=AFF_LIST_REQ_MAPPING, method = RequestMethod.GET)
+    public @ModelAttribute("data") Collection<Affiliate> viewAffiliates() {
         
         Collection<Affiliate> affiliates = affiliateService.findAllAffiliates();
 
-        return  forwardToView(AFF_REQ_MAPPING ,"affiliate","data",affiliates);
+        return  affiliates;
     }
     
-    @RequestMapping(REG_REQ_MAPPING)
-    public ModelAndView viewRegistrationForm() {
+    @RequestMapping(value=USER_NEW_REQ_MAPPING, method = RequestMethod.GET)
+    public @ModelAttribute("user") User viewRegistrationForm() {
         
-        return  forwardToView(REG_REQ_MAPPING ,REG_REQ_MAPPING,"command",new User());
+        return  new User();
     }    
     
     
-    @RequestMapping(USERS_REQ_MAPPING)
-    public ModelAndView viewUsers() {
+    @RequestMapping(value=USER_LIST_REQ_MAPPING,method = RequestMethod.GET)
+    public @ModelAttribute("data") Collection<User> viewUsers() {
         
         Collection<User> users = userService.findAllUsers();
 
-        return  forwardToView(USERS_REQ_MAPPING ,USERS_REQ_MAPPING,"data",users);
+        return  users;
     }    
     
-    @RequestMapping(value=ADDUSER_REQ_MAPPING, method = RequestMethod.POST)
+    @RequestMapping(value=USER_ADD_REQ_MAPPING, method = RequestMethod.POST)
     public ModelAndView addUser(@ModelAttribute("user")User user) {
         
         String errMsg=null;
         try {
             userService.createUser(user);
         }catch(Exception e) {
-            errMsg=" Exception:"+e.getClass().getSimpleName()+ ((e.getMessage()==null)?"":" ,Message:"+e.getMessage());
+            errMsg=" Exception:"+e.getClass().getSimpleName()+ ((e.getMessage()==null)?"":
+                   " ,Message:"+e.getMessage());
         }
         
-        ModelAndView mav = viewUsers();
+        ModelAndView mav = forwardToView(USER_ADD_REQ_MAPPING,USER_LIST_REQ_MAPPING,"data",viewUsers());
         
         mav.addObject("status", (errMsg!=null)?"failed to create user:"+user.getUsername()+errMsg:
-                                                         "User:"+user.getUsername()+" created successfully");
-
+                                               "User:"+user.getUsername()+" created successfully");
         return  mav;
     }
 
@@ -126,6 +133,5 @@ public class AdvertManagerController {
     public void setUserService(UserService userService) {
         this.userService = userService;
     }
-
-    
+   
 }

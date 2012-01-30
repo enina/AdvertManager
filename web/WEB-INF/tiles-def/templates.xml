@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE tiles-definitions PUBLIC
+       "-//Apache Software Foundation//DTD Tiles Configuration 2.0//EN"
+       "http://tiles.apache.org/dtds/tiles-config_2_0.dtd">
+
+<tiles-definitions>
+
+    <!-- Default Main Template -->
+    <definition name=".mainTemplate" template="/WEB-INF/view/common/main.jsp">
+        <put-attribute name="title" value="Adman" type="string" />
+        <put-attribute name="header" value="/WEB-INF/view/common/header.jsp" />
+        <put-attribute name="footer" value="/WEB-INF/view/common/menu.jsp" />
+        <put-attribute name="menu" value="/WEB-INF/view/common/menu.jsp" />
+        <put-attribute name="content" value="/WEB-INF/view/common/blank.jsp" />
+    </definition>
+   
+   <definition name="home" extends=".mainTemplate">
+       <put-attribute name="content" value="/WEB-INF/view/home.jsp" />
+   </definition>
+   
+   <definition name="affiliates/list" extends=".mainTemplate">
+       <put-attribute name="title" value="Affiliates" type="string" />
+       <put-attribute name="content" value="/WEB-INF/view/affiliates/list.jsp" />
+   </definition>
+
+   <definition name="users/new" extends=".mainTemplate">
+       <put-attribute name="title" value="User Registration" type="string" />
+       <put-attribute name="content" value="/WEB-INF/view/users/new.jsp" />
+   </definition>
+
+   <definition name="users/list" extends=".mainTemplate">
+       <put-attribute name="title" value="Users" type="string" />
+       <put-attribute name="content" value="/WEB-INF/view/users/list.jsp" />
+   </definition>
+
+</tiles-definitions>

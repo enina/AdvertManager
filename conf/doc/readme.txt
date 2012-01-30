@@ -1,5 +1,5 @@
 Technology and 3-rd party libraries
-    Using Spring,Hibernate,Spring Web-Flow 2 , MySQL,CXF .
+    Using Spring,Hibernate,Spring WebMVC , MySQL,CXF .
     Investigate security issues using WS-Security standard
     Investigate  git repository using github
     API should be implemented as a standard compliant web service as 
