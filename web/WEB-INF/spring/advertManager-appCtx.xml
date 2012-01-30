@@ -27,6 +27,8 @@
         <property name="jdbcUrl" value="jdbc:mysql://localhost:3306/mysql"/>
         <property name="user" value="admin"/>
         <property name="password" value="admin1234"/>
+        <property name="maxIdleTime" value="6000"/>
+        
     </bean>
 
 <!--    <bean id="advertManagerSessionFactory" class="com.mne.adman.test.DummySessionFactory">

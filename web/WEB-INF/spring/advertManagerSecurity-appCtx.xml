@@ -17,6 +17,7 @@
 
     <http pattern="/css/**" security="none"/>
     <http pattern="/loggedout.jsp" security="none"/>
+    <!--http pattern="/*.do" security="none"/-->
 
     <http use-expressions="true">
         <intercept-url pattern="/secure/**" access="hasRole('supervisor')"/>

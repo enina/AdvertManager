@@ -3,3 +3,6 @@
 nbproject/private/*
 /build/
 /dist/
+
+setup/glassfish-resources.xml
+web/META-INF/context.xml
