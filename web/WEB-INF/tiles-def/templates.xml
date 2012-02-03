@@ -8,7 +8,7 @@
     <!-- Default Main Template -->
     <definition name=".mainTemplate" template="/WEB-INF/view/common/main.jsp">
         <put-attribute name="title" value="Adman" type="string" />
-        <put-attribute name="header" value="/WEB-INF/view/common/header.jsp" />
+        <put-attribute name="header" value="/WEB-INF/view/common/blank.jsp" />
         <put-attribute name="footer" value="/WEB-INF/view/common/menu.jsp" />
         <put-attribute name="menu" value="/WEB-INF/view/common/menu.jsp" />
         <put-attribute name="content" value="/WEB-INF/view/common/blank.jsp" />

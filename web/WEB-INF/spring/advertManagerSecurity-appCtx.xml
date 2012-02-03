@@ -21,7 +21,7 @@
 
     <http use-expressions="true">
         <intercept-url pattern="/secure/**" access="hasRole('supervisor')"/>
-        <intercept-url pattern="/*.do/**" access="isAuthenticated()" />
+        <intercept-url pattern="/**/*.do/**" access="isAuthenticated()" />
         <!--
              Allow all other requests. In a real application you should
              adopt a whitelisting approach where access is not allowed by default

@@ -69,9 +69,28 @@
 
     -->
     
-    <!--target name="-pre-dist">
-        <copy todir="${build.dir}/web/WEB-INF/conf/spring">
-           <fileset dir="conf/spring" />
+    <target name="-pre-dist">
+        <copy todir="${build.dir}/web/WEB-INF/classes">
+            <fileset dir="web/WEB-INF/" includes="logback.xml" />
         </copy>
-    </target-->
+        <jar destfile="${build.dir}/web/apps/parsergen.jar">
+            <fileset dir="${build.dir}/web/WEB-INF/classes/" includes="com/mne/advertmanager/parsergen/**"/>
+            <fileset dir="${build.dir}/web/WEB-INF/classes/" includes="com/mne/advertmanager/util/JSoupTransport.class" />
+            <manifest>
+                <attribute name="Main-Class"  value="com.mne.advertmanager.parsergen.ParserGenMainFrame"/>
+                <attribute name="Class-Path"  value="jsoup-1.6.1.jar"/>
+            </manifest>            
+        </jar>
+        <copy todir="${build.dir}/web/apps/extlib">
+            <fileset dir="${build.dir}/web/WEB-INF/lib" includes="jsoup-1.6.1.jar" />
+        </copy>
+        <signjar jar="${build.dir}/web/apps/parsergen.jar" 
+                 alias="mne"  storepass="mneAdMan" />
+                 
+        <signjar jar="${build.dir}/web/apps/extlib/jsoup-1.6.1.jar" 
+                 alias="mne"  storepass="mneAdMan" />
+                 
+    </target>
+    
+    
 </project>
