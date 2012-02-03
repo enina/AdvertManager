@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jnlp spec="1.0+" codebase="" href="">
+    <information>
+        <title>
+            ParserGen
+        </title>
+        <vendor>
+            MNE
+        </vendor>
+    </information>
+    <security>
+      <all-permissions/>
+    </security>    
+    <resources>
+        <j2se version="1.6+" initial-heap-size="512m" max-heap-size="512m"/>
+        <jar href="http://friedmanspace:8080/AdvertManager/apps/extlib/jsoup-1.6.1.jar" download="eager"/>
+        <jar href="http://friedmanspace:8080/AdvertManager/apps/parsergen.jar" download="eager"/>
+    </resources>
+    <application-desc main-class="com.mne.advertmanager.parsergen.ParserGenMainFrame"/>
+
+</jnlp>
