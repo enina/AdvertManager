@@ -32,5 +32,7 @@
        <put-attribute name="title" value="Users" type="string" />
        <put-attribute name="content" value="/WEB-INF/view/users/list.jsp" />
    </definition>
+   
+   <definition name="apps/parsergen" template="/WEB-INF/view/apps/parsergen.jsp"/>
 
 </tiles-definitions>

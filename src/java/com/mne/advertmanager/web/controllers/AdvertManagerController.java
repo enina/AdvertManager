@@ -10,6 +10,7 @@ import com.mne.advertmanager.service.AffiliateService;
 import com.mne.advertmanager.service.DataGenService;
 import com.mne.advertmanager.service.UserService;
 import java.util.Collection;
+import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +35,10 @@ public class AdvertManagerController {
     private static final String USERS = "users";
     private static final String AFFILIATES = "affiliates";
     private static final String DATAGEN = "dataGen";
+    private static final String APPS = "apps";
+    
+
+    private static final String APPS_PARSERGEN_REQ_MAPPING = APPS+"/parsergen";
     
     private static final String AFF_LIST_REQ_MAPPING = AFFILIATES+"/list";
     private static final String DG_GEN_REQ_MAPPING = DATAGEN+"/generate";
@@ -77,6 +82,13 @@ public class AdvertManagerController {
 
         return  affiliates;
     }
+    @RequestMapping(value=APPS_PARSERGEN_REQ_MAPPING, method = RequestMethod.GET)
+    public @ModelAttribute("codebase") String launchParserGenerator(HttpServletRequest request) {
+        
+        String codebase="http://"+request.getServerName()+":"+request.getServerPort()+request.getServletContext().getContextPath()+"/apps";
+
+        return  codebase;
+    }    
     
     @RequestMapping(value=USER_NEW_REQ_MAPPING, method = RequestMethod.GET)
     public @ModelAttribute("user") User viewRegistrationForm() {
