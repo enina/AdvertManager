@@ -15,7 +15,6 @@ public class DataSpec extends SelectableItem{
 
     private String dataURL;
     private String method;
-
     private String listEntrySelector;
     
     private Map<String,SelectableItem> subItems =  new HashMap<String,SelectableItem>();
@@ -71,6 +70,17 @@ public class DataSpec extends SelectableItem{
 
     public void setListEntrySelector(String listEntrySelector) {
         this.listEntrySelector = listEntrySelector;
+    }
+
+    @Override
+    public boolean isValid() {
+        
+        boolean result = super.isValid() && isStringValid(dataURL) && isStringValid(listEntrySelector);
+        
+        for (SelectableItem si:subItems.values())
+            result  = result && si.isValid();
+        
+        return result;
     }
     
     

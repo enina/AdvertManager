@@ -6,9 +6,9 @@
             <c:out value="${affiliate.id}" />
         </td>
         <td class="affTd" align="left">
-            <c:out value="${affiliate.affiliateName}" escapeXml="false"/>
+            <c:out value="${affiliate.affiliateName}"/>
         </td>
-        <td align="left" class="affTd">
+        <td class="affTd" align="left" >
             <c:out value="${affiliate.email}" />
         </td>
         </tr>   

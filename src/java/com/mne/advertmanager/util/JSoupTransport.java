@@ -32,7 +32,7 @@ public class JSoupTransport {
                 result = con.get();
             }
         } catch (IOException ex) {
-            logger.log(Level.SEVERE, "failed to retrieved url:" + docUrl, ex);
+            logger.log(Level.SEVERE, "failed to retrieved url {0}:::Exception {1}:::Message {2}" ,new Object[]{ docUrl, ex.getClass().getSimpleName(),ex.getMessage()});
         }
         return result;
     }
@@ -63,7 +63,7 @@ public class JSoupTransport {
 
             return result;
         } catch (Exception e) {
-            logger.log(Level.SEVERE, "authentication failure", e);
+            logger.log(Level.SEVERE, "authentication failure::: Exception {0}:::Message {1}" ,new Object[]{e.getClass().getSimpleName(),e.getMessage()});
             return null;
         }
     }
@@ -74,9 +74,8 @@ public class JSoupTransport {
                 con.url(proj.getLogoutUrl());
                 con.get();
             }
-        } catch (IOException ex) {
-            logger.log(Level.SEVERE, "failed to logout", ex);
+        } catch (IOException e) {
+            logger.log(Level.SEVERE, "failed to logout::: Exception {0}:::Message {1}" ,new Object[]{e.getClass().getSimpleName(),e.getMessage()});
         }
-
     }
 }
