@@ -17,7 +17,7 @@
         <td class="affTd" align="left">
             <c:out value="${user.password}"/>
         </td>
-        <td align="left" class="affTd">
+        <td class="affTd" align="left" >
             <c:out value="${user.enabled}" />
         </td>
         </tr>   

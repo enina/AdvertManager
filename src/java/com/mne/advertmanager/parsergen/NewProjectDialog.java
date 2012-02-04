@@ -8,6 +8,10 @@ import com.mne.advertmanager.parsergen.model.Project;
 import com.mne.advertmanager.util.JSoupTransport;
 import java.io.File;
 import javax.swing.JFileChooser;
+import javax.swing.JTextField;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.text.AbstractDocument;
 import org.jsoup.Connection;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -18,22 +22,43 @@ import org.jsoup.nodes.Element;
  */
 public class NewProjectDialog extends javax.swing.JDialog {
 
-    private boolean isBaseUrlComplete = false;
-    private boolean isUserNameComplete = false;
-    private boolean isUserFieldComplete = false;
-    private boolean isPasswordComplete = false;
-    private boolean isPasswordFieldComplete = false;
+    private boolean isBaseUrlComplete = true;
+    private boolean isUserNameComplete = true;
+    private boolean isUserFieldComplete = true;
+    private boolean isPasswordComplete = true;
+    private boolean isPasswordFieldComplete = true;
     private boolean isHomeFolderComplete = false;
-    private boolean isTestabale = isBaseUrlComplete & isUserNameComplete & isUserFieldComplete & isPasswordComplete & isPasswordFieldComplete;
+    private boolean isCookieComplete = true;
+    private boolean isLoginUrlComplete = true;
+    private boolean isLogoutUrlComplete = true;
+    private boolean isSelectorComplete = true;
+    private boolean isTestabale = false;
     private boolean isInputComplete = isTestabale & isHomeFolderComplete;
-    private Project curProject;
+    private Project project;
+    
 
     public NewProjectDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
-        curProject = new Project();
+        project = new Project();
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        initComponents();
 
+        initComponents();
+        
+        txtBaseUrl.getDocument().addDocumentListener(new BaseURLSelectorDocListener());
+        txtCookie.getDocument().addDocumentListener(new CookieDocListener());
+        txtLoginFormURL.getDocument().addDocumentListener(new LoginFormURLDocListener());
+        txtLogoutURL.getDocument().addDocumentListener(new LogoutURLDocListener());
+        txtPassword.getDocument().addDocumentListener(new PasswordDocListener());
+        txtPasswordField.getDocument().addDocumentListener(new PasswordFieldDocListener());
+        txtSelector.getDocument().addDocumentListener(new SelectorDocListener());
+        txtUserField.getDocument().addDocumentListener(new UserFieldDocListener());
+        txtUserName.getDocument().addDocumentListener(new UserDocListener());
+        JTextField[] textFields = new  JTextField[]{txtBaseUrl,txtCookie,txtLoginFormURL,txtLogoutURL,txtPassword,txtPasswordField,txtSelector,txtUserField,txtUserName};
+        
+        for(JTextField tf:textFields)
+            tf.setText(tf.getText());
+        
+        
     }
 
     /**
@@ -47,7 +72,6 @@ public class NewProjectDialog extends javax.swing.JDialog {
         lblMethod = new javax.swing.JLabel();
         cmbMethod = new javax.swing.JComboBox();
         btnTestConnection = new javax.swing.JButton();
-        lblStatus = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         btnCreate = new javax.swing.JButton();
         lblHomeFolder = new javax.swing.JLabel();
@@ -69,7 +93,9 @@ public class NewProjectDialog extends javax.swing.JDialog {
         jLabel1 = new javax.swing.JLabel();
         txtLoginFormURL = new javax.swing.JFormattedTextField();
         lblLogout = new javax.swing.JLabel();
-        txtLogout = new javax.swing.JTextField();
+        txtLogoutURL = new javax.swing.JTextField();
+        jPanel1 = new javax.swing.JPanel();
+        lblStatus = new javax.swing.JLabel();
 
         setTitle("New project");
         setLocationByPlatform(true);
@@ -89,8 +115,6 @@ public class NewProjectDialog extends javax.swing.JDialog {
             }
         });
 
-        lblStatus.setText("Status");
-
         btnCreate.setText("Create");
         btnCreate.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -109,11 +133,6 @@ public class NewProjectDialog extends javax.swing.JDialog {
 
         txtUserName.setText("vasya");
         txtUserName.setToolTipText("enter user name");
-        txtUserName.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
-            public void propertyChange(java.beans.PropertyChangeEvent evt) {
-                onUserNameChange(evt);
-            }
-        });
 
         lblPassword.setText("Password");
 
@@ -121,47 +140,22 @@ public class NewProjectDialog extends javax.swing.JDialog {
 
         txtUserField.setText("j_username");
         txtUserField.setToolTipText("enter username field name");
-        txtUserField.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
-            public void propertyChange(java.beans.PropertyChangeEvent evt) {
-                onUserFieldNameChange(evt);
-            }
-        });
 
         txtPassword.setText("vasya");
         txtPassword.setToolTipText("enter password");
-        txtPassword.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
-            public void propertyChange(java.beans.PropertyChangeEvent evt) {
-                onPasswordChange(evt);
-            }
-        });
 
         lblPasswordField.setText("Password field name");
 
         txtPasswordField.setText("j_password");
         txtPasswordField.setToolTipText("enter password field name");
-        txtPasswordField.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
-            public void propertyChange(java.beans.PropertyChangeEvent evt) {
-                onPasswordFieldChange(evt);
-            }
-        });
 
         txtBaseUrl.setText("http://localhost:8080/AdvertManager");
         txtBaseUrl.setToolTipText("enter base url");
-        txtBaseUrl.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtBaseUrlActionPerformed(evt);
-            }
-        });
-        txtBaseUrl.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
-            public void propertyChange(java.beans.PropertyChangeEvent evt) {
-                onBaseUrlChange(evt);
-            }
-        });
 
         lblBaseUrl.setLabelFor(txtBaseUrl);
         lblBaseUrl.setText("Base Url");
 
-        btnSelectHome.setLabel("Select Home ");
+        btnSelectHome.setText("Select Home");
         btnSelectHome.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 onSelect(evt);
@@ -183,7 +177,24 @@ public class NewProjectDialog extends javax.swing.JDialog {
 
         lblLogout.setText("Logout URL");
 
-        txtLogout.setText("j_spring_security_logout");
+        txtLogoutURL.setText("j_spring_security_logout");
+
+        jPanel1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
+
+        lblStatus.setText("Status");
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(lblStatus, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(lblStatus))
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -192,48 +203,49 @@ public class NewProjectDialog extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(lblCookie)
-                        .addGap(28, 28, 28)
-                        .addComponent(txtCookie))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblUserField)
-                            .addComponent(lblUser, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(63, 63, 63)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtUserField)
-                            .addComponent(txtUserName)))
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(btnSelectHome)
-                            .addComponent(lblBaseUrl)
                             .addComponent(lblMethod)
-                            .addComponent(btnTestConnection)
-                            .addComponent(lblPasswordField)
-                            .addComponent(lblPassword)
+                            .addComponent(lblCookie)
+                            .addComponent(lblUser, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblUserField)
+                            .addComponent(lblBaseUrl)
                             .addComponent(jLabel1)
-                            .addComponent(lblLogout))
-                        .addGap(30, 30, 30)
+                            .addComponent(lblLogout)
+                            .addComponent(lblPassword)
+                            .addComponent(lblPasswordField))
+                        .addGap(31, 31, 31)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblHomeFolder, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(txtPassword)
-                            .addComponent(txtPasswordField)
-                            .addComponent(txtBaseUrl, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(txtLoginFormURL)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(cmbMethod, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(lblSelector)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(txtUserField)
+                                    .addComponent(txtUserName, javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(txtCookie, javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(lblHomeFolder, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(txtBaseUrl)
+                                    .addComponent(txtLoginFormURL, javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                        .addComponent(cmbMethod, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(lblSelector)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(txtSelector))
+                                    .addComponent(txtLogoutURL, javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                        .addComponent(btnCreate)
+                                        .addGap(0, 0, Short.MAX_VALUE)))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtSelector, javax.swing.GroupLayout.DEFAULT_SIZE, 170, Short.MAX_VALUE))
+                                .addComponent(jLabel5))
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(btnCreate)
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addComponent(txtLogout)))
-                    .addComponent(lblStatus, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel5)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(txtPasswordField)
+                                    .addComponent(txtPassword))
+                                .addGap(6, 6, 6))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(btnTestConnection)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -244,57 +256,62 @@ public class NewProjectDialog extends javax.swing.JDialog {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(jLabel5)
-                        .addGap(167, 167, 167))
+                        .addGap(7, 7, 7))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(btnSelectHome, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(lblHomeFolder, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(6, 6, 6)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(lblMethod)
-                            .addComponent(cmbMethod, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblSelector)
-                            .addComponent(txtSelector, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtBaseUrl, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblBaseUrl))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(6, 6, 6)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(cmbMethod, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(lblSelector)
+                                    .addComponent(txtSelector, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(lblMethod)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtLoginFormURL, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel1))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblBaseUrl)
+                            .addComponent(txtBaseUrl, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1)
+                            .addComponent(txtLoginFormURL, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lblLogout)
-                            .addComponent(txtLogout, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txtLogoutURL, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lblCookie)
                             .addComponent(txtCookie, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lblUser)
                             .addComponent(txtUserName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lblUserField)
                             .addComponent(txtUserField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lblPassword)
                             .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lblPasswordField)
                             .addComponent(txtPasswordField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(btnTestConnection)
-                            .addComponent(btnCreate))
-                        .addGap(18, 18, 18)
-                        .addComponent(lblStatus)
-                        .addContainerGap())))
+                            .addComponent(btnCreate))))
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
+
+        layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {txtCookie, txtLogoutURL});
 
         jLabel5.getAccessibleContext().setAccessibleName("statusMessage");
 
@@ -303,18 +320,8 @@ public class NewProjectDialog extends javax.swing.JDialog {
 
     private void onTestConnection(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onTestConnection
 
-        curProject.setBaseURL(txtBaseUrl.getText());
-        curProject.setUserField(txtUserField.getText());
-        curProject.setUsername(txtUserName.getText());
-        curProject.setPasswordField(txtPasswordField.getText());
-        curProject.setPassword(new String(txtPassword.getPassword()));
-        curProject.setMethod(cmbMethod.getSelectedItem().toString());
-        curProject.setSelector(txtSelector.getText());
-        curProject.setCookieName(txtCookie.getText());
-        curProject.setLoginFormUrl(txtLoginFormURL.getText());
-        curProject.setLogoutUrl(txtLogout.getText());
-
-        String status = validateSetupData(curProject);
+  
+        String status = validateSetupData(project);
 
         lblStatus.setText(status);
     }//GEN-LAST:event_onTestConnection
@@ -324,23 +331,25 @@ public class NewProjectDialog extends javax.swing.JDialog {
         Connection con = null;
 
         try {
+            project.setValid(false);
             con = JSoupTransport.login(proj);
             if (con == null) {
-                return "Status:Failure.Failed to login";
+                return "Status:Failed to login";
             }
 
-            doc = JSoupTransport.retrieveDocument(con, proj.getBaseURL(),proj.getMethod());
+            doc = JSoupTransport.retrieveDocument(con, proj.getBaseURL(), proj.getMethod());
 
             if (doc == null) {
-                return "Status:Failure.Cannot retrieved document from url:"+proj.getBaseURL();
+                return "Status:Cannot retrieved document from url:" + proj.getBaseURL();
             }
 
 
             Element targetElem = doc.select(proj.getSelector()).first();
             if (targetElem != null) {
+                project.setValid(true);
                 return "Status:Success";
             } else {
-                return "Status:Failure.Error in URL , form , cookie or credentials data";
+                return "Status:Failed to get target content";
             }
         } catch (Exception e) {
             return "Status:Failure.Exception:" + e.getClass().getSimpleName() + ".Message:" + e.getMessage();
@@ -350,66 +359,144 @@ public class NewProjectDialog extends javax.swing.JDialog {
     }
 
     private void onCreate(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onCreate
-        System.out.println(curProject.toString());
         setVisible(false);
     }//GEN-LAST:event_onCreate
 
     private void onSelect(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onSelect
         JFileChooser fc = new JFileChooser();
         fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-        int status = fc.showOpenDialog(this);
+        fc.showOpenDialog(this);
         File homeFolder = fc.getSelectedFile();
         lblHomeFolder.setText(homeFolder.getAbsolutePath());
-
     }//GEN-LAST:event_onSelect
-
-    private void onBaseUrlChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_onBaseUrlChange
-
-        isBaseUrlComplete = txtBaseUrl.getText().length() > 0;
-        setButtonsState();
-
-    }//GEN-LAST:event_onBaseUrlChange
-
-    private void onUserNameChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_onUserNameChange
-
-        isUserNameComplete = txtUserName.getText().length() > 0;
-        setButtonsState();
-
-    }//GEN-LAST:event_onUserNameChange
-
-    private void onUserFieldNameChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_onUserFieldNameChange
-        isUserFieldComplete = txtUserField.getText().length() > 0;
-        setButtonsState();
-
-    }//GEN-LAST:event_onUserFieldNameChange
-
-    private void onPasswordChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_onPasswordChange
-        isPasswordComplete = txtPassword.getPassword().length > 0;
-        setButtonsState();
-    }//GEN-LAST:event_onPasswordChange
-
-    private void onPasswordFieldChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_onPasswordFieldChange
-        isPasswordFieldComplete = txtPasswordField.getText().length() > 0;
-        setButtonsState();
-    }//GEN-LAST:event_onPasswordFieldChange
 
     private void onHomeFolderChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_onHomeFolderChange
         isHomeFolderComplete = lblHomeFolder.getText().length() > 0;
         setButtonsState();
     }
+
     public Project getProject() {
-        return curProject;
+        return project;
     }
+
     private void setButtonsState() {
-        isTestabale = isBaseUrlComplete & isUserNameComplete & isUserFieldComplete & isPasswordComplete & isPasswordFieldComplete;
+        isTestabale = isBaseUrlComplete & isSelectorComplete & isUserNameComplete
+                      & isLoginUrlComplete & isLogoutUrlComplete & isCookieComplete
+                      & isUserNameComplete & isUserFieldComplete 
+                      & isPasswordComplete & isPasswordFieldComplete;
+
         isInputComplete = isTestabale & isHomeFolderComplete;
-        btnTestConnection.enableInputMethods(isTestabale);
-        btnCreate.enableInputMethods(isInputComplete);
+        btnTestConnection.setEnabled(isTestabale);
+        btnCreate.setEnabled(isInputComplete);
     }//GEN-LAST:event_onHomeFolderChange
 
-    private void txtBaseUrlActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBaseUrlActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtBaseUrlActionPerformed
+    private abstract class BaseDocumentListener implements DocumentListener {
+
+        @Override
+        public void changedUpdate(DocumentEvent e) {
+            updateData(e);
+        }
+
+        @Override
+        public void insertUpdate(DocumentEvent e) {
+            updateData(e);
+        }
+
+        @Override
+        public void removeUpdate(DocumentEvent e) {
+            updateData(e);
+        }
+
+        private void updateData(DocumentEvent e) {
+            if (project != null) {
+                doUpdate();
+            }
+            setButtonsState();
+        }
+
+        protected abstract void doUpdate();
+    }
+
+    private class BaseURLSelectorDocListener extends BaseDocumentListener {
+
+        @Override
+        protected void doUpdate() {
+            isBaseUrlComplete = txtBaseUrl.getText().length()>0;
+            project.setBaseURL(txtBaseUrl.getText());
+        }
+    }
+
+    private class CookieDocListener extends BaseDocumentListener {
+
+
+        @Override
+        protected void doUpdate() {
+            isCookieComplete = txtCookie.getText().length()>0;
+            project.setCookieName(txtCookie.getText());
+        }
+    }
+
+    private class LoginFormURLDocListener extends BaseDocumentListener {
+
+        @Override
+        protected void doUpdate() {
+            isLoginUrlComplete = txtLoginFormURL.getText().length()>0;
+            project.setLoginFormUrl(txtLoginFormURL.getText());
+        }
+    }
+
+    private class LogoutURLDocListener extends BaseDocumentListener {
+
+        @Override
+        protected void doUpdate() {
+            isLogoutUrlComplete = txtLogoutURL.getText().length() > 0;
+            project.setLogoutUrl(txtLogoutURL.getText());
+        }
+    }
+
+    private class PasswordDocListener extends BaseDocumentListener {
+
+        @Override
+        protected void doUpdate() {
+            isPasswordComplete = txtPassword.getPassword().length>0;
+            project.setPassword(new String(txtPassword.getPassword()));
+        }
+    }
+
+    private class PasswordFieldDocListener extends BaseDocumentListener {
+
+        @Override
+        protected void doUpdate() {
+            isPasswordFieldComplete=txtPasswordField.getText().length() > 0;
+            project.setPasswordField(txtPasswordField.getText());
+        }
+    }
+
+    private class UserDocListener extends BaseDocumentListener {
+
+        @Override
+        protected void doUpdate() {
+            isUserNameComplete = txtUserName.getText().length()>0;
+            project.setUsername(txtUserName.getText());
+        }
+    }
+
+    private class UserFieldDocListener extends BaseDocumentListener {
+        @Override
+        protected void doUpdate() {
+            isUserFieldComplete = txtUserField.getText().length()>0;
+            project.setUserField(txtUserField.getText());
+        }
+    }
+
+    private class SelectorDocListener extends BaseDocumentListener {
+        @Override
+        protected void doUpdate() {
+            isSelectorComplete = txtSelector.getText().length()>0;
+            project.setSelector(txtSelector.getText());
+        }
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCreate;
     private javax.swing.JButton btnSelectHome;
@@ -417,6 +504,7 @@ public class NewProjectDialog extends javax.swing.JDialog {
     private javax.swing.JComboBox cmbMethod;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel lblBaseUrl;
     private javax.swing.JLabel lblCookie;
     private javax.swing.JLabel lblHomeFolder;
@@ -431,13 +519,11 @@ public class NewProjectDialog extends javax.swing.JDialog {
     private javax.swing.JTextField txtBaseUrl;
     private javax.swing.JTextField txtCookie;
     private javax.swing.JFormattedTextField txtLoginFormURL;
-    private javax.swing.JTextField txtLogout;
+    private javax.swing.JTextField txtLogoutURL;
     private javax.swing.JPasswordField txtPassword;
     private javax.swing.JTextField txtPasswordField;
     private javax.swing.JTextField txtSelector;
     private javax.swing.JTextField txtUserField;
     private javax.swing.JTextField txtUserName;
     // End of variables declaration//GEN-END:variables
-
-   
 }

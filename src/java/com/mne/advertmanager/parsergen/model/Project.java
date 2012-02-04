@@ -25,6 +25,7 @@ public class Project {
     private String loginFormUrl;
     private String logoutUrl;
     private String selector;
+    private boolean isValid = false;
     
     private Map<String,DataSpec> dataSpecMap = new HashMap<String,DataSpec>();
 
@@ -133,6 +134,16 @@ public class Project {
         return dataSpecMap.get(name);
     }
 
+    public boolean isValid() {
+        return isValid;
+    }
+
+    public void setValid(boolean isValid) {
+        this.isValid = isValid;
+    }
+
+    
+    
     private void normalizeBaseUrl() {
         if (!baseURL.endsWith("/"))
             baseURL+="/";

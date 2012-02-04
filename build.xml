@@ -84,11 +84,12 @@
         <copy todir="${build.dir}/web/apps/extlib">
             <fileset dir="${build.dir}/web/WEB-INF/lib" includes="jsoup-1.6.1.jar" />
         </copy>
-        <signjar jar="${build.dir}/web/apps/parsergen.jar" 
-                 alias="mne"  storepass="mneAdMan" />
                  
-        <signjar jar="${build.dir}/web/apps/extlib/jsoup-1.6.1.jar" 
-                 alias="mne"  storepass="mneAdMan" />
+        <signjar alias="mne"  storepass="mneAdMan" preservelastmodified="true" >
+            <fileset file="${build.dir}/web/apps/extlib/jsoup-1.6.1.jar"/>
+            <fileset file="${build.dir}/web/apps/parsergen.jar"/>
+        </signjar>
+
                  
     </target>
     

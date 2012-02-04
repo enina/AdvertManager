@@ -14,7 +14,6 @@ public class SelectableItem {
     private String selector;
 
     SelectableItem() {
-        
     }
     public SelectableItem(String name) {
         this.name = name;
@@ -35,6 +34,15 @@ public class SelectableItem {
     public void setSelector(String selector) {
         this.selector = selector;
     }
+
+    public boolean isValid() {
+        return isStringValid(name) && isStringValid(selector);
+    }
+    
+    protected boolean isStringValid(String data) {
+        return data!=null && data.length()>0;
+    }
+
     
     
     
