@@ -171,7 +171,7 @@ public class ParserGenMainFrame extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jSplitPane1.setDividerLocation(180);
+        jSplitPane1.setDividerLocation(300);
         jSplitPane1.setPreferredSize(new java.awt.Dimension(336, 500));
         jSplitPane1.setRequestFocusEnabled(false);
 
@@ -218,7 +218,7 @@ public class ParserGenMainFrame extends javax.swing.JFrame {
                         .addGroup(advancedPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lblSubItem)
                             .addComponent(lblMainDataSelector))
-                        .addGap(0, 108, Short.MAX_VALUE))
+                        .addGap(0, 0, Short.MAX_VALUE))
                     .addComponent(cmbSubItem, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(231, 231, 231))
             .addComponent(txtMainSelector)
@@ -299,7 +299,7 @@ public class ParserGenMainFrame extends javax.swing.JFrame {
                         .addComponent(radioGet)
                         .addGap(18, 18, 18)
                         .addComponent(radioPost)
-                        .addGap(0, 171, Short.MAX_VALUE))))
+                        .addGap(0, 63, Short.MAX_VALUE))))
             .addComponent(txtUrl)
             .addGroup(basicPanelLayout.createSequentialGroup()
                 .addComponent(btnDisplay)
@@ -372,7 +372,7 @@ public class ParserGenMainFrame extends javax.swing.JFrame {
         openMenuItem.setText("new");
         openMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                openMenuItemActionPerformed(evt);
+                onNew(evt);
             }
         });
         menuFile.add(openMenuItem);
@@ -384,6 +384,11 @@ public class ParserGenMainFrame extends javax.swing.JFrame {
         menuFile.add(jMenuItem3);
 
         miExit.setText("exit");
+        miExit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                onExit(evt);
+            }
+        });
         menuFile.add(miExit);
 
         jMenuBar1.add(menuFile);
@@ -442,10 +447,12 @@ public class ParserGenMainFrame extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void openMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openMenuItemActionPerformed
+    private void onNew(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onNew
 
         JDialog newProjDialog = new NewProjectDialog(this, true);
 
+        newProjDialog.setLocation(this.getLocation().x+50, this.getLocation().y+70);
+        
         newProjDialog.setVisible(true);
 
         project = ((NewProjectDialog) newProjDialog).getProject();
@@ -454,7 +461,7 @@ public class ParserGenMainFrame extends javax.swing.JFrame {
         else
             lblStatus.setText("Status:Project configuration is invalid");
 
-    }//GEN-LAST:event_openMenuItemActionPerformed
+    }//GEN-LAST:event_onNew
 
     private void onEditProduct(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onEditProduct
 
@@ -614,6 +621,8 @@ public class ParserGenMainFrame extends javax.swing.JFrame {
         if (previewData != null) {
             JDialog previewDialog = new PreviewDialog(this, previewData, false);
 
+            previewDialog.setLocation(this.getLocation().x+50, this.getLocation().y+70);
+            
             previewDialog.setVisible(true);
         }
     }//GEN-LAST:event_onPreview
@@ -630,6 +639,11 @@ public class ParserGenMainFrame extends javax.swing.JFrame {
             advancedPanel.setVisible(!advancedPanel.isVisible());
         }
     }//GEN-LAST:event_onAdvancedItem
+
+    private void onExit(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onExit
+        setVisible(false);
+        dispose();
+    }//GEN-LAST:event_onExit
 
     private class SubItemSelectorDocListener extends BaseDocumentListener {
 
