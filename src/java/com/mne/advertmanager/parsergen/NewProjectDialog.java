@@ -319,6 +319,7 @@ public class NewProjectDialog extends javax.swing.JDialog {
         String status = validateSetupData(project);
 
         lblStatus.setText(status);
+        setButtonsState();
     }//GEN-LAST:event_onTestConnection
 
     private String validateSetupData(Project proj) {
@@ -365,7 +366,6 @@ public class NewProjectDialog extends javax.swing.JDialog {
 
     private void onHomeFolderChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_onHomeFolderChange
         isHomeFolderComplete = lblHomeFolder.getText().length() > 0;
-        setButtonsState();
     }
 
     public Project getProject() {
@@ -380,7 +380,7 @@ public class NewProjectDialog extends javax.swing.JDialog {
 
         isInputComplete = isTestabale & isHomeFolderComplete;
         btnTestConnection.setEnabled(isTestabale);
-        btnCreate.setEnabled(isInputComplete);
+        btnCreate.setEnabled(isInputComplete & project.isValid());
     }//GEN-LAST:event_onHomeFolderChange
 
     private abstract class BaseDocumentListener implements DocumentListener {
