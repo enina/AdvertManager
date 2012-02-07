@@ -6,3 +6,4 @@ nbproject/private/*
 
 setup/glassfish-resources.xml
 web/META-INF/context.xml
+nbproject/build-impl.xml~

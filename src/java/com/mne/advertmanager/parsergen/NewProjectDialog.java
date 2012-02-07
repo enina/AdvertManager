@@ -11,7 +11,6 @@ import javax.swing.JFileChooser;
 import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import javax.swing.text.AbstractDocument;
 import org.jsoup.Connection;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -57,8 +56,6 @@ public class NewProjectDialog extends javax.swing.JDialog {
         
         for(JTextField tf:textFields)
             tf.setText(tf.getText());
-        
-        
     }
 
     /**
@@ -319,8 +316,6 @@ public class NewProjectDialog extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void onTestConnection(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onTestConnection
-
-  
         String status = validateSetupData(project);
 
         lblStatus.setText(status);
@@ -342,8 +337,6 @@ public class NewProjectDialog extends javax.swing.JDialog {
             if (doc == null) {
                 return "Status:Cannot retrieved document from url:" + proj.getBaseURL();
             }
-
-
             Element targetElem = doc.select(proj.getSelector()).first();
             if (targetElem != null) {
                 project.setValid(true);
@@ -380,10 +373,10 @@ public class NewProjectDialog extends javax.swing.JDialog {
     }
 
     private void setButtonsState() {
-        isTestabale = isBaseUrlComplete & isSelectorComplete & isUserNameComplete
-                      & isLoginUrlComplete & isLogoutUrlComplete & isCookieComplete
-                      & isUserNameComplete & isUserFieldComplete 
-                      & isPasswordComplete & isPasswordFieldComplete;
+        isTestabale =   isBaseUrlComplete  & isSelectorComplete  & isUserNameComplete &
+                        isLoginUrlComplete & isLogoutUrlComplete & isCookieComplete   &
+                        isUserNameComplete & isUserFieldComplete & isPasswordComplete &
+                        isPasswordFieldComplete;
 
         isInputComplete = isTestabale & isHomeFolderComplete;
         btnTestConnection.setEnabled(isTestabale);

@@ -63,10 +63,11 @@ public class ParserGenMainFrame extends javax.swing.JFrame {
      * Creates new form ParserGenMainFrame
      */
     public ParserGenMainFrame() {
+
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (Exception ex) {
-            logger.log(Level.SEVERE, null, ex);
+            logger.log(Level.SEVERE, "Failed to set system look and feel {0}", ex.getClass().getSimpleName());
         }
         initComponents();
         basicPanel.setVisible(false);
@@ -451,30 +452,34 @@ public class ParserGenMainFrame extends javax.swing.JFrame {
         if (project!= null && project.isValid()) 
             displayTree(project.getBaseURL(), project.getMethod());
         else
-            lblStatus.setText("Status:Project connfiguration is invalid");
+            lblStatus.setText("Status:Project configuration is invalid");
 
     }//GEN-LAST:event_openMenuItemActionPerformed
 
     private void onEditProduct(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onEditProduct
 
-        DataSpec productSpec = new DataSpec("product");
-        productSpec.addSubItem(new SelectableItem("description"));
-        productSpec.addSubItem(new SelectableItem("price"));
-        productSpec.addSubItem(new SelectableItem("commision"));
-        productSpec.addSubItem(new SelectableItem("product_link"));
-        productSpec.addSubItem(new SelectableItem("author"));
+        if (project!= null && project.isValid()) {
+            DataSpec productSpec = new DataSpec("product");
+            productSpec.addSubItem(new SelectableItem("description"));
+            productSpec.addSubItem(new SelectableItem("price"));
+            productSpec.addSubItem(new SelectableItem("commision"));
+            productSpec.addSubItem(new SelectableItem("product_link"));
+            productSpec.addSubItem(new SelectableItem("author"));
 
-        fillComponentPanel(productSpec);
+            fillComponentPanel(productSpec);
+        }
     }//GEN-LAST:event_onEditProduct
 
     private void onEditAffiliate(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onEditAffiliate
 
-        DataSpec dataSpec = new DataSpec("Affiliate");
+        if (project != null && project.isValid()) {
+            DataSpec dataSpec = new DataSpec("Affiliate");
 
-        dataSpec.addSubItem(new SelectableItem("affiliateName"));
-        dataSpec.addSubItem(new SelectableItem("email"));
+            dataSpec.addSubItem(new SelectableItem("affiliateName"));
+            dataSpec.addSubItem(new SelectableItem("email"));
 
-        fillComponentPanel(dataSpec);
+            fillComponentPanel(dataSpec);
+        }
 
     }//GEN-LAST:event_onEditAffiliate
 
@@ -495,14 +500,15 @@ public class ParserGenMainFrame extends javax.swing.JFrame {
 
             String subItem = (String) cmbSubItem.getSelectedItem();
             DataSpec dataSpec = project.getDataSpec(curDataSpec);
-            SelectableItem subItemSpec = dataSpec.getSubItem(subItem);
-            selectorText = subItemSpec.getSelector();
+            if (dataSpec != null) {
+                SelectableItem subItemSpec = dataSpec.getSubItem(subItem);
+                selectorText = subItemSpec.getSelector();
 
-            if (selectorText == null) {
-                selectorText = "Enter sub item selector";
+                if (selectorText == null) {
+                    selectorText = "Enter sub item selector";
+                }
+                txtSubItemSelector.setText(selectorText);
             }
-
-            txtSubItemSelector.setText(selectorText);
         }
     }//GEN-LAST:event_onSubItemChange
 
@@ -575,23 +581,27 @@ public class ParserGenMainFrame extends javax.swing.JFrame {
 
         JSoupTransport.logout(con, project);
 
-        Element dataElem = doc.select(dataSpec.getSelector()).first();
-        Elements dataList = dataElem.select(dataSpec.getListEntrySelector());
+        PreviewTableModel result = null;
+        List<String> names = null;
+        ArrayList<List<String>> rows = null;
+        try {
+            Element dataElem = doc.select(dataSpec.getSelector()).first();
+            Elements dataList = dataElem.select(dataSpec.getListEntrySelector());
 
-        List<String> names = new ArrayList<String>(dataSpec.getSubItems().keySet());
-        ArrayList<List<String>> rows = new ArrayList<List<String>>();
+            names = new ArrayList<String>(dataSpec.getSubItems().keySet());
+            rows = new ArrayList<List<String>>();
 
-
-        for (int i = 0; i < dataList.size(); ++i) {
-            List<String> singleRow = new ArrayList<String>();
-            for (SelectableItem item : dataSpec.getSubItems().values()) {
-                singleRow.add(dataList.get(i).select(item.getSelector()).first().text());
+            for (int i = 0; i < dataList.size(); ++i) {
+                List<String> singleRow = new ArrayList<String>();
+                for (SelectableItem item : dataSpec.getSubItems().values()) {
+                    singleRow.add(dataList.get(i).select(item.getSelector()).first().text());
+                }
+                rows.add(singleRow);
             }
-            rows.add(singleRow);
+            result = new PreviewTableModel(names, rows);
+        }catch(Exception e) {
+            lblStatus.setText("Status:Failed to retrieve data.Review selector settings.");
         }
-
-        PreviewTableModel result = new PreviewTableModel(names, rows);
-
 
         return result;
     }
@@ -600,9 +610,11 @@ public class ParserGenMainFrame extends javax.swing.JFrame {
 
         PreviewTableModel previewData = buildPreviewTableModel(project.getDataSpec(curDataSpec));
 
-        JDialog previewDialog = new PreviewDialog(this, previewData, false);
+        if (previewData != null) {
+            JDialog previewDialog = new PreviewDialog(this, previewData, false);
 
-        previewDialog.setVisible(true);
+            previewDialog.setVisible(true);
+        }
     }//GEN-LAST:event_onPreview
 
     private void onMethodChange(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onMethodChange
@@ -612,7 +624,10 @@ public class ParserGenMainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_onMethodChange
 
     private void onAdvancedItem(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onAdvancedItem
-        advancedPanel.setVisible(!advancedPanel.isVisible());
+        
+        if (project != null && project.isValid()) {
+            advancedPanel.setVisible(!advancedPanel.isVisible());
+        }
     }//GEN-LAST:event_onAdvancedItem
 
     private class SubItemSelectorDocListener extends BaseDocumentListener {
@@ -621,8 +636,10 @@ public class ParserGenMainFrame extends javax.swing.JFrame {
         protected void doUpdate() {
             String subItem = (String) cmbSubItem.getSelectedItem();
             DataSpec dataSpec = project.getDataSpec(curDataSpec);
-            SelectableItem subItemSpec = dataSpec.getSubItem(subItem);
-            subItemSpec.setSelector(txtSubItemSelector.getText());
+            if (dataSpec!= null) {
+                SelectableItem subItemSpec = dataSpec.getSubItem(subItem);
+                subItemSpec.setSelector(txtSubItemSelector.getText());
+            }
         }
     }
 
@@ -631,8 +648,10 @@ public class ParserGenMainFrame extends javax.swing.JFrame {
         @Override
         protected void doUpdate() {
             DataSpec dataSpec = project.getDataSpec(curDataSpec);
-            dataSpec.setDataURL(txtUrl.getText());
-            btnPreview.setVisible(false);
+            if (dataSpec!= null) {
+                dataSpec.setDataURL(txtUrl.getText());
+                btnPreview.setVisible(false);
+            }
         }
     }
 
@@ -686,8 +705,7 @@ public class ParserGenMainFrame extends javax.swing.JFrame {
 
     private class DocTreeMouseListener implements MouseListener {
 
-        @Override
-        public void mouseClicked(MouseEvent e) {
+        @Override public void mouseClicked(MouseEvent e) {
             if (e.getButton() == MouseEvent.BUTTON3 && project != null && curDataSpec != null) {
                 JPopupMenu ctxMenu = new JPopupMenu();
                 ActionListener actionListener = new CtxMenuActionListener(treeDoc.getClosestPathForLocation(e.getX(), e.getY()));
@@ -704,21 +722,10 @@ public class ParserGenMainFrame extends javax.swing.JFrame {
 
         }
 
-        @Override
-        public void mousePressed(MouseEvent e) {
-        }
-
-        @Override
-        public void mouseReleased(MouseEvent e) {
-        }
-
-        @Override
-        public void mouseEntered(MouseEvent e) {
-        }
-
-        @Override
-        public void mouseExited(MouseEvent e) {
-        }
+        @Override public void mousePressed(MouseEvent e)  {}
+        @Override public void mouseReleased(MouseEvent e) {}
+        @Override public void mouseEntered(MouseEvent e)  {}
+        @Override public void mouseExited(MouseEvent e)   {}
     }
 
     private class CtxMenuItem extends JMenuItem {
@@ -741,26 +748,11 @@ public class ParserGenMainFrame extends javax.swing.JFrame {
             this.label = label;
         }
 
-        public String getLabel() {
-            return label;
-        }
-
-        public void setLabel(String label) {
-            this.label = label;
-        }
-
-        public String getTagName() {
-            return tagName;
-        }
-
-        public void setTagName(String tagName) {
-            this.tagName = tagName;
-        }
-
-        @Override
-        public String toString() {
-            return label;
-        }
+        public String getLabel() { return label; }
+        public void setLabel(String label) {this.label = label;}
+        public String getTagName() {return tagName;}
+        public void setTagName(String tagName) {this.tagName = tagName;}
+        @Override public String toString() {return label; }
     }
 
     private class CtxMenuActionListener implements ActionListener {
