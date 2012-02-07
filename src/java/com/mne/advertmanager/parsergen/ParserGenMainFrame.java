@@ -551,6 +551,7 @@ public class ParserGenMainFrame extends javax.swing.JFrame {
         return result;
     }
 
+    @SuppressWarnings("unchecked")
     private void fillComponentPanel(DataSpec dataSpec) {
 
         lblItemName.setText(dataSpec.getName());

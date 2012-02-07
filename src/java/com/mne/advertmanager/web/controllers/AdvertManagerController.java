@@ -86,7 +86,7 @@ public class AdvertManagerController {
     public @ModelAttribute("codebase") String launchParserGenerator(HttpServletRequest request) {
         
         String codebase="http://"+request.getServerName()+":"+request.getServerPort()+request.getServletContext().getContextPath()+"/apps";
-
+        logger.info("Returning codebase="+codebase);
         return  codebase;
     }    
     

@@ -17,7 +17,7 @@ import org.hibernate.SessionFactory;
 public class GenericDaoHibernateImpl<T, PK extends Serializable> implements GenericDao<T, PK> {
 
     private Class<T> type;
-    private SessionFactory sessionFactory;    
+    private SessionFactory sessionFactory;
 
     public GenericDaoHibernateImpl(Class<T> type) {
         this.type = type;
@@ -44,32 +44,41 @@ public class GenericDaoHibernateImpl<T, PK extends Serializable> implements Gene
     public void delete(T o) {
         getSession().delete(o);
     }
+
     @Override
     public void flush() {
         getSession().flush();
     }
 
-    
     @Override
     @SuppressWarnings("unchecked")
-    public Collection<T> findByQuery(String queryName,Object ...params) {
-       Query q =  getSession().getNamedQuery(queryName);
-       int i =0;
-       for (Object o:params) {
-        q.setEntity(i, o);
-        ++i;
-       }
-       return q.list();
-    }
-    
+    public Collection<T> findByQuery(String queryName, Object... params) {
 
+        Collection<T> result = null;
+
+        Query q = getSession().getNamedQuery(queryName);
+
+
+        if (q != null) {
+            if (params.length > 0) {
+                int i = 0;
+                for (Object o : params) {
+                    q.setEntity(i, o);
+                    ++i;
+                }
+            }
+
+            result = q.list();
+        }
+
+        return result;
+    }
 
     public void setSessionFactory(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
     }
 
     // Not showing implementations of getSession() and setSessionFactory()
-
     private Session getSession() {
         return sessionFactory.getCurrentSession();
     }
