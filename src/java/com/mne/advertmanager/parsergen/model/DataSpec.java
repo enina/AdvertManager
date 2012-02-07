@@ -32,6 +32,7 @@ public class DataSpec extends SelectableItem{
     }
 
     public void setDataURL(String dataURL) {
+        reset();
         this.dataURL = dataURL;
     }
 
@@ -81,6 +82,14 @@ public class DataSpec extends SelectableItem{
             result  = result && si.isValid();
         
         return result;
+    }
+    
+    public void reset() {
+        setMethod("");
+        setSelector("");
+        setListEntrySelector("");
+        for (SelectableItem si:subItems.values())
+            si.setSelector("");
     }
     
     
