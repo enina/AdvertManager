@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ivy-module version="2.0">
+    <info organisation="com.mne" module="AdvertManager"/>
+    <dependencies>
+        <dependency org="org.springframework" name="spring-core" rev="3.1.0.RELEASE"/>
+        <dependency org="org.springframework" name="spring-webmvc" rev="3.1.0.RELEASE"/>
+        <dependency org="org.springframework" name="spring-security" rev="3.1.0.RELEASE"/>
+
+        <dependency org="org.hibernate" name="hibernate-entitymanager" rev="4.0.1.Final"/>            
+        <dependency org="org.hibernate" name="hibernate-validator" rev="4.2.0.Final"/>
+        
+        <dependency org="org.slf4j" name="slf4j-api" rev="1.6.4"/>
+
+        <dependency org="ch.qos.logback" name="logback-core" rev="1.0.0"/>
+        <dependency org="ch.qos.logback" name="logback-classic" rev="1.0.0"/>
+
+        <dependency org="org.apache.cxf" name="cxf-api" rev="2.5.1"/>
+
+
+        <dependency org="jstl"             name="jstl"           rev="1.2"/>
+        
+        <dependency org="org.apache.tiles" name="tiles-api"      rev="2.2.2"/>                   
+        <dependency org="org.apache.tiles" name="tiles-core"     rev="2.2.2"/>
+        <dependency org="org.apache.tiles" name="tiles-servlet"  rev="2.2.2"/>
+        <dependency org="org.apache.tiles" name="tiles-jsp"      rev="2.2.2"/>
+        <dependency org="org.apache.tiles" name="tiles-template" rev="2.2.2"/>        
+        
+        <dependency org="org.jsoup" name="jsoup" rev="1.6.1"/>
+                                            
+        <!--dependency org="commons-lang" name="commons-lang" rev="2.0"/-->
+        <!--dependency org="commons-cli" name="commons-cli" rev="1.0"/-->
+    </dependencies>
+</ivy-module>

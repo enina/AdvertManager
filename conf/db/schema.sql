@@ -152,4 +152,5 @@ insert into authorities values ('root', 'ROLE_ADMIN');
 insert into authorities values ('vasya', 'ROLE_USER');
 insert into authorities values ('hacker', 'ROLE_USER');
 insert into authorities values ('hacker', 'ROLE_ADMIN');
+commit;
 -----------------------------------default data-------------------------------------------------------------------------------

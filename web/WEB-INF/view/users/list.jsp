@@ -9,17 +9,19 @@
     <div style="color:red"><c:out value="${status}"/></div>
 </c:if>    
 <table border="1" class="affTable">
-    <c:forEach items="${data}" var="user">
-    <tr>
-        <td class="affTd" align="left" >
-            <c:out value="${user.username}" />
-        </td>
-        <td class="affTd" align="left">
-            <c:out value="${user.password}"/>
-        </td>
-        <td class="affTd" align="left" >
-            <c:out value="${user.enabled}" />
-        </td>
-        </tr>   
-    </c:forEach>
+    <c:if test="${data!=null}">
+        <c:forEach items="${data}" var="user">
+            <tr>
+                <td class="affTd" align="left" >
+                    <c:out value="${user.username}" />
+                </td>
+                <td class="affTd" align="left">
+                    <c:out value="${user.password}"/>
+                </td>
+                <td class="affTd" align="left" >
+                    <c:out value="${user.enabled}" />
+                </td>
+            </tr>   
+        </c:forEach>
+    </c:if>
 </table>

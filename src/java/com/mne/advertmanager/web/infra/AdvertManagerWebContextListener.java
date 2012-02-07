@@ -4,7 +4,10 @@
  */
 package com.mne.advertmanager.web.infra;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletContextEvent;
+
 import org.springframework.web.context.ContextLoaderListener;
 
 /**
@@ -12,6 +15,7 @@ import org.springframework.web.context.ContextLoaderListener;
  * @author Nina Eidelshtein and Misha Lebedev
  */
 public class AdvertManagerWebContextListener  extends ContextLoaderListener {
+    private final Logger logger = Logger.getLogger(AdvertManagerWebContextListener.class.getName());
 
     @Override
     public void contextDestroyed(ServletContextEvent event) {
@@ -20,12 +24,10 @@ public class AdvertManagerWebContextListener  extends ContextLoaderListener {
 
     @Override
     public void contextInitialized(ServletContextEvent event) {
-        int x =0;
         try {
             super.contextInitialized(event);
-            x=1;
         }catch(Exception ex) {
-            x=2;
+            logger.log(Level.SEVERE, "Context initialization failed with exception {0}", ex.getClass().getSimpleName());
         }
     }
     
