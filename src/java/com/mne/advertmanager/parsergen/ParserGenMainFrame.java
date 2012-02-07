@@ -599,6 +599,7 @@ public class ParserGenMainFrame extends javax.swing.JFrame {
                 rows.add(singleRow);
             }
             result = new PreviewTableModel(names, rows);
+            lblStatus.setText("Status:Success");
         }catch(Exception e) {
             lblStatus.setText("Status:Failed to retrieve data.Review selector settings.");
         }
