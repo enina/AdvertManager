@@ -214,16 +214,16 @@ public class ParserGenMainFrame extends javax.swing.JFrame {
                 .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, advancedPanelLayout.createSequentialGroup()
                 .addGroup(advancedPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(txtSubItemSelector, javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txtListEntrySelector, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 190, Short.MAX_VALUE)
-                    .addComponent(txtMainSelector, javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, advancedPanelLayout.createSequentialGroup()
                         .addGroup(advancedPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lblSubItem)
                             .addComponent(lblMainDataSelector))
-                        .addGap(0, 0, Short.MAX_VALUE))
+                        .addGap(0, 108, Short.MAX_VALUE))
                     .addComponent(cmbSubItem, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(231, 231, 231))
+            .addComponent(txtMainSelector)
+            .addComponent(txtListEntrySelector)
+            .addComponent(txtSubItemSelector)
         );
         advancedPanelLayout.setVerticalGroup(
             advancedPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -651,7 +651,6 @@ public class ParserGenMainFrame extends javax.swing.JFrame {
             DataSpec dataSpec = project.getDataSpec(curDataSpec);
             if (dataSpec!= null) {
                 dataSpec.setDataURL(txtUrl.getText());
-                btnPreview.setVisible(false);
             }
         }
     }
@@ -691,6 +690,7 @@ public class ParserGenMainFrame extends javax.swing.JFrame {
 
         private void updateData(DocumentEvent e) {
             if (project != null) {
+                
                 doUpdate();
 
                 if (project.getDataSpec(curDataSpec).isValid())
