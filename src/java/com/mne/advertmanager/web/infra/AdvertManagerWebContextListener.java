@@ -7,7 +7,6 @@ package com.mne.advertmanager.web.infra;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletContextEvent;
-
 import org.springframework.web.context.ContextLoaderListener;
 
 /**
@@ -15,7 +14,7 @@ import org.springframework.web.context.ContextLoaderListener;
  * @author Nina Eidelshtein and Misha Lebedev
  */
 public class AdvertManagerWebContextListener  extends ContextLoaderListener {
-    private final Logger logger = Logger.getLogger(AdvertManagerWebContextListener.class.getName());
+    private static final Logger logger = Logger.getLogger(AdvertManagerWebContextListener.class.getName());
 
     @Override
     public void contextDestroyed(ServletContextEvent event) {
