@@ -41,10 +41,14 @@ public class ParserGenMainFrame extends javax.swing.JFrame {
 
     public static void main(String args[]) {
 
-        ParserGenMainFrame app = new ParserGenMainFrame();
-        app.setLocation(450, 150);
-        app.setVisible(true);
-
+        java.awt.EventQueue.invokeLater(new Runnable() {
+           @Override
+           public void run() {
+                ParserGenMainFrame app = new ParserGenMainFrame();
+                app.setLocation(450, 150);
+                app.setVisible(true);
+           }
+       });        
     }
 
     /**
@@ -128,7 +132,8 @@ public class ParserGenMainFrame extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Parser Configuration");
-        setAlwaysOnTop(true);
+        setModalExclusionType(java.awt.Dialog.ModalExclusionType.APPLICATION_EXCLUDE);
+        setName("frameMain");
 
         splitPane.setDividerLocation(300);
         splitPane.setPreferredSize(new java.awt.Dimension(336, 500));
@@ -415,7 +420,7 @@ public class ParserGenMainFrame extends javax.swing.JFrame {
 
         project = ((NewProjectDialog) newProjDialog).getProject();
         if (project!= null && project.isValid()) 
-            displayTree(project.getBaseURL(), project.getMethod());
+            displayTree(project.getBaseURL()+project.getHomePage(), project.getMethod());
         else
             lblStatus.setText("Status:Project configuration is invalid");
 
