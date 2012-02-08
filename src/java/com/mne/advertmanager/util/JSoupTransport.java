@@ -25,7 +25,7 @@ public class JSoupTransport {
     public static Document retrieveDocument(Connection con, String docUrl, String method) {
         Document result = null;
         try {
-            con.url(docUrl);
+            con.url(docUrl).timeout(0);
             if ("post".equals(method)) {
                 result = con.post();
             } else {
@@ -40,20 +40,30 @@ public class JSoupTransport {
     public static Connection login(Project proj) {
 
         Connection result = null;
-
+        String url="";
         try {
             //access home page without credentials. get session cookie and redirect to login form
-            result = Jsoup.connect(proj.getBaseURL());
-            result.get();
+            url=proj.getBaseURL()+proj.getHomePage();
+            result = Jsoup.connect(url).timeout(0);
+            Document doc = result.get();
             //submit login form and authenticate
-            result.url(proj.getLoginFormUrl());
+            String loginUrl = proj.getLoginFormUrl();
+            result.url(loginUrl);
             result.followRedirects(false);
+            String firstCookie = result.response().cookie(proj.getCookieName());
 
-            result.data(proj.getUserField(), proj.getUsername(), proj.getPasswordField(), proj.getPassword()).post();
-            String sesId = result.response().cookie(proj.getCookieName());
-            if (sesId == null) {
-                return null;
+            doc = result.data(proj.getUserField(), proj.getUsername(), proj.getPasswordField(), proj.getPassword()).post();
+            String secondCookie = result.response().cookie(proj.getCookieName());
+            String sesId="";
+            if (secondCookie != null) {
+                sesId=secondCookie;
+            }else {
+                if (firstCookie!=null)
+                    sesId=firstCookie;
+                else
+                    return null;
             }
+                 
 
             result.followRedirects(true);
 
@@ -63,7 +73,7 @@ public class JSoupTransport {
 
             return result;
         } catch (Exception e) {
-            logger.log(Level.SEVERE, "authentication failure::: Exception {0}:::Message {1}" ,new Object[]{e.getClass().getSimpleName(),e.getMessage()});
+            logger.log(Level.SEVERE, "authentication failure connecting to {0}::: Exception {1}:::Message {2}" ,new Object[]{url,e.getClass().getSimpleName(),e.getMessage()});
             return null;
         }
     }

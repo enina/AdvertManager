@@ -25,7 +25,9 @@ public class Project {
     private String loginFormUrl;
     private String logoutUrl;
     private String selector;
+    private String homePage;
     private boolean isValid = false;
+    
     
     private Map<String,DataSpec> dataSpecMap = new HashMap<String,DataSpec>();
 
@@ -142,6 +144,16 @@ public class Project {
         this.isValid = isValid;
     }
 
+    public String getHomePage() {
+        return homePage;
+    }
+
+    public void setHomePage(String homePage) {
+        this.homePage = homePage;
+    }
+
+
+    
     
     
     private void normalizeBaseUrl() {
