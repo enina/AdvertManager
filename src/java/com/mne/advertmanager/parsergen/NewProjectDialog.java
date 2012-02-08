@@ -91,7 +91,7 @@ public class NewProjectDialog extends javax.swing.JDialog {
         txtLoginFormURL = new javax.swing.JFormattedTextField();
         lblLogout = new javax.swing.JLabel();
         txtLogoutURL = new javax.swing.JTextField();
-        jPanel1 = new javax.swing.JPanel();
+        panelStatus = new javax.swing.JPanel();
         lblStatus = new javax.swing.JLabel();
 
         setTitle("New project");
@@ -176,19 +176,19 @@ public class NewProjectDialog extends javax.swing.JDialog {
 
         txtLogoutURL.setText("j_spring_security_logout");
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
+        panelStatus.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
 
         lblStatus.setText("Status");
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout panelStatusLayout = new javax.swing.GroupLayout(panelStatus);
+        panelStatus.setLayout(panelStatusLayout);
+        panelStatusLayout.setHorizontalGroup(
+            panelStatusLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(lblStatus, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+        panelStatusLayout.setVerticalGroup(
+            panelStatusLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelStatusLayout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
                 .addComponent(lblStatus))
         );
@@ -200,7 +200,7 @@ public class NewProjectDialog extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(panelStatus, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(btnSelectHome)
@@ -304,7 +304,7 @@ public class NewProjectDialog extends javax.swing.JDialog {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(btnTestConnection)
                             .addComponent(btnCreate))))
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(panelStatus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
@@ -497,7 +497,6 @@ public class NewProjectDialog extends javax.swing.JDialog {
     private javax.swing.JComboBox cmbMethod;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel lblBaseUrl;
     private javax.swing.JLabel lblCookie;
     private javax.swing.JLabel lblHomeFolder;
@@ -509,6 +508,7 @@ public class NewProjectDialog extends javax.swing.JDialog {
     private javax.swing.JLabel lblStatus;
     private javax.swing.JLabel lblUser;
     private javax.swing.JLabel lblUserField;
+    private javax.swing.JPanel panelStatus;
     private javax.swing.JTextField txtBaseUrl;
     private javax.swing.JTextField txtCookie;
     private javax.swing.JFormattedTextField txtLoginFormURL;
