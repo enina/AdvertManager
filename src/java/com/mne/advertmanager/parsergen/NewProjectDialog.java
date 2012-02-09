@@ -21,6 +21,7 @@ import org.jsoup.nodes.Element;
  */
 public class NewProjectDialog extends javax.swing.JDialog {
 
+
     private boolean isBaseUrlComplete = true;
     private boolean isUserNameComplete = true;
     private boolean isUserFieldComplete = true;
@@ -31,6 +32,7 @@ public class NewProjectDialog extends javax.swing.JDialog {
     private boolean isLoginUrlComplete = true;
     private boolean isLogoutUrlComplete = true;
     private boolean isSelectorComplete = true;
+    private boolean isHomePageComplete = true;
     private boolean isTestabale = false;
     private boolean isInputComplete = isTestabale & isHomeFolderComplete;
     private Project project;
@@ -43,6 +45,9 @@ public class NewProjectDialog extends javax.swing.JDialog {
 
         initComponents();
         
+
+        
+        
         txtBaseUrl.getDocument().addDocumentListener(new BaseURLSelectorDocListener());
         txtCookie.getDocument().addDocumentListener(new CookieDocListener());
         txtLoginFormURL.getDocument().addDocumentListener(new LoginFormURLDocListener());
@@ -52,11 +57,43 @@ public class NewProjectDialog extends javax.swing.JDialog {
         txtSelector.getDocument().addDocumentListener(new SelectorDocListener());
         txtUserField.getDocument().addDocumentListener(new UserFieldDocListener());
         txtUserName.getDocument().addDocumentListener(new UserDocListener());
-        JTextField[] textFields = new  JTextField[]{txtBaseUrl,txtCookie,txtLoginFormURL,txtLogoutURL,txtPassword,txtPasswordField,txtSelector,txtUserField,txtUserName};
+        txtHomePage.getDocument().addDocumentListener(new HomePageDocListener());
+        JTextField[] textFields = new  JTextField[]{txtBaseUrl,txtCookie,txtLoginFormURL,txtLogoutURL,txtPassword,
+                                                    txtPasswordField,txtSelector,txtUserField,txtUserName,txtHomePage};
+        
+        //debug1();
         
         for(JTextField tf:textFields)
             tf.setText(tf.getText());
     }
+    
+    
+    private void debug() {
+        txtBaseUrl.setText("http://dragdvd.e-autopay.com/aff/");
+        txtCookie.setText("partnersaccaunt");
+        txtLoginFormURL.setText("login.php");
+        txtLogoutURL.setText("exit.php");
+        txtPassword.setText("2117ikwoww15");
+        txtPasswordField.setText("form_pwd");
+        txtSelector.setText("html>body");
+        txtUserField.setText("form_refid");
+        txtUserName.setText("links");
+        txtHomePage.setText("main.php");
+        
+    }
+    private void debug1() {
+        txtBaseUrl.setText("http://dvd.corel-lessons.com/bbm/aff/");
+        txtCookie.setText("PHPSESSID");
+        txtLoginFormURL.setText("login");
+        txtLogoutURL.setText("logout");
+        txtPassword.setText("in2fo4s");
+        txtPasswordField.setText("pass");
+        txtSelector.setText("html>body");
+        txtUserField.setText("login");
+        txtUserName.setText("infos");
+        txtHomePage.setText("main");
+        
+    }    
 
     /**
      * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The content of this method is always
@@ -91,12 +128,15 @@ public class NewProjectDialog extends javax.swing.JDialog {
         txtLoginFormURL = new javax.swing.JFormattedTextField();
         lblLogout = new javax.swing.JLabel();
         txtLogoutURL = new javax.swing.JTextField();
-        jPanel1 = new javax.swing.JPanel();
+        panelStatus = new javax.swing.JPanel();
         lblStatus = new javax.swing.JLabel();
+        lblHomePage = new javax.swing.JLabel();
+        txtHomePage = new javax.swing.JTextField();
 
         setTitle("New project");
         setLocationByPlatform(true);
-        setModal(true);
+        setModalExclusionType(java.awt.Dialog.ModalExclusionType.APPLICATION_EXCLUDE);
+        setModalityType(java.awt.Dialog.ModalityType.APPLICATION_MODAL);
         setName("new");
         setResizable(false);
 
@@ -176,22 +216,26 @@ public class NewProjectDialog extends javax.swing.JDialog {
 
         txtLogoutURL.setText("j_spring_security_logout");
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
+        panelStatus.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
 
         lblStatus.setText("Status");
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout panelStatusLayout = new javax.swing.GroupLayout(panelStatus);
+        panelStatus.setLayout(panelStatusLayout);
+        panelStatusLayout.setHorizontalGroup(
+            panelStatusLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(lblStatus, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+        panelStatusLayout.setVerticalGroup(
+            panelStatusLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelStatusLayout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
                 .addComponent(lblStatus))
         );
+
+        lblHomePage.setText("Home Page");
+
+        txtHomePage.setText("/");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -200,49 +244,54 @@ public class NewProjectDialog extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(panelStatus, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnSelectHome)
-                            .addComponent(lblMethod)
-                            .addComponent(lblCookie)
-                            .addComponent(lblUser, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblUserField)
-                            .addComponent(lblBaseUrl)
-                            .addComponent(jLabel1)
-                            .addComponent(lblLogout)
-                            .addComponent(lblPassword)
-                            .addComponent(lblPasswordField))
-                        .addGap(31, 31, 31)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(txtUserField)
-                                    .addComponent(txtUserName, javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(txtCookie, javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(lblHomeFolder, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(txtBaseUrl)
-                                    .addComponent(txtLoginFormURL, javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                        .addComponent(cmbMethod, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(lblSelector)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(txtSelector))
-                                    .addComponent(txtLogoutURL, javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                        .addComponent(btnCreate)
-                                        .addGap(0, 0, Short.MAX_VALUE)))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel5))
+                                .addComponent(btnTestConnection)
+                                .addGap(315, 315, 315))
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(txtPasswordField)
-                                    .addComponent(txtPassword))
-                                .addGap(6, 6, 6))))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnTestConnection)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(lblCookie)
+                                            .addComponent(lblUser, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(lblUserField)
+                                            .addComponent(jLabel1)
+                                            .addComponent(lblLogout)
+                                            .addComponent(lblPassword)
+                                            .addComponent(lblPasswordField))
+                                        .addGap(31, 31, 31)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(txtUserField, javax.swing.GroupLayout.Alignment.TRAILING)
+                                            .addComponent(txtUserName)
+                                            .addComponent(txtCookie)
+                                            .addComponent(txtLoginFormURL)
+                                            .addComponent(txtLogoutURL)
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addComponent(btnCreate)
+                                                .addGap(0, 0, Short.MAX_VALUE))
+                                            .addComponent(txtPasswordField)
+                                            .addComponent(txtPassword)))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(btnSelectHome)
+                                            .addComponent(lblMethod)
+                                            .addComponent(lblBaseUrl)
+                                            .addComponent(lblHomePage))
+                                        .addGap(49, 49, 49)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(lblHomeFolder, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                            .addComponent(txtBaseUrl, javax.swing.GroupLayout.Alignment.TRAILING)
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addComponent(cmbMethod, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                                .addComponent(lblSelector)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(txtSelector))
+                                            .addComponent(txtHomePage))))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
+                        .addComponent(jLabel5)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -252,8 +301,7 @@ public class NewProjectDialog extends javax.swing.JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jLabel5)
-                        .addGap(7, 7, 7))
+                        .addComponent(jLabel5))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(btnSelectHome, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -273,6 +321,10 @@ public class NewProjectDialog extends javax.swing.JDialog {
                             .addComponent(lblBaseUrl)
                             .addComponent(txtBaseUrl, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblHomePage)
+                            .addComponent(txtHomePage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel1)
                             .addComponent(txtLoginFormURL, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -303,8 +355,10 @@ public class NewProjectDialog extends javax.swing.JDialog {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(btnTestConnection)
-                            .addComponent(btnCreate))))
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnCreate))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addGap(7, 7, 7)
+                .addComponent(panelStatus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
@@ -333,10 +387,10 @@ public class NewProjectDialog extends javax.swing.JDialog {
                 return "Status:Failed to login";
             }
 
-            doc = JSoupTransport.retrieveDocument(con, proj.getBaseURL(), proj.getMethod());
+            doc = JSoupTransport.retrieveDocument(con, proj.getBaseURL()+proj.getHomePage(), proj.getMethod());
 
             if (doc == null) {
-                return "Status:Cannot retrieved document from url:" + proj.getBaseURL();
+                return "Status:Cannot retrieved document from url:" + proj.getBaseURL()+proj.getHomePage();
             }
             Element targetElem = doc.select(proj.getSelector()).first();
             if (targetElem != null) {
@@ -376,7 +430,7 @@ public class NewProjectDialog extends javax.swing.JDialog {
         isTestabale =   isBaseUrlComplete  & isSelectorComplete  & isUserNameComplete &
                         isLoginUrlComplete & isLogoutUrlComplete & isCookieComplete   &
                         isUserNameComplete & isUserFieldComplete & isPasswordComplete &
-                        isPasswordFieldComplete;
+                        isPasswordFieldComplete & isHomePageComplete;
 
         isInputComplete = isTestabale & isHomeFolderComplete;
         btnTestConnection.setEnabled(isTestabale);
@@ -490,6 +544,15 @@ public class NewProjectDialog extends javax.swing.JDialog {
         }
     }
     
+    private  class HomePageDocListener extends BaseDocumentListener {
+        @Override
+        protected void doUpdate() {
+            isHomePageComplete = txtHomePage.getText().length()>0;
+            project.setHomePage(txtHomePage.getText());
+        }
+    }
+    
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCreate;
     private javax.swing.JButton btnSelectHome;
@@ -497,10 +560,10 @@ public class NewProjectDialog extends javax.swing.JDialog {
     private javax.swing.JComboBox cmbMethod;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel lblBaseUrl;
     private javax.swing.JLabel lblCookie;
     private javax.swing.JLabel lblHomeFolder;
+    private javax.swing.JLabel lblHomePage;
     private javax.swing.JLabel lblLogout;
     private javax.swing.JLabel lblMethod;
     private javax.swing.JLabel lblPassword;
@@ -509,8 +572,10 @@ public class NewProjectDialog extends javax.swing.JDialog {
     private javax.swing.JLabel lblStatus;
     private javax.swing.JLabel lblUser;
     private javax.swing.JLabel lblUserField;
+    private javax.swing.JPanel panelStatus;
     private javax.swing.JTextField txtBaseUrl;
     private javax.swing.JTextField txtCookie;
+    private javax.swing.JTextField txtHomePage;
     private javax.swing.JFormattedTextField txtLoginFormURL;
     private javax.swing.JTextField txtLogoutURL;
     private javax.swing.JPasswordField txtPassword;

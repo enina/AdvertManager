@@ -40,23 +40,15 @@ public class ParserGenMainFrame extends javax.swing.JFrame {
     private String curDataSpec = "";
 
     public static void main(String args[]) {
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (Exception ex) {
-            logger.log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        java.awt.EventQueue.invokeLater(new Runnable() {
 
-            @Override
-            public void run() {
-                new ParserGenMainFrame().setVisible(true);
-            }
-        });
+        java.awt.EventQueue.invokeLater(new Runnable() {
+           @Override
+           public void run() {
+                ParserGenMainFrame app = new ParserGenMainFrame();
+                app.setLocation(450, 150);
+                app.setVisible(true);
+           }
+       });        
     }
 
     /**
@@ -64,63 +56,32 @@ public class ParserGenMainFrame extends javax.swing.JFrame {
      */
     public ParserGenMainFrame() {
 
+        boolean isContinue = false;
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+            isContinue = true;
         } catch (Exception ex) {
+            isContinue = false;
             logger.log(Level.SEVERE, "Failed to set system look and feel {0}", ex.getClass().getSimpleName());
         }
-        initComponents();
-        basicPanel.setVisible(false);
-        btnPreview.setVisible(false);
+        
+        if (isContinue) {
+            initComponents();
+            panelBasic.setVisible(false);
+            btnPreview.setVisible(false);
 
-        advancedPanel.setVisible(false);
-        radioGroup.add(radioGet);
-        radioGroup.add(radioPost);
+            panelAdvanced.setVisible(false);
+            radioGroup.add(radioGet);
+            radioGroup.add(radioPost);
 
-        txtSubItemSelector.getDocument().addDocumentListener(new SubItemSelectorDocListener());
-        txtUrl.getDocument().addDocumentListener(new URLDocListener());
-        txtMainSelector.getDocument().addDocumentListener(new MainSelectorDocListener());
-        txtListEntrySelector.getDocument().addDocumentListener(new ListEntrySelectorDocListener());
-        treeDoc.addMouseListener(new DocTreeMouseListener());
-    }
-
-    private boolean displayTree(String url, String method) {
-
-        Connection con = null;
-        boolean result = false;
-        String status="";
-        try {
-            con = JSoupTransport.login(project);
-            if (con != null) {
-                org.jsoup.nodes.Document dataRoot = JSoupTransport.retrieveDocument(con, url, method);
-                if (dataRoot != null) {
-                    JSoupTransport.logout(con, project);
-
-                    DefaultMutableTreeNode controlRoot = new DefaultMutableTreeNode("/");
-                    controlRoot.setAllowsChildren(true);
-
-                    buildTree(dataRoot.select("html").first(), controlRoot);
-
-                    DefaultMutableTreeNode rootNode = (DefaultMutableTreeNode) controlRoot.getFirstChild();
-
-                    DefaultTreeModel model = new DefaultTreeModel(rootNode);
-                    treeDoc.setModel(model);
-
-                    ((DefaultMutableTreeNode) rootNode).setParent(null);
-                    model.reload(rootNode);
-
-                    status = "Status:Success";
-                    result = true;
-                }else
-                    status = "Status:Failed to retrieved data from URL=" + url;
-            }else
-                status = "Status:Failed to login";
-        } finally {
-            lblStatus.setText(status);
-            JSoupTransport.logout(con, project);
-            return result;
+            txtSubItemSelector.getDocument().addDocumentListener(new SubItemSelectorDocListener());
+            txtUrl.getDocument().addDocumentListener(new URLDocListener());
+            txtMainSelector.getDocument().addDocumentListener(new MainSelectorDocListener());
+            txtListEntrySelector.getDocument().addDocumentListener(new ListEntrySelectorDocListener());
+            treeHtmlDoc.addMouseListener(new DocTreeMouseListener());
         }
     }
+
 
     /**
      * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The content of this method is always
@@ -131,19 +92,17 @@ public class ParserGenMainFrame extends javax.swing.JFrame {
     private void initComponents() {
 
         radioGroup = new javax.swing.ButtonGroup();
-        jSplitPane1 = new javax.swing.JSplitPane();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        treeDoc = new javax.swing.JTree();
-        basePanel = new javax.swing.JPanel();
-        advancedPanel = new javax.swing.JPanel();
+        splitPane = new javax.swing.JSplitPane();
+        panelProperties = new javax.swing.JPanel();
+        panelAdvanced = new javax.swing.JPanel();
         txtSubItemSelector = new javax.swing.JTextField();
         cmbSubItem = new javax.swing.JComboBox();
         lblSubItem = new javax.swing.JLabel();
         txtListEntrySelector = new javax.swing.JTextField();
-        jLabel1 = new javax.swing.JLabel();
+        lblListEntry = new javax.swing.JLabel();
         txtMainSelector = new javax.swing.JTextField();
         javax.swing.JLabel lblMainDataSelector = new javax.swing.JLabel();
-        basicPanel = new javax.swing.JPanel();
+        panelBasic = new javax.swing.JPanel();
         lblItem = new javax.swing.JLabel();
         lblItemName = new javax.swing.JLabel();
         lblURL = new javax.swing.JLabel();
@@ -153,39 +112,41 @@ public class ParserGenMainFrame extends javax.swing.JFrame {
         txtUrl = new javax.swing.JTextField();
         btnDisplay = new javax.swing.JButton();
         btnPreview = new javax.swing.JButton();
-        jPanel1 = new javax.swing.JPanel();
+        panelStatus = new javax.swing.JPanel();
         lblStatus = new javax.swing.JLabel();
-        jMenuBar1 = new javax.swing.JMenuBar();
+        panelDocument = new javax.swing.JPanel();
+        txtDocQuery = new javax.swing.JTextField();
+        btnSearch = new javax.swing.JButton();
+        scrollPanel = new javax.swing.JScrollPane();
+        treeHtmlDoc = new javax.swing.JTree();
+        menuBar = new javax.swing.JMenuBar();
         menuFile = new javax.swing.JMenu();
-        openMenuItem = new javax.swing.JMenuItem();
-        jMenuItem2 = new javax.swing.JMenuItem();
-        jMenuItem3 = new javax.swing.JMenuItem();
+        miNew = new javax.swing.JMenuItem();
+        miOpen = new javax.swing.JMenuItem();
+        miSave = new javax.swing.JMenuItem();
         miExit = new javax.swing.JMenuItem();
         menuEdit = new javax.swing.JMenu();
         miProduct = new javax.swing.JMenuItem();
         miAffiliate = new javax.swing.JMenuItem();
         miAccess = new javax.swing.JMenuItem();
         miAuthor = new javax.swing.JMenuItem();
-        Options = new javax.swing.JMenu();
+        menuOptions = new javax.swing.JMenu();
         javax.swing.JMenuItem miAdvanced = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Parser Configuration");
+        setModalExclusionType(java.awt.Dialog.ModalExclusionType.APPLICATION_EXCLUDE);
+        setName("frameMain");
 
-        jSplitPane1.setDividerLocation(300);
-        jSplitPane1.setPreferredSize(new java.awt.Dimension(336, 500));
-        jSplitPane1.setRequestFocusEnabled(false);
+        splitPane.setDividerLocation(300);
+        splitPane.setPreferredSize(new java.awt.Dimension(336, 500));
+        splitPane.setRequestFocusEnabled(false);
 
-        javax.swing.tree.DefaultMutableTreeNode treeNode1 = new javax.swing.tree.DefaultMutableTreeNode("/");
-        treeDoc.setModel(new javax.swing.tree.DefaultTreeModel(treeNode1));
-        jScrollPane1.setViewportView(treeDoc);
+        panelProperties.setPreferredSize(new java.awt.Dimension(300, 650));
 
-        jSplitPane1.setLeftComponent(jScrollPane1);
-
-        basePanel.setPreferredSize(new java.awt.Dimension(300, 650));
-
-        advancedPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Advanced"));
-        advancedPanel.setToolTipText("advanced");
-        advancedPanel.setRequestFocusEnabled(false);
+        panelAdvanced.setBorder(javax.swing.BorderFactory.createTitledBorder("Advanced"));
+        panelAdvanced.setToolTipText("advanced");
+        panelAdvanced.setRequestFocusEnabled(false);
 
         txtSubItemSelector.setText("enter sub item selector");
 
@@ -199,40 +160,41 @@ public class ParserGenMainFrame extends javax.swing.JFrame {
 
         txtListEntrySelector.setText("enter list entry selector");
 
-        jLabel1.setText("List entry selector");
+        lblListEntry.setText("List entry selector");
 
         txtMainSelector.setText("enter data list selector");
 
         lblMainDataSelector.setText("Data list selector");
 
-        javax.swing.GroupLayout advancedPanelLayout = new javax.swing.GroupLayout(advancedPanel);
-        advancedPanel.setLayout(advancedPanelLayout);
-        advancedPanelLayout.setHorizontalGroup(
-            advancedPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(advancedPanelLayout.createSequentialGroup()
-                .addComponent(jLabel1)
+        javax.swing.GroupLayout panelAdvancedLayout = new javax.swing.GroupLayout(panelAdvanced);
+        panelAdvanced.setLayout(panelAdvancedLayout);
+        panelAdvancedLayout.setHorizontalGroup(
+            panelAdvancedLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelAdvancedLayout.createSequentialGroup()
+                .addComponent(lblListEntry)
                 .addContainerGap())
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, advancedPanelLayout.createSequentialGroup()
-                .addGroup(advancedPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, advancedPanelLayout.createSequentialGroup()
-                        .addGroup(advancedPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblSubItem)
-                            .addComponent(lblMainDataSelector))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(cmbSubItem, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(231, 231, 231))
             .addComponent(txtMainSelector)
             .addComponent(txtListEntrySelector)
             .addComponent(txtSubItemSelector)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelAdvancedLayout.createSequentialGroup()
+                .addGroup(panelAdvancedLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(panelAdvancedLayout.createSequentialGroup()
+                        .addGap(0, 20, Short.MAX_VALUE)
+                        .addComponent(lblSubItem))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, panelAdvancedLayout.createSequentialGroup()
+                        .addComponent(lblMainDataSelector)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(cmbSubItem, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(231, 231, 231))
         );
-        advancedPanelLayout.setVerticalGroup(
-            advancedPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(advancedPanelLayout.createSequentialGroup()
+        panelAdvancedLayout.setVerticalGroup(
+            panelAdvancedLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelAdvancedLayout.createSequentialGroup()
                 .addComponent(lblMainDataSelector)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtMainSelector, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel1)
+                .addComponent(lblListEntry)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtListEntrySelector, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -240,11 +202,10 @@ public class ParserGenMainFrame extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lblSubItem)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtSubItemSelector, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(76, Short.MAX_VALUE))
+                .addComponent(txtSubItemSelector, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
-        basicPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Basic"));
+        panelBasic.setBorder(javax.swing.BorderFactory.createTitledBorder("Basic"));
 
         lblItem.setText("Item:");
 
@@ -280,43 +241,43 @@ public class ParserGenMainFrame extends javax.swing.JFrame {
             }
         });
 
-        javax.swing.GroupLayout basicPanelLayout = new javax.swing.GroupLayout(basicPanel);
-        basicPanel.setLayout(basicPanelLayout);
-        basicPanelLayout.setHorizontalGroup(
-            basicPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(basicPanelLayout.createSequentialGroup()
-                .addGroup(basicPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout panelBasicLayout = new javax.swing.GroupLayout(panelBasic);
+        panelBasic.setLayout(panelBasicLayout);
+        panelBasicLayout.setHorizontalGroup(
+            panelBasicLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelBasicLayout.createSequentialGroup()
+                .addGroup(panelBasicLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lblURL)
                     .addComponent(lblItem))
                 .addGap(28, 28, 28)
-                .addGroup(basicPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(basicPanelLayout.createSequentialGroup()
+                .addGroup(panelBasicLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelBasicLayout.createSequentialGroup()
                         .addComponent(lblItemName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addContainerGap())
-                    .addGroup(basicPanelLayout.createSequentialGroup()
+                    .addGroup(panelBasicLayout.createSequentialGroup()
                         .addComponent(lblMethod)
                         .addGap(50, 50, 50)
                         .addComponent(radioGet)
                         .addGap(18, 18, 18)
                         .addComponent(radioPost)
-                        .addGap(0, 63, Short.MAX_VALUE))))
+                        .addGap(0, 0, Short.MAX_VALUE))))
             .addComponent(txtUrl)
-            .addGroup(basicPanelLayout.createSequentialGroup()
+            .addGroup(panelBasicLayout.createSequentialGroup()
                 .addComponent(btnDisplay)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnPreview, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
         );
 
-        basicPanelLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {btnDisplay, btnPreview});
+        panelBasicLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {btnDisplay, btnPreview});
 
-        basicPanelLayout.setVerticalGroup(
-            basicPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(basicPanelLayout.createSequentialGroup()
-                .addGroup(basicPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+        panelBasicLayout.setVerticalGroup(
+            panelBasicLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelBasicLayout.createSequentialGroup()
+                .addGroup(panelBasicLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblItem)
                     .addComponent(lblItemName))
-                .addGroup(basicPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(panelBasicLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblURL)
                     .addComponent(lblMethod)
                     .addComponent(radioGet)
@@ -324,64 +285,97 @@ public class ParserGenMainFrame extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtUrl, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addGroup(basicPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(panelBasicLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnDisplay)
                     .addComponent(btnPreview))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
+        panelStatus.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
 
         lblStatus.setText("Status:");
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout panelStatusLayout = new javax.swing.GroupLayout(panelStatus);
+        panelStatus.setLayout(panelStatusLayout);
+        panelStatusLayout.setHorizontalGroup(
+            panelStatusLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(lblStatus, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(lblStatus)
-                .addGap(0, 2, Short.MAX_VALUE))
+        panelStatusLayout.setVerticalGroup(
+            panelStatusLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(lblStatus, javax.swing.GroupLayout.DEFAULT_SIZE, 25, Short.MAX_VALUE)
         );
 
-        javax.swing.GroupLayout basePanelLayout = new javax.swing.GroupLayout(basePanel);
-        basePanel.setLayout(basePanelLayout);
-        basePanelLayout.setHorizontalGroup(
-            basePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(basicPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(advancedPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        javax.swing.GroupLayout panelPropertiesLayout = new javax.swing.GroupLayout(panelProperties);
+        panelProperties.setLayout(panelPropertiesLayout);
+        panelPropertiesLayout.setHorizontalGroup(
+            panelPropertiesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(panelBasic, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(panelAdvanced, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(panelStatus, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
-        basePanelLayout.setVerticalGroup(
-            basePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(basePanelLayout.createSequentialGroup()
-                .addComponent(basicPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+        panelPropertiesLayout.setVerticalGroup(
+            panelPropertiesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelPropertiesLayout.createSequentialGroup()
+                .addComponent(panelBasic, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(advancedPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 73, Short.MAX_VALUE)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(panelAdvanced, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 239, Short.MAX_VALUE)
+                .addComponent(panelStatus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
-        jSplitPane1.setRightComponent(basePanel);
+        splitPane.setRightComponent(panelProperties);
+
+        btnSearch.setText("Search in doc");
+        btnSearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                onSearch(evt);
+            }
+        });
+
+        javax.swing.tree.DefaultMutableTreeNode treeNode1 = new javax.swing.tree.DefaultMutableTreeNode("/");
+        treeHtmlDoc.setModel(new javax.swing.tree.DefaultTreeModel(treeNode1));
+        scrollPanel.setViewportView(treeHtmlDoc);
+
+        javax.swing.GroupLayout panelDocumentLayout = new javax.swing.GroupLayout(panelDocument);
+        panelDocument.setLayout(panelDocumentLayout);
+        panelDocumentLayout.setHorizontalGroup(
+            panelDocumentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelDocumentLayout.createSequentialGroup()
+                .addComponent(txtDocQuery, javax.swing.GroupLayout.DEFAULT_SIZE, 196, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnSearch))
+            .addComponent(scrollPanel)
+        );
+        panelDocumentLayout.setVerticalGroup(
+            panelDocumentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelDocumentLayout.createSequentialGroup()
+                .addGroup(panelDocumentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelDocumentLayout.createSequentialGroup()
+                        .addGap(1, 1, 1)
+                        .addComponent(txtDocQuery))
+                    .addComponent(btnSearch, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(scrollPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 568, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+
+        splitPane.setLeftComponent(panelDocument);
 
         menuFile.setText("File");
 
-        openMenuItem.setText("new");
-        openMenuItem.addActionListener(new java.awt.event.ActionListener() {
+        miNew.setText("new");
+        miNew.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 onNew(evt);
             }
         });
-        menuFile.add(openMenuItem);
+        menuFile.add(miNew);
 
-        jMenuItem2.setText("open");
-        menuFile.add(jMenuItem2);
+        miOpen.setText("open");
+        menuFile.add(miOpen);
 
-        jMenuItem3.setText("save");
-        menuFile.add(jMenuItem3);
+        miSave.setText("save");
+        menuFile.add(miSave);
 
         miExit.setText("exit");
         miExit.addActionListener(new java.awt.event.ActionListener() {
@@ -391,7 +385,7 @@ public class ParserGenMainFrame extends javax.swing.JFrame {
         });
         menuFile.add(miExit);
 
-        jMenuBar1.add(menuFile);
+        menuBar.add(menuFile);
 
         menuEdit.setText("Edit");
 
@@ -417,9 +411,9 @@ public class ParserGenMainFrame extends javax.swing.JFrame {
         miAuthor.setText("Author");
         menuEdit.add(miAuthor);
 
-        jMenuBar1.add(menuEdit);
+        menuBar.add(menuEdit);
 
-        Options.setText("Options");
+        menuOptions.setText("Options");
 
         miAdvanced.setText("Advanced");
         miAdvanced.addActionListener(new java.awt.event.ActionListener() {
@@ -427,26 +421,25 @@ public class ParserGenMainFrame extends javax.swing.JFrame {
                 onAdvancedItem(evt);
             }
         });
-        Options.add(miAdvanced);
+        menuOptions.add(miAdvanced);
 
-        jMenuBar1.add(Options);
+        menuBar.add(menuOptions);
 
-        setJMenuBar(jMenuBar1);
+        setJMenuBar(menuBar);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 619, Short.MAX_VALUE)
+            .addComponent(splitPane, javax.swing.GroupLayout.DEFAULT_SIZE, 651, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(splitPane, javax.swing.GroupLayout.DEFAULT_SIZE, 599, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
     private void onNew(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onNew
 
         JDialog newProjDialog = new NewProjectDialog(this, true);
@@ -457,7 +450,7 @@ public class ParserGenMainFrame extends javax.swing.JFrame {
 
         project = ((NewProjectDialog) newProjDialog).getProject();
         if (project!= null && project.isValid()) 
-            displayTree(project.getBaseURL(), project.getMethod());
+            displayTree(project.getBaseURL()+project.getHomePage(), project.getMethod());
         else
             lblStatus.setText("Status:Project configuration is invalid");
 
@@ -482,7 +475,7 @@ public class ParserGenMainFrame extends javax.swing.JFrame {
         if (project != null && project.isValid()) {
             DataSpec dataSpec = new DataSpec("Affiliate");
 
-            dataSpec.addSubItem(new SelectableItem("affiliateName"));
+            dataSpec.addSubItem(new SelectableItem("name"));
             dataSpec.addSubItem(new SelectableItem("email"));
 
             fillComponentPanel(dataSpec);
@@ -519,6 +512,81 @@ public class ParserGenMainFrame extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_onSubItemChange
 
+    private void onPreview(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onPreview
+
+        PreviewTableModel previewData = buildPreviewTableModel(project.getDataSpec(curDataSpec));
+
+        if (previewData != null) {
+            JDialog previewDialog = new PreviewDialog(this, previewData, false);
+
+            previewDialog.setLocation(this.getLocation().x+50, this.getLocation().y+70);
+            
+            previewDialog.setVisible(true);
+        }
+    }//GEN-LAST:event_onPreview
+
+    private void onMethodChange(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onMethodChange
+        if (project != null) {
+            project.getDataSpec(curDataSpec).setMethod(radioGet.isSelected() ? "get" : "post");
+        }
+    }//GEN-LAST:event_onMethodChange
+
+    private void onAdvancedItem(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onAdvancedItem
+        
+        if (project != null && project.isValid()) {
+            panelAdvanced.setVisible(!panelAdvanced.isVisible());
+        }
+    }//GEN-LAST:event_onAdvancedItem
+
+    private void onExit(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onExit
+        setVisible(false);
+        dispose();
+    }//GEN-LAST:event_onExit
+
+    private void onSearch(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onSearch
+        
+        String query = txtDocQuery.getText();
+        DefaultMutableTreeNode root= (DefaultMutableTreeNode)treeHtmlDoc.getModel().getRoot();
+        if (query.length() > 0) {
+            TreeNode result = find(root,query);
+            if (result != null) {
+                ArrayList<TreeNode> path = new ArrayList<TreeNode>();
+                while (result != null) {
+                    path.add(0, result);
+                    result=result.getParent();
+                }
+                TreePath treePath = new TreePath(path.toArray());
+                treeHtmlDoc.setSelectionPath(treePath);
+                treeHtmlDoc.makeVisible(treePath);
+            }
+        }
+    }//GEN-LAST:event_onSearch
+
+    private  TreeNode find(DefaultMutableTreeNode node,String query) {
+        
+        NodeData data = null;
+        TreeNode result = null;
+        DefaultMutableTreeNode childNode = null;
+        
+        if (node!=null) {
+            
+            data = (NodeData)node.getUserObject();
+
+            if (data.match(query))
+                return node;
+            
+            for (int i = 0 ; i < node.getChildCount();++i) {
+                childNode  = (DefaultMutableTreeNode)node.getChildAt(i);
+                result = find(childNode,query);
+                if (result!=null)
+                    break;
+            }
+        }
+        
+        return result;
+    }
+    
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////
     private void buildTree(org.jsoup.nodes.Node dataNode, DefaultMutableTreeNode controlNode) {
 
         String nodeText = "";
@@ -547,6 +615,41 @@ public class ParserGenMainFrame extends javax.swing.JFrame {
             }
         }
     }
+    private boolean displayTree(String url, String method) {
+
+        Connection con = null;
+        boolean result = false;
+        String status="";
+        try {
+            con = JSoupTransport.login(project);
+            if (con != null) {
+                org.jsoup.nodes.Document dataRoot = JSoupTransport.retrieveDocument(con, url, method);
+                if (dataRoot != null) {
+                    DefaultMutableTreeNode controlRoot = new DefaultMutableTreeNode("/");
+                    controlRoot.setAllowsChildren(true);
+
+                    buildTree(dataRoot.select("html").first(), controlRoot);
+
+                    DefaultMutableTreeNode rootNode = (DefaultMutableTreeNode) controlRoot.getFirstChild();
+
+                    DefaultTreeModel model = new DefaultTreeModel(rootNode);
+                    treeHtmlDoc.setModel(model);
+
+                    ((DefaultMutableTreeNode) rootNode).setParent(null);
+                    model.reload(rootNode);
+
+                    status = "Status:Success";
+                    result = true;
+                }else
+                    status = "Status:Failed to retrieved data from URL=" + url;
+            }else
+                status = "Status:Failed to login";
+        } finally {
+            lblStatus.setText(status);
+            JSoupTransport.logout(con, project);
+            return result;
+        }
+    }
 
     private String builElementText(Element element) {
 
@@ -568,16 +671,22 @@ public class ParserGenMainFrame extends javax.swing.JFrame {
     private void fillComponentPanel(DataSpec dataSpec) {
 
         lblItemName.setText(dataSpec.getName());
+        txtUrl.setText("");
+        txtMainSelector.setText("");
+        txtListEntrySelector.setText("");
+        
+        
         Set<String> subItems = dataSpec.getSubItems().keySet();
-
         for (String name : subItems) {
             cmbSubItem.addItem(name);
+            txtSubItemSelector.setText("");
         }
 
-        basicPanel.setVisible(true);
+        panelBasic.setVisible(true);
         project.addDataSpec(dataSpec);
         curDataSpec = dataSpec.getName();
         lblStatus.setText("Status:");
+        
     }
 
     private PreviewTableModel buildPreviewTableModel(DataSpec dataSpec) {
@@ -613,48 +722,16 @@ public class ParserGenMainFrame extends javax.swing.JFrame {
 
         return result;
     }
-
-    private void onPreview(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onPreview
-
-        PreviewTableModel previewData = buildPreviewTableModel(project.getDataSpec(curDataSpec));
-
-        if (previewData != null) {
-            JDialog previewDialog = new PreviewDialog(this, previewData, false);
-
-            previewDialog.setLocation(this.getLocation().x+50, this.getLocation().y+70);
-            
-            previewDialog.setVisible(true);
-        }
-    }//GEN-LAST:event_onPreview
-
-    private void onMethodChange(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onMethodChange
-        if (project != null) {
-            project.getDataSpec(curDataSpec).setMethod(radioGet.isSelected() ? "get" : "post");
-        }
-    }//GEN-LAST:event_onMethodChange
-
-    private void onAdvancedItem(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onAdvancedItem
-        
-        if (project != null && project.isValid()) {
-            advancedPanel.setVisible(!advancedPanel.isVisible());
-        }
-    }//GEN-LAST:event_onAdvancedItem
-
-    private void onExit(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onExit
-        setVisible(false);
-        dispose();
-    }//GEN-LAST:event_onExit
-
+    
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////
+    
     private class SubItemSelectorDocListener extends BaseDocumentListener {
 
         @Override
         protected void doUpdate() {
             String subItem = (String) cmbSubItem.getSelectedItem();
-            DataSpec dataSpec = project.getDataSpec(curDataSpec);
-            if (dataSpec!= null) {
-                SelectableItem subItemSpec = dataSpec.getSubItem(subItem);
-                subItemSpec.setSelector(txtSubItemSelector.getText());
-            }
+            SelectableItem subItemSpec = ds.getSubItem(subItem);
+            subItemSpec.setSelector(txtSubItemSelector.getText());
         }
     }
 
@@ -662,10 +739,7 @@ public class ParserGenMainFrame extends javax.swing.JFrame {
 
         @Override
         protected void doUpdate() {
-            DataSpec dataSpec = project.getDataSpec(curDataSpec);
-            if (dataSpec!= null) {
-                dataSpec.setDataURL(txtUrl.getText());
-            }
+            ds.setDataURL(txtUrl.getText());
         }
     }
 
@@ -673,7 +747,7 @@ public class ParserGenMainFrame extends javax.swing.JFrame {
 
         @Override
         protected void doUpdate() {
-            project.getDataSpec(curDataSpec).setSelector(txtMainSelector.getText());            
+            ds.setSelector(txtMainSelector.getText());            
         }
     }
 
@@ -681,38 +755,36 @@ public class ParserGenMainFrame extends javax.swing.JFrame {
 
         @Override
         protected void doUpdate() {
-            project.getDataSpec(curDataSpec).setListEntrySelector(txtListEntrySelector.getText());
+            ds.setListEntrySelector(txtListEntrySelector.getText());
         }
     }
 
     private abstract class BaseDocumentListener implements DocumentListener {
 
-        @Override
-        public void changedUpdate(DocumentEvent e) {
-            updateData(e);
-        }
+        protected DataSpec ds = null;
+        @Override public void changedUpdate(DocumentEvent e) {  updateData(e); }
 
-        @Override
-        public void insertUpdate(DocumentEvent e) {
-            updateData(e);
-        }
+        @Override public void insertUpdate(DocumentEvent e) {   updateData(e); }
 
-        @Override
-        public void removeUpdate(DocumentEvent e) {
-            updateData(e);
-        }
+        @Override public void removeUpdate(DocumentEvent e) {    updateData(e); }
 
         private void updateData(DocumentEvent e) {
-            if (project != null) {
-                
-                doUpdate();
 
-                if (project.getDataSpec(curDataSpec).isValid())
-                    btnPreview.setVisible(true);
-                else
-                    btnPreview.setVisible(false);
+            if (project != null) {
+
+                if (curDataSpec!= null && curDataSpec.length()>0)
+                    ds=project.getDataSpec(curDataSpec);
+
+                if (ds != null) {
+                    doUpdate();
+                    if (ds.isValid()) {
+                        btnPreview.setVisible(true);
+                    } else {
+                        btnPreview.setVisible(false);
+                    }
+                }
+                
             }
-            
         }
 
         protected abstract void doUpdate();
@@ -723,16 +795,18 @@ public class ParserGenMainFrame extends javax.swing.JFrame {
         @Override public void mouseClicked(MouseEvent e) {
             if (e.getButton() == MouseEvent.BUTTON3 && project != null && curDataSpec != null) {
                 JPopupMenu ctxMenu = new JPopupMenu();
-                ActionListener actionListener = new CtxMenuActionListener(treeDoc.getClosestPathForLocation(e.getX(), e.getY()));
+                ActionListener actionListener = new CtxMenuActionListener(treeHtmlDoc.getClosestPathForLocation(e.getX(), e.getY()));
                 DataSpec dataSpec = project.getDataSpec(curDataSpec);
-                ctxMenu.add(new CtxMenuItem(dataSpec.getName() + " root element", "main", actionListener));
-                ctxMenu.add(new CtxMenuItem(dataSpec.getName() + " list entry element", "li", actionListener));
+                if (dataSpec!= null) {
+                    ctxMenu.add(new CtxMenuItem(dataSpec.getName() + " root element", "main", actionListener));
+                    ctxMenu.add(new CtxMenuItem(dataSpec.getName() + " list entry element", "li", actionListener));
 
-                for (String subItem : dataSpec.getSubItems().keySet()) {
-                    ctxMenu.add(new CtxMenuItem(subItem + " element", subItem, actionListener));
+                    for (String subItem : dataSpec.getSubItems().keySet()) {
+                        ctxMenu.add(new CtxMenuItem(subItem + " element", subItem, actionListener));
+                    }
+
+                    ctxMenu.show(e.getComponent(), e.getX(), e.getY());
                 }
-
-                ctxMenu.show(e.getComponent(), e.getX(), e.getY());
             }
 
         }
@@ -768,6 +842,11 @@ public class ParserGenMainFrame extends javax.swing.JFrame {
         public String getTagName() {return tagName;}
         public void setTagName(String tagName) {this.tagName = tagName;}
         @Override public String toString() {return label; }
+
+        private boolean match(String query) {
+            boolean result = tagName.indexOf(query) >= 0 || label.indexOf(query) >= 0;
+            return result;
+        }
     }
 
     private class CtxMenuActionListener implements ActionListener {
@@ -833,38 +912,41 @@ public class ParserGenMainFrame extends javax.swing.JFrame {
         }
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JMenu Options;
-    private javax.swing.JPanel advancedPanel;
-    private javax.swing.JPanel basePanel;
-    private javax.swing.JPanel basicPanel;
     private javax.swing.JButton btnDisplay;
     private javax.swing.JButton btnPreview;
+    private javax.swing.JButton btnSearch;
     private javax.swing.JComboBox cmbSubItem;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem2;
-    private javax.swing.JMenuItem jMenuItem3;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JSplitPane jSplitPane1;
     private javax.swing.JLabel lblItem;
     private javax.swing.JLabel lblItemName;
+    private javax.swing.JLabel lblListEntry;
     private javax.swing.JLabel lblMethod;
     private javax.swing.JLabel lblStatus;
     private javax.swing.JLabel lblSubItem;
     private javax.swing.JLabel lblURL;
+    private javax.swing.JMenuBar menuBar;
     private javax.swing.JMenu menuEdit;
     private javax.swing.JMenu menuFile;
+    private javax.swing.JMenu menuOptions;
     private javax.swing.JMenuItem miAccess;
     private javax.swing.JMenuItem miAffiliate;
     private javax.swing.JMenuItem miAuthor;
     private javax.swing.JMenuItem miExit;
+    private javax.swing.JMenuItem miNew;
+    private javax.swing.JMenuItem miOpen;
     private javax.swing.JMenuItem miProduct;
-    private javax.swing.JMenuItem openMenuItem;
+    private javax.swing.JMenuItem miSave;
+    private javax.swing.JPanel panelAdvanced;
+    private javax.swing.JPanel panelBasic;
+    private javax.swing.JPanel panelDocument;
+    private javax.swing.JPanel panelProperties;
+    private javax.swing.JPanel panelStatus;
     private javax.swing.JRadioButton radioGet;
     private javax.swing.ButtonGroup radioGroup;
     private javax.swing.JRadioButton radioPost;
-    private javax.swing.JTree treeDoc;
+    private javax.swing.JScrollPane scrollPanel;
+    private javax.swing.JSplitPane splitPane;
+    private javax.swing.JTree treeHtmlDoc;
+    private javax.swing.JTextField txtDocQuery;
     private javax.swing.JTextField txtListEntrySelector;
     private javax.swing.JTextField txtMainSelector;
     private javax.swing.JTextField txtSubItemSelector;
