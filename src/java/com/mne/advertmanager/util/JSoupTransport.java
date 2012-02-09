@@ -81,7 +81,7 @@ public class JSoupTransport {
     public static void logout(Connection con, Project proj) {
         try {
             if (con != null) {
-                con.url(proj.getLogoutUrl());
+                con.url(proj.getLogoutUrl()).timeout(0);
                 con.get();
             }
         } catch (IOException e) {
