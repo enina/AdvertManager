@@ -6,6 +6,9 @@ package com.mne.advertmanager.service;
 
 import com.mne.advertmanager.model.Product;
 import com.mne.advertmanager.dao.GenericDao;
+import java.util.Collection;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 
 
@@ -21,4 +24,10 @@ public class ProductService {
         this.productDao = productDao;
     }
     
+//============================ findAllProducts =================================
+
+   @Transactional(readOnly = true)//, propagation = Propagation.REQUIRED)
+    public Collection<Product> findAllProducts(){
+        return productDao.findByQuery("Product.findAll");
+    }
 }
