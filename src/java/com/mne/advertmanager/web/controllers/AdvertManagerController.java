@@ -5,11 +5,14 @@
 package com.mne.advertmanager.web.controllers;
 
 import com.mne.advertmanager.model.Affiliate;
+import com.mne.advertmanager.model.Product;
 import com.mne.advertmanager.model.User;
 import com.mne.advertmanager.service.AffiliateService;
 import com.mne.advertmanager.service.DataGenService;
+import com.mne.advertmanager.service.ProductService;
 import com.mne.advertmanager.service.UserService;
 import java.util.Collection;
+import javax.enterprise.inject.spi.Producer;
 import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,6 +34,9 @@ public class AdvertManagerController {
     private static Logger logger = LoggerFactory.getLogger(AdvertManagerController.class);
     private DataGenService   dataGenerator;
     private AffiliateService affiliateService;
+    private ProductService productService;
+
+
     private UserService userService;
     private static final String USERS = "users";
     private static final String AFFILIATES = "affiliates";
@@ -74,7 +80,20 @@ public class AdvertManagerController {
         
         return  forwardToView(DG_GEN_REQ_MAPPING,"home","message","Greetings from AdMan DataGen .Dummy Data is being generated!");
     }
-    
+//================================ viewProducts ================================
+    @RequestMapping(value= "products/list", method= RequestMethod.GET)
+    public @ModelAttribute("data") Collection<Product> veiwProducts(){
+        System.out.println("geting data...");
+        System.out.println("geting data... for shure");
+        
+        Collection<Product> products = productService.findAllProducts();
+        
+        System.out.println("return Product data to view");
+       
+        
+        return products;
+    }
+//================================ viewAffiliates ==============================
     @RequestMapping(value=AFF_LIST_REQ_MAPPING, method = RequestMethod.GET)
     public @ModelAttribute("data") Collection<Affiliate> viewAffiliates() {
         
@@ -82,29 +101,15 @@ public class AdvertManagerController {
 
         return  affiliates;
     }
-    @RequestMapping(value=APPS_PARSERGEN_REQ_MAPPING, method = RequestMethod.GET)
-    public @ModelAttribute("codebase") String launchParserGenerator(HttpServletRequest request) {
-        
-        String codebase="http://"+request.getServerName()+":"+request.getServerPort()+request.getServletContext().getContextPath()+"/apps";
-        logger.info("Returning codebase="+codebase);
-        return  codebase;
-    }    
-    
-    @RequestMapping(value=USER_NEW_REQ_MAPPING, method = RequestMethod.GET)
-    public @ModelAttribute("user") User viewRegistrationForm() {
-        
-        return  new User();
-    }    
-    
-    
+//================================ viewUsers ===================================
     @RequestMapping(value=USER_LIST_REQ_MAPPING,method = RequestMethod.GET)
     public @ModelAttribute("data") Collection<User> viewUsers() {
         
         Collection<User> users = userService.findAllUsers();
 
         return  users;
-    }    
-    
+    }
+//================================ addUser =====================================
     @RequestMapping(value=USER_ADD_REQ_MAPPING, method = RequestMethod.POST)
     public ModelAndView addUser(@ModelAttribute("user")User user) {
         
@@ -122,6 +127,25 @@ public class AdvertManagerController {
                                                "User:"+user.getUsername()+" created successfully");
         return  mav;
     }
+        
+    @RequestMapping(value=APPS_PARSERGEN_REQ_MAPPING, method = RequestMethod.GET)
+    public @ModelAttribute("codebase") String launchParserGenerator(HttpServletRequest request) {
+        
+        String codebase="http://"+request.getServerName()+":"+request.getServerPort()+request.getServletContext().getContextPath()+"/apps";
+        logger.info("Returning codebase="+codebase);
+        return  codebase;
+    }    
+    
+    @RequestMapping(value=USER_NEW_REQ_MAPPING, method = RequestMethod.GET)
+    public @ModelAttribute("user") User viewRegistrationForm() {
+        
+        return  new User();
+    }    
+    
+    
+  
+    
+
 
     private ModelAndView forwardToView(String requestMapping , String viewName,String key,Object data) {
         ModelAndView mav = new ModelAndView();
@@ -144,6 +168,13 @@ public class AdvertManagerController {
     @Autowired
     public void setUserService(UserService userService) {
         this.userService = userService;
+    }
+//======================== setProductService ===================================
+    @Autowired
+    public void setProductService(ProductService productService) {
+        
+        System.out.println("AdvertManagerController:setProductService...");
+        this.productService = productService;
     }
    
 }

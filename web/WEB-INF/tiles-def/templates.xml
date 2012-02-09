@@ -33,6 +33,14 @@
        <put-attribute name="content" value="/WEB-INF/view/users/list.jsp" />
    </definition>
    
+
+   <definition name="products/list" extends=".mainTemplate">
+       <put-attribute name="title" value="Products" type="string" />
+       <put-attribute name="content" value="/WEB-INF/view/products/list.jsp" />
+   </definition>
+ 
+   <!--for gui we defined tamplate that not extends main, meas that it gust go to the gsp page -->
+   <!--for gui we defined tamplate that not extends main, meas that it gust go to the gsp page -->
    <definition name="apps/parsergen" template="/WEB-INF/view/apps/parsergen.jsp"/>
 
 </tiles-definitions>
