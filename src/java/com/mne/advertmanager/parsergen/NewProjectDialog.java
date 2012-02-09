@@ -61,7 +61,7 @@ public class NewProjectDialog extends javax.swing.JDialog {
         JTextField[] textFields = new  JTextField[]{txtBaseUrl,txtCookie,txtLoginFormURL,txtLogoutURL,txtPassword,
                                                     txtPasswordField,txtSelector,txtUserField,txtUserName,txtHomePage};
         
-        //debug();
+        //debug1();
         
         for(JTextField tf:textFields)
             tf.setText(tf.getText());
@@ -81,6 +81,19 @@ public class NewProjectDialog extends javax.swing.JDialog {
         txtHomePage.setText("main.php");
         
     }
+    private void debug1() {
+        txtBaseUrl.setText("http://dvd.corel-lessons.com/bbm/aff/");
+        txtCookie.setText("PHPSESSID");
+        txtLoginFormURL.setText("login");
+        txtLogoutURL.setText("logout");
+        txtPassword.setText("in2fo4s");
+        txtPasswordField.setText("pass");
+        txtSelector.setText("html>body");
+        txtUserField.setText("login");
+        txtUserName.setText("infos");
+        txtHomePage.setText("main");
+        
+    }    
 
     /**
      * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The content of this method is always

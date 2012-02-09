@@ -93,9 +93,7 @@ public class ParserGenMainFrame extends javax.swing.JFrame {
 
         radioGroup = new javax.swing.ButtonGroup();
         splitPane = new javax.swing.JSplitPane();
-        scrollPanel = new javax.swing.JScrollPane();
-        treeHtmlDoc = new javax.swing.JTree();
-        panelBase = new javax.swing.JPanel();
+        panelProperties = new javax.swing.JPanel();
         panelAdvanced = new javax.swing.JPanel();
         txtSubItemSelector = new javax.swing.JTextField();
         cmbSubItem = new javax.swing.JComboBox();
@@ -116,6 +114,11 @@ public class ParserGenMainFrame extends javax.swing.JFrame {
         btnPreview = new javax.swing.JButton();
         panelStatus = new javax.swing.JPanel();
         lblStatus = new javax.swing.JLabel();
+        panelDocument = new javax.swing.JPanel();
+        txtDocQuery = new javax.swing.JTextField();
+        btnSearch = new javax.swing.JButton();
+        scrollPanel = new javax.swing.JScrollPane();
+        treeHtmlDoc = new javax.swing.JTree();
         menuBar = new javax.swing.JMenuBar();
         menuFile = new javax.swing.JMenu();
         miNew = new javax.swing.JMenuItem();
@@ -139,13 +142,7 @@ public class ParserGenMainFrame extends javax.swing.JFrame {
         splitPane.setPreferredSize(new java.awt.Dimension(336, 500));
         splitPane.setRequestFocusEnabled(false);
 
-        javax.swing.tree.DefaultMutableTreeNode treeNode1 = new javax.swing.tree.DefaultMutableTreeNode("/");
-        treeHtmlDoc.setModel(new javax.swing.tree.DefaultTreeModel(treeNode1));
-        scrollPanel.setViewportView(treeHtmlDoc);
-
-        splitPane.setLeftComponent(scrollPanel);
-
-        panelBase.setPreferredSize(new java.awt.Dimension(300, 650));
+        panelProperties.setPreferredSize(new java.awt.Dimension(300, 650));
 
         panelAdvanced.setBorder(javax.swing.BorderFactory.createTitledBorder("Advanced"));
         panelAdvanced.setToolTipText("advanced");
@@ -176,18 +173,19 @@ public class ParserGenMainFrame extends javax.swing.JFrame {
             .addGroup(panelAdvancedLayout.createSequentialGroup()
                 .addComponent(lblListEntry)
                 .addContainerGap())
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelAdvancedLayout.createSequentialGroup()
-                .addGroup(panelAdvancedLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, panelAdvancedLayout.createSequentialGroup()
-                        .addGroup(panelAdvancedLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblSubItem)
-                            .addComponent(lblMainDataSelector))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(cmbSubItem, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(231, 231, 231))
             .addComponent(txtMainSelector)
             .addComponent(txtListEntrySelector)
             .addComponent(txtSubItemSelector)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelAdvancedLayout.createSequentialGroup()
+                .addGroup(panelAdvancedLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(panelAdvancedLayout.createSequentialGroup()
+                        .addGap(0, 20, Short.MAX_VALUE)
+                        .addComponent(lblSubItem))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, panelAdvancedLayout.createSequentialGroup()
+                        .addComponent(lblMainDataSelector)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(cmbSubItem, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(231, 231, 231))
         );
         panelAdvancedLayout.setVerticalGroup(
             panelAdvancedLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -204,8 +202,7 @@ public class ParserGenMainFrame extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lblSubItem)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtSubItemSelector, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(76, Short.MAX_VALUE))
+                .addComponent(txtSubItemSelector, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         panelBasic.setBorder(javax.swing.BorderFactory.createTitledBorder("Basic"));
@@ -306,30 +303,63 @@ public class ParserGenMainFrame extends javax.swing.JFrame {
         );
         panelStatusLayout.setVerticalGroup(
             panelStatusLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelStatusLayout.createSequentialGroup()
-                .addComponent(lblStatus)
-                .addGap(0, 2, Short.MAX_VALUE))
+            .addComponent(lblStatus, javax.swing.GroupLayout.DEFAULT_SIZE, 25, Short.MAX_VALUE)
         );
 
-        javax.swing.GroupLayout panelBaseLayout = new javax.swing.GroupLayout(panelBase);
-        panelBase.setLayout(panelBaseLayout);
-        panelBaseLayout.setHorizontalGroup(
-            panelBaseLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout panelPropertiesLayout = new javax.swing.GroupLayout(panelProperties);
+        panelProperties.setLayout(panelPropertiesLayout);
+        panelPropertiesLayout.setHorizontalGroup(
+            panelPropertiesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(panelBasic, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(panelAdvanced, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(panelStatus, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
-        panelBaseLayout.setVerticalGroup(
-            panelBaseLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelBaseLayout.createSequentialGroup()
+        panelPropertiesLayout.setVerticalGroup(
+            panelPropertiesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelPropertiesLayout.createSequentialGroup()
                 .addComponent(panelBasic, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(panelAdvanced, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 73, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 239, Short.MAX_VALUE)
                 .addComponent(panelStatus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
-        splitPane.setRightComponent(panelBase);
+        splitPane.setRightComponent(panelProperties);
+
+        btnSearch.setText("Search in doc");
+        btnSearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                onSearch(evt);
+            }
+        });
+
+        javax.swing.tree.DefaultMutableTreeNode treeNode1 = new javax.swing.tree.DefaultMutableTreeNode("/");
+        treeHtmlDoc.setModel(new javax.swing.tree.DefaultTreeModel(treeNode1));
+        scrollPanel.setViewportView(treeHtmlDoc);
+
+        javax.swing.GroupLayout panelDocumentLayout = new javax.swing.GroupLayout(panelDocument);
+        panelDocument.setLayout(panelDocumentLayout);
+        panelDocumentLayout.setHorizontalGroup(
+            panelDocumentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelDocumentLayout.createSequentialGroup()
+                .addComponent(txtDocQuery, javax.swing.GroupLayout.DEFAULT_SIZE, 196, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnSearch))
+            .addComponent(scrollPanel)
+        );
+        panelDocumentLayout.setVerticalGroup(
+            panelDocumentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelDocumentLayout.createSequentialGroup()
+                .addGroup(panelDocumentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelDocumentLayout.createSequentialGroup()
+                        .addGap(1, 1, 1)
+                        .addComponent(txtDocQuery))
+                    .addComponent(btnSearch, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(scrollPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 568, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+
+        splitPane.setLeftComponent(panelDocument);
 
         menuFile.setText("File");
 
@@ -401,11 +431,11 @@ public class ParserGenMainFrame extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(splitPane, javax.swing.GroupLayout.DEFAULT_SIZE, 619, Short.MAX_VALUE)
+            .addComponent(splitPane, javax.swing.GroupLayout.DEFAULT_SIZE, 651, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(splitPane, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(splitPane, javax.swing.GroupLayout.DEFAULT_SIZE, 599, Short.MAX_VALUE)
         );
 
         pack();
@@ -513,6 +543,48 @@ public class ParserGenMainFrame extends javax.swing.JFrame {
         dispose();
     }//GEN-LAST:event_onExit
 
+    private void onSearch(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onSearch
+        
+        String query = txtDocQuery.getText();
+        DefaultMutableTreeNode root= (DefaultMutableTreeNode)treeHtmlDoc.getModel().getRoot();
+        if (query.length() > 0) {
+            TreeNode result = find(root,query);
+            if (result != null) {
+                ArrayList<TreeNode> path = new ArrayList<TreeNode>();
+                while (result != null) {
+                    path.add(0, result);
+                    result=result.getParent();
+                }
+                TreePath treePath = new TreePath(path.toArray());
+                treeHtmlDoc.setSelectionPath(treePath);
+                treeHtmlDoc.makeVisible(treePath);
+            }
+        }
+    }//GEN-LAST:event_onSearch
+
+    private  TreeNode find(DefaultMutableTreeNode node,String query) {
+        
+        NodeData data = null;
+        TreeNode result = null;
+        DefaultMutableTreeNode childNode = null;
+        
+        if (node!=null) {
+            
+            data = (NodeData)node.getUserObject();
+
+            if (data.match(query))
+                return node;
+            
+            for (int i = 0 ; i < node.getChildCount();++i) {
+                childNode  = (DefaultMutableTreeNode)node.getChildAt(i);
+                result = find(childNode,query);
+                if (result!=null)
+                    break;
+            }
+        }
+        
+        return result;
+    }
     
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////
     private void buildTree(org.jsoup.nodes.Node dataNode, DefaultMutableTreeNode controlNode) {
@@ -553,8 +625,6 @@ public class ParserGenMainFrame extends javax.swing.JFrame {
             if (con != null) {
                 org.jsoup.nodes.Document dataRoot = JSoupTransport.retrieveDocument(con, url, method);
                 if (dataRoot != null) {
-                    JSoupTransport.logout(con, project);
-
                     DefaultMutableTreeNode controlRoot = new DefaultMutableTreeNode("/");
                     controlRoot.setAllowsChildren(true);
 
@@ -772,6 +842,11 @@ public class ParserGenMainFrame extends javax.swing.JFrame {
         public String getTagName() {return tagName;}
         public void setTagName(String tagName) {this.tagName = tagName;}
         @Override public String toString() {return label; }
+
+        private boolean match(String query) {
+            boolean result = tagName.indexOf(query) >= 0 || label.indexOf(query) >= 0;
+            return result;
+        }
     }
 
     private class CtxMenuActionListener implements ActionListener {
@@ -839,6 +914,7 @@ public class ParserGenMainFrame extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnDisplay;
     private javax.swing.JButton btnPreview;
+    private javax.swing.JButton btnSearch;
     private javax.swing.JComboBox cmbSubItem;
     private javax.swing.JLabel lblItem;
     private javax.swing.JLabel lblItemName;
@@ -860,8 +936,9 @@ public class ParserGenMainFrame extends javax.swing.JFrame {
     private javax.swing.JMenuItem miProduct;
     private javax.swing.JMenuItem miSave;
     private javax.swing.JPanel panelAdvanced;
-    private javax.swing.JPanel panelBase;
     private javax.swing.JPanel panelBasic;
+    private javax.swing.JPanel panelDocument;
+    private javax.swing.JPanel panelProperties;
     private javax.swing.JPanel panelStatus;
     private javax.swing.JRadioButton radioGet;
     private javax.swing.ButtonGroup radioGroup;
@@ -869,6 +946,7 @@ public class ParserGenMainFrame extends javax.swing.JFrame {
     private javax.swing.JScrollPane scrollPanel;
     private javax.swing.JSplitPane splitPane;
     private javax.swing.JTree treeHtmlDoc;
+    private javax.swing.JTextField txtDocQuery;
     private javax.swing.JTextField txtListEntrySelector;
     private javax.swing.JTextField txtMainSelector;
     private javax.swing.JTextField txtSubItemSelector;
