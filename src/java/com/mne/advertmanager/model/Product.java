@@ -6,19 +6,7 @@ package com.mne.advertmanager.model;
 
 import java.io.Serializable;
 import java.util.Collection;
-import javax.persistence.Basic;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlTransient;
@@ -30,7 +18,12 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity
 @Table(name = "product")
 @NamedQueries({
-    @NamedQuery(name = "Product.findAll", query = "SELECT p FROM Product p"),
+    @NamedQuery(name = "Product.findAll",
+        query = "SELECT p FROM Product p "
+//                + "left join fetch p.productGroupId pg "
+//                + "left join fetch pg.affiliateId "
+//                + "left join fetch p.authorId"
+        ),
     @NamedQuery(name = "Product.findById", query = "SELECT p FROM Product p WHERE p.id = :id"),
     @NamedQuery(name = "Product.findByDescription", query = "SELECT p FROM Product p WHERE p.description = :description"),
     @NamedQuery(name = "Product.findByPrice", query = "SELECT p FROM Product p WHERE p.price = :price"),
@@ -39,46 +32,58 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Product.findByProductLink", query = "SELECT p FROM Product p WHERE p.productLink = :productLink"),
     @NamedQuery(name = "Product.findByRedirectLink", query = "SELECT p FROM Product p WHERE p.redirectLink = :redirectLink")})
 public class Product implements Serializable {
+    
+    private static final long serialVersionUID = 1L;    
+    
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "productId")
     private Collection<AccessLog> accessLogCollection;
+    
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "productId")
     private Collection<PurchaseOrder> purchaseOrderCollection;
-    private static final long serialVersionUID = 1L;
+    
+
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
+    
     @Size(max = 256)
     @Column(name = "description")
     private String description;
-    @Basic(optional = false)
+    
+
     @NotNull
     @Column(name = "price")
     private int price;
-    @Basic(optional = false)
+    
+
     @NotNull
     @Column(name = "commision")
     private int commision;
-    @Basic(optional = false)
+    
+
     @NotNull
     @Column(name = "sync_status")
     private int syncStatus;
-    @Basic(optional = false)
+    
+
     @NotNull
     @Size(min = 1, max = 256)
     @Column(name = "product_link")
     private String productLink;
-    @Basic(optional = false)
+    
     @NotNull
     @Size(min = 1, max = 256)
     @Column(name = "redirect_link")
     private String redirectLink;
+    
     @JoinColumn(name = "author_id", referencedColumnName = "id")
-    @ManyToOne(optional = false)
+    @ManyToOne(fetch= FetchType.LAZY)
     private Author authorId;
+    
     @JoinColumn(name = "product_group_id", referencedColumnName = "id")
-    @ManyToOne(optional = false)
+    @ManyToOne(fetch= FetchType.LAZY)
     private ProductGroup productGroupId;
 
     public Product() {

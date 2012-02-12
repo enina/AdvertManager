@@ -83,12 +83,15 @@ public class AdvertManagerController {
 //================================ viewProducts ================================
     @RequestMapping(value= "products/list", method= RequestMethod.GET)
     public @ModelAttribute("data") Collection<Product> veiwProducts(){
-        System.out.println("geting data...");
-        System.out.println("geting data... for shure");
+
+        
+        logger.info("getting product data");
         
         Collection<Product> products = productService.findAllProducts();
         
-        System.out.println("return Product data to view");
+        int size = (products!=null)?products.size():0;
+        
+        logger.info("return product data to view. found {} products",size);
        
         
         return products;

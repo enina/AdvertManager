@@ -7,21 +7,9 @@ package com.mne.advertmanager.model;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashSet;
-import javax.persistence.Basic;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
+import javax.persistence.*;
 import javax.validation.constraints.Size;
+import org.hibernate.annotations.LazyToOne;
 
 /**
  *
@@ -34,23 +22,31 @@ import javax.validation.constraints.Size;
     @NamedQuery(name = "ProductGroup.findById", query = "SELECT p FROM ProductGroup p WHERE p.id = :id"),
     @NamedQuery(name = "ProductGroup.findByGroupName", query = "SELECT p FROM ProductGroup p WHERE p.groupName = :groupName"),
     @NamedQuery(name = "ProductGroup.findByDescription", query = "SELECT p FROM ProductGroup p WHERE p.description = :description")})
+
+
+
 public class ProductGroup implements Serializable {
     private static final long serialVersionUID = 1L;
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
+    
     @Size(max = 256)
     @Column(name = "group_name")
     private String groupName;
+    
     @Size(max = 256)
     @Column(name = "description")
     private String description;
+    
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "productGroupId")
     private Collection<Product> productCollection;
+
     @JoinColumn(name = "affiliate_id", referencedColumnName = "id")
-    @ManyToOne(optional = false)
+    @ManyToOne(fetch=FetchType.LAZY)
     private Affiliate affiliateId;
 
     public ProductGroup() {
