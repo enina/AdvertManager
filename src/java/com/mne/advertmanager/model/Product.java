@@ -20,9 +20,9 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "Product.findAll",
         query = "SELECT p FROM Product p "
-//                + "left join fetch p.productGroupId pg "
-//                + "left join fetch pg.affiliateId "
-//                + "left join fetch p.authorId"
+                + "left join fetch p.productGroupId pg "
+                + "left join fetch pg.affiliateId "
+                + "left join fetch p.authorId"
         ),
     @NamedQuery(name = "Product.findById", query = "SELECT p FROM Product p WHERE p.id = :id"),
     @NamedQuery(name = "Product.findByDescription", query = "SELECT p FROM Product p WHERE p.description = :description"),

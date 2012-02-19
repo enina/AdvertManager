@@ -15,10 +15,11 @@
   
   <logger name="com.mne" level="debug"/>
   
-  <logger name="org.hibernate.SQL" level="error"/>
+  <logger name="org.hibernate.SQL" level="debug"/>
 
   
   <logger name="org.hibernate" level="error"/>
+  
   
   
   <logger name="org.springframework" level="error"/>

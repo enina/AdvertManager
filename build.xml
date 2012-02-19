@@ -74,28 +74,36 @@
         <property name="ivy.default.ivy.user.dir" value="D:/java/ivy_rep/"/>
         <ivy:retrieve pattern="${IVY_DIR}/[type]/[artifact]-[revision].[ext]"/>
     </target>
+    
 
-    <target name="-pre-dist">
+    <target name="-post-compile">
+        
         <copy todir="${build.dir}/web/WEB-INF/classes">
-            <fileset dir="web/WEB-INF/" includes="logback.xml" />
+            <fileset dir="${conf.dir}" includes="logback.xml" />
         </copy>
+        
         <jar destfile="${build.dir}/web/apps/parsergen.jar">
-            <fileset dir="${build.dir}/web/WEB-INF/classes/" includes="com/mne/advertmanager/parsergen/**"/>
-            <fileset dir="${build.dir}/web/WEB-INF/classes/" includes="com/mne/advertmanager/util/JSoupTransport.class" />
+            <fileset dir="${build.dir}/web/WEB-INF/classes/" >
+                <include name="com/mne/advertmanager/parsergen/**/*.class"/>
+                <include name="com/mne/advertmanager/util/JSoupTransport.class" />
+            </fileset>
+            
             <manifest>
                 <attribute name="Main-Class"  value="com.mne.advertmanager.parsergen.ParserGenMainFrame"/>
                 <attribute name="Class-Path"  value="jsoup-1.6.1.jar"/>
             </manifest>            
         </jar>
+        
         <copy todir="${build.dir}/web/apps/extlib">
             <fileset dir="${build.dir}/web/WEB-INF/lib" includes="jsoup-1.6.1.jar" />
         </copy>
-                 
-        <signjar alias="mne"  storepass="mneAdMan" preservelastmodified="true" >
-            <fileset file="${build.dir}/web/apps/extlib/jsoup-1.6.1.jar"/>
-            <fileset file="${build.dir}/web/apps/parsergen.jar"/>
-        </signjar>
 
+        <signjar alias="mne"  keystore="${conf.dir}/keystore/mne.keystore" storepass="mneAdMan" preservelastmodified="true" >
+            <fileset dir="${build.dir}/web/apps/"> 
+                <include name="extlib/jsoup-1.6.1.jar"/>
+                <include name="parsergen.jar"/>
+            </fileset>
+        </signjar>
                  
     </target>
     
