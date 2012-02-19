@@ -16,7 +16,6 @@ drop table if exists access_source          CASCADE;
 ------------------ application tables --------------
 
 ---------- spring security tables ------------------
-drop table if exists users              CASCADE;
 drop table if exists authorities        CASCADE;
 drop table if exists groups             CASCADE;
 drop table if exists group_authorities  CASCADE;
@@ -32,9 +31,13 @@ create table author (
 
 create table affiliate (
     id INT NOT NULL AUTO_INCREMENT,
-    affiliateName varchar(256) not null ,
-    email         varchar(256) not null ,
-    CONSTRAINT AFFILIATE_PK PRIMARY KEY (id));
+    affiliateName varchar(256)  not null ,
+    email         varchar(256)  not null ,
+    password      varchar(50)   not null,
+    enabled       boolean       not null,
+    CONSTRAINT AFFILIATE_PK         PRIMARY KEY (id),
+    CONSTRAINT AFFILIATE_NAME_UQ    UNIQUE affNameIdx  (affiliateName(255)),
+    CONSTRAINT AFFILIATE_EMAIL_UQ   UNIQUE affEmailIdx (email(255)) );
 
 create table product_group (
     id INT NOT NULL AUTO_INCREMENT,
@@ -106,17 +109,12 @@ create table partner (
 
 
 --------------------------------------------------- Spring Security tables ---------------------------------------------------
-create table users(
-    username varchar(50) not null primary key,
-    password varchar(50) not null,
-    enabled boolean not null);
-
 create table authorities (
-    username varchar(50) not null,
-    authority varchar(50) not null,
-    constraint fk_authorities_users foreign key(username) references users(username));
+    user_id     int not null,
+    authority   varchar(50) not null,
+    constraint fk_authorities_users foreign key(user_id) references affiliate(id));
 
-create unique index ix_auth_username on authorities (username,authority);
+create unique index ix_auth_username on authorities (user_id,authority);
 
 create table groups (
     id int not null auto_increment,
@@ -136,21 +134,23 @@ create table group_members (
     constraint fk_group_members_group foreign key(group_id) references groups(id));
 ------------------------------------------------------------------------------------------------------------------------------
 -----------------------------------default data-------------------------------------------------------------------------------
-insert into users values ('ilya','ilya',1);
-insert into users values ('nina','nina',1);
-insert into users values ('misha','misha',1);
-insert into users values ('root','admin',1);
-insert into users values ('vasya','vasya',1);
-insert into users values ('hacker','hacker',0);
-insert into authorities values ('ilya', 'ROLE_USER');
-insert into authorities values ('ilya', 'ROLE_ADMIN');
-insert into authorities values ('nina', 'ROLE_USER');
-insert into authorities values ('nina', 'ROLE_ADMIN');
-insert into authorities values ('misha', 'ROLE_USER');
-insert into authorities values ('misha', 'ROLE_ADMIN');
-insert into authorities values ('root', 'ROLE_ADMIN');
-insert into authorities values ('vasya', 'ROLE_USER');
-insert into authorities values ('hacker', 'ROLE_USER');
-insert into authorities values ('hacker', 'ROLE_ADMIN');
+insert into affiliate (affiliateName , email,password,enabled) values ('ilya','ilya@mail.com','ilya',1);
+insert into affiliate (affiliateName , email,password,enabled) values ('nina','nina@mail.com','nina',1);
+insert into affiliate (affiliateName , email,password,enabled) values ('misha','misha@mail.com','misha',1);
+insert into affiliate (affiliateName , email,password,enabled) values ('root','root@mail.com','admin',1);
+insert into affiliate (affiliateName , email,password,enabled) values ('vasya','vasya@mail.com','vasya',1);
+insert into affiliate (affiliateName , email,password,enabled) values ('hacker','hacker@mail.com','hacker',0);
+
+insert into authorities  select id ,'ROLE_ADMIN' from affiliate where affiliateName='ilya';
+insert into authorities  select id ,'ROLE_USER' from affiliate where affiliateName='ilya';
+insert into authorities  select id ,'ROLE_ADMIN' from affiliate where affiliateName='nina';
+insert into authorities  select id ,'ROLE_USER' from affiliate where affiliateName='nina';
+insert into authorities  select id ,'ROLE_ADMIN' from affiliate where affiliateName='misha';
+insert into authorities  select id ,'ROLE_USER' from affiliate where affiliateName='misha';
+insert into authorities  select id ,'ROLE_ADMIN' from affiliate where affiliateName='root';
+insert into authorities  select id ,'ROLE_USER' from affiliate where affiliateName='vasya';
+insert into authorities  select id ,'ROLE_ADMIN' from affiliate where affiliateName='hacker';
+insert into authorities  select id ,'ROLE_USER' from affiliate where affiliateName='hacker';
+
 commit;
 -----------------------------------default data-------------------------------------------------------------------------------
