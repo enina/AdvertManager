@@ -54,20 +54,31 @@ public class AdvertManagerController {
     private static final String USER_NEW_REQ_MAPPING = USERS+"/new";    
     private static final String USER_ADD_REQ_MAPPING = USERS+"/add";
 
+//================================= mainWindow =================================
+    @RequestMapping(value = "/mainwindow", method = RequestMethod.GET)
+    public @ModelAttribute("message") String mainWindow() { 
+        logger.info("redirecting to home page");
+        //return "redirect:home.do/";
+        
+        System.out.println("mainWindow function says hi");
+        return "helow from misha";
+    }
     
+//================================= redirect ===================================
     @RequestMapping("/")
     public String redirect() { 
         logger.info("redirecting to home page");
-        return "redirect:home.do/";
+        //return "redirect:home.do/";
+        return "redirect:mainwindow.do";
     }
-    
+//============================== generateHome ==================================
     @RequestMapping(value="home", method = RequestMethod.GET)
     public @ModelAttribute("message") String generateHome() {
         return  "Greetings from AdMan !";
     }
     
     
-    
+//================================== generateData ==============================
     @RequestMapping(value=DG_GEN_REQ_MAPPING, method = RequestMethod.GET)
     public ModelAndView generateData() {
         new Thread() {
@@ -130,7 +141,7 @@ public class AdvertManagerController {
                                                "User:"+user.getUsername()+" created successfully");
         return  mav;
     }
-        
+//================================ launchParserGenerator =======================    
     @RequestMapping(value=APPS_PARSERGEN_REQ_MAPPING, method = RequestMethod.GET)
     public @ModelAttribute("codebase") String launchParserGenerator(HttpServletRequest request) {
         
@@ -138,7 +149,7 @@ public class AdvertManagerController {
         logger.info("Returning codebase="+codebase);
         return  codebase;
     }    
-    
+//================================ viewRegistrationForm ========================    
     @RequestMapping(value=USER_NEW_REQ_MAPPING, method = RequestMethod.GET)
     public @ModelAttribute("user") User viewRegistrationForm() {
         
@@ -149,25 +160,25 @@ public class AdvertManagerController {
   
     
 
-
+//============================= forwardToView ==================================
     private ModelAndView forwardToView(String requestMapping , String viewName,String key,Object data) {
-        ModelAndView mav = new ModelAndView();
-        mav.setViewName(viewName);
-        mav.addObject(key, data);
-        logger.info("{} --> {}",requestMapping,viewName);
-        return mav;
+        ModelAndView mav = new ModelAndView(); //create new model and view
+        mav.setViewName(viewName);             //set redirection jsp name
+        mav.addObject(key, data);              //add data to be passed to view
+        logger.info("{} --> {}",requestMapping,viewName); //log this event
+        return mav;                                       //redirect 
     }
-    
+//============================= setDataGenerator ===============================
     @Autowired
     public void setDataGenerator(DataGenService dataGenerator) {
         this.dataGenerator = dataGenerator;
     }
-
+//============================= setAffiliateService ============================
     @Autowired
     public void setAffiliateService(AffiliateService affiliateService) {
         this.affiliateService = affiliateService;
     }
-    
+//============================= setUserService =================================
     @Autowired
     public void setUserService(UserService userService) {
         this.userService = userService;
