@@ -11,13 +11,13 @@
 </div>
 
 
-<sec:authorize access="hasRole('ROLE_ADMIN')">
+ <sec:authorize access="hasRole('ROLE_ADMIN')">
     <div> <a href="/AdvertManager/dataGen/generate.do">Generate Data</a></div>
     <div> <a href="/AdvertManager/users/new.do">Register New User</a></div>
     <div> <a href="/AdvertManager/users/list.do">Show All Users</a></div>
     <div> <a href="/AdvertManager/apps/parsergen.do">Configure Parser</a></div>
     
-</sec:authorize>
+</sec:authorize> 
 
 
 

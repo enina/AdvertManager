@@ -22,6 +22,7 @@
             <property name="location" value="/WEB-INF/spring/advertmanager.properties"/>
     </bean>
 
+    <!-- neaded for hibernate -->
     <bean id="advertManagerC3P0DataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
         <property name="driverClass" value="com.oracle.jdbc.driver"/>
         <property name="jdbcUrl" value="jdbc:mysql://localhost:3306/mysql"/>
@@ -31,9 +32,9 @@
         
     </bean>
 
-<!--    <bean id="advertManagerSessionFactory" class="com.mne.adman.test.DummySessionFactory">
+    <!--    <bean id="advertManagerSessionFactory" class="com.mne.adman.test.DummySessionFactory">
     </bean>-->
-
+    <!-- neaded for hibernate to know how to create sessions -->
     <bean id="advertManagerSessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
         <property name="dataSource" ref="advertManagerC3P0DataSource"/>
         
@@ -46,7 +47,13 @@
         </property>
     </bean>
     
+    <!-- neaded for hibernate to perform transactions -->
+    <bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+        <property name="sessionFactory">
+            <ref bean="advertManagerSessionFactory" />
+        </property>
     
+<!--================ our aplication beans  ===================================-->
     <bean id="adManGenericDao"  class="com.mne.advertmanager.dao.GenericDaoHibernateImpl" abstract="true" scope="prototype">
         <property name="sessionFactory">
             <ref bean="advertManagerSessionFactory"/>
@@ -155,11 +162,7 @@ prepare UserServise bean
         </property>
     </bean>    
     
-    
-    <bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
-        <property name="sessionFactory">
-            <ref bean="advertManagerSessionFactory" />
-        </property>
+
     </bean>        
             
     <tx:annotation-driven/>
