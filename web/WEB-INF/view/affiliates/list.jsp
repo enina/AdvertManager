@@ -12,6 +12,12 @@
             <td class="affTd" align="left" >
                 <c:out value="${affiliate.email}" />
             </td>
+            <td class="affTd" align="left" >
+                <c:out value="${affiliate.password}" />
+            </td>
+            <td class="affTd" align="left" >
+                <c:out value="${affiliate.enabled}" />
+            </td>            
             </tr>   
         </c:forEach>
     </c:if>        
