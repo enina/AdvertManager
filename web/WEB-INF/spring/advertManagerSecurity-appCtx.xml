@@ -18,9 +18,11 @@
     <http pattern="/css/**" security="none"/>
     <http pattern="/loggedout.jsp" security="none"/>
     <!--http pattern="/*.do" security="none"/-->
-
+    
     <http use-expressions="true">
         <intercept-url pattern="/secure/**" access="hasRole('supervisor')"/>
+        <intercept-url pattern="/users/new.do/**" access="permitAll" />
+        <intercept-url pattern="/users/add.do/**" access="permitAll" />
         <intercept-url pattern="/**/*.do/**" access="isAuthenticated()" />
         <!--
              Allow all other requests. In a real application you should
@@ -39,8 +41,8 @@
         <session-management invalid-session-url="/timeout.jsp">
             <concurrency-control max-sessions="1" error-if-maximum-exceeded="true" />
         </session-management>
-
     </http>
+
 
     <!--
     Usernames/Passwords are
