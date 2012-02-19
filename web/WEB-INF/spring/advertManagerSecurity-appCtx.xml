@@ -28,7 +28,7 @@
              Allow all other requests. In a real application you should
              adopt a whitelisting approach where access is not allowed by default
           -->
-        <form-login />
+        <form-login login-page='/index.jsp' default-target-url='/home.do'  always-use-default-target='true'/>
         <!--<form-login login-page='/index.jsp' default-target-url='/home.htm'  always-use-default-target='true' />-->
         
         <logout invalidate-session="true" logout-success-url="/loggedout.jsp" delete-cookies="JSESSIONID"/>
@@ -72,6 +72,8 @@
 
     <beans:bean id="myUserDetailsService" class="org.springframework.security.core.userdetails.jdbc.JdbcDaoImpl">
         <beans:property name="dataSource" ref="advertManagerC3P0DataSource"/>
+        <beans:property name="usersByUsernameQuery" value="select affiliateName , password,enabled from affiliate where affiliateName=?"/>
+        <beans:property name="authoritiesByUsernameQuery" value="select affiliateName ,authority from authorities  join affiliate on authorities.user_id=affiliate.id where affiliateName = ?"/>
     </beans:bean>
 
 </beans:beans>
