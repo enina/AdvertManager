@@ -17,11 +17,14 @@
 
     <http pattern="/css/**" security="none"/>
     <http pattern="/loggedout.jsp" security="none"/>
+    <http pattern="/mainwindow.jsp" security="none"/>
+    <http pattern="/*" security="none"/>
     <!--http pattern="/*.do" security="none"/-->
 
-    <http use-expressions="true">
+   <http use-expressions="true">
         <intercept-url pattern="/secure/**" access="hasRole('supervisor')"/>
-        <intercept-url pattern="/**/*.do/**" access="isAuthenticated()" />
+        
+        <!-- <intercept-url pattern="/**/*.do/**" access="isAuthenticated()" /> -->
         <!--
              Allow all other requests. In a real application you should
              adopt a whitelisting approach where access is not allowed by default
@@ -31,16 +34,17 @@
         
         <logout invalidate-session="true" logout-success-url="/loggedout.jsp" delete-cookies="JSESSIONID"/>
         <remember-me />
-<!--
-    Uncomment to enable X509 client authentication support
-        <x509 />
--->
+        
+        <!--
+            Uncomment to enable X509 client authentication support
+                <x509 />
+        -->     
         <!-- Uncomment to limit the number of sessions a user can have -->
         <session-management invalid-session-url="/timeout.jsp">
             <concurrency-control max-sessions="1" error-if-maximum-exceeded="true" />
         </session-management>
 
-    </http>
+    </http> 
 
     <!--
     Usernames/Passwords are
