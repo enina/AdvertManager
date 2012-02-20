@@ -18,6 +18,8 @@
                 ignoreResourceNotFound="true"
                 location="file:/WEB-INF/conf/advertmanager.properties"/-->
 
+
+    <!--=====================================================infrastructure beans start ==============================================================-->
     <bean class="org.springframework.beans.factory.config.PropertyOverrideConfigurer">
             <property name="location" value="/WEB-INF/spring/advertmanager.properties"/>
     </bean>
@@ -28,7 +30,10 @@
         <property name="user" value="admin"/>
         <property name="password" value="admin1234"/>
         <property name="maxIdleTime" value="6000"/>
-        
+    </bean>
+    
+    <bean id="adManJdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+        <property name="dataSource" ref="advertManagerC3P0DataSource"/>
     </bean>
 
 <!--    <bean id="advertManagerSessionFactory" class="com.mne.adman.test.DummySessionFactory">
@@ -45,6 +50,18 @@
             </value>
         </property>
     </bean>
+    
+    <bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+        <property name="sessionFactory">
+            <ref bean="advertManagerSessionFactory" />
+        </property>
+    </bean>        
+            
+    <tx:annotation-driven/>
+
+    <!--=============================================================== infrastructure beans end ===========================================================-->
+    
+    <!-- user beans start -->
     
     
     <bean id="adManGenericDao"  class="com.mne.advertmanager.dao.GenericDaoHibernateImpl" abstract="true" scope="prototype">
@@ -95,11 +112,6 @@
         </constructor-arg>
     </bean>
     
-    <bean id="userDao"  parent="adManGenericDao" class="com.mne.advertmanager.dao.GenericDaoHibernateImpl" >
-        <constructor-arg >
-            <value type="java.lang.Class">com.mne.advertmanager.model.User</value>
-        </constructor-arg>
-    </bean>
     
 <!--=============================== adManProductService ========================
 preapate ProductService bean
@@ -107,14 +119,6 @@ preapate ProductService bean
     <bean id="advertManagerProductService" class="com.mne.advertmanager.service.ProductService">
         <property name="productDao">
             <ref bean="productDao"/>
-        </property>
-    </bean>
-<!--=============================== adManUserService ===========================
-prepare UserServise bean
--->
-    <bean id="adManUserService" class="com.mne.advertmanager.service.UserService">
-        <property name="userDao">
-            <ref bean="userDao"/>
         </property>
     </bean>
 
@@ -153,15 +157,11 @@ prepare UserServise bean
         <property name="affiliateDao">
             <ref bean="affiliateDao"/>
         </property>
+        <property name="jdbcTemplate">
+            <ref bean="adManJdbcTemplate"/>
+        </property>
     </bean>    
     
     
-    <bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
-        <property name="sessionFactory">
-            <ref bean="advertManagerSessionFactory" />
-        </property>
-    </bean>        
-            
-    <tx:annotation-driven/>
 
 </beans>

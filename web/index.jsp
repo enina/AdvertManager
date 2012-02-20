@@ -3,9 +3,7 @@
     Created on : Jan 13, 2012, 7:58:38 PM
     Author     : nina
 --%>
-
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
-<!DOCTYPE html>
+<%@ include file="WEB-INF/view/common/taglibs.jsp" %>
 <!--
 <%--
     response.sendRedirect("home.do");
@@ -17,7 +15,10 @@
     </head>
     <body onload='document.f.j_username.focus();'>
         <h3>Login with Username and Password</h3>
-        <form name='f' action='j_spring_security_check' method='POST'>
+        <c:if test="${status!=null}">
+            <div style="color:red"><c:out value="${status}"/></div>
+        </c:if>
+        <form name='f' action='${pageContext.request.contextPath}/j_spring_security_check' method='POST'>
             <table>
                 <tr>
                     <td>User:</td>
@@ -36,6 +37,6 @@
                 </tr>
             </table>
         </form>
-        <div> <a href="users/new.do">Register New User</a></div>
+        <div> <a href="${pageContext.request.contextPath}/affiliates/new.do">Register</a></div>
     </body>
 </html>
