@@ -15,14 +15,13 @@
 
     <global-method-security pre-post-annotations="enabled" />
 
-    <http pattern="/css/**" security="none"/>
-    <http pattern="/loggedout.jsp" security="none"/>
     <!--http pattern="/*.do" security="none"/-->
     
     <http use-expressions="true">
-        <intercept-url pattern="/secure/**" access="hasRole('supervisor')"/>
-        <intercept-url pattern="/users/new.do/**" access="permitAll" />
-        <intercept-url pattern="/users/add.do/**" access="permitAll" />
+        <intercept-url pattern="/css/**" access="permitAll"/>
+        <intercept-url pattern="/loggedout.jsp" access="permitAll"/>
+        <intercept-url pattern="/affiliates/new.do/**" access="permitAll" />
+        <intercept-url pattern="/affiliates/add.do/**" access="permitAll" />
         <intercept-url pattern="/**/*.do/**" access="isAuthenticated()" />
         <!--
              Allow all other requests. In a real application you should

@@ -5,16 +5,23 @@
 --%>
 
 <%@include file="../common/taglibs.jsp" %>
-<form:form  modelAttribute="user" method="post" action="add.do">
+<form:form  modelAttribute="affiliate" method="post" action="add.do">
     <table>
         <tr>
-            <td><form:label path="username">User Name</form:label></td>
-            <td><form:input path="username" /></td>
+            <td><form:label path="affiliateName">Affiliate Name</form:label></td>
+            <td><form:input path="affiliateName" /></td>
         </tr>
+        
         <tr>
             <td><form:label path="password">Password</form:label></td>
             <td><form:password path="password" /></td>
         </tr>
+        
+        <tr>
+            <td><form:label path="email">Email</form:label></td>
+            <td><form:input path="email" /></td>
+        </tr>
+        
         <tr>
             <td><form:label path="enabled">Enabled</form:label></td>
             <td><form:checkbox path="enabled" /></td>
