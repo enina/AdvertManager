@@ -142,15 +142,12 @@ insert into affiliate (affiliateName , email,password,enabled) values ('vasya','
 insert into affiliate (affiliateName , email,password,enabled) values ('hacker','hacker@mail.com','hacker',0);
 
 insert into authorities  select id ,'ROLE_ADMIN' from affiliate where affiliateName='ilya';
-insert into authorities  select id ,'ROLE_USER' from affiliate where affiliateName='ilya';
 insert into authorities  select id ,'ROLE_ADMIN' from affiliate where affiliateName='nina';
-insert into authorities  select id ,'ROLE_USER' from affiliate where affiliateName='nina';
 insert into authorities  select id ,'ROLE_ADMIN' from affiliate where affiliateName='misha';
-insert into authorities  select id ,'ROLE_USER' from affiliate where affiliateName='misha';
 insert into authorities  select id ,'ROLE_ADMIN' from affiliate where affiliateName='root';
 insert into authorities  select id ,'ROLE_USER' from affiliate where affiliateName='vasya';
 insert into authorities  select id ,'ROLE_ADMIN' from affiliate where affiliateName='hacker';
-insert into authorities  select id ,'ROLE_USER' from affiliate where affiliateName='hacker';
+
 
 commit;
 -----------------------------------default data-------------------------------------------------------------------------------

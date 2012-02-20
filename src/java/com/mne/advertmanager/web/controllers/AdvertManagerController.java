@@ -104,24 +104,25 @@ public class AdvertManagerController {
     @RequestMapping(value=AFF_ADD_REQ_MAPPING, method = RequestMethod.POST)
     public ModelAndView addUser(@ModelAttribute("affiliate")Affiliate affiliate,SecurityContextHolderAwareRequestWrapper securityContext) {
         
-        String errMsg=null;
+        String status = null;
         try {
             affiliateService.createAffiliate(affiliate);
+            status = "User:"+affiliate.getAffiliateName()+" created successfully";
         }catch(Exception e) {
-            errMsg=" Exception:"+e.getClass().getSimpleName()+ ((e.getMessage()==null)?"":
-                   " ,Message:"+e.getMessage());
+            String errMsg = ",Exception:"+e.getClass().getSimpleName()+ ((e.getMessage()==null) ? "": " ,Message:"+e.getMessage());
+            status = "Failed to create user:"+affiliate.getAffiliateName()+errMsg;
+            logger.error(status);
         }
         
        ModelAndView mav = null; 
        if (securityContext.isUserInRole("ROLE_ADMIN")) {
             mav = forwardToView(AFF_ADD_REQ_MAPPING,AFF_LIST_REQ_MAPPING,"data",viewAffiliates());
-       }else
-       {
+       }else {
            mav = forwardToView(AFF_ADD_REQ_MAPPING,"login",null,null);
        }
         
-        mav.addObject("status", (errMsg!=null)?"failed to create user:"+affiliate.getAffiliateName()+errMsg:
-                                               "User:"+affiliate.getAffiliateName()+" created successfully");
+        mav.addObject("status", status);
+        
         return  mav;
     }
         
