@@ -59,15 +59,10 @@ public class GenericDaoHibernateImpl<T, PK extends Serializable> implements Gene
         Query q = getSession().getNamedQuery(queryName);
 
 
-        if (q != null) {
-            if (params.length > 0) {
-                int i = 0;
-                for (Object o : params) {
-                    q.setEntity(i, o);
-                    ++i;
-                }
+        if (q != null && params != null) {
+            for (int i = 0; i < params.length; ++i) {
+                q.setParameter(i, params[i]);
             }
-
             result = q.list();
         }
 

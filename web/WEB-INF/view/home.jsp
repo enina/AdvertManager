@@ -4,8 +4,57 @@
         <fmt:message key="welcome.title"/>
 </h1>
 <p>
-        <c:out value="${message}"/>
+    Hello
+    <!---->
+    <sec:authentication property="principal.username"/> . 
 </p>                
+
+
+<table border="1" class="affTable">
+    <c:if test="${data!=null}">
+        <c:forEach items="${data.productGroupCollection}" var="pg">
+            <tr><td>
+                <div>Product Group:<c:out value="${pg.groupName}" /></div>
+                <table border="1" class="affTable">
+                    <thead>
+                        <tr style="background-color: #999999;">
+                            <th>Product ID</td><td>Author Name</td><td>Author Email</td><td>Description</td><td>Price</td><td>Link</td>
+                        </tr>
+                    </thead>                
+                    <c:forEach items="${pg.productCollection}" var="product">
+                        <tr>
+                            <td class="affTd" align="left" >
+                                <c:out value="${product.id}" />
+                            </td>
+                            <td class="affTd" align="left" >
+                                <c:out value="${product.authorId.authorName}" />
+                            </td>                        
+                            <td class="affTd" align="left" >
+                                <c:out value="${product.authorId.email}" />
+                            </td>                                                
+                            <td class="affTd" align="left" >
+                                <c:out value="${product.description}" />
+                            </td>
+                            <td class="affTd" align="left" >
+                                <c:out value="${product.price}" />
+                            </td>
+                            <td class="affTd" align="left" >
+                                <c:out value="${product.productLink}" />
+                            </td>
+                        </tr>   
+                    </c:forEach>
+                </table>                    
+            </td></tr>
+        </c:forEach>
+    </c:if>        
+</table>
+
+<!--
+<div id="ext">
+    
+</div>
+-->
+
 
 <div> <a href="${pageContext.request.contextPath}/affiliates/list.do">Affiliates</a>
       <a href="${pageContext.request.contextPath}/products/list.do"> Products </a>

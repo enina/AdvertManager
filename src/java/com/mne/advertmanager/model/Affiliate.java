@@ -6,6 +6,7 @@ package com.mne.advertmanager.model;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.Set;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -29,7 +30,12 @@ import javax.validation.constraints.Size;
 @NamedQueries({
     @NamedQuery(name = "Affiliate.findAll", query = "SELECT a FROM Affiliate a"),
     @NamedQuery(name = "Affiliate.findById", query = "SELECT a FROM Affiliate a WHERE a.id = :id"),
-    @NamedQuery(name = "Affiliate.findByAffiliateName", query = "SELECT a FROM Affiliate a WHERE a.affiliateName = :affiliateName"),
+    @NamedQuery(name = "Affiliate.findByAffiliateName",
+        query = "SELECT a FROM Affiliate a "
+                + " left join fetch a.productGroupCollection pg"
+                + " left join fetch pg.productCollection prd"
+                + " left join fetch prd.authorId"
+                + " WHERE a.affiliateName = ?"),
     @NamedQuery(name = "Affiliate.findByEmail", query = "SELECT a FROM Affiliate a WHERE a.email = :email")})
 public class Affiliate implements Serializable {
     
@@ -67,7 +73,7 @@ public class Affiliate implements Serializable {
     
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "affiliateId")
-    private Collection<ProductGroup> productGroupCollection;
+    private Set<ProductGroup> productGroupCollection;
 
     public Affiliate() {
     }
@@ -123,11 +129,11 @@ public class Affiliate implements Serializable {
     }
     
 
-    public Collection<ProductGroup> getProductGroupCollection() {
+    public Set<ProductGroup> getProductGroupCollection() {
         return productGroupCollection;
     }
 
-    public void setProductGroupCollection(Collection<ProductGroup> productGroupCollection) {
+    public void setProductGroupCollection(Set<ProductGroup> productGroupCollection) {
         this.productGroupCollection = productGroupCollection;
     }
 

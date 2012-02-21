@@ -7,8 +7,9 @@ package com.mne.advertmanager.service;
 import com.mne.advertmanager.dao.GenericDao;
 import com.mne.advertmanager.model.Affiliate;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -32,9 +33,29 @@ public class AffiliateService {
     
     
     @Transactional(readOnly = true)
-    public Collection<Affiliate> findAllAffiliates() {
-        return affiliateDao.findByQuery("Affiliate.findAll");
+    public Set<Affiliate> findAllAffiliates() {
+        
+        HashSet<Affiliate> result = new HashSet<Affiliate>();
+        Collection<Affiliate> data = affiliateDao.findByQuery("Affiliate.findAll");
+
+        if (data != null)
+            result.addAll(data);
+        
+        return result;
     }
+    
+    @Transactional(readOnly = true)
+    public Affiliate findAffiliateWithProductGroupsAndProducts(String affiliateName) {
+        
+        Affiliate result = null;
+        
+        Collection<Affiliate> data = affiliateDao.findByQuery("Affiliate.findByAffiliateName",affiliateName);
+
+        if (data != null)
+            result = data.iterator().next();
+        
+        return result;
+    }    
 
     @Transactional
     public void createAffiliate(Affiliate affiliate) {

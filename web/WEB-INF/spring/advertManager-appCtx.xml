@@ -127,8 +127,8 @@ preapate ProductService bean
     
 
     <bean id="adManDataGenService" class="com.mne.advertmanager.service.DataGenService">
-        <property name="affiliateDao">
-            <ref bean="affiliateDao"/>
+        <property name="affiliateService">
+            <ref bean="affiliateService"/>
         </property>
         <property name="authorDao">
             <ref bean="authorDao"/>
