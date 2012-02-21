@@ -58,8 +58,10 @@ public class AdvertManagerController {
     }
     
     @RequestMapping(value="home", method = RequestMethod.GET)
-    public @ModelAttribute("message") String generateHome() {
-        return  "Greetings from AdMan !";
+    public @ModelAttribute("data") Affiliate generateHome(SecurityContextHolderAwareRequestWrapper securityContext) {
+        String affName = securityContext.getUserPrincipal().getName();
+        Affiliate aff = affiliateService.findAffiliateWithProductGroupsAndProducts(affName);
+        return  aff;
     }
     
     

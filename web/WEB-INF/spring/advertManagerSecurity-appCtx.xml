@@ -15,9 +15,9 @@
 
     <global-method-security pre-post-annotations="enabled" />
 
-    <!--http pattern="/*.do" security="none"/-->
     
     <http use-expressions="true">
+        <!--<intercept-url pattern="/**/*.do/**" access="permitAll" />-->
         <intercept-url pattern="/css/**" access="permitAll"/>
         <intercept-url pattern="/loggedout.jsp" access="permitAll"/>
         <intercept-url pattern="/affiliates/new.do/**" access="permitAll" />

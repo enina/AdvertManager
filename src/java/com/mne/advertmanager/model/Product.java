@@ -6,6 +6,7 @@ package com.mne.advertmanager.model;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.Set;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -36,10 +37,10 @@ public class Product implements Serializable {
     private static final long serialVersionUID = 1L;    
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "productId")
-    private Collection<AccessLog> accessLogCollection;
+    private Set<AccessLog> accessLogCollection;
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "productId")
-    private Collection<PurchaseOrder> purchaseOrderCollection;
+    private Set<PurchaseOrder> purchaseOrderCollection;
     
 
     
@@ -200,20 +201,20 @@ public class Product implements Serializable {
     }
 
     @XmlTransient
-    public Collection<AccessLog> getAccessLogCollection() {
+    public Set<AccessLog> getAccessLogCollection() {
         return accessLogCollection;
     }
 
-    public void setAccessLogCollection(Collection<AccessLog> accessLogCollection) {
+    public void setAccessLogCollection(Set<AccessLog> accessLogCollection) {
         this.accessLogCollection = accessLogCollection;
     }
 
     @XmlTransient
-    public Collection<PurchaseOrder> getPurchaseOrderCollection() {
+    public Set<PurchaseOrder> getPurchaseOrderCollection() {
         return purchaseOrderCollection;
     }
 
-    public void setPurchaseOrderCollection(Collection<PurchaseOrder> purchaseOrderCollection) {
+    public void setPurchaseOrderCollection(Set<PurchaseOrder> purchaseOrderCollection) {
         this.purchaseOrderCollection = purchaseOrderCollection;
     }
     

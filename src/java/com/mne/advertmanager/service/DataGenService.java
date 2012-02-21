@@ -24,7 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class DataGenService {
     
     private GenericDao<Product,Long> productDao;
-    private GenericDao<Affiliate,Long> affiliateDao;
+    private AffiliateService        affService;
     private GenericDao<Author,Long> authorDao;
     private GenericDao<ProductGroup,Long> productGroupDao;
     private GenericDao<AccessSource,Long> accessSourceDao;
@@ -49,8 +49,8 @@ public class DataGenService {
         this.accessSourceDao = accessSourceDao;
     }
 
-    public void setAffiliateDao(GenericDao<Affiliate, Long> affiliateDao) {
-        this.affiliateDao = affiliateDao;
+    public void setAffiliateService(AffiliateService affiliateService) {
+        this.affService = affiliateService;
     }
 
     public void setAuthorDao(GenericDao<Author, Long> authorDao) {
@@ -74,7 +74,7 @@ public class DataGenService {
         for (int i = 0; i < 5;++i) {
             Affiliate curAff = entityFactory.makeAffiliate();
             affList.add(curAff);        
-            affiliateDao.create(curAff);
+            affService.createAffiliate(curAff);
             rowCounter++;
         }
         

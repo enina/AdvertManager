@@ -9,16 +9,16 @@
         <tbody>
             <c:forEach items="${data}" var="product">
                 <tr>
-                    <td class="prodTd" align="left" >
+                    <td class="affTd" align="left" >
                         <c:out value="${product.id}" />
                     </td>
-                    <td class="prodTd" align="left" >
+                    <td class="affTd" align="left" >
                         <c:out value="${product.description}" />
                     </td>
-                    <td class="prodTd" align="left" >
+                    <td class="affTd" align="left" >
                         <c:out value="${product.price}" />
                     </td>
-                    <td class="prodTd" align="left" >
+                    <td class="affTd" align="left" >
                         <c:out value="${product.productLink}" />
                     </td>                
                 </tr>   
