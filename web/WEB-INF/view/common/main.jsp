@@ -12,12 +12,9 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta http-equiv="cache-control" content="no-cache, no-store">
     </head>
-    <body>
+    <body style="margin: 0px;">
         <div id="header">
             <tiles:insertAttribute name="header" />
-        </div>
-        <div id="menu">
-            <tiles:insertAttribute name="menu" />
         </div>
         <div id="content">
             <tiles:insertAttribute name="content" />

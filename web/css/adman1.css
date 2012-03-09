@@ -14,3 +14,10 @@
 	border-style: solid;
 	border-color: black;
 }
+.menu{ /*define <a> that hold menu links (home,loguot)*/
+    
+    height: 100%;
+    display: block;
+    text-decoration: none;
+    color: black;
+}
