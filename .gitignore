@@ -8,3 +8,6 @@ nbproject/private/*
 setup/glassfish-resources.xml
 web/META-INF/context.xml
 nbproject/build-impl.xml~
+web/js/adman/app.js
+web/js/adman/controller/productGroup.js
+web/js/adman/view/productGroup/tree.js
