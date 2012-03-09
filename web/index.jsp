@@ -15,7 +15,7 @@
     <head>
         <title>Login Page</title>
     </head>
-    <body onload='document.f.j_username.focus();'>
+<!--    <body onload='document.f.j_username.focus();'>
         <h3>Login with Username and Password</h3>
         <form name='f' action='j_spring_security_check' method='POST'>
             <table>
@@ -37,5 +37,20 @@
             </table>
         </form>
         <div> <a href="users/new.do">Register New User</a></div>
+-->
+
+       
+
+<body id="body" style="background-image: url('WEB-INF/view/images/ironPatern25X25.pnj')" >
+        <div id="submitForm">
+            <form>
+            <table >
+                <tr><td>User Name</td></tr>
+                <tr><td><input type="text" name="j_username" width="15" /></td></tr>
+                <tr><td>Password</td></tr>
+                <tr><td><input type="password" name="j_password" width="15"/></td></tr>  
+            </table>
+            </form>
+        </div>
     </body>
 </html>
