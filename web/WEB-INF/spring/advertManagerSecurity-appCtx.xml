@@ -20,6 +20,8 @@
     <!--http pattern="/*.do" security="none"/-->
     
     <http use-expressions="true">
+        <intercept-url pattern="/index.jsp" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
+
         <intercept-url pattern="/secure/**" access="hasRole('supervisor')"/>
         <intercept-url pattern="/users/new.do/**" access="permitAll" />
         <intercept-url pattern="/users/add.do/**" access="permitAll" />
@@ -28,7 +30,7 @@
              Allow all other requests. In a real application you should
              adopt a whitelisting approach where access is not allowed by default
           -->
-        <form-login />
+        <form-login login-page='/index.jsp' />
         <!--<form-login login-page='/index.jsp' default-target-url='/home.htm'  always-use-default-target='true' />-->
         
         <logout invalidate-session="true" logout-success-url="/loggedout.jsp" delete-cookies="JSESSIONID"/>
@@ -71,6 +73,7 @@
     </authentication-manager>
 
     <beans:bean id="myUserDetailsService" class="org.springframework.security.core.userdetails.jdbc.JdbcDaoImpl">
+        
         <beans:property name="dataSource" ref="advertManagerC3P0DataSource"/>
     </beans:bean>
 
