@@ -3,9 +3,5 @@
     Created on : Jan 19, 2012, 4:35:57 PM
     Author     : Nina Eidelshtein and Misha Lebedev
 --%>
-<table border="1" class="affTable">
-    <tr>
-        <td class="affTd"><a href="/AdvertManager/home.do">Home</a></td>
-        <td class="affTd"><a href="/AdvertManager/j_spring_security_logout">Logout</a></td>
-    </tr>
-</table>
+
+
