@@ -1,5 +1,6 @@
 /conf/ext
 /web/WEB-INF/lib/*.jar
+/web/js/extjs/**
 nbproject/private/*
 /build/
 /dist/
