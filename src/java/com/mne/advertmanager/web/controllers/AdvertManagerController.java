@@ -6,17 +6,15 @@ package com.mne.advertmanager.web.controllers;
 
 import com.mne.advertmanager.model.Affiliate;
 import com.mne.advertmanager.model.Product;
-import com.mne.advertmanager.model.User;
 import com.mne.advertmanager.service.AffiliateService;
 import com.mne.advertmanager.service.DataGenService;
 import com.mne.advertmanager.service.ProductService;
-import com.mne.advertmanager.service.UserService;
 import java.util.Collection;
-import javax.enterprise.inject.spi.Producer;
 import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestWrapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -37,8 +35,7 @@ public class AdvertManagerController {
     private ProductService productService;
 
 
-    private UserService userService;
-    private static final String USERS = "users";
+
     private static final String AFFILIATES = "affiliates";
     private static final String DATAGEN = "dataGen";
     private static final String APPS = "apps";
@@ -47,12 +44,11 @@ public class AdvertManagerController {
     private static final String APPS_PARSERGEN_REQ_MAPPING = APPS+"/parsergen";
     
     private static final String AFF_LIST_REQ_MAPPING = AFFILIATES+"/list";
+    private static final String AFF_NEW_REQ_MAPPING = AFFILIATES+"/new";
+    private static final String AFF_ADD_REQ_MAPPING = AFFILIATES+"/add";
     private static final String DG_GEN_REQ_MAPPING = DATAGEN+"/generate";
 
     
-    private static final String USER_LIST_REQ_MAPPING = USERS+"/list";    
-    private static final String USER_NEW_REQ_MAPPING = USERS+"/new";    
-    private static final String USER_ADD_REQ_MAPPING = USERS+"/add";
 
     
     @RequestMapping("/")
@@ -60,10 +56,22 @@ public class AdvertManagerController {
         logger.info("redirecting to home page");
         return "redirect:home.do/";
     }
-    
+    /**
+     * view resolution works through tiles configuration file WEB-INF/tiles-def/templates.xml
+     * tile which defines presentation automatically equals the url 
+     * for example for url "home" corresponding tile is    
+     *                                               <definition name="home" extends=".mainTemplate">
+     *                                                   <put-attribute name="content" value="/WEB-INF/view/home.jsp" />
+     *                                               </definition>
+     * 
+     * @param securityContext
+     * @return 
+     */
     @RequestMapping(value="home", method = RequestMethod.GET)
-    public @ModelAttribute("message") String generateHome() {
-        return  "Greetings from AdMan !";
+    public @ModelAttribute("data") Affiliate generateHome(SecurityContextHolderAwareRequestWrapper securityContext) {
+        String affName = securityContext.getUserPrincipal().getName();
+        Affiliate aff = affiliateService.findAffiliateWithProductGroupsAndProducts(affName);
+        return  aff;
     }
     
     
@@ -104,30 +112,29 @@ public class AdvertManagerController {
 
         return  affiliates;
     }
-//================================ viewUsers ===================================
-    @RequestMapping(value=USER_LIST_REQ_MAPPING,method = RequestMethod.GET)
-    public @ModelAttribute("data") Collection<User> viewUsers() {
+//================================ Add Affiliate =====================================
+    @RequestMapping(value=AFF_ADD_REQ_MAPPING, method = RequestMethod.POST)
+    public ModelAndView addUser(@ModelAttribute("affiliate")Affiliate affiliate,SecurityContextHolderAwareRequestWrapper securityContext) {
         
-        Collection<User> users = userService.findAllUsers();
-
-        return  users;
-    }
-//================================ addUser =====================================
-    @RequestMapping(value=USER_ADD_REQ_MAPPING, method = RequestMethod.POST)
-    public ModelAndView addUser(@ModelAttribute("user")User user) {
-        
-        String errMsg=null;
+        String status = null;
         try {
-            userService.createUser(user);
+            affiliateService.createAffiliate(affiliate);
+            status = "User:"+affiliate.getAffiliateName()+" created successfully";
         }catch(Exception e) {
-            errMsg=" Exception:"+e.getClass().getSimpleName()+ ((e.getMessage()==null)?"":
-                   " ,Message:"+e.getMessage());
+            String errMsg = ",Exception:"+e.getClass().getSimpleName()+ ((e.getMessage()==null) ? "": " ,Message:"+e.getMessage());
+            status = "Failed to create user:"+affiliate.getAffiliateName()+errMsg;
+            logger.error(status);
         }
         
-        ModelAndView mav = forwardToView(USER_ADD_REQ_MAPPING,USER_LIST_REQ_MAPPING,"data",viewUsers());
+       ModelAndView mav = null; 
+       if (securityContext.isUserInRole("ROLE_ADMIN")) {
+            mav = forwardToView(AFF_ADD_REQ_MAPPING,AFF_LIST_REQ_MAPPING,"data",viewAffiliates());
+       }else {
+           mav = forwardToView(AFF_ADD_REQ_MAPPING,"login",null,null);
+       }
         
-        mav.addObject("status", (errMsg!=null)?"failed to create user:"+user.getUsername()+errMsg:
-                                               "User:"+user.getUsername()+" created successfully");
+        mav.addObject("status", status);
+        
         return  mav;
     }
         
@@ -139,21 +146,17 @@ public class AdvertManagerController {
         return  codebase;
     }    
     
-    @RequestMapping(value=USER_NEW_REQ_MAPPING, method = RequestMethod.GET)
-    public @ModelAttribute("user") User viewRegistrationForm() {
+    @RequestMapping(value=AFF_NEW_REQ_MAPPING, method = RequestMethod.GET)
+    public @ModelAttribute("affiliate") Affiliate viewRegistrationForm() {
         
-        return  new User();
+        return  new Affiliate();
     }    
-    
-    
-  
-    
-
 
     private ModelAndView forwardToView(String requestMapping , String viewName,String key,Object data) {
         ModelAndView mav = new ModelAndView();
         mav.setViewName(viewName);
-        mav.addObject(key, data);
+        if (key!=null && data!=null)
+            mav.addObject(key, data);
         logger.info("{} --> {}",requestMapping,viewName);
         return mav;
     }
@@ -168,15 +171,11 @@ public class AdvertManagerController {
         this.affiliateService = affiliateService;
     }
     
-    @Autowired
-    public void setUserService(UserService userService) {
-        this.userService = userService;
-    }
 //======================== setProductService ===================================
     @Autowired
     public void setProductService(ProductService productService) {
         
-        System.out.println("AdvertManagerController:setProductService...");
+        logger.info("AdvertManagerController:setProductService...");
         this.productService = productService;
     }
    

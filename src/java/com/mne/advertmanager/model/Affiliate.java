@@ -6,6 +6,7 @@ package com.mne.advertmanager.model;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.Set;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -29,28 +30,50 @@ import javax.validation.constraints.Size;
 @NamedQueries({
     @NamedQuery(name = "Affiliate.findAll", query = "SELECT a FROM Affiliate a"),
     @NamedQuery(name = "Affiliate.findById", query = "SELECT a FROM Affiliate a WHERE a.id = :id"),
-    @NamedQuery(name = "Affiliate.findByAffiliateName", query = "SELECT a FROM Affiliate a WHERE a.affiliateName = :affiliateName"),
+    @NamedQuery(name = "Affiliate.findByAffiliateName",
+        query = "SELECT a FROM Affiliate a "
+                + " left join fetch a.productGroupCollection pg"
+                + " left join fetch pg.productCollection prd"
+                + " left join fetch prd.authorId"
+                + " WHERE a.affiliateName = ?"),
     @NamedQuery(name = "Affiliate.findByEmail", query = "SELECT a FROM Affiliate a WHERE a.email = :email")})
 public class Affiliate implements Serializable {
+    
     private static final long serialVersionUID = 1L;
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
+    
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 256)
     @Column(name = "affiliateName")
     private String affiliateName;
+    
     // @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="Invalid email")//if the field contains email address consider using this annotation to enforce field validation
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 256)
     @Column(name = "email")
     private String email;
+    
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 50)
+    @Column(name = "password")
+    private String password;
+    
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "enabled")
+    private boolean enabled;    
+    
+    
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "affiliateId")
-    private Collection<ProductGroup> productGroupCollection;
+    private Set<ProductGroup> productGroupCollection;
 
     public Affiliate() {
     }
@@ -89,11 +112,28 @@ public class Affiliate implements Serializable {
         this.email = email;
     }
 
-    public Collection<ProductGroup> getProductGroupCollection() {
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+    
+
+    public Set<ProductGroup> getProductGroupCollection() {
         return productGroupCollection;
     }
 
-    public void setProductGroupCollection(Collection<ProductGroup> productGroupCollection) {
+    public void setProductGroupCollection(Set<ProductGroup> productGroupCollection) {
         this.productGroupCollection = productGroupCollection;
     }
 
