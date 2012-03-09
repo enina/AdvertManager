@@ -22,10 +22,23 @@ public class AffiliateService {
     
     private JdbcTemplate jdbcTemplate;
 
+    /**
+     * for each property defined on bean element in application context we must have a corresponding setter functions
+     * For example:
+     *  <property name="affiliateDao">
+            <ref bean="affiliateDao"/>
+        </property>
+     * Corresponding setter functions is setAffiliateDao
+     * @param affiliateDao 
+     */
     public void setAffiliateDao(GenericDao<Affiliate, Long> affiliateDao) {
         this.affiliateDao = affiliateDao;
     }
 
+    /**
+     * setter for jdbcTemplate  property
+     * @param jdbcTemplate 
+     */
     public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
@@ -57,6 +70,14 @@ public class AffiliateService {
         return result;
     }    
 
+    /**
+     * updates two different tables in database.not readonly because it changes database
+     * creates atomic operation which consists of 2 sub-operations:
+     *  1.update affiliate table
+     *  2 update authorities table (insert role for created user)
+     * in case any single insert fails transaction guarantees that none of the tables will be updated
+     * @param affiliate 
+     */
     @Transactional
     public void createAffiliate(Affiliate affiliate) {
         affiliateDao.create(affiliate);

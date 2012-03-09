@@ -1,32 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app version="3.0" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
+
+    <!-- specify location of all spring configuration files-->
     <context-param>
         <param-name>contextConfigLocation</param-name>
         <param-value>/WEB-INF/spring/*appCtx.xml</param-value>
     </context-param>
     
-
+    <!-- must appear here . not sure why it used-->
     <context-param>
         <param-name>webAppRootKey</param-name>
         <param-value>webapp.root</param-value>
     </context-param>
 
+
+    <!-- 
+        check if user has right to access the application in general
+        and each page specifically.
+    -->
     <filter>
         <filter-name>springSecurityFilterChain</filter-name>
         <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
     </filter>
 
+    <!-- apply security filter to all urls-->
     <filter-mapping>
       <filter-name>springSecurityFilterChain</filter-name>
       <url-pattern>/*</url-pattern>
     </filter-mapping> 
     
+    
+    <!-- 
+        initialization listener
+        needed to initilize spring context when application starts
+    -->
     <listener>
         <listener-class>com.mne.advertmanager.web.infra.AdvertManagerWebContextListener</listener-class>
     </listener>
+    
+    <!-- needed to catch session timeout and logout users -->
     <listener>
 	<listener-class>org.springframework.security.web.session.HttpSessionEventPublisher</listener-class>
     </listener>    
+    
     <session-config>
         <session-timeout>
             10

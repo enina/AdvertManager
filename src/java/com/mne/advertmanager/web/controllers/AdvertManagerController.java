@@ -56,7 +56,17 @@ public class AdvertManagerController {
         logger.info("redirecting to home page");
         return "redirect:home.do/";
     }
-    
+    /**
+     * view resolution works through tiles configuration file WEB-INF/tiles-def/templates.xml
+     * tile which defines presentation automatically equals the url 
+     * for example for url "home" corresponding tile is    
+     *                                               <definition name="home" extends=".mainTemplate">
+     *                                                   <put-attribute name="content" value="/WEB-INF/view/home.jsp" />
+     *                                               </definition>
+     * 
+     * @param securityContext
+     * @return 
+     */
     @RequestMapping(value="home", method = RequestMethod.GET)
     public @ModelAttribute("data") Affiliate generateHome(SecurityContextHolderAwareRequestWrapper securityContext) {
         String affName = securityContext.getUserPrincipal().getName();
