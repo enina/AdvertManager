@@ -9,9 +9,8 @@
     <sec:authentication property="principal.username"/> . 
 </p>                
 
-
-<table border="1" class="affTable">
-    <c:if test="${data!=null}">
+<c:if test="${data!=null}">
+    <table border="1" class="affTable">
         <c:forEach items="${data.productGroupCollection}" var="pg">
             <tr><td>
                 <div>Product Group:<c:out value="${pg.groupName}" /></div>
@@ -46,8 +45,8 @@
                 </table>                    
             </td></tr>
         </c:forEach>
-    </c:if>        
-</table>
+    </table>
+</c:if>        
 
 <!--
 <div id="ext">
