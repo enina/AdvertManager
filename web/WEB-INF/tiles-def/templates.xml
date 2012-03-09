@@ -13,6 +13,7 @@
         <put-attribute name="content" value="/WEB-INF/view/common/blank.jsp" />        
         <put-attribute name="footer" value="/WEB-INF/view/common/footer.jsp" />
     </definition>
+    
    
    <definition name="home" extends=".mainTemplate">
        <put-attribute name="content" value="/WEB-INF/view/home.jsp" />
@@ -33,8 +34,7 @@
        <put-attribute name="content" value="/WEB-INF/view/products/list.jsp" />
    </definition>
  
-   <!--for gui we defined tamplate that not extends main, meas that it gust go to the gsp page -->
-   <!--for gui we defined tamplate that not extends main, meas that it gust go to the gsp page -->
+   <!--for gui we defined template that not extends main, meas that it gust go to the jsp page -->
    <definition name="apps/parsergen" template="/WEB-INF/view/apps/parsergen.jsp"/>
    
    <definition name="login" template="/index.jsp"/>

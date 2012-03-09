@@ -15,22 +15,19 @@
 
     <global-method-security pre-post-annotations="enabled" />
 
-    <http pattern="/css/**" security="none"/>
-    <http pattern="/loggedout.jsp" security="none"/>
-    <!--http pattern="/*.do" security="none"/-->
     
     <http use-expressions="true">
-        <intercept-url pattern="/index.jsp" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
-
-        <intercept-url pattern="/secure/**" access="hasRole('supervisor')"/>
-        <intercept-url pattern="/users/new.do/**" access="permitAll" />
-        <intercept-url pattern="/users/add.do/**" access="permitAll" />
+        <!--<intercept-url pattern="/**/*.do/**" access="permitAll" />-->
+        <intercept-url pattern="/css/**" access="permitAll"/>
+        <intercept-url pattern="/loggedout.jsp" access="permitAll"/>
+        <intercept-url pattern="/affiliates/new.do/**" access="permitAll" />
+        <intercept-url pattern="/affiliates/add.do/**" access="permitAll" />
         <intercept-url pattern="/**/*.do/**" access="isAuthenticated()" />
         <!--
              Allow all other requests. In a real application you should
              adopt a whitelisting approach where access is not allowed by default
           -->
-        <form-login login-page='/index.jsp' />
+        <form-login login-page='/index.jsp' default-target-url='/home.do'  always-use-default-target='true'/>
         <!--<form-login login-page='/index.jsp' default-target-url='/home.htm'  always-use-default-target='true' />-->
         
         <logout invalidate-session="true" logout-success-url="/loggedout.jsp" delete-cookies="JSESSIONID"/>
@@ -46,35 +43,23 @@
     </http>
 
 
-    <!--
-    Usernames/Passwords are
-        rod/koala
-        dianne/emu
-        scott/wombat
-        peter/opal
-    -->
     <beans:bean id="encoder" class="org.springframework.security.crypto.password.StandardPasswordEncoder"/>
-    <!--
-    <authentication-manager>
-        <authentication-provider>
-            <password-encoder ref="encoder"/>
-            <user-service>
-                <user name="rod" password="4efe081594ce25ee4efd9f7067f7f678a347bccf2de201f3adf2a3eb544850b465b4e51cdc3fcdde" authorities="supervisor, user, teller" />
-                <user name="dianne" password="957ea522524a41cbfb649a3e293d56268f840fd5b661b499b07858bc020d6d223f912e3ab303b00f" authorities="user,teller" />
-                <user name="scott" password="fb1f9e48058d30dc21c35ab4cf895e2a80f2f03fac549b51be637196dfb6b2b7276a89c65e38b7a1" authorities="user" />
-                <user name="peter" password="e175750688deee19d7179d444bfaf92129f4eea8b4503d83eb8f92a7dd9cda5fbae73638c913e420" authorities="user" />
-            </user-service>
-        </authentication-provider>
-    </authentication-manager>
-    -->
+
 
     <authentication-manager>
         <authentication-provider user-service-ref='myUserDetailsService'/>
     </authentication-manager>
 
     <beans:bean id="myUserDetailsService" class="org.springframework.security.core.userdetails.jdbc.JdbcDaoImpl">
-        
         <beans:property name="dataSource" ref="advertManagerC3P0DataSource"/>
+        <beans:property name="usersByUsernameQuery" value="select affiliateName , password,enabled from affiliate where affiliateName=?"/>
+        <beans:property name="authoritiesByUsernameQuery" value="select affiliateName ,authority from authorities  join affiliate on authorities.user_id=affiliate.id where affiliateName = ?"/>
     </beans:bean>
 
+    <beans:bean id="roleHierarchy"    class="org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl">
+        <beans:property name="hierarchy">
+            <beans:value>ROLE_ADMIN > ROLE_STAFF  > ROLE_USER  > ROLE_GUEST</beans:value>
+        </beans:property>
+    </beans:bean>
+    
 </beans:beans>

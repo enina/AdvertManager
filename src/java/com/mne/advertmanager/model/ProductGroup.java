@@ -7,9 +7,9 @@ package com.mne.advertmanager.model;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Set;
 import javax.persistence.*;
 import javax.validation.constraints.Size;
-import org.hibernate.annotations.LazyToOne;
 
 /**
  *
@@ -43,7 +43,7 @@ public class ProductGroup implements Serializable {
     private String description;
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "productGroupId")
-    private Collection<Product> productCollection;
+    private Set<Product> productCollection;
 
     @JoinColumn(name = "affiliate_id", referencedColumnName = "id")
     @ManyToOne(fetch=FetchType.LAZY)
@@ -82,11 +82,11 @@ public class ProductGroup implements Serializable {
         this.description = description;
     }
 
-    public Collection<Product> getProductCollection() {
+    public Set<Product> getProductCollection() {
         return productCollection;
     }
 
-    public void setProductCollection(Collection<Product> productCollection) {
+    public void setProductCollection(Set<Product> productCollection) {
         this.productCollection = productCollection;
     }
 

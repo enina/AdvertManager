@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+
+<!--
+Configuration file for Hibernate system
+Contains list of classes which comprise our model and cache provider definition
+-->
 <hibernate-configuration>
     <session-factory>
         <property name="cache.provider_class">net.sf.ehcache.hibernate.EhCacheProvider</property>

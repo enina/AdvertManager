@@ -45,6 +45,8 @@ public class EntityFactory {
     public Affiliate  makeAffiliate() {
         Affiliate result = new Affiliate();
         result.setAffiliateName("AffiliateName"+ ++magicNum);
+        result.setPassword(result.getAffiliateName());
+        result.setEnabled((++magicNum%2)==1);
         result.setEmail("AffiliateEmail"+ ++magicNum);
         return result;
 

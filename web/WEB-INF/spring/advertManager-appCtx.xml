@@ -13,11 +13,37 @@
               
               
 
-    <!--context:property-override  
-                ignoreInvalidKeys="true" 
-                ignoreResourceNotFound="true"
-                location="file:/WEB-INF/conf/advertmanager.properties"/-->
+    <!--
+        Main application context configuration files.
 
+        Defines infrastructure beans 
+            DataSource          - specifies database driver,url , username and password
+            JDBCTemplate        - spring object which uses datasource.used to execute JDBC statements
+            SessionFactory      - hibernate object which uses datasource . used to initialize hibernate subsystem
+            TransactionManager and tx:annotatondriver - specifies transaction handling 
+            Properties Configurer - allows to override configuration values on beans and specify them in external property file 
+            
+        Defines service beans:
+            Service beans are needed to perform our application business logic.
+            They may use several DAO beans to access corresponding tables.
+            Transactions are defined on methods of the service beans
+        
+        
+        Defines DAO beans:
+            DAO beans are needed to read and write Model object to/from Database
+            We define single DAO bean for each object in our model.
+            Every bean is an instance of the same class - com.mne.advertmanager.dao.GenericDaoHibernateImpl
+            This is so because on every object in our model we perform the 
+            same set of operations  CRUD={ Create,Read,Update Delete}
+            We define single genericDAO bean with dataSource property.
+            This bean is the parent bean for all other DAO beans
+        
+        
+    -->
+
+
+    <!--=====================================================infrastructure beans start ==============================================================-->
+    
     <bean class="org.springframework.beans.factory.config.PropertyOverrideConfigurer">
             <property name="location" value="/WEB-INF/spring/advertmanager.properties"/>
     </bean>
@@ -28,11 +54,16 @@
         <property name="user" value="admin"/>
         <property name="password" value="admin1234"/>
         <property name="maxIdleTime" value="6000"/>
-        
+    </bean>
+    
+    <bean id="adManJdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+        <property name="dataSource" ref="advertManagerC3P0DataSource"/>
     </bean>
 
-<!--    <bean id="advertManagerSessionFactory" class="com.mne.adman.test.DummySessionFactory">
-    </bean>-->
+    <!--    
+    <bean id="advertManagerSessionFactory" class="com.mne.adman.test.DummySessionFactory">
+    </bean>
+    -->
 
     <bean id="advertManagerSessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
         <property name="dataSource" ref="advertManagerC3P0DataSource"/>
@@ -46,6 +77,24 @@
         </property>
     </bean>
     
+    <bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+        <property name="sessionFactory">
+            <ref bean="advertManagerSessionFactory" />
+        </property>
+    </bean>        
+            
+    <tx:annotation-driven/>
+
+    <!--=============================================================== infrastructure beans end ===========================================================-->
+    
+    <!--============================================================== user DAO beans start ====================================================================-->
+    <!--
+        DAO beans are needed to read and write Model object to/from Database
+        We define single DAO bean for each object in our model.
+        Every bean is an instance of the same class - com.mne.advertmanager.dao.GenericDaoHibernateImpl
+        This is so because on every object in our model we perform the 
+        same set of operations  CRUD={ Create,Read,Update Delete}
+    -->
     
     <bean id="adManGenericDao"  class="com.mne.advertmanager.dao.GenericDaoHibernateImpl" abstract="true" scope="prototype">
         <property name="sessionFactory">
@@ -95,36 +144,24 @@
         </constructor-arg>
     </bean>
     
-    <bean id="userDao"  parent="adManGenericDao" class="com.mne.advertmanager.dao.GenericDaoHibernateImpl" >
-        <constructor-arg >
-            <value type="java.lang.Class">com.mne.advertmanager.model.User</value>
-        </constructor-arg>
-    </bean>
-    
-<!--=============================== adManProductService ========================
-preapate ProductService bean
---> 
+<!--============================================================== user DAO     beans end   ===============================================================-->    
+<!--=============================================================  user service beans start ===============================================================--> 
+    <!--
+        Service beans are needed to perform our application business logic.
+        They may use several DAO beans to access corresponding tables.
+        Transactions are defined on methods of the service beans
+    -->
+
     <bean id="advertManagerProductService" class="com.mne.advertmanager.service.ProductService">
         <property name="productDao">
             <ref bean="productDao"/>
         </property>
     </bean>
-<!--=============================== adManUserService ===========================
-prepare UserServise bean
--->
-    <bean id="adManUserService" class="com.mne.advertmanager.service.UserService">
-        <property name="userDao">
-            <ref bean="userDao"/>
-        </property>
-    </bean>
 
-    
-    <bean id="adManEntityFactory" class="com.mne.advertmanager.util.EntityFactory"/>
-    
 
     <bean id="adManDataGenService" class="com.mne.advertmanager.service.DataGenService">
-        <property name="affiliateDao">
-            <ref bean="affiliateDao"/>
+        <property name="affiliateService">
+            <ref bean="affiliateService"/>
         </property>
         <property name="authorDao">
             <ref bean="authorDao"/>
@@ -153,15 +190,16 @@ prepare UserServise bean
         <property name="affiliateDao">
             <ref bean="affiliateDao"/>
         </property>
+        <property name="jdbcTemplate">
+            <ref bean="adManJdbcTemplate"/>
+        </property>
     </bean>    
     
+<!--=============================================================  user service beans end ===============================================================--> 
     
-    <bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
-        <property name="sessionFactory">
-            <ref bean="advertManagerSessionFactory" />
-        </property>
-    </bean>        
-            
-    <tx:annotation-driven/>
+    <!-- Utility Bean , Used by dataGenService to create objects -->
+    <bean id="adManEntityFactory" class="com.mne.advertmanager.util.EntityFactory"/>
+    
+    
 
 </beans>

@@ -10,17 +10,27 @@ import javax.servlet.ServletContextEvent;
 import org.springframework.web.context.ContextLoaderListener;
 
 /**
- *
+ * class extends standard spring class ContextLoaderListener which reads application context configuration files
+ * specified by context-param contextConfigLocation in web.xml and creates all the beans in the context
  * @author Nina Eidelshtein and Misha Lebedev
  */
 public class AdvertManagerWebContextListener  extends ContextLoaderListener {
     private static final Logger logger = Logger.getLogger(AdvertManagerWebContextListener.class.getName());
 
+    /**
+     * called by the container upon context destruction.Used to cleanup resources
+     * @param event 
+     */
     @Override
     public void contextDestroyed(ServletContextEvent event) {
         super.contextDestroyed(event);
     }
 
+    
+    /**
+     * called by the container upon context initialization  Used to create resources
+     * @param event 
+     */    
     @Override
     public void contextInitialized(ServletContextEvent event) {
         try {
