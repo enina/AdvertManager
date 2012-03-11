@@ -51,6 +51,7 @@ create table product (
     id INT NOT NULL AUTO_INCREMENT,
     product_group_id  int not null,
     author_id int not null,
+    name varchar(256) not null,
     description varchar(256),
     price int not null ,
     commision int not null ,

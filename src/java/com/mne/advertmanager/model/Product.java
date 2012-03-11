@@ -87,7 +87,16 @@ public class Product implements Serializable {
     @ManyToOne(fetch= FetchType.LAZY)
     private ProductGroup productGroupId;
 
+    @NotNull
+    @Size(min = 1, max = 256)
+    @Column(name = "name")
+    private String name;
+
     public Product() {
+        id=-1;
+        authorId = new Author(-1);
+        productGroupId = new ProductGroup(-1);
+        
     }
 
     public Product(Integer id) {
@@ -174,6 +183,17 @@ public class Product implements Serializable {
     public void setProductGroupId(ProductGroup productGroupId) {
         this.productGroupId = productGroupId;
     }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+    
+    
+    
 
     @Override
     public int hashCode() {

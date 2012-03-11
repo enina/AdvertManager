@@ -5,10 +5,10 @@
 package com.mne.advertmanager.web.controllers;
 
 import com.mne.advertmanager.model.Affiliate;
+import com.mne.advertmanager.model.Author;
 import com.mne.advertmanager.model.Product;
-import com.mne.advertmanager.service.AffiliateService;
-import com.mne.advertmanager.service.DataGenService;
-import com.mne.advertmanager.service.ProductService;
+import com.mne.advertmanager.model.ProductGroup;
+import com.mne.advertmanager.service.*;
 import java.util.Collection;
 import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
@@ -33,10 +33,13 @@ public class AdvertManagerController {
     private DataGenService   dataGenerator;
     private AffiliateService affiliateService;
     private ProductService productService;
+    private AuthorService  authorService;
+    private ProductGroupService pgService;
 
 
 
     private static final String AFFILIATES = "affiliates";
+    private static final String PRODUCTS = "products";
     private static final String DATAGEN = "dataGen";
     private static final String APPS = "apps";
     
@@ -47,6 +50,10 @@ public class AdvertManagerController {
     private static final String AFF_NEW_REQ_MAPPING = AFFILIATES+"/new";
     private static final String AFF_ADD_REQ_MAPPING = AFFILIATES+"/add";
     private static final String DG_GEN_REQ_MAPPING = DATAGEN+"/generate";
+    
+    
+    private static final String PRODUCT_NEW_REQ_MAPPING = PRODUCTS+"/new";
+    private static final String PRODUCT_ADD_REQ_MAPPING = PRODUCTS+"/add";
 
     
 
@@ -88,9 +95,46 @@ public class AdvertManagerController {
         
         return  forwardToView(DG_GEN_REQ_MAPPING,"home","message","Greetings from AdMan DataGen .Dummy Data is being generated!");
     }
-//================================ viewProducts ================================
+    ////////////////////////////////////////////// Products /////////////////////////////////////////////////////////////////////////////
+    
+    @RequestMapping(value=PRODUCT_NEW_REQ_MAPPING , method = RequestMethod.GET)
+    public ModelAndView viewProductDefintionForm(SecurityContextHolderAwareRequestWrapper securityContext) {
+        
+        ModelAndView mav = new ModelAndView(PRODUCT_NEW_REQ_MAPPING);
+        String affName = securityContext.getUserPrincipal().getName();
+        
+        Collection<Author>       authors   = authorService.findAllAuthors();
+        Collection<ProductGroup> prdGroups = pgService.findAffiliateProductGroups(affName);
+        
+        mav.addObject("product", new Product());
+        mav.addObject("authors", authors);
+        mav.addObject("prdGroups", prdGroups);
+        
+        return  mav;
+        
+    }
+    
+    @RequestMapping(value=PRODUCT_ADD_REQ_MAPPING , method = RequestMethod.POST)
+    public ModelAndView addProduct(@ModelAttribute("product")Product product,SecurityContextHolderAwareRequestWrapper securityContext) {
+        
+        String status="";
+        try {
+            productService.createProduct(product);
+            status = "Product:"+product.getName()+" created successfully";
+        }catch(Exception e) {
+            status = handleException(e,"create","product",product.getName());
+        }
+        
+        ModelAndView mav = forwardToView(PRODUCT_ADD_REQ_MAPPING,"home","data",generateHome(securityContext));
+
+        mav.addObject("status", status);
+        
+        return  mav;
+    }    
+    
+    
     @RequestMapping(value= "products/list", method= RequestMethod.GET)
-    public @ModelAttribute("data") Collection<Product> veiwProducts(){
+    public @ModelAttribute("data") Collection<Product> viewProducts(){
 
         
         logger.info("getting product data");
@@ -104,7 +148,9 @@ public class AdvertManagerController {
         
         return products;
     }
-//================================ viewAffiliates ==============================
+
+    //////////////////////////////////////////////////// Affiliates ////////////////////////////////////////////////////////////
+    
     @RequestMapping(value=AFF_LIST_REQ_MAPPING, method = RequestMethod.GET)
     public @ModelAttribute("data") Collection<Affiliate> viewAffiliates() {
         
@@ -112,7 +158,7 @@ public class AdvertManagerController {
 
         return  affiliates;
     }
-//================================ Add Affiliate =====================================
+
     @RequestMapping(value=AFF_ADD_REQ_MAPPING, method = RequestMethod.POST)
     public ModelAndView addUser(@ModelAttribute("affiliate")Affiliate affiliate,SecurityContextHolderAwareRequestWrapper securityContext) {
         
@@ -121,9 +167,7 @@ public class AdvertManagerController {
             affiliateService.createAffiliate(affiliate);
             status = "User:"+affiliate.getAffiliateName()+" created successfully";
         }catch(Exception e) {
-            String errMsg = ",Exception:"+e.getClass().getSimpleName()+ ((e.getMessage()==null) ? "": " ,Message:"+e.getMessage());
-            status = "Failed to create user:"+affiliate.getAffiliateName()+errMsg;
-            logger.error(status);
+            status = handleException(e,"create","affiliate",affiliate.getAffiliateName());
         }
         
        ModelAndView mav = null; 
@@ -137,6 +181,7 @@ public class AdvertManagerController {
         
         return  mav;
     }
+
         
     @RequestMapping(value=APPS_PARSERGEN_REQ_MAPPING, method = RequestMethod.GET)
     public @ModelAttribute("codebase") String launchParserGenerator(HttpServletRequest request) {
@@ -152,6 +197,15 @@ public class AdvertManagerController {
         return  new Affiliate();
     }    
 
+    //////////////////////////////////////////////////////  Utility ////////////////////////////////////////////////////////////////////////
+    
+    private String handleException(Exception e, String opType,String entityType,String entityName) {
+        String errMsg = ",Exception:"+e.getClass().getSimpleName()+ ((e.getMessage()==null) ? "": " ,Message:"+e.getMessage());
+        String status = "Failed to "+opType+ " " + entityType+ " : "+entityName+errMsg;
+        logger.error(status);
+        return status;
+    }
+
     private ModelAndView forwardToView(String requestMapping , String viewName,String key,Object data) {
         ModelAndView mav = new ModelAndView();
         mav.setViewName(viewName);
@@ -160,6 +214,8 @@ public class AdvertManagerController {
         logger.info("{} --> {}",requestMapping,viewName);
         return mav;
     }
+    
+    ///////////////////////////////////////// Setters /////////////////////////////////////////////////////////////////////////////////
     
     @Autowired
     public void setDataGenerator(DataGenService dataGenerator) {
@@ -171,12 +227,23 @@ public class AdvertManagerController {
         this.affiliateService = affiliateService;
     }
     
-//======================== setProductService ===================================
     @Autowired
     public void setProductService(ProductService productService) {
         
         logger.info("AdvertManagerController:setProductService...");
         this.productService = productService;
     }
+
+    @Autowired
+    public void setAuthorService(AuthorService authorService) {
+        this.authorService = authorService;
+    }
+
+    @Autowired
+    public void setProductGroupService(ProductGroupService pgService) {
+        this.pgService = pgService;
+    }
    
+    
+    
 }

@@ -1,14 +1,13 @@
 <%@ include file="common/taglibs.jsp" %>
-
+<!--
 <h1>
-        <fmt:message key="welcome.title"/>
+   <fmt:message key="welcome.title"/>
 </h1>
-<p>
-    Hello
-    <!---->
-    <sec:authentication property="principal.username"/> . 
-</p>                
+-->
 
+<c:if test="${status!=null}">
+    <div style="color:red"><c:out value="${status}"/></div>
+</c:if>
 <c:if test="${data!=null}">
     <table border="1" class="affTable">
         <c:forEach items="${data.productGroupCollection}" var="pg">

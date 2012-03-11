@@ -186,13 +186,20 @@
         </property>
     </bean>
     
+    <bean id="productGroupService" class="com.mne.advertmanager.service.ProductGroupService">
+        <property name="productGroupDao">
+            <ref bean="productGroupDao"/>
+        </property>
+    </bean>
+    
     <bean id="affiliateService" class="com.mne.advertmanager.service.AffiliateService">
-        <property name="affiliateDao">
-            <ref bean="affiliateDao"/>
-        </property>
-        <property name="jdbcTemplate">
-            <ref bean="adManJdbcTemplate"/>
-        </property>
+        <property name="affiliateDao" ref="affiliateDao"/>
+        <property name="jdbcTemplate" ref ="adManJdbcTemplate"/>
+        <property name="productGroupService" ref="productGroupService"/>
+    </bean>    
+    
+    <bean id="authorService" class="com.mne.advertmanager.service.AuthorService">
+        <property name="authorDao" ref="authorDao"/>
     </bean>    
     
 <!--=============================================================  user service beans end ===============================================================--> 
