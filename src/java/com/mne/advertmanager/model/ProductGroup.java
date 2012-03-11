@@ -18,10 +18,14 @@ import javax.validation.constraints.Size;
 @Entity
 @Table(name = "product_group")
 @NamedQueries({
-    @NamedQuery(name = "ProductGroup.findAll", query = "SELECT p FROM ProductGroup p"),
-    @NamedQuery(name = "ProductGroup.findById", query = "SELECT p FROM ProductGroup p WHERE p.id = :id"),
-    @NamedQuery(name = "ProductGroup.findByGroupName", query = "SELECT p FROM ProductGroup p WHERE p.groupName = :groupName"),
-    @NamedQuery(name = "ProductGroup.findByDescription", query = "SELECT p FROM ProductGroup p WHERE p.description = :description")})
+    @NamedQuery(name = "ProductGroup.findAllByAffName", 
+        query = "SELECT pg FROM ProductGroup pg" +
+                 " left join fetch pg.affiliateId aff" +
+                 " where aff.affiliateName=?"),
+    @NamedQuery(name = "ProductGroup.findAll", query = "SELECT pg FROM ProductGroup pg"),
+    @NamedQuery(name = "ProductGroup.findById", query = "SELECT pg FROM ProductGroup pg WHERE pg.id = :id"),
+    @NamedQuery(name = "ProductGroup.findByGroupName", query = "SELECT pg FROM ProductGroup pg WHERE pg.groupName = :groupName"),
+    @NamedQuery(name = "ProductGroup.findByDescription", query = "SELECT pg FROM ProductGroup pg WHERE pg.description = :description")})
 
 
 

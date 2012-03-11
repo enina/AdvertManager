@@ -6,6 +6,7 @@ package com.mne.advertmanager.service;
 
 import com.mne.advertmanager.dao.GenericDao;
 import com.mne.advertmanager.model.Affiliate;
+import com.mne.advertmanager.model.ProductGroup;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -19,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class AffiliateService {
  
     private GenericDao<Affiliate,Long> affiliateDao;
+    private ProductGroupService        productGroupService;
     
     private JdbcTemplate jdbcTemplate;
 
@@ -41,6 +43,10 @@ public class AffiliateService {
      */
     public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
+    }
+
+    public void setProductGroupService(ProductGroupService productGroupService) {
+        this.productGroupService = productGroupService;
     }
     
     
@@ -82,5 +88,10 @@ public class AffiliateService {
     public void createAffiliate(Affiliate affiliate) {
         affiliateDao.create(affiliate);
         jdbcTemplate.update("insert into authorities values(?,?)",new Object[]{affiliate.getId(),"ROLE_USER"});
+        ProductGroup pg = new ProductGroup();
+        pg.setGroupName("Default");
+        pg.setDescription("Default product group");
+        pg.setAffiliateId(affiliate);
+        productGroupService.createProductGroup(pg);
     }
 }
