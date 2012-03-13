@@ -20,14 +20,14 @@
         <!--<intercept-url pattern="/**/*.do/**" access="permitAll" />-->
         <intercept-url pattern="/css/**" access="permitAll"/>
         <intercept-url pattern="/loggedout.jsp" access="permitAll"/>
-        <intercept-url pattern="/affiliates/new.do/**" access="permitAll" />
-        <intercept-url pattern="/affiliates/add.do/**" access="permitAll" />
-        <intercept-url pattern="/**/*.do/**" access="isAuthenticated()" />
+        <intercept-url pattern="/mvc/affiliates/new/**" access="permitAll" />
+        <intercept-url pattern="/mvc/affiliates/add/**" access="permitAll" />
+        <intercept-url pattern="/mvc/**" access="isAuthenticated()" />
         <!--
              Allow all other requests. In a real application you should
              adopt a whitelisting approach where access is not allowed by default
           -->
-        <form-login login-page='/index.jsp' default-target-url='/home.do'  always-use-default-target='true'/>
+        <form-login login-page='/index.jsp' default-target-url='/mvc/home'  always-use-default-target='true'/>
         <!--<form-login login-page='/index.jsp' default-target-url='/home.htm'  always-use-default-target='true' />-->
         
         <logout invalidate-session="true" logout-success-url="/loggedout.jsp" delete-cookies="JSESSIONID"/>

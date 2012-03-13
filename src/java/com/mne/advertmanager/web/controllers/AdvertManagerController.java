@@ -4,19 +4,24 @@
  */
 package com.mne.advertmanager.web.controllers;
 
+import com.google.gson.Gson;
 import com.mne.advertmanager.model.Affiliate;
 import com.mne.advertmanager.model.Author;
 import com.mne.advertmanager.model.Product;
 import com.mne.advertmanager.model.ProductGroup;
 import com.mne.advertmanager.service.*;
+import java.io.IOException;
 import java.util.Collection;
+import java.util.logging.Level;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestWrapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
@@ -28,6 +33,39 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 @RequestMapping("/")
 public class AdvertManagerController {
+
+    private static final String ADD = "/add";
+    private static final String NEW = "/new";
+    private static final String LIST = "/list";
+    private static final String GET = "/get";    
+    
+    private static final String AFFILIATES = "affiliates";
+    private static final String PRODUCTS = "products";
+    private static final String PROD_GROUPS = "pgroups";
+    private static final String AUTHORS = "authors";
+    private static final String DATAGEN = "dataGen";
+    private static final String APPS = "apps";
+    
+
+
+    private static final String APPS_PARSERGEN_REQ_MAPPING = APPS+"/parsergen";
+    
+    private static final String AFF_LIST_REQ_MAPPING = AFFILIATES+LIST;
+    private static final String AFF_NEW_REQ_MAPPING = AFFILIATES+NEW;
+    private static final String AFF_ADD_REQ_MAPPING = AFFILIATES+ADD;
+    private static final String DG_GEN_REQ_MAPPING = DATAGEN+"/generate";
+    
+    
+    private static final String PRODUCT_NEW_REQ_MAPPING = PRODUCTS+NEW;
+    private static final String PRODUCT_ADD_REQ_MAPPING = PRODUCTS+ADD;
+
+
+    //private static final String AUTHOR_GET_REQ_MAPPING = AUTHORS+GET;
+    //private static final String PROD_GROUPS_GET_REQ_MAPPING = PROD_GROUPS+GET;
+
+
+    
+    
     
     private static Logger logger = LoggerFactory.getLogger(AdvertManagerController.class);
     private DataGenService   dataGenerator;
@@ -35,33 +73,14 @@ public class AdvertManagerController {
     private ProductService productService;
     private AuthorService  authorService;
     private ProductGroupService pgService;
+    private Gson gson = new Gson();
 
 
 
-    private static final String AFFILIATES = "affiliates";
-    private static final String PRODUCTS = "products";
-    private static final String DATAGEN = "dataGen";
-    private static final String APPS = "apps";
-    
-
-    private static final String APPS_PARSERGEN_REQ_MAPPING = APPS+"/parsergen";
-    
-    private static final String AFF_LIST_REQ_MAPPING = AFFILIATES+"/list";
-    private static final String AFF_NEW_REQ_MAPPING = AFFILIATES+"/new";
-    private static final String AFF_ADD_REQ_MAPPING = AFFILIATES+"/add";
-    private static final String DG_GEN_REQ_MAPPING = DATAGEN+"/generate";
-    
-    
-    private static final String PRODUCT_NEW_REQ_MAPPING = PRODUCTS+"/new";
-    private static final String PRODUCT_ADD_REQ_MAPPING = PRODUCTS+"/add";
-
-    
-
-    
     @RequestMapping("/")
     public String redirect() { 
         logger.info("redirecting to home page");
-        return "redirect:home.do/";
+        return "redirect:mvc/home/";
     }
     /**
      * view resolution works through tiles configuration file WEB-INF/tiles-def/templates.xml
@@ -197,6 +216,44 @@ public class AdvertManagerController {
         return  new Affiliate();
     }    
 
+    //////////////////////////////////////////////////////  Author  ////////////////////////////////////////////////////////////////////////
+    @RequestMapping(value=AUTHORS+"/{authorId}", method=RequestMethod.GET)
+    public void getAuthor(@PathVariable int authorId,HttpServletResponse response) {
+        try {
+            Author author = authorService.findById(authorId);
+            author.setProductCollection(null);
+            String result = gson.toJson(author);
+            logger.info(result);
+            response.getWriter().write(result);
+        }
+
+        catch (IOException e) {
+            String errMsg = ",Exception:"+e.getClass().getSimpleName()+ ((e.getMessage()==null) ? "": " ,Message:"+e.getMessage());
+            logger.error("failed to retrieve author(id={},Exception:{})",authorId,errMsg);
+        }
+    }
+    //////////////////////////////////////////////////////  Author  ////////////////////////////////////////////////////////////////////////
+    
+    
+    //////////////////////////////////////////////////////  Product Group ////////////////////////////////////////////////////////////////////////
+    @RequestMapping(value=PROD_GROUPS+"/{pgId}", method=RequestMethod.GET)
+    public void getProductGroup(@PathVariable int pgId,HttpServletResponse response) {
+        try {
+            ProductGroup pg = pgService.findById(pgId);
+            pg.setProductCollection(null);
+            pg.setAffiliateId(null);
+            String result = gson.toJson(pg);
+            logger.info(result);
+            response.getWriter().write(result);
+        }
+        catch (IOException e) {
+            String errMsg = ",Exception:"+e.getClass().getSimpleName()+ ((e.getMessage()==null) ? "": " ,Message:"+e.getMessage());
+            logger.error("failed to retrieve product  group (id={},Exception:{})",pgId,errMsg);
+        }
+    }
+    //////////////////////////////////////////////////////  Product Group ////////////////////////////////////////////////////////////////////////
+    
+    
     //////////////////////////////////////////////////////  Utility ////////////////////////////////////////////////////////////////////////
     
     private String handleException(Exception e, String opType,String entityType,String entityName) {

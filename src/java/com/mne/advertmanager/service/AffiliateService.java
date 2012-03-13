@@ -55,6 +55,7 @@ public class AffiliateService {
     public Set<Affiliate> findAllAffiliates() {
         
         HashSet<Affiliate> result = new HashSet<Affiliate>();
+        
         Collection<Affiliate> data = affiliateDao.findByQuery("Affiliate.findAll");
 
         if (data != null)
@@ -68,10 +69,9 @@ public class AffiliateService {
         
         Affiliate result = null;
         
-        Collection<Affiliate> data = affiliateDao.findByQuery("Affiliate.findByAffiliateName",affiliateName);
+        Collection<Affiliate> data = affiliateDao.findByQuery("Affiliate.findByAffiliateNameWithProductsAndGroups",affiliateName);
 
-        if (data != null)
-            result = data.iterator().next();
+        result = getFirstElement(data);
         
         return result;
     }    
@@ -93,5 +93,26 @@ public class AffiliateService {
         pg.setDescription("Default product group");
         pg.setAffiliateId(affiliate);
         productGroupService.createProductGroup(pg);
+    }
+
+    public Affiliate findAffiliateByName(String affName) {
+
+        Affiliate result = null;
+        
+        Collection<Affiliate> data = affiliateDao.findByQuery("Affiliate.findByName",affName);
+
+        result = getFirstElement(data);
+        
+        return result;
+    }
+    
+    private Affiliate getFirstElement(Collection<Affiliate> data) {
+        
+        Affiliate result = null;
+        
+        if (data != null)
+            result = data.iterator().next();
+        
+        return result;
     }
 }

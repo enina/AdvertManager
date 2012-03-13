@@ -153,43 +153,26 @@
     -->
 
     <bean id="advertManagerProductService" class="com.mne.advertmanager.service.ProductService">
-        <property name="productDao">
-            <ref bean="productDao"/>
-        </property>
+        <property name="productDao"          ref="productDao"/>
+        <property name="productGroupService" ref="productGroupService"/>        
+        <property name="authorService"       ref="authorService"/>        
     </bean>
 
 
     <bean id="adManDataGenService" class="com.mne.advertmanager.service.DataGenService">
-        <property name="affiliateService">
-            <ref bean="affiliateService"/>
-        </property>
-        <property name="authorDao">
-            <ref bean="authorDao"/>
-        </property>
-        <property name="productDao">
-            <ref bean="productDao"/>
-        </property>
-        <property name="productGroupDao">
-            <ref bean="productGroupDao"/>
-        </property>
-        <property name="accessSourceDao">
-            <ref bean="accessSourceDao"/>
-        </property>
-        <property name="accessLogDao">
-            <ref bean="accessLogDao"/>
-        </property>
-        <property name="purchaseOrderDao">
-            <ref bean="purchaseOrderDao"/>
-        </property>
-        <property name="entityFactory">
-            <ref bean="adManEntityFactory"/>
-        </property>
+        <property name="affiliateService" ref="affiliateService"/>
+        <property name="authorDao"        ref="authorDao"/>
+        <property name="productDao"       ref="productDao"/>
+        <property name="productGroupDao"  ref="productGroupDao"/>
+        <property name="accessSourceDao"  ref="accessSourceDao"/>
+        <property name="accessLogDao"     ref="accessLogDao"/>
+        <property name="purchaseOrderDao" ref="purchaseOrderDao"/>
+        <property name="entityFactory"    ref="adManEntityFactory"/>
     </bean>
     
     <bean id="productGroupService" class="com.mne.advertmanager.service.ProductGroupService">
-        <property name="productGroupDao">
-            <ref bean="productGroupDao"/>
-        </property>
+        <property name="productGroupDao" ref="productGroupDao"/>
+        <property name="affiliateService"    ref="affiliateService"/>                
     </bean>
     
     <bean id="affiliateService" class="com.mne.advertmanager.service.AffiliateService">

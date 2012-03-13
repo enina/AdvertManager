@@ -50,7 +50,7 @@
                 </tr>
                 <tr>
                     <td ><a style="display: block;  text-decoration: none; width:55px; border: solid 1px white; color:black;" onclick="document.getElementById('loginForm').submit();">Login</a></td>   <!-- <input name="submit" type="submit" value="Login"/> -->
-                    <td ><a style="display: block;  text-decoration: none; width:55px; border: solid 1px white; color:black;" href="${pageContext.request.contextPath}/affiliates/new.do">Register</a></td>
+                    <td ><a style="display: block;  text-decoration: none; width:55px; border: solid 1px white; color:black;" href="${pageContext.request.contextPath}/mvc/affiliates/new">Register</a></td>
                 </tr>
             </table>
         </form>

@@ -5,7 +5,7 @@
 --%>
 
 <%@include file="../common/taglibs.jsp" %>
-<form:form  modelAttribute="affiliate" method="post" action="add.do">
+<form:form  modelAttribute="affiliate" method="post" action="add">
     <table>
         <tr>
             <td><form:label path="affiliateName">Affiliate Name</form:label></td>

@@ -54,15 +54,15 @@
 -->
 
 
-<div> <a href="${pageContext.request.contextPath}/affiliates/list.do">Affiliates</a>
-      <a href="${pageContext.request.contextPath}/products/list.do"> Products </a>
+<div> <a href="${pageContext.request.contextPath}/mvc/affiliates/list">Affiliates</a>
+      <a href="${pageContext.request.contextPath}/mvc/products/list"> Products </a>
 </div>
 
 
 <sec:authorize access="hasRole('ROLE_ADMIN')">
-    <div> <a href="${pageContext.request.contextPath}/dataGen/generate.do">Generate Data</a></div>
-    <div> <a href="${pageContext.request.contextPath}/affiliates/new.do">Register Affiliate</a></div>
-    <div> <a href="${pageContext.request.contextPath}/apps/parsergen.do">Configure Parser</a></div>  
+    <div> <a href="${pageContext.request.contextPath}/mvc/dataGen/generate">Generate Data</a></div>
+    <div> <a href="${pageContext.request.contextPath}/mvc/affiliates/new">Register Affiliate</a></div>
+    <div> <a href="${pageContext.request.contextPath}/mvc/apps/parsergen">Configure Parser</a></div>  
 </sec:authorize>
 
 
