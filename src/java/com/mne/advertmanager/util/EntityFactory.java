@@ -34,6 +34,7 @@ public class EntityFactory {
         Product result = new Product();
 
         result.setCommision( (++magicNum % 100)/100);
+        result.setName("ProductName"+ ++magicNum);
         result.setDescription("ProductDescription"+ ++magicNum);
         result.setPrice(++magicNum);
         result.setProductLink("http://site/productLink/"+ ++magicNum);

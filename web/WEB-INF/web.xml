@@ -61,7 +61,7 @@
 
     <servlet-mapping>
         <servlet-name>Dispatcher</servlet-name>
-        <url-pattern>*.do</url-pattern>
+        <url-pattern>/mvc/*</url-pattern>
     </servlet-mapping>
     
 

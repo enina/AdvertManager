@@ -15,14 +15,14 @@ import org.springframework.transaction.annotation.Transactional;
  */
 public class AuthorService {
 
-    private GenericDao<Author, Long> authorDao;
+    private GenericDao<Author, Integer> authorDao;
 
-    public void setAuthorDao(GenericDao<Author, Long> authorDao) {
+    public void setAuthorDao(GenericDao<Author, Integer> authorDao) {
         this.authorDao = authorDao;
     }
 
 //============================ findAllProducts =================================
-    @Transactional(readOnly = true)//, propagation = Propagation.REQUIRED)
+    @Transactional(readOnly = true)
     public Collection<Author> findAllAuthors() {
         return authorDao.findByQuery("Author.findAll");
     }
@@ -30,5 +30,19 @@ public class AuthorService {
     @Transactional
     public void createAuthor(Author author) {
         authorDao.create(author);
+    }
+    @Transactional(readOnly = true)
+    public Author findById(int authorId) {
+        return authorDao.read(authorId);
+    }
+
+    public Author createOrUpdate(Author author) {
+        
+        if (author.getId()==0) {
+            authorDao.create(author);
+        }else {
+            authorDao.update(author);
+        }
+        return author;
     }
 }

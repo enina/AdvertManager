@@ -30,7 +30,8 @@ import javax.validation.constraints.Size;
 @NamedQueries({
     @NamedQuery(name = "Affiliate.findAll", query = "SELECT a FROM Affiliate a"),
     @NamedQuery(name = "Affiliate.findById", query = "SELECT a FROM Affiliate a WHERE a.id = :id"),
-    @NamedQuery(name = "Affiliate.findByAffiliateName",
+    @NamedQuery(name = "Affiliate.findByName", query = "SELECT a FROM Affiliate a WHERE a.affiliateName = ?"),
+    @NamedQuery(name = "Affiliate.findByAffiliateNameWithProductsAndGroups",
         query = "SELECT a FROM Affiliate a "
                 + " left join fetch a.productGroupCollection pg"
                 + " left join fetch pg.productCollection prd"
