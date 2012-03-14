@@ -43,6 +43,7 @@ public class ProductService {
         return productDao.findByQuery("Product.findAll");
     }
 
+//============================ createProduct ===================================
     @Transactional
     public void createProduct(Product product) {
         
@@ -60,4 +61,5 @@ public class ProductService {
         product.setProductGroupId(pg);
         productDao.create(product);
     }
+    
 }

@@ -58,7 +58,10 @@ public class AdvertManagerController {
     
     private static final String PRODUCT_NEW_REQ_MAPPING = PRODUCTS+NEW;
     private static final String PRODUCT_ADD_REQ_MAPPING = PRODUCTS+ADD;
+    
+    private static final String AUTHOR_ADD_REQ_MAPPEING = AUTHORS+ADD;
 
+    private static final String AUTHOR_NEW_REQ_MAPPING = AUTHORS + NEW;
 
     //private static final String AUTHOR_GET_REQ_MAPPING = AUTHORS+GET;
     //private static final String PROD_GROUPS_GET_REQ_MAPPING = PROD_GROUPS+GET;
@@ -132,7 +135,7 @@ public class AdvertManagerController {
         return  mav;
         
     }
-    
+//============================ addProduct ===============================================
     @RequestMapping(value=PRODUCT_ADD_REQ_MAPPING , method = RequestMethod.POST)
     public ModelAndView addProduct(@ModelAttribute("product")Product product,SecurityContextHolderAwareRequestWrapper securityContext) {
         
@@ -150,8 +153,39 @@ public class AdvertManagerController {
         
         return  mav;
     }    
+//============================= newAuthor redirection ==========================
+    @RequestMapping(value=AUTHOR_NEW_REQ_MAPPING, method = RequestMethod.GET )
+    public ModelAndView viewAuthorDefintionForm(SecurityContextHolderAwareRequestWrapper securityContext) {
+        
+        System.out.println("controller:viewAuthorDefintionForm");
+        ModelAndView mav = new ModelAndView(AUTHOR_NEW_REQ_MAPPING);
+        
+        mav.addObject("author", new Author());       
+        
+        return  mav;
+    
+}
+//============================= addAuthor ======================================
+
+    @RequestMapping(value=AUTHOR_ADD_REQ_MAPPEING, method = RequestMethod.POST)
+    public ModelAndView addAuthor(@ModelAttribute("author")Author author, SecurityContextHolderAwareRequestWrapper securityContext){
+        
+        String status = "";
+        try{
+            authorService.createAuthor(author);
+            status = "Author: " + author.getAuthorName() +" created successfully";
+        }catch(Exception e){
+            status = handleException(e, "create", "author", author.getAuthorName() );
+        }
+        
+        ModelAndView mav = forwardToView(AUTHOR_ADD_REQ_MAPPEING,"home","data",generateHome(securityContext));
+        mav.addObject("status", status);
+        
+        return  mav;
+    }
     
     
+//=============================== viewProducts =================================
     @RequestMapping(value= "products/list", method= RequestMethod.GET)
     public @ModelAttribute("data") Collection<Product> viewProducts(){
 
