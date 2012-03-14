@@ -7,6 +7,7 @@
         <tr>
             <td class="affTd"><a name="menu" href="${pageContext.request.contextPath}/mvc/home">Home</a></td>
             <td class="affTd"><a name="menu" href="${pageContext.request.contextPath}/mvc/products/new">Add Product</a></td>
+            <td class="affTd"><a name="menu" href="${pageContext.request.contextPath}/mvc/authors/new">Add Author</a></td>
             <td class="affTd"><a name="menu" href="${pageContext.request.contextPath}/j_spring_security_logout">Logout</a></td>
         </tr>
     </table>
