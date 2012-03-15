@@ -1,18 +1,57 @@
+
+body{
+    
+    
+}
+
 .graphicBar { 
     color:blue;
     background-color: blue;
 }
 .affTable {
-	border-width: 1px;
+       
+        position: relative;
+        
+        
+	border-width: 0px;
 	border-style: solid;
 	border-color: black;
         border-collapse:collapse;
+        
+}
+.affTable th{
+    
+   text-align: center;
+   background-color: #818081;
+   
+}
+.affTable td{
+    
+   text-align: center;
+   
+}
+.affTable{
+    width:100%;
+    
+}
+
+
+tr:nth-child(even){
+    background: #eeedfe
+}
+tr:nth-child(odd){
+    background: #fffefff
 }
 
 .affTd {
-	border-width: 1px;
-	border-style: solid;
-	border-color: black;
+    min-width: 70px;
+/*     width:150px;*/
+     text-align: center;
+     font-size: 1.2em;
+}
+.affTd a{
+    
+    padding-right: 20px;
 }
 .menu{ /*define <a> that hold menu links (home,loguot)*/
     
@@ -20,4 +59,30 @@
     display: block;
     text-decoration: none;
     color: black;
+}
+.menuetable,.menuetable tr, .menuetable tr td {
+    
+    border-collapse: collapse;
+    border-bottom-style: none;
+}
+.menuetable{
+    
+    position: relative;
+    top: 20px;
+}
+.menuItem:visited,.menuItem:link {
+    
+    text-decoration: none;
+    color:#cccccc;
+
+}
+.menuItem:hover{
+    color:#ffffff;
+    text-decoration: underline;
+}
+
+.content{
+    
+  
+    
 }

@@ -55,6 +55,7 @@
             <td><form:label path="redirectLink">Redirect Link</form:label></td>
             <td><form:input path="redirectLink" /></td>
         </tr>
+        
 
     </table>
 
@@ -68,7 +69,6 @@
             <td><form:input    path="authorId.email" /></td>
         </tr>
     </table>            
-
 
 
     <table id="productGroupData" style="display:none">

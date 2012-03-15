@@ -13,15 +13,19 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta http-equiv="cache-control" content="no-cache, no-store">
     </head>
-    <body style="margin: 0px;">
+    <body style="margin: 0px; background-color: #f5f5f5; position: relative;">
         <div id="header">
             <tiles:insertAttribute name="header" />
         </div>
         <div id="content">
+            <table style="width:100%;"><tr><td style="width: 10%;">&nbsp;</td><td>
             <tiles:insertAttribute name="content" />
+            </td><td style="width: 10%;">&nbsp;</td>
+            </tr>
+            </table>
         </div>
-        <div id="footer">
-            <tiles:insertAttribute name="footer" />
+        <div id="footer" style="height: 20px;">
+          
         </div>
     </body>
 </html>

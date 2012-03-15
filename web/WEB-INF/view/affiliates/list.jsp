@@ -2,8 +2,20 @@
 <c:if test="${status!=null}">
     <div style="color:red"><c:out value="${status}"/></div>
 </c:if>
+ 
 <table border="1" class="affTable">
+    
+    
     <c:if test="${data!=null}">
+        <thead>
+            <tr >
+                <th>Affiliate ID</th><th> Name </th>
+                
+                <sec:authorize access="hasRole('ROLE_ADMIN')">
+                <th> Email</th><th>Password</th><th>Is Enabled </th>
+                </sec:authorize> 
+            </tr>
+        </thead>
         <c:forEach items="${data}" var="affiliate">
         <tr>
             <td class="affTd" align="left" >
@@ -27,3 +39,4 @@
         </c:forEach>
     </c:if>        
 </table>
+
