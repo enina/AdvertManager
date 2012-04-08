@@ -149,6 +149,12 @@ insert into authorities  select id ,'ROLE_ADMIN' from affiliate where affiliateN
 insert into authorities  select id ,'ROLE_USER' from affiliate where affiliateName='vasya';
 insert into authorities  select id ,'ROLE_ADMIN' from affiliate where affiliateName='hacker';
 
+insert into product_group (affiliate_id,group_name,description) select id,'Default','Default Group' from affiliate where affiliateName='ilya' ;
+insert into product_group (affiliate_id,group_name,description) select id,'Default','Default Group' from affiliate where affiliateName='nina' ;
+insert into product_group (affiliate_id,group_name,description) select id,'Default','Default Group' from affiliate where affiliateName='misha' ;
+insert into product_group (affiliate_id,group_name,description) select id,'Default','Default Group' from affiliate where affiliateName='root' ;
+insert into product_group (affiliate_id,group_name,description) select id,'Default','Default Group' from affiliate where affiliateName='vasya' ;
+
 
 commit;
 -----------------------------------default data-------------------------------------------------------------------------------
