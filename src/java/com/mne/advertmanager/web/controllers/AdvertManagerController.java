@@ -12,7 +12,6 @@ import com.mne.advertmanager.model.ProductGroup;
 import com.mne.advertmanager.service.*;
 import java.io.IOException;
 import java.util.Collection;
-import java.util.logging.Level;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
