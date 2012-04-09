@@ -10,8 +10,8 @@
         <title><tiles:getAsString name="title" /></title>
         <link rel="stylesheet" type="text/css" href="<c:url value="/css/adman1.css"/>" />
         <script type="text/javascript" src="<c:url value="/js/product.js"/>"></script>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <meta http-equiv="cache-control" content="no-cache, no-store">
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+        <meta http-equiv="cache-control" content="no-cache, no-store"/>
     </head>
     <body style="margin: 0px; background-color: #f5f5f5; position: relative;">
         <div id="header">
