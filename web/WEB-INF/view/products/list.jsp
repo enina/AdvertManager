@@ -2,8 +2,8 @@
 <table border="1" class="affTable">
     <c:if test="${data!=null}">
         <thead>
-            <tr style="background-color: #999999;">
-                <th>Product ID</td><td>Product Description</td><td>Price</td><td>Link</td>
+            <tr >
+                <th>Product ID</th><th>Product Description</th><th>Price</th><th>Link</th>
             </tr>
         </thead>
         <tbody>
