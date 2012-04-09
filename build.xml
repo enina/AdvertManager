@@ -70,9 +70,9 @@
 
     -->
 
-    <target name="ivy.retrieve.lib">
-        <property name="ivy.default.ivy.user.dir" value="D:/java/ivy_rep/"/>
-        <ivy:retrieve pattern="${IVY_DIR}/[type]/[artifact]-[revision].[ext]"/>
+    <target name="ivy.retrieve.lib" depends="-init-project">
+        <property name="ivy.default.ivy.user.dir" value="${var.IVY_REP_DIR}"/>
+        <ivy:retrieve pattern="${var.EXT_LIB}/../[type]/[artifact]-[revision].[ext]"/>
     </target>
     
 

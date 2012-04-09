@@ -27,14 +27,15 @@
            /* cursor: hand*/
         </style>
     </head>
-    <body onload='document.f.j_username.focus();' style="position: relative; background-image: url('${pageContext.request.contextPath}/images/ironPatern25X25.png');">
+    <body onload='document.f.j_username.focus();' style="position: relative; background-color: #9fccf4;">
         
         <c:if test="${status!=null}">
             <div style="color:red"><c:out value="${status}"/></div>
         </c:if>
-        <div style="position: relative; left:35%; top:25%; background-color: #888888; width:300px;">
+        <div style="position: relative; left:35%; top:25%; background-image: url('${pageContext.request.contextPath}/images/loginbg300x200.png'); width:300px; height:200px;">
+        <div style="position: absolute; bottom: 0px;">
         <form style="width:100%;" name='f' id="loginForm" action='${pageContext.request.contextPath}/j_spring_security_check' method='post'>
-            <h3>Please Login</h3>
+          
             <table>
                 <tr>
                     <td>User Name:</td>
@@ -54,6 +55,7 @@
                 </tr>
             </table>
         </form>
+        </div>
             
         </div>
     

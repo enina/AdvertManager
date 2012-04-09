@@ -35,11 +35,13 @@ public class Author implements Serializable {
     @Column(name = "authorName")
     private String authorName;
     // @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="Invalid email")//if the field contains email address consider using this annotation to enforce field validation
+    
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 256)
     @Column(name = "email")
     private String email;
+    
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "authorId")
     private Collection<Product> productCollection;
 
