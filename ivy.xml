@@ -2,33 +2,36 @@
 <ivy-module version="2.0">
     <info organisation="com.mne" module="AdvertManager"/>
     <dependencies>
-        <dependency org="org.springframework" name="spring-core" rev="3.1.0.RELEASE"/>
-        <dependency org="org.springframework" name="spring-webmvc" rev="3.1.0.RELEASE"/>
-        <dependency org="org.springframework" name="spring-tx" rev="3.1.0.RELEASE"/>
-            
         <dependency org="org.springframework" name="spring-aspects" rev="3.1.0.RELEASE"/>
+        <dependency org="org.springframework" name="spring-core" rev="3.1.0.RELEASE"/>        
         <dependency org="org.springframework" name="spring-instrument" rev="3.1.0.RELEASE"/>
-        <dependency org="org.springframework" name="spring-orm" rev="3.1.0.RELEASE"/>
         <dependency org="org.springframework" name="spring-jdbc" rev="3.1.0.RELEASE"/>
-        <dependency org="org.springframework" name="spring-web" rev="3.1.0.RELEASE"/>
-		
-        <dependency org="org.springframework.security" name="spring-security-core" rev="3.1.0.RELEASE"/>
-        <dependency org="org.springframework.security" name="spring-security-acl" rev="3.1.0.RELEASE"/>
+        <dependency org="org.springframework" name="spring-orm" rev="3.1.0.RELEASE"/>
+
+        <dependency org="org.springframework.security" name="spring-security-acl" rev="3.1.0.RELEASE"/>		
         <dependency org="org.springframework.security" name="spring-security-aspects" rev="3.1.0.RELEASE"/>
         <dependency org="org.springframework.security" name="spring-security-cas" rev="3.1.0.RELEASE"/>
         <dependency org="org.springframework.security" name="spring-security-config" rev="3.1.0.RELEASE"/>
+        <dependency org="org.springframework.security" name="spring-security-core" rev="3.1.0.RELEASE"/>
         <dependency org="org.springframework.security" name="spring-security-ldap" rev="3.1.0.RELEASE"/>
-        <dependency org="org.springframework.security" name="spring-security-config" rev="3.1.0.RELEASE"/>
         <dependency org="org.springframework.security" name="spring-security-openid" rev="3.1.0.RELEASE"/>
         <dependency org="org.springframework.security" name="spring-security-remoting" rev="3.1.0.RELEASE"/>
         <dependency org="org.springframework.security" name="spring-security-taglibs" rev="3.1.0.RELEASE"/>
         <dependency org="org.springframework.security" name="spring-security-web" rev="3.1.0.RELEASE"/>
 
+        <dependency org="org.springframework" name="spring-tx" rev="3.1.0.RELEASE"/>
+        <dependency org="org.springframework" name="spring-web" rev="3.1.0.RELEASE"/>        
+        <dependency org="org.springframework" name="spring-webmvc" rev="3.1.0.RELEASE"/>
+
+            
+        <dependency org="org.hibernate" name="hibernate-c3p0" rev="4.0.1.Final"/>                        
+        <dependency org="org.hibernate" name="hibernate-core" rev="4.0.1.Final"/>            
+        <dependency org="org.hibernate" name="hibernate-ehcache" rev="4.0.1.Final"/>        
         <dependency org="org.hibernate" name="hibernate-entitymanager" rev="4.0.1.Final"/>            
         <dependency org="org.hibernate" name="hibernate-validator" rev="4.2.0.Final"/>
         <dependency org="org.hibernate" name="hibernate-validator-annotation-processor" rev="4.2.0.Final"/>
-        <dependency org="org.hibernate" name="hibernate-ehcache" rev="4.0.1.Final"/>
-        <dependency org="org.hibernate" name="hibernate-c3p0" rev="4.0.1.Final"/>            
+
+
         
         <dependency org="org.slf4j" name="slf4j-api" rev="1.6.4"/>
         <dependency org="org.slf4j" name="jcl-over-slf4j" rev="1.6.4"/>
@@ -61,8 +64,8 @@
         
         <dependency org="org.apache.tiles" name="tiles-api"      rev="2.2.2"/>                   
         <dependency org="org.apache.tiles" name="tiles-core"     rev="2.2.2"/>
+        <dependency org="org.apache.tiles" name="tiles-jsp"      rev="2.2.2"/>        
         <dependency org="org.apache.tiles" name="tiles-servlet"  rev="2.2.2"/>
-        <dependency org="org.apache.tiles" name="tiles-jsp"      rev="2.2.2"/>
         <dependency org="org.apache.tiles" name="tiles-template" rev="2.2.2"/>        
         
         <dependency org="org.jsoup" name="jsoup" rev="1.6.1"/>
@@ -73,21 +76,82 @@
 
             		
             		
-        <!--dependency org="commons-lang" name="commons-lang" rev="2.0"/-->
-        <!--dependency org="commons-cli" name="commons-cli" rev="1.0"/-->
-        <exclude org="com.ibm.websphere" module="com.springsource.com.ibm.websphere.uow" />
-        <exclude org="javax.ejb"         module="com.springsource.javax.ejb"  />    
-        <exclude org="org.eclipse.persistence"         module="org.eclipse.persistence.core" />    
-        <exclude org="org.eclipse.persistence"         module="org.eclipse.persistence.jpa" />    
-        <exclude org="com.caucho"         module="com.springsource.com.caucho" />    
-        <exclude org="org.apache.derby"         module="com.springsource.org.apache.derby"/>    
-        <exclude org="org.apache.derby"         module="com.springsource.org.apache.derby.client"  />    
+        <exclude org="com.ibm.websphere"                module="com.springsource.com.ibm.websphere.uow" />
+        <exclude org="javax.ejb"                        module="com.springsource.javax.ejb"  />    
+        <exclude org="com.caucho"                       module="com.springsource.com.caucho" />            
+        <exclude org="org.eclipse.persistence"/>    
+
         <exclude org="javax.resource"         module="com.springsource.javax.resource"  />    
-        
-        <exclude org="maven-plugins"         module="maven-cobertura-plugin"  />    
-        <exclude org="javax.jms"         module="jms"  />    
+        <exclude org="maven-plugins"/>    
         <exclude org="com.sun.jdmk"         module="jmxtools"  />    
         <exclude org="com.sun.jmx"         module="jmxri"  />    
-        <exclude org="maven-plugins"         module="maven-findbugs-plugin"  />    
+
+
+        <exclude org="org.apache.poi" /> 
+        <exclude org="org.apache.ant" />
+        <exclude org="org.apache.derby" />    
+        <exclude org="org.apache.ibatis" /> 
+        <exclude org="org.apache.tomcat" />
+        <exclude org="org.apache.openjpa"/>
+        <exclude org="org.apache.geronimo.specs" />                
+        <exclude org="org.apache.directory.server" />
+        
+        <exclude org="org.osgi"/>                
+        <exclude org="org.freemarker"/>         
+        <exclude org="org.openid4java"/>        
+        <exclude org="org.eclipse.jetty"/>        
+        <exclude org="org.codehaus.groovy"/>
+        <exclude org="org.codehaus.jackson"/>
+        <exclude org="org.eclipse"          module="osgi"/>
+
+
+
+        
+
+        <exclude org="com.google.inject" />
+        <exclude org="com.h2database" />
+
+
+        <exclude org="ant" />
+        <exclude org="axis" />
+        <exclude org="rome"/>
+        <exclude org="jdom"/>
+        <exclude org="log4j"/>        
+        <exclude org="jfree"/>
+        <exclude org="janino"/>        
+        <exclude org="hsqldb"/>        
+        <exclude org="velocity"/>        
+        <exclude org="xml-apis"/>
+        <exclude org="activation"/>        
+        <exclude org="com.lowagie"/>
+        <exclude org="jasperreports"/>
+        <exclude org="velocity-tools"/>
+        <exclude org="javax.xml.bind" />        
+        <exclude org="com.sun.xml.bind"/>
+        <exclude org="toplink.essentials"/>                
+        <exclude org="eclipse" module="jdtcore"/>
+        
+
+        <exclude org="net.sourceforge.serp"/>        
+        <exclude org="net.sourceforge.jexcelapi" />
+
+
+
+        <exclude org="javax.el"/>
+        <exclude org="javax.jdo"/>        
+        <exclude org="javax.mail"/>
+        <exclude org="javax.faces"/>
+        <exclude org="javax.portlet"/>
+        <exclude org="javax.servlet"/>
+        <exclude org="javax.servlet.jsp"/>
+        <exclude org="javax.transaction"/>
+
+        
+        <exclude org="javax.jms"         module="jms"  />            
+        <exclude org="javax.xml.ws"      module="jaxws-api"/>
+        <exclude org="javax.xml"         module="jaxrpc-api"/>
+        <exclude org="javax.persistence" module="persistence-api"/>
+        
     </dependencies>
+    
 </ivy-module>
