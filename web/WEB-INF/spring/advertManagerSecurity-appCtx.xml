@@ -14,6 +14,33 @@
     <debug />
 
     <global-method-security pre-post-annotations="enabled" />
+    
+    <!-- This must go before the http element in order to be used by security:authorize tags using the access attribute -->
+    <beans:bean id="expressionHandler" class="org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler">
+        <beans:property name="roleHierarchy" ref="roleHierarchy" />
+    </beans:bean>
+    
+    <!-- security:authorize tags using the url attribute will delegate to this accessDecisionManager -->
+    <beans:bean id="accessDecisionManager" class="org.springframework.security.access.vote.AffirmativeBased">
+        <beans:property name="decisionVoters">
+            <beans:list>
+                <beans:bean class="org.springframework.security.web.access.expression.WebExpressionVoter">
+                    <beans:property name="expressionHandler" ref="expressionHandler" />
+                </beans:bean>
+            </beans:list>
+        </beans:property>
+    </beans:bean>
+
+
+    <beans:bean id="roleHierarchy"    class="org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl">
+        <beans:property name="hierarchy">
+            <beans:value>
+                ROLE_ADMIN > ROLE_STAFF
+                ROLE_STAFF  >  ROLE_USER 
+                ROLE_USER  > ROLE_GUEST</beans:value>
+        </beans:property>
+    </beans:bean>
+    
 
     
     <http use-expressions="true">
@@ -56,10 +83,6 @@
         <beans:property name="authoritiesByUsernameQuery" value="select affiliateName ,authority from authorities  join affiliate on authorities.user_id=affiliate.id where affiliateName = ?"/>
     </beans:bean>
 
-    <beans:bean id="roleHierarchy"    class="org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl">
-        <beans:property name="hierarchy">
-            <beans:value>ROLE_ADMIN > ROLE_STAFF  > ROLE_USER  > ROLE_GUEST</beans:value>
-        </beans:property>
-    </beans:bean>
+
     
 </beans:beans>
