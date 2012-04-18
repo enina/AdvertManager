@@ -12,18 +12,23 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
 import org.jsoup.Connection;
 import org.jsoup.nodes.Attributes;
 import org.jsoup.nodes.Element;
@@ -35,20 +40,26 @@ import org.jsoup.select.Elements;
  */
 public class ParserGenMainFrame extends javax.swing.JFrame {
 
+    /**
+     *
+     */
+    private static final long serialVersionUID = -2829437157987592509L;
     private static final Logger logger = Logger.getLogger(ParserGenMainFrame.class.getName());
     private Project project = null;
     private String curDataSpec = "";
+    private Marshaller  marshaller = null;
 
     public static void main(String args[]) {
 
         java.awt.EventQueue.invokeLater(new Runnable() {
-           @Override
-           public void run() {
+
+            @Override
+            public void run() {
                 ParserGenMainFrame app = new ParserGenMainFrame();
                 app.setLocation(450, 150);
                 app.setVisible(true);
-           }
-       });        
+            }
+        });
     }
 
     /**
@@ -60,34 +71,75 @@ public class ParserGenMainFrame extends javax.swing.JFrame {
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
             isContinue = true;
+            JAXBContext jaxbCtx = JAXBContext.newInstance(com.mne.advertmanager.parsergen.model.Project.class);
+            marshaller = jaxbCtx.createMarshaller();
+            marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+            
         } catch (Exception ex) {
             isContinue = false;
-            logger.log(Level.SEVERE, "Failed to set system look and feel {0}", ex.getClass().getSimpleName());
+            logger.log(Level.SEVERE, "Failed to set system look and feel {0}:Message {1}", new Object[]{ex.getClass().getSimpleName(),ex.toString()});
         }
-        
+
         if (isContinue) {
             initComponents();
-            panelBasic.setVisible(false);
-            btnPreview.setVisible(false);
-
-            panelAdvanced.setVisible(false);
+            
+            reset();
+            
             radioGroup.add(radioGet);
             radioGroup.add(radioPost);
 
             txtSubItemSelector.getDocument().addDocumentListener(new SubItemSelectorDocListener());
             txtUrl.getDocument().addDocumentListener(new URLDocListener());
-            txtMainSelector.getDocument().addDocumentListener(new MainSelectorDocListener());
-            txtListEntrySelector.getDocument().addDocumentListener(new ListEntrySelectorDocListener());
+            //txtMainSelector.getDocument().addDocumentListener(new MainSelectorDocListener());
+            //txtListEntrySelector.getDocument().addDocumentListener(new ListEntrySelectorDocListener());
             treeHtmlDoc.addMouseListener(new DocTreeMouseListener());
+            txtPaging.getDocument().addDocumentListener(new PageParamDocListener());
+            txtNumPages.addChangeListener(new NumPagesDocListener());
         }
     }
+    
+    private void reset() {
+        panelBasic.setVisible(false);
+        btnPreview.setVisible(false);
 
+        panelAdvanced.setVisible(false);
+        panelPaging.setVisible(false);
+
+        project = null;
+        curDataSpec = "";
+        fillComponentPanel(null);
+    }
+
+    private ArrayList<List<String>> getPageData(org.jsoup.nodes.Document doc, DataSpec dataSpec) {
+
+        Element dataElem = doc.select(dataSpec.getSelector()).first();
+        Elements dataList = dataElem.select(dataSpec.getListEntrySelector());
+
+        ArrayList<List<String>> rows;
+        rows = new ArrayList<List<String>>();
+        for (int i = 0; i < dataList.size(); ++i) {
+            List<String> singleRow = new ArrayList<String>();
+            for (SelectableItem item : dataSpec.getDataItems()) {
+                Element listEntryElement = dataList.get(i);
+                String selector = item.getSelector();
+                Elements selectedList = listEntryElement.select(selector);
+                if (selectedList != null) {
+                    Element targetElement = selectedList.first();
+                    String columnValue = targetElement.text();
+                    singleRow.add(columnValue);
+                } else {
+                    System.err.println("Error retrieving value of " + selector);
+                }
+            }
+            rows.add(singleRow);
+        }
+        return rows;
+    }
 
     /**
      * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The content of this method is always
      * regenerated by the Form Editor.
      */
-    @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
@@ -97,11 +149,8 @@ public class ParserGenMainFrame extends javax.swing.JFrame {
         panelAdvanced = new javax.swing.JPanel();
         txtSubItemSelector = new javax.swing.JTextField();
         cmbSubItem = new javax.swing.JComboBox();
-        lblSubItem = new javax.swing.JLabel();
-        txtListEntrySelector = new javax.swing.JTextField();
-        lblListEntry = new javax.swing.JLabel();
-        txtMainSelector = new javax.swing.JTextField();
-        javax.swing.JLabel lblMainDataSelector = new javax.swing.JLabel();
+        lblSubItemSelector = new javax.swing.JLabel();
+        lblSubItemName = new javax.swing.JLabel();
         panelBasic = new javax.swing.JPanel();
         lblItem = new javax.swing.JLabel();
         lblItemName = new javax.swing.JLabel();
@@ -114,6 +163,11 @@ public class ParserGenMainFrame extends javax.swing.JFrame {
         btnPreview = new javax.swing.JButton();
         panelStatus = new javax.swing.JPanel();
         lblStatus = new javax.swing.JLabel();
+        panelPaging = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        txtNumPages = new javax.swing.JSpinner();
+        jLabel2 = new javax.swing.JLabel();
+        txtPaging = new javax.swing.JTextField();
         panelDocument = new javax.swing.JPanel();
         txtDocQuery = new javax.swing.JTextField();
         btnSearch = new javax.swing.JButton();
@@ -156,53 +210,35 @@ public class ParserGenMainFrame extends javax.swing.JFrame {
             }
         });
 
-        lblSubItem.setText("SubItem Selector");
+        lblSubItemSelector.setLabelFor(txtSubItemSelector);
+        lblSubItemSelector.setText("SubItem Selector");
 
-        txtListEntrySelector.setText("enter list entry selector");
-
-        lblListEntry.setText("List entry selector");
-
-        txtMainSelector.setText("enter data list selector");
-
-        lblMainDataSelector.setText("Data list selector");
+        lblSubItemName.setLabelFor(cmbSubItem);
+        lblSubItemName.setText("SubItem Name");
 
         javax.swing.GroupLayout panelAdvancedLayout = new javax.swing.GroupLayout(panelAdvanced);
         panelAdvanced.setLayout(panelAdvancedLayout);
         panelAdvancedLayout.setHorizontalGroup(
             panelAdvancedLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(txtSubItemSelector, javax.swing.GroupLayout.DEFAULT_SIZE, 333, Short.MAX_VALUE)
+            .addComponent(cmbSubItem, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(panelAdvancedLayout.createSequentialGroup()
-                .addComponent(lblListEntry)
-                .addContainerGap())
-            .addComponent(txtMainSelector)
-            .addComponent(txtListEntrySelector)
-            .addComponent(txtSubItemSelector)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelAdvancedLayout.createSequentialGroup()
-                .addGroup(panelAdvancedLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(panelAdvancedLayout.createSequentialGroup()
-                        .addGap(0, 20, Short.MAX_VALUE)
-                        .addComponent(lblSubItem))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, panelAdvancedLayout.createSequentialGroup()
-                        .addComponent(lblMainDataSelector)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(cmbSubItem, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(231, 231, 231))
+                .addGroup(panelAdvancedLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblSubItemSelector)
+                    .addComponent(lblSubItemName))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         panelAdvancedLayout.setVerticalGroup(
             panelAdvancedLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelAdvancedLayout.createSequentialGroup()
-                .addComponent(lblMainDataSelector)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtMainSelector, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lblListEntry)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtListEntrySelector, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lblSubItemName)
+                .addGap(11, 11, 11)
                 .addComponent(cmbSubItem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lblSubItem)
+                .addComponent(lblSubItemSelector)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtSubItemSelector, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(txtSubItemSelector, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         panelBasic.setBorder(javax.swing.BorderFactory.createTitledBorder("Basic"));
@@ -306,6 +342,36 @@ public class ParserGenMainFrame extends javax.swing.JFrame {
             .addComponent(lblStatus, javax.swing.GroupLayout.DEFAULT_SIZE, 25, Short.MAX_VALUE)
         );
 
+        panelPaging.setBorder(javax.swing.BorderFactory.createTitledBorder("Paging"));
+
+        jLabel1.setText("number of pages");
+
+        jLabel2.setText("paging parameter");
+
+        javax.swing.GroupLayout panelPagingLayout = new javax.swing.GroupLayout(panelPaging);
+        panelPaging.setLayout(panelPagingLayout);
+        panelPagingLayout.setHorizontalGroup(
+            panelPagingLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelPagingLayout.createSequentialGroup()
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(txtNumPages, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(txtPaging))
+        );
+        panelPagingLayout.setVerticalGroup(
+            panelPagingLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelPagingLayout.createSequentialGroup()
+                .addGroup(panelPagingLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(txtNumPages, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2)
+                    .addComponent(txtPaging, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(0, 16, Short.MAX_VALUE))
+        );
+
         javax.swing.GroupLayout panelPropertiesLayout = new javax.swing.GroupLayout(panelProperties);
         panelProperties.setLayout(panelPropertiesLayout);
         panelPropertiesLayout.setHorizontalGroup(
@@ -313,6 +379,7 @@ public class ParserGenMainFrame extends javax.swing.JFrame {
             .addComponent(panelBasic, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(panelAdvanced, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(panelStatus, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(panelPaging, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         panelPropertiesLayout.setVerticalGroup(
             panelPropertiesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -320,7 +387,9 @@ public class ParserGenMainFrame extends javax.swing.JFrame {
                 .addComponent(panelBasic, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(panelAdvanced, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 239, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(panelPaging, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 226, Short.MAX_VALUE)
                 .addComponent(panelStatus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
@@ -353,10 +422,10 @@ public class ParserGenMainFrame extends javax.swing.JFrame {
                 .addGroup(panelDocumentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panelDocumentLayout.createSequentialGroup()
                         .addGap(1, 1, 1)
-                        .addComponent(txtDocQuery))
-                    .addComponent(btnSearch, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(txtDocQuery, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(scrollPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 568, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(scrollPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 570, Short.MAX_VALUE))
         );
 
         splitPane.setLeftComponent(panelDocument);
@@ -375,6 +444,11 @@ public class ParserGenMainFrame extends javax.swing.JFrame {
         menuFile.add(miOpen);
 
         miSave.setText("save");
+        miSave.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                onSave(evt);
+            }
+        });
         menuFile.add(miSave);
 
         miExit.setText("exit");
@@ -406,6 +480,11 @@ public class ParserGenMainFrame extends javax.swing.JFrame {
         menuEdit.add(miAffiliate);
 
         miAccess.setText("Access");
+        miAccess.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                onEditAccess(evt);
+            }
+        });
         menuEdit.add(miAccess);
 
         miAuthor.setText("Author");
@@ -442,23 +521,25 @@ public class ParserGenMainFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
     private void onNew(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onNew
 
+        reset();
         JDialog newProjDialog = new NewProjectDialog(this, true);
 
-        newProjDialog.setLocation(this.getLocation().x+50, this.getLocation().y+70);
-        
+        newProjDialog.setLocation(this.getLocation().x + 50, this.getLocation().y + 70);
+
         newProjDialog.setVisible(true);
 
         project = ((NewProjectDialog) newProjDialog).getProject();
-        if (project!= null && project.isValid()) 
-            displayTree(project.getBaseURL()+project.getHomePage(), project.getMethod());
-        else
+        if (project != null && project.isValid()) {
+            displayTree(project.getBaseURL() + project.getHomePage(), project.getMethod());
+        } else {
             lblStatus.setText("Status:Project configuration is invalid");
+        }
 
     }//GEN-LAST:event_onNew
 
     private void onEditProduct(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onEditProduct
 
-        if (project!= null && project.isValid()) {
+        if (project != null && project.isValid()) {
             DataSpec productSpec = new DataSpec("product");
             productSpec.addSubItem(new SelectableItem("description"));
             productSpec.addSubItem(new SelectableItem("price"));
@@ -514,15 +595,30 @@ public class ParserGenMainFrame extends javax.swing.JFrame {
 
     private void onPreview(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onPreview
 
-        PreviewTableModel previewData = buildPreviewTableModel(project.getDataSpec(curDataSpec));
+        DataSpec ds = project.getDataSpec(curDataSpec);
+        PreviewTableModel previewData = buildPreviewTableModel(ds);
 
         if (previewData != null) {
             JDialog previewDialog = new PreviewDialog(this, previewData, false);
 
-            previewDialog.setLocation(this.getLocation().x+50, this.getLocation().y+70);
-            
+            previewDialog.setLocation(this.getLocation().x + 50, this.getLocation().y + 70);
+
             previewDialog.setVisible(true);
         }
+
+        Connection con = JSoupTransport.login(project);
+
+        if (ds.getNumPages() > 0) {
+            for (int i = 2; i <= ds.getNumPages();++i ) {
+                String url = project.getBaseURL() + ds.getDataURL()+"&"+ds.getPageParam()+"="+i;
+                org.jsoup.nodes.Document doc = JSoupTransport.retrieveDocument(con, url, ds.getMethod());
+                ArrayList<List<String>> page = getPageData(doc, ds);
+                System.out.println("Page="+i+":::Page[0]['date']="+page.get(1).get(1));
+            }
+        }
+        
+        JSoupTransport.logout(con, project);        
+       
     }//GEN-LAST:event_onPreview
 
     private void onMethodChange(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onMethodChange
@@ -532,9 +628,10 @@ public class ParserGenMainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_onMethodChange
 
     private void onAdvancedItem(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onAdvancedItem
-        
+
         if (project != null && project.isValid()) {
             panelAdvanced.setVisible(!panelAdvanced.isVisible());
+            panelPaging.setVisible(!panelPaging.isVisible());
         }
     }//GEN-LAST:event_onAdvancedItem
 
@@ -544,16 +641,16 @@ public class ParserGenMainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_onExit
 
     private void onSearch(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onSearch
-        
+
         String query = txtDocQuery.getText();
-        DefaultMutableTreeNode root= (DefaultMutableTreeNode)treeHtmlDoc.getModel().getRoot();
+        DefaultMutableTreeNode root = (DefaultMutableTreeNode) treeHtmlDoc.getModel().getRoot();
         if (query.length() > 0) {
-            TreeNode result = find(root,query);
+            TreeNode result = find(root, query);
             if (result != null) {
                 ArrayList<TreeNode> path = new ArrayList<TreeNode>();
                 while (result != null) {
                     path.add(0, result);
-                    result=result.getParent();
+                    result = result.getParent();
                 }
                 TreePath treePath = new TreePath(path.toArray());
                 treeHtmlDoc.setSelectionPath(treePath);
@@ -562,30 +659,58 @@ public class ParserGenMainFrame extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_onSearch
 
-    private  TreeNode find(DefaultMutableTreeNode node,String query) {
-        
+    private void onEditAccess(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onEditAccess
+        if (project != null && project.isValid()) {
+            DataSpec dataSpec = new DataSpec("Access");
+
+            dataSpec.addSubItem(new SelectableItem("DateTime"));
+            dataSpec.addSubItem(new SelectableItem("IP"));
+            dataSpec.addSubItem(new SelectableItem("Referer"));
+            dataSpec.addSubItem(new SelectableItem("Target"));
+
+            fillComponentPanel(dataSpec);
+        }
+
+    }//GEN-LAST:event_onEditAccess
+
+    private void onSave(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onSave
+        if (project != null && project.isValid()) {
+            try {
+                String filePath = project.getHomeDirectory() + File.separator + project.getName()+".xml";
+                File result = new File(filePath);
+                marshaller.marshal(project, result);
+            } catch (JAXBException ex) {
+                System.out.println("marshaling error:"+ex.getMessage());
+            }
+        }
+    }//GEN-LAST:event_onSave
+
+    private TreeNode find(DefaultMutableTreeNode node, String query) {
+
         NodeData data = null;
         TreeNode result = null;
         DefaultMutableTreeNode childNode = null;
-        
-        if (node!=null) {
-            
-            data = (NodeData)node.getUserObject();
 
-            if (data.match(query))
+        if (node != null) {
+
+            data = (NodeData) node.getUserObject();
+
+            if (data.match(query)) {
                 return node;
-            
-            for (int i = 0 ; i < node.getChildCount();++i) {
-                childNode  = (DefaultMutableTreeNode)node.getChildAt(i);
-                result = find(childNode,query);
-                if (result!=null)
+            }
+
+            for (int i = 0; i < node.getChildCount(); ++i) {
+                childNode = (DefaultMutableTreeNode) node.getChildAt(i);
+                result = find(childNode, query);
+                if (result != null) {
                     break;
+                }
             }
         }
-        
+
         return result;
     }
-    
+
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////
     private void buildTree(org.jsoup.nodes.Node dataNode, DefaultMutableTreeNode controlNode) {
 
@@ -615,11 +740,12 @@ public class ParserGenMainFrame extends javax.swing.JFrame {
             }
         }
     }
+
     private boolean displayTree(String url, String method) {
 
         Connection con = null;
         boolean result = false;
-        String status="";
+        String status = "";
         try {
             con = JSoupTransport.login(project);
             if (con != null) {
@@ -640,15 +766,17 @@ public class ParserGenMainFrame extends javax.swing.JFrame {
 
                     status = "Status:Success";
                     result = true;
-                }else
+                } else {
                     status = "Status:Failed to retrieved data from URL=" + url;
-            }else
+                }
+            } else {
                 status = "Status:Failed to login";
+            }
         } finally {
             lblStatus.setText(status);
             JSoupTransport.logout(con, project);
-            return result;
         }
+        return result;
     }
 
     private String builElementText(Element element) {
@@ -667,26 +795,27 @@ public class ParserGenMainFrame extends javax.swing.JFrame {
         return result;
     }
 
-    @SuppressWarnings("unchecked")
     private void fillComponentPanel(DataSpec dataSpec) {
 
-        lblItemName.setText(dataSpec.getName());
+        curDataSpec = null;
         txtUrl.setText("");
-        txtMainSelector.setText("");
-        txtListEntrySelector.setText("");
-        
-        
-        Set<String> subItems = dataSpec.getSubItems().keySet();
-        for (String name : subItems) {
-            cmbSubItem.addItem(name);
-            txtSubItemSelector.setText("");
-        }
-
-        panelBasic.setVisible(true);
-        project.addDataSpec(dataSpec);
-        curDataSpec = dataSpec.getName();
+        cmbSubItem.removeAllItems();
         lblStatus.setText("Status:");
+
+        if (dataSpec != null) {
+            lblItemName.setText(dataSpec.getName());
+            
+            for (SelectableItem si : dataSpec.getAllSubItems()) {
+                cmbSubItem.addItem(si.getName());
+                txtSubItemSelector.setText("");
+            }
+
+            panelBasic.setVisible(true);
+            project.addDataSpec(dataSpec);
+            curDataSpec = dataSpec.getName();
+        }
         
+
     }
 
     private PreviewTableModel buildPreviewTableModel(DataSpec dataSpec) {
@@ -699,31 +828,47 @@ public class ParserGenMainFrame extends javax.swing.JFrame {
 
         PreviewTableModel result = null;
         List<String> names = null;
-        ArrayList<List<String>> rows = null;
+        ArrayList<List<String>> page = null;
         try {
-            Element dataElem = doc.select(dataSpec.getSelector()).first();
-            Elements dataList = dataElem.select(dataSpec.getListEntrySelector());
 
-            names = new ArrayList<String>(dataSpec.getSubItems().keySet());
-            rows = new ArrayList<List<String>>();
-
-            for (int i = 0; i < dataList.size(); ++i) {
-                List<String> singleRow = new ArrayList<String>();
-                for (SelectableItem item : dataSpec.getSubItems().values()) {
-                    singleRow.add(dataList.get(i).select(item.getSelector()).first().text());
-                }
-                rows.add(singleRow);
+            names = new ArrayList<String>();
+            for (SelectableItem si : dataSpec.getAllSubItems()) {
+                names.add(si.getName());
             }
-            result = new PreviewTableModel(names, rows);
+            page = getPageData(doc, dataSpec);
+            result = new PreviewTableModel(names, page);
             lblStatus.setText("Status:Success");
-        }catch(Exception e) {
+        } catch (Exception e) {
             lblStatus.setText("Status:Failed to retrieve data.Review selector settings.");
         }
 
         return result;
     }
-    
+
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    private class PageParamDocListener extends BaseDocumentListener {
+        @Override
+        protected void doUpdate() {
+            String pageParam = txtPaging.getText();
+            ds.setPageParam(pageParam);
+        }
+    }
+
+    private class NumPagesDocListener implements ChangeListener {
+
+        @Override
+        public void stateChanged(ChangeEvent e) {
+            if (project != null) {
+                if (curDataSpec != null && curDataSpec.length() > 0) {
+                    DataSpec ds = project.getDataSpec(curDataSpec);
+                    ds.setNumPages((Integer)txtNumPages.getValue());
+                }
+            }
+        }
+        
+    }
+    
     
     private class SubItemSelectorDocListener extends BaseDocumentListener {
 
@@ -742,12 +887,12 @@ public class ParserGenMainFrame extends javax.swing.JFrame {
             ds.setDataURL(txtUrl.getText());
         }
     }
-
+    /*
     private class MainSelectorDocListener extends BaseDocumentListener {
 
         @Override
         protected void doUpdate() {
-            ds.setSelector(txtMainSelector.getText());            
+            ds.setSelector(txtMainSelector.getText());
         }
     }
 
@@ -758,22 +903,33 @@ public class ParserGenMainFrame extends javax.swing.JFrame {
             ds.setListEntrySelector(txtListEntrySelector.getText());
         }
     }
-
+    */
     private abstract class BaseDocumentListener implements DocumentListener {
 
         protected DataSpec ds = null;
-        @Override public void changedUpdate(DocumentEvent e) {  updateData(e); }
 
-        @Override public void insertUpdate(DocumentEvent e) {   updateData(e); }
+        @Override
+        public void changedUpdate(DocumentEvent e) {
+            updateData(e);
+        }
 
-        @Override public void removeUpdate(DocumentEvent e) {    updateData(e); }
+        @Override
+        public void insertUpdate(DocumentEvent e) {
+            updateData(e);
+        }
+
+        @Override
+        public void removeUpdate(DocumentEvent e) {
+            updateData(e);
+        }
 
         private void updateData(DocumentEvent e) {
-
+            ds=null;
             if (project != null) {
-
-                if (curDataSpec!= null && curDataSpec.length()>0)
-                    ds=project.getDataSpec(curDataSpec);
+                
+                if (curDataSpec != null && curDataSpec.length() > 0) {
+                    ds = project.getDataSpec(curDataSpec);
+                }
 
                 if (ds != null) {
                     doUpdate();
@@ -783,7 +939,7 @@ public class ParserGenMainFrame extends javax.swing.JFrame {
                         btnPreview.setVisible(false);
                     }
                 }
-                
+
             }
         }
 
@@ -792,32 +948,45 @@ public class ParserGenMainFrame extends javax.swing.JFrame {
 
     private class DocTreeMouseListener implements MouseListener {
 
-        @Override public void mouseClicked(MouseEvent e) {
+        @Override
+        public void mouseClicked(MouseEvent e) {
             if (e.getButton() == MouseEvent.BUTTON3 && project != null && curDataSpec != null) {
                 JPopupMenu ctxMenu = new JPopupMenu();
                 ActionListener actionListener = new CtxMenuActionListener(treeHtmlDoc.getClosestPathForLocation(e.getX(), e.getY()));
                 DataSpec dataSpec = project.getDataSpec(curDataSpec);
-                if (dataSpec!= null) {
-                    ctxMenu.add(new CtxMenuItem(dataSpec.getName() + " root element", "main", actionListener));
-                    ctxMenu.add(new CtxMenuItem(dataSpec.getName() + " list entry element", "li", actionListener));
-
-                    for (String subItem : dataSpec.getSubItems().keySet()) {
-                        ctxMenu.add(new CtxMenuItem(subItem + " element", subItem, actionListener));
+                if (dataSpec != null) {
+                    for (SelectableItem si : dataSpec.getAllSubItems()) {
+                        ctxMenu.add(new CtxMenuItem(si.getName() + " element", si.getName(), actionListener));
                     }
-
                     ctxMenu.show(e.getComponent(), e.getX(), e.getY());
                 }
             }
 
         }
 
-        @Override public void mousePressed(MouseEvent e)  {}
-        @Override public void mouseReleased(MouseEvent e) {}
-        @Override public void mouseEntered(MouseEvent e)  {}
-        @Override public void mouseExited(MouseEvent e)   {}
+        @Override
+        public void mousePressed(MouseEvent e) {
+        }
+
+        @Override
+        public void mouseReleased(MouseEvent e) {
+        }
+
+        @Override
+        public void mouseEntered(MouseEvent e) {
+        }
+
+        @Override
+        public void mouseExited(MouseEvent e) {
+        }
     }
 
     private class CtxMenuItem extends JMenuItem {
+
+        /**
+         *
+         */
+        private static final long serialVersionUID = 6410627515515543560L;
 
         CtxMenuItem(String label, String command, ActionListener actionListener) {
             super(label);
@@ -837,11 +1006,29 @@ public class ParserGenMainFrame extends javax.swing.JFrame {
             this.label = label;
         }
 
-        public String getLabel() { return label; }
-        public void setLabel(String label) {this.label = label;}
-        public String getTagName() {return tagName;}
-        public void setTagName(String tagName) {this.tagName = tagName;}
-        @Override public String toString() {return label; }
+        @SuppressWarnings("unused")
+        public String getLabel() {
+            return label;
+        }
+
+        @SuppressWarnings("unused")
+        public void setLabel(String label) {
+            this.label = label;
+        }
+
+        public String getTagName() {
+            return tagName;
+        }
+
+        @SuppressWarnings("unused")
+        public void setTagName(String tagName) {
+            this.tagName = tagName;
+        }
+
+        @Override
+        public String toString() {
+            return label;
+        }
 
         private boolean match(String query) {
             boolean result = tagName.indexOf(query) >= 0 || label.indexOf(query) >= 0;
@@ -863,28 +1050,20 @@ public class ParserGenMainFrame extends javax.swing.JFrame {
             String cmd = e.getActionCommand();
 
             String selector = "";
-            JTextField curField = null;
 
-            if ("main".equals(cmd)) {
+            if ("root".equals(cmd)) {
                 for (int i = 0; i < path.getPathCount(); ++i) {
                     DefaultMutableTreeNode curPathElem = (DefaultMutableTreeNode) path.getPathComponent(i);
-                    selector += buildSinglePathElementSelector(curPathElem, true,true);
+                    selector += buildSinglePathElementSelector(curPathElem, true, true);
                 }
-                curField = txtMainSelector;
-            } else if ("li".equals(cmd)) {
-
-                selector = buildSinglePathElementSelector((DefaultMutableTreeNode) path.getLastPathComponent(), false,false);
-                curField = txtListEntrySelector;
-
             } else {
-                selector = buildSinglePathElementSelector((DefaultMutableTreeNode) path.getLastPathComponent(), false,true);
-                cmbSubItem.setSelectedItem(cmd);
-                curField = txtSubItemSelector;
+                selector = buildSinglePathElementSelector((DefaultMutableTreeNode) path.getLastPathComponent(), false, true);
             }
-            curField.setText(selector);
+            cmbSubItem.setSelectedItem(cmd);
+            txtSubItemSelector.setText(selector);
         }
 
-        private String buildSinglePathElementSelector(DefaultMutableTreeNode curPathElem, boolean isPrefixRequired,boolean isSuffixRequired) {
+        private String buildSinglePathElementSelector(DefaultMutableTreeNode curPathElem, boolean isPrefixRequired, boolean isSuffixRequired) {
 
             String prefix = "";
             String suffix = "";
@@ -901,8 +1080,9 @@ public class ParserGenMainFrame extends javax.swing.JFrame {
                     suffix = " ";
                 } else {
                     prefix = " ";
-                    if (isSuffixRequired)
+                    if (isSuffixRequired) {
                         suffix = ":eq(" + childIndex + ")";
+                    }
                 }
             }
 
@@ -916,12 +1096,14 @@ public class ParserGenMainFrame extends javax.swing.JFrame {
     private javax.swing.JButton btnPreview;
     private javax.swing.JButton btnSearch;
     private javax.swing.JComboBox cmbSubItem;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel lblItem;
     private javax.swing.JLabel lblItemName;
-    private javax.swing.JLabel lblListEntry;
     private javax.swing.JLabel lblMethod;
     private javax.swing.JLabel lblStatus;
-    private javax.swing.JLabel lblSubItem;
+    private javax.swing.JLabel lblSubItemName;
+    private javax.swing.JLabel lblSubItemSelector;
     private javax.swing.JLabel lblURL;
     private javax.swing.JMenuBar menuBar;
     private javax.swing.JMenu menuEdit;
@@ -938,6 +1120,7 @@ public class ParserGenMainFrame extends javax.swing.JFrame {
     private javax.swing.JPanel panelAdvanced;
     private javax.swing.JPanel panelBasic;
     private javax.swing.JPanel panelDocument;
+    private javax.swing.JPanel panelPaging;
     private javax.swing.JPanel panelProperties;
     private javax.swing.JPanel panelStatus;
     private javax.swing.JRadioButton radioGet;
@@ -947,8 +1130,8 @@ public class ParserGenMainFrame extends javax.swing.JFrame {
     private javax.swing.JSplitPane splitPane;
     private javax.swing.JTree treeHtmlDoc;
     private javax.swing.JTextField txtDocQuery;
-    private javax.swing.JTextField txtListEntrySelector;
-    private javax.swing.JTextField txtMainSelector;
+    private javax.swing.JSpinner txtNumPages;
+    private javax.swing.JTextField txtPaging;
     private javax.swing.JTextField txtSubItemSelector;
     private javax.swing.JTextField txtUrl;
     // End of variables declaration//GEN-END:variables

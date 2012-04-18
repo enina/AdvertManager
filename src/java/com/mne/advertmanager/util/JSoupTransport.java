@@ -4,15 +4,15 @@
  */
 package com.mne.advertmanager.util;
 
-import com.mne.advertmanager.parsergen.model.Project;
 import java.io.IOException;
-import java.sql.Driver;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
+
+import com.mne.advertmanager.parsergen.model.Project;
 
 /**
  *
@@ -45,7 +45,8 @@ public class JSoupTransport {
             //access home page without credentials. get session cookie and redirect to login form
             url=proj.getBaseURL()+proj.getHomePage();
             result = Jsoup.connect(url).timeout(0);
-            Document doc = result.get();
+            @SuppressWarnings("unused")
+			Document doc = result.get();
             //submit login form and authenticate
             String loginUrl = proj.getLoginFormUrl();
             result.url(loginUrl);

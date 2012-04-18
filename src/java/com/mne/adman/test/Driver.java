@@ -10,7 +10,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
-import org.jsoup.helper.HttpConnection.KeyVal;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
@@ -38,9 +37,9 @@ public class Driver {
             String sesId = con.response().cookie("JSESSIONID");
             con.followRedirects(true);
             //enter the system read home page
-            Iterator iter = con.request().data().iterator();
+            Iterator<org.jsoup.Connection.KeyVal> iter = con.request().data().iterator();
             while (iter.hasNext()) {
-                KeyVal item = (KeyVal)iter.next();
+            	org.jsoup.Connection.KeyVal item = iter.next();
                 if (item.key().equals("j_username") ||
                     item.key().equals("j_password") )
                     iter.remove();
@@ -55,7 +54,6 @@ public class Driver {
             else
                 System.out.println("failure");
         }catch(Exception e) {
-            int x = 1;
             System.out.println("failure");
         }finally {
             try {

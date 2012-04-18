@@ -36,6 +36,7 @@ public class AdvertManagerController {
     private static final String ADD = "/add";
     private static final String NEW = "/new";
     private static final String LIST = "/list";
+    @SuppressWarnings("unused")
     private static final String GET = "/get";    
     
     private static final String AFFILIATES = "affiliates";

@@ -5,8 +5,8 @@
 package com.mne.advertmanager.model;
 
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.Set;
+
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;

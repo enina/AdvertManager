@@ -28,6 +28,9 @@
               <Properties>
                 <Property name="text" type="java.lang.String" value="save"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="onSave"/>
+              </Events>
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="miExit">
               <Properties>
@@ -64,6 +67,9 @@
               <Properties>
                 <Property name="text" type="java.lang.String" value="Access"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="onEditAccess"/>
+              </Events>
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="miAuthor">
               <Properties>
@@ -160,6 +166,7 @@
                   <Component id="panelBasic" alignment="1" max="32767" attributes="0"/>
                   <Component id="panelAdvanced" alignment="1" max="32767" attributes="0"/>
                   <Component id="panelStatus" alignment="0" max="32767" attributes="0"/>
+                  <Component id="panelPaging" alignment="0" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
@@ -168,7 +175,9 @@
                       <Component id="panelBasic" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="panelAdvanced" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="239" max="32767" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="panelPaging" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace pref="226" max="32767" attributes="0"/>
                       <Component id="panelStatus" min="-2" max="-2" attributes="0"/>
                   </Group>
               </Group>
@@ -189,45 +198,28 @@
               <Layout>
                 <DimensionLayout dim="0">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" alignment="0" attributes="0">
-                          <Component id="lblListEntry" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace max="32767" attributes="0"/>
-                      </Group>
-                      <Component id="txtMainSelector" alignment="0" max="32767" attributes="0"/>
-                      <Component id="txtListEntrySelector" alignment="0" max="32767" attributes="0"/>
-                      <Component id="txtSubItemSelector" alignment="0" max="32767" attributes="0"/>
-                      <Group type="102" alignment="1" attributes="0">
-                          <Group type="103" groupAlignment="1" attributes="0">
-                              <Group type="102" attributes="0">
-                                  <EmptySpace min="0" pref="20" max="32767" attributes="0"/>
-                                  <Component id="lblSubItem" min="-2" max="-2" attributes="0"/>
-                              </Group>
-                              <Group type="102" alignment="0" attributes="0">
-                                  <Component id="lblMainDataSelector" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                              </Group>
-                              <Component id="cmbSubItem" alignment="0" max="32767" attributes="0"/>
+                      <Component id="txtSubItemSelector" alignment="0" pref="333" max="32767" attributes="0"/>
+                      <Component id="cmbSubItem" alignment="0" max="32767" attributes="0"/>
+                      <Group type="102" attributes="0">
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="lblSubItemSelector" min="-2" max="-2" attributes="0"/>
+                              <Component id="lblSubItemName" alignment="0" min="-2" max="-2" attributes="0"/>
                           </Group>
-                          <EmptySpace min="-2" pref="231" max="-2" attributes="0"/>
+                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
                 <DimensionLayout dim="1">
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
-                          <Component id="lblMainDataSelector" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Component id="txtMainSelector" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Component id="lblListEntry" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Component id="txtListEntrySelector" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="lblSubItemName" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="11" max="-2" attributes="0"/>
                           <Component id="cmbSubItem" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="lblSubItem" min="-2" max="-2" attributes="0"/>
+                          <Component id="lblSubItemSelector" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="txtSubItemSelector" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -248,34 +240,21 @@
                     <EventHandler event="propertyChange" listener="java.beans.PropertyChangeListener" parameters="java.beans.PropertyChangeEvent" handler="onSubItemChange"/>
                   </Events>
                 </Component>
-                <Component class="javax.swing.JLabel" name="lblSubItem">
+                <Component class="javax.swing.JLabel" name="lblSubItemSelector">
                   <Properties>
+                    <Property name="labelFor" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
+                      <ComponentRef name="txtSubItemSelector"/>
+                    </Property>
                     <Property name="text" type="java.lang.String" value="SubItem Selector"/>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JTextField" name="txtListEntrySelector">
+                <Component class="javax.swing.JLabel" name="lblSubItemName">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="enter list entry selector"/>
+                    <Property name="labelFor" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
+                      <ComponentRef name="cmbSubItem"/>
+                    </Property>
+                    <Property name="text" type="java.lang.String" value="SubItem Name"/>
                   </Properties>
-                </Component>
-                <Component class="javax.swing.JLabel" name="lblListEntry">
-                  <Properties>
-                    <Property name="text" type="java.lang.String" value="List entry selector"/>
-                  </Properties>
-                </Component>
-                <Component class="javax.swing.JTextField" name="txtMainSelector">
-                  <Properties>
-                    <Property name="text" type="java.lang.String" value="enter data list selector"/>
-                  </Properties>
-                </Component>
-                <Component class="javax.swing.JLabel" name="lblMainDataSelector">
-                  <Properties>
-                    <Property name="text" type="java.lang.String" value="Data list selector"/>
-                  </Properties>
-                  <AuxValues>
-                    <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="true"/>
-                    <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
-                  </AuxValues>
                 </Component>
               </SubComponents>
             </Container>
@@ -433,6 +412,60 @@
                 </Component>
               </SubComponents>
             </Container>
+            <Container class="javax.swing.JPanel" name="panelPaging">
+              <Properties>
+                <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+                  <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
+                    <TitledBorder title="Paging"/>
+                  </Border>
+                </Property>
+              </Properties>
+
+              <Layout>
+                <DimensionLayout dim="0">
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="102" alignment="0" attributes="0">
+                          <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="txtNumPages" min="-2" pref="56" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="txtPaging" max="32767" attributes="0"/>
+                      </Group>
+                  </Group>
+                </DimensionLayout>
+                <DimensionLayout dim="1">
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="102" alignment="0" attributes="0">
+                          <Group type="103" groupAlignment="3" attributes="0">
+                              <Component id="jLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="txtNumPages" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="jLabel2" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="txtPaging" alignment="3" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace min="0" pref="16" max="32767" attributes="0"/>
+                      </Group>
+                  </Group>
+                </DimensionLayout>
+              </Layout>
+              <SubComponents>
+                <Component class="javax.swing.JLabel" name="jLabel1">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="number of pages"/>
+                  </Properties>
+                </Component>
+                <Component class="javax.swing.JSpinner" name="txtNumPages">
+                </Component>
+                <Component class="javax.swing.JLabel" name="jLabel2">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="paging parameter"/>
+                  </Properties>
+                </Component>
+                <Component class="javax.swing.JTextField" name="txtPaging">
+                </Component>
+              </SubComponents>
+            </Container>
           </SubComponents>
         </Container>
         <Container class="javax.swing.JPanel" name="panelDocument">
@@ -458,13 +491,13 @@
                   <Group type="102" alignment="0" attributes="0">
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" attributes="0">
-                              <EmptySpace min="1" pref="1" max="-2" attributes="0"/>
-                              <Component id="txtDocQuery" max="32767" attributes="0"/>
+                              <EmptySpace min="-2" pref="1" max="-2" attributes="0"/>
+                              <Component id="txtDocQuery" min="-2" max="-2" attributes="0"/>
                           </Group>
-                          <Component id="btnSearch" max="32767" attributes="0"/>
+                          <Component id="btnSearch" min="-2" pref="18" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="scrollPanel" min="-2" pref="568" max="-2" attributes="0"/>
+                      <Component id="scrollPanel" pref="570" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>

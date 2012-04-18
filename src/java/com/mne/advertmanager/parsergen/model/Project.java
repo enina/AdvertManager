@@ -4,33 +4,125 @@
  */
 package com.mne.advertmanager.parsergen.model;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.*;
 
 /**
  *
  * @author Nina Eidelshtein and Misha Lebedev
  */
-public class Project {
-    
-    private String name;
-    private String baseURL;
-    private String homeDirectory;
-    private String username;
-    private String userField;
-    private String password;
-    private String passwordField;
-    private String method;
-    private String cookieName;
-    private String loginFormUrl;
-    private String logoutUrl;
-    private String selector;
-    private String homePage;
-    private boolean isValid = false;
-    
-    
-    private Map<String,DataSpec> dataSpecMap = new HashMap<String,DataSpec>();
 
+@XmlSeeAlso({com.mne.advertmanager.parsergen.model.DataSpec.class,com.mne.advertmanager.parsergen.model.SelectableItem.class})
+@XmlRootElement
+@XmlType(propOrder={"valid","name","homeDirectory", "baseURL" ,"homePage", "username", "userField", "password","passwordField",
+                    "method","cookieName","loginFormUrl","logoutUrl","selector","dataSpecList"})
+@Entity
+@Table(name = "billing_project_spec")
+public class Project implements Serializable {
+    
+    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = "id")
+    private Integer id;
+    
+    
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 256)
+    @Column(name = "name")
+    private String name;
+    
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 1024)
+    @Column(name = "base_url")    
+    private String baseURL;
+    
+    private String homeDirectory;
+    
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 8, max = 16)
+    @Column(name = "username")    
+    private String username;
+    
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 16)
+    @Column(name = "user_field")    
+    private String userField;
+    
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 8, max = 16)
+    @Column(name = "password")    
+    private String password;
+    
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 16)
+    @Column(name = "password_field")    
+    private String passwordField;
+
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 3, max = 8)
+    @Column(name = "method")    
+    private String method;
+
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 8, max = 32)
+    @Column(name = "cookie_name")    
+    private String cookieName;
+
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 8, max = 256)
+    @Column(name = "login_url")    
+    private String loginFormUrl;
+
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 8, max = 256)
+    @Column(name = "logout_url")    
+    private String logoutUrl;
+
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 8, max = 256)
+    @Column(name = "selector")    
+    private String selector;
+    
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 8, max = 256)
+    @Column(name = "home_page")    
+    private String homePage;
+
+    private boolean isValid = false;
+
+    @XmlElementWrapper(name = "dataSpecList")    
+    @XmlElement(name = "dataSpec")
+    @OneToMany(mappedBy = "project")
+    private List<DataSpec> dataSpecList = new ArrayList<DataSpec>();
+
+    
+    public Project() {
+
+    }    
+    
+    public Project(Integer id) {
+        this.id = id;
+    }
+    
     public String getBaseURL() {
         return baseURL;
     }
@@ -129,11 +221,18 @@ public class Project {
     }
     
     public void addDataSpec(DataSpec dataSpec) {
-        dataSpecMap.put(dataSpec.getName(), dataSpec);
+        dataSpecList.add( dataSpec);
     }
     
     public DataSpec getDataSpec(String name) {
-        return dataSpecMap.get(name);
+        DataSpec result = null;
+        for (DataSpec ds: dataSpecList) {
+            if (ds.getName().equals(name)) {
+                result = ds;
+                break;
+            }
+        }
+        return result;
     }
 
     public boolean isValid() {
@@ -152,14 +251,15 @@ public class Project {
         this.homePage = homePage;
     }
 
-
-    
-    
-    
-    private void normalizeBaseUrl() {
-        if (!baseURL.endsWith("/"))
-            baseURL+="/";
+    public Integer getId() {
+        return id;
     }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+
     
     
     @Override
@@ -177,5 +277,32 @@ public class Project {
         "logoutUrl="+logoutUrl+"\n"+
         "selector="+selector+"\n";
     }
-    
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Project other = (Project) obj;
+        if (this.id != other.id && (this.id == null || !this.id.equals(other.id))) {
+            return false;
+        }
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (id != null ? id.hashCode() : 0);
+        return hash;
+    }
+
+    private void normalizeBaseUrl() {
+        if (!baseURL.endsWith("/"))
+            baseURL+="/";
+    }
 }
