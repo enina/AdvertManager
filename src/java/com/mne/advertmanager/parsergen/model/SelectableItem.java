@@ -9,6 +9,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
 /**
@@ -50,7 +51,7 @@ public class SelectableItem implements Serializable {
     public SelectableItem(String name) {
         this.name = name;
     }
-
+    @XmlTransient
     public Integer getId() {
         return id;
     }
