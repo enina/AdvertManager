@@ -36,64 +36,60 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="panelStatus" alignment="0" max="32767" attributes="0"/>
                   <Group type="102" alignment="0" attributes="0">
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" alignment="0" attributes="0">
-                              <Component id="btnTestConnection" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" pref="315" max="-2" attributes="0"/>
-                          </Group>
-                          <Group type="102" attributes="0">
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Group type="102" alignment="0" attributes="0">
-                                      <Group type="103" groupAlignment="0" attributes="0">
-                                          <Component id="lblCookie" alignment="0" min="-2" max="-2" attributes="0"/>
-                                          <Component id="lblUser" alignment="0" min="-2" pref="73" max="-2" attributes="0"/>
-                                          <Component id="lblUserField" alignment="0" min="-2" max="-2" attributes="0"/>
-                                          <Component id="jLabel1" alignment="0" min="-2" max="-2" attributes="0"/>
-                                          <Component id="lblLogout" alignment="0" min="-2" max="-2" attributes="0"/>
-                                          <Component id="lblPassword" alignment="0" min="-2" max="-2" attributes="0"/>
-                                          <Component id="lblPasswordField" alignment="0" min="-2" max="-2" attributes="0"/>
-                                      </Group>
-                                      <EmptySpace min="-2" pref="31" max="-2" attributes="0"/>
-                                      <Group type="103" groupAlignment="0" attributes="0">
-                                          <Component id="txtUserField" alignment="1" max="32767" attributes="0"/>
-                                          <Component id="txtUserName" alignment="0" max="32767" attributes="0"/>
-                                          <Component id="txtCookie" alignment="0" max="32767" attributes="0"/>
-                                          <Component id="txtLoginFormURL" alignment="0" max="32767" attributes="0"/>
-                                          <Component id="txtLogoutURL" alignment="0" max="32767" attributes="0"/>
-                                          <Group type="102" alignment="0" attributes="0">
-                                              <Component id="btnCreate" min="-2" max="-2" attributes="0"/>
-                                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                                          </Group>
-                                          <Component id="txtPasswordField" max="32767" attributes="0"/>
-                                          <Component id="txtPassword" max="32767" attributes="0"/>
-                                      </Group>
-                                  </Group>
-                                  <Group type="102" alignment="0" attributes="0">
-                                      <Group type="103" groupAlignment="0" attributes="0">
-                                          <Component id="btnSelectHome" min="-2" max="-2" attributes="0"/>
-                                          <Component id="lblMethod" alignment="0" min="-2" max="-2" attributes="0"/>
-                                          <Component id="lblBaseUrl" alignment="0" min="-2" max="-2" attributes="0"/>
-                                          <Component id="lblHomePage" alignment="0" min="-2" max="-2" attributes="0"/>
-                                      </Group>
-                                      <EmptySpace min="-2" pref="49" max="-2" attributes="0"/>
-                                      <Group type="103" groupAlignment="0" attributes="0">
-                                          <Component id="lblHomeFolder" alignment="0" max="32767" attributes="0"/>
-                                          <Component id="txtBaseUrl" alignment="1" max="32767" attributes="0"/>
-                                          <Group type="102" alignment="0" attributes="0">
-                                              <Component id="cmbMethod" min="-2" max="-2" attributes="0"/>
-                                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                              <Component id="lblSelector" min="-2" max="-2" attributes="0"/>
-                                              <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="txtSelector" max="32767" attributes="0"/>
-                                          </Group>
-                                          <Component id="txtHomePage" alignment="0" max="32767" attributes="0"/>
-                                      </Group>
-                                  </Group>
-                              </Group>
-                              <EmptySpace max="-2" attributes="0"/>
-                          </Group>
-                      </Group>
+                      <EmptySpace max="32767" attributes="0"/>
                       <Component id="jLabel5" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" alignment="0" attributes="0">
+                      <Component id="btnTestConnection" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="309" max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" alignment="0" attributes="0">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="lblCookie" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="lblUser" alignment="0" min="-2" pref="73" max="-2" attributes="0"/>
+                          <Component id="lblUserField" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="jLabel1" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="lblLogout" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="lblPassword" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="lblPasswordField" alignment="0" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace min="-2" pref="31" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="txtUserField" alignment="1" max="32767" attributes="0"/>
+                          <Component id="txtUserName" alignment="0" max="32767" attributes="0"/>
+                          <Component id="txtCookie" alignment="0" max="32767" attributes="0"/>
+                          <Component id="txtLoginFormURL" alignment="0" max="32767" attributes="0"/>
+                          <Component id="txtLogoutURL" alignment="0" max="32767" attributes="0"/>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="btnCreate" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                          </Group>
+                          <Component id="txtPasswordField" max="32767" attributes="0"/>
+                          <Component id="txtPassword" max="32767" attributes="0"/>
+                      </Group>
+                  </Group>
+                  <Group type="102" alignment="0" attributes="0">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="btnSelectHome" min="-2" max="-2" attributes="0"/>
+                          <Component id="lblMethod" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="lblBaseUrl" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="lblHomePage" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="lblName" alignment="0" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace min="-2" pref="49" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="lblHomeFolder" alignment="0" max="32767" attributes="0"/>
+                          <Component id="txtBaseUrl" alignment="1" max="32767" attributes="0"/>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="cmbMethod" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                              <Component id="lblSelector" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="txtSelector" pref="148" max="32767" attributes="0"/>
+                          </Group>
+                          <Component id="txtHomePage" alignment="0" max="32767" attributes="0"/>
+                          <Component id="txtName" alignment="1" max="32767" attributes="0"/>
+                      </Group>
                   </Group>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
@@ -102,85 +98,81 @@
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" attributes="0">
+          <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" attributes="0">
-                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                      <Component id="jLabel5" min="-2" max="-2" attributes="0"/>
+                  <Group type="102" alignment="0" attributes="0">
+                      <Component id="lblHomeFolder" min="-2" pref="23" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="txtName" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <Group type="102" attributes="0">
-                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                          <Component id="btnSelectHome" max="32767" attributes="0"/>
-                          <Component id="lblHomeFolder" max="32767" attributes="0"/>
-                      </Group>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" attributes="0">
-                              <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="3" attributes="0">
-                                  <Component id="cmbMethod" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="lblSelector" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="txtSelector" alignment="3" min="-2" max="-2" attributes="0"/>
-                              </Group>
-                          </Group>
-                          <Group type="102" alignment="0" attributes="0">
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="lblMethod" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                      </Group>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="lblBaseUrl" min="-2" max="-2" attributes="0"/>
-                          <Component id="txtBaseUrl" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="lblHomePage" min="-2" max="-2" attributes="0"/>
-                          <Component id="txtHomePage" min="-2" max="-2" attributes="0"/>
-                      </Group>
+                  <Group type="102" alignment="0" attributes="0">
+                      <Component id="btnSelectHome" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
-                          <Component id="txtLoginFormURL" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="lblLogout" min="-2" max="-2" attributes="0"/>
-                          <Component id="txtLogoutURL" linkSize="1" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="lblCookie" min="-2" max="-2" attributes="0"/>
-                          <Component id="txtCookie" linkSize="1" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="lblUser" min="-2" max="-2" attributes="0"/>
-                          <Component id="txtUserName" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="lblUserField" min="-2" max="-2" attributes="0"/>
-                          <Component id="txtUserField" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="lblPassword" min="-2" max="-2" attributes="0"/>
-                          <Component id="txtPassword" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="lblPasswordField" min="-2" max="-2" attributes="0"/>
-                          <Component id="txtPasswordField" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="btnTestConnection" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="btnCreate" alignment="0" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                      <Component id="lblName" min="-2" max="-2" attributes="0"/>
                   </Group>
               </Group>
+              <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="103" alignment="0" groupAlignment="3" attributes="0">
+                      <Component id="cmbMethod" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="lblSelector" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="txtSelector" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <Component id="lblMethod" alignment="0" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="lblBaseUrl" min="-2" max="-2" attributes="0"/>
+                  <Component id="txtBaseUrl" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="lblHomePage" min="-2" max="-2" attributes="0"/>
+                  <Component id="txtHomePage" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
+                  <Component id="txtLoginFormURL" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="lblLogout" min="-2" max="-2" attributes="0"/>
+                  <Component id="txtLogoutURL" linkSize="1" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="lblCookie" min="-2" max="-2" attributes="0"/>
+                  <Component id="txtCookie" linkSize="1" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="lblUser" min="-2" max="-2" attributes="0"/>
+                  <Component id="txtUserName" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="lblUserField" min="-2" max="-2" attributes="0"/>
+                  <Component id="txtUserField" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="lblPassword" min="-2" max="-2" attributes="0"/>
+                  <Component id="txtPassword" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="lblPasswordField" min="-2" max="-2" attributes="0"/>
+                  <Component id="txtPasswordField" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="btnTestConnection" alignment="0" min="-2" max="-2" attributes="0"/>
+                  <Component id="btnCreate" alignment="0" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace max="32767" attributes="0"/>
+              <Component id="jLabel5" min="-2" max="-2" attributes="0"/>
               <EmptySpace min="-2" pref="7" max="-2" attributes="0"/>
               <Component id="panelStatus" min="-2" max="-2" attributes="0"/>
               <EmptySpace min="-2" max="-2" attributes="0"/>
@@ -243,7 +235,7 @@
     </Component>
     <Component class="javax.swing.JTextField" name="txtUserName">
       <Properties>
-        <Property name="text" type="java.lang.String" value="vasya"/>
+        <Property name="text" type="java.lang.String" value="root"/>
         <Property name="toolTipText" type="java.lang.String" value="enter user name"/>
       </Properties>
     </Component>
@@ -265,7 +257,7 @@
     </Component>
     <Component class="javax.swing.JPasswordField" name="txtPassword">
       <Properties>
-        <Property name="text" type="java.lang.String" value="vasya"/>
+        <Property name="text" type="java.lang.String" value="admin"/>
         <Property name="toolTipText" type="java.lang.String" value="enter password"/>
       </Properties>
     </Component>
@@ -384,7 +376,25 @@
     </Component>
     <Component class="javax.swing.JTextField" name="txtHomePage">
       <Properties>
-        <Property name="text" type="java.lang.String" value="/"/>
+        <Property name="text" type="java.lang.String" value="/mvc/home"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="lblName">
+      <Properties>
+        <Property name="labelFor" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
+          <ComponentRef name="cmbMethod"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="Name"/>
+      </Properties>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="true"/>
+        <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
+      </AuxValues>
+    </Component>
+    <Component class="javax.swing.JTextField" name="txtName">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="refproj"/>
+        <Property name="toolTipText" type="java.lang.String" value="enter base url"/>
       </Properties>
     </Component>
   </SubComponents>

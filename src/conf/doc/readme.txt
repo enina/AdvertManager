@@ -23,3 +23,18 @@ Aggregation viewer(Today,Yesterday,CurMonth,PrevMonth,AllTimes)
     1)Access (no partners)
     2)Billing
 
+Ваш партнерский ID:  info
+Ваш пароль :  of58ypc82v27
+Доступ к аккаунту:  http://mediakursy.e-autopay.com/aff/login.php
+Ваша партнерская ссылка:  http://www.mediakursy.ru/info/info
+
+http://www.mediakursy.ru/info/info/options
+
+
+Для банеров
+
+Ваш партнерский ID:  banner
+Ваш пароль :  y1s7mzxmf1tj
+Доступ к аккаунту:  http://mediakursy.e-autopay.com/aff/login.php
+Ваша партнерская ссылка:  http://www.mediakursy.ru/info/banner
+http://www.mediakursy.ru/info/banner/options

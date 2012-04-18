@@ -31,16 +31,19 @@ public class Partner implements Serializable {
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
+    
     @Basic(optional = false)
     @NotNull
     @Column(name = "payment_transfer_time")
     @Temporal(TemporalType.TIMESTAMP)
     private Date paymentTransferTime;
+    
     @Basic(optional = false)
     @NotNull
     @Column(name = "payment_amount")
     private int paymentAmount;
     // @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="Invalid email")//if the field contains email address consider using this annotation to enforce field validation
+
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 256)

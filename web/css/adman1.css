@@ -1,4 +1,3 @@
-
 body{
     
     
@@ -9,10 +8,8 @@ body{
     background-color: blue;
 }
 .affTable {
-       
+        width:100%;
         position: relative;
-        
-        
 	border-width: 0px;
 	border-style: solid;
 	border-color: black;
@@ -20,19 +17,11 @@ body{
         
 }
 .affTable th{
-    
    text-align: center;
    background-color: #818081;
-   
 }
 .affTable td{
-    
    text-align: center;
-   
-}
-.affTable{
-    width:100%;
-    
 }
 
 
@@ -45,16 +34,14 @@ tr:nth-child(odd){
 
 .affTd {
     min-width: 70px;
-/*     width:150px;*/
-     text-align: center;
-     font-size: 1.2em;
+    text-align: center;
+    font-size: 1.2em;
 }
 .affTd a{
     
     padding-right: 20px;
 }
 .menu{ /*define <a> that hold menu links (home,loguot)*/
-    
     height: 100%;
     display: block;
     text-decoration: none;
@@ -83,6 +70,5 @@ tr:nth-child(odd){
 
 .content{
     
-  
     
 }

@@ -21,6 +21,8 @@ Contains list of classes which comprise our model and cache provider definition
         <mapping class="com.mne.advertmanager.model.PurchaseOrder"/>
         <mapping class="com.mne.advertmanager.model.AccessSource"/>        
         <mapping class="com.mne.advertmanager.model.AccessLog"/>
-        <mapping class="com.mne.advertmanager.model.User"/>
+        <mapping class="com.mne.advertmanager.parsergen.model.Project"/>
+        <mapping class="com.mne.advertmanager.parsergen.model.DataSpec"/>
+        <mapping class="com.mne.advertmanager.parsergen.model.SelectableItem"/>
     </session-factory>
 </hibernate-configuration>

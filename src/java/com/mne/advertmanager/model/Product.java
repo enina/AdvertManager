@@ -5,9 +5,21 @@
 package com.mne.advertmanager.model;
 
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.Set;
-import javax.persistence.*;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlTransient;
@@ -16,8 +28,14 @@ import javax.xml.bind.annotation.XmlTransient;
  *
  * @author Nina Eidelshtein and Misha Lebedev
  */
-@Entity
-@Table(name = "product")
+/*
+ * entity means that objects of this class are saved in DB
+ */
+@Entity 
+/*
+ * Table annotation means in which table this class is saved 
+ */
+@Table(name = "product") 
 @NamedQueries({
     @NamedQuery(name = "Product.findAll",
         query = "SELECT p FROM Product p "

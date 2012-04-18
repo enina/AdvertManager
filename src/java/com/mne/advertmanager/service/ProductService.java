@@ -4,14 +4,14 @@
  */
 package com.mne.advertmanager.service;
 
+import java.util.Collection;
+
+import org.springframework.transaction.annotation.Transactional;
+
 import com.mne.advertmanager.dao.GenericDao;
 import com.mne.advertmanager.model.Author;
 import com.mne.advertmanager.model.Product;
 import com.mne.advertmanager.model.ProductGroup;
-import java.security.Principal;
-import java.util.Collection;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  *

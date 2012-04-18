@@ -4,21 +4,63 @@
  */
 package com.mne.advertmanager.parsergen.model;
 
+import java.io.Serializable;
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlType;
+
 /**
  *
  * @author Nina Eidelshtein and Misha Lebedev
  */
-public class SelectableItem {
+@XmlType(propOrder={"name","selector"})
+@Entity
+@Table(name = "selectable_data_item")
+public class SelectableItem implements Serializable {
     
+    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = "id")
+    private Integer id = -1;
+    
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 256)
+    @Column(name = "email")
     private String name;
-    private String selector;
 
-    SelectableItem() {
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 256)
+    @Column(name = "selector")
+    private String selector;
+    
+    @JoinColumn(name = "dataspec_id", referencedColumnName = "id")
+    @ManyToOne(fetch=FetchType.LAZY)
+    @SuppressWarnings("unused")
+    private DataSpec dataSpec;
+
+    public SelectableItem() {
     }
+
     public SelectableItem(String name) {
         this.name = name;
     }
 
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    
+    
     public String getName() {
         return name;
     }
