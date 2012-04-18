@@ -23,9 +23,16 @@ import javax.xml.bind.annotation.*;
                     "method","cookieName","loginFormUrl","logoutUrl","selector","dataSpecList"})
 @Entity
 @Table(name = "billing_project_spec")
+@NamedQueries({
+    @NamedQuery(name = "Project.findAll", 
+        query = "SELECT p FROM Project p" +
+                " left join fetch p.dataSpecList ds"  +
+                " left join fetch ds.subItems")
+})
 public class Project implements Serializable {
     
     private static final long serialVersionUID = 1L;
+    @XmlTransient
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
@@ -251,6 +258,7 @@ public class Project implements Serializable {
         this.homePage = homePage;
     }
 
+    @XmlTransient
     public Integer getId() {
         return id;
     }

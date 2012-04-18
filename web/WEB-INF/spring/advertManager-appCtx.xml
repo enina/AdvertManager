@@ -144,6 +144,12 @@
         </constructor-arg>
     </bean>
     
+    <bean id="projectDao"  parent="adManGenericDao" class="com.mne.advertmanager.dao.GenericDaoHibernateImpl" >
+        <constructor-arg >
+            <value type="java.lang.Class">com.mne.advertmanager.parsergen.model.Project</value>
+        </constructor-arg>
+    </bean>    
+    
 <!--============================================================== user DAO     objects end   ===============================================================-->    
 <!--=============================================================  user service beans start ===============================================================--> 
     <!--
@@ -183,6 +189,9 @@
     
     <bean id="authorService" class="com.mne.advertmanager.service.AuthorService">
         <property name="authorDao" ref="authorDao"/>
+    </bean>    
+    <bean id="authorService" class="com.mne.advertmanager.service.BillingProjectService">
+        <property name="projectDao" ref="projectDao"/>
     </bean>    
     
 <!--=============================================================  user service beans end ===============================================================--> 

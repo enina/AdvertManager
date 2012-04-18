@@ -44,6 +44,26 @@
        <put-attribute name="content" value="/WEB-INF/view/products/list.jsp" />
    </definition>
    
+   <definition name="billing/list" extends=".mainTemplate">
+       <put-attribute name="title" value="Billing Sites" type="string" />
+       <put-attribute name="content" value="/WEB-INF/view/billing/list.jsp" />
+   </definition>
+   
+   <definition name="billing/new" extends=".mainTemplate">
+       <put-attribute name="title" value="Billing Sites" type="string" />
+       <put-attribute name="content" value="/WEB-INF/view/billing/new.jsp" />
+   </definition>   
+   
+   <definition name="billing/import" extends=".mainTemplate">
+       <put-attribute name="title" value="Billing Sites" type="string" />
+       <put-attribute name="content" value="/WEB-INF/view/billing/importstatus.jsp" />
+   </definition>
+   
+   <definition name="access/list" extends=".mainTemplate">
+       <put-attribute name="title" value="Access Log Viewer" type="string" />
+       <put-attribute name="content" value="/WEB-INF/view/access/list.jsp" />
+   </definition>   
+   
    
  
    <!--for gui we defined template that not extends main, meas that it gust go to the jsp page -->

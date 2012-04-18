@@ -43,31 +43,39 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "AccessLog.findByUrl", query = "SELECT a FROM AccessLog a WHERE a.url = :url")})
 public class AccessLog implements Serializable {
     private static final long serialVersionUID = 1L;
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
+    
     @Basic(optional = false)
     @NotNull
     @Column(name = "access_time")
     @Temporal(TemporalType.TIMESTAMP)
     private Date accessTime;
+    
     @Size(max = 256)
     @Column(name = "ip_address")
     private String ipAddress;
+    
     @Size(max = 256)
     @Column(name = "location")
     private String location;
+    
     @Size(max = 256)
     @Column(name = "url")
     private String url;
+    
     @JoinColumn(name = "source_domain_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private AccessSource sourceDomain;
+    
     @JoinColumn(name = "product_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Product productId;
+    
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "accessId")
     private Collection<PurchaseOrder> purchaseOrderCollection;
 
