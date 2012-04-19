@@ -68,7 +68,7 @@ public class NewProjectDialog extends javax.swing.JDialog {
         JTextField[] textFields = new  JTextField[]{txtBaseUrl,txtCookie,txtLoginFormURL,txtLogoutURL,txtPassword,
                                                     txtPasswordField,txtSelector,txtUserField,txtUserName,txtHomePage,txtName};
         
-        debug();
+        //debug();
         
         for(JTextField tf:textFields)
             tf.setText(tf.getText());
@@ -154,6 +154,11 @@ public class NewProjectDialog extends javax.swing.JDialog {
         lblMethod.setText("Method");
 
         cmbMethod.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "get", "post" }));
+        cmbMethod.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                onMethodSelected(evt);
+            }
+        });
 
         btnTestConnection.setText("TestConnection");
         btnTestConnection.addActionListener(new java.awt.event.ActionListener() {
@@ -262,12 +267,6 @@ public class NewProjectDialog extends javax.swing.JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(panelStatus, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel5))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnTestConnection)
-                        .addGap(309, 309, 309))
-                    .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lblCookie)
                             .addComponent(lblUser, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -306,7 +305,12 @@ public class NewProjectDialog extends javax.swing.JDialog {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(txtSelector, javax.swing.GroupLayout.DEFAULT_SIZE, 148, Short.MAX_VALUE))
                             .addComponent(txtHomePage)
-                            .addComponent(txtName, javax.swing.GroupLayout.Alignment.TRAILING))))
+                            .addComponent(txtName, javax.swing.GroupLayout.Alignment.TRAILING)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel5)
+                            .addComponent(btnTestConnection))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -453,6 +457,12 @@ public class NewProjectDialog extends javax.swing.JDialog {
         btnTestConnection.setEnabled(isTestabale);
         btnCreate.setEnabled(isInputComplete & project.isValid());
     }//GEN-LAST:event_onHomeFolderChange
+
+    private void onMethodSelected(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_onMethodSelected
+        
+        if (project != null) 
+            project.setMethod(cmbMethod.getSelectedItem().toString());
+    }//GEN-LAST:event_onMethodSelected
 
     private abstract class BaseDocumentListener implements DocumentListener {
 

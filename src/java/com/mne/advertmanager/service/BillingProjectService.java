@@ -114,7 +114,12 @@ public class BillingProjectService {
                 String url = project.getBaseURL() + ds.getDataURL();
                 i++;
                 if (hasPaging) {
-                    url+= "&" + ds.getPageParam() + "=" + i;
+                    if (url.indexOf('?')>0)
+                        url+= "&" ;
+                    else
+                        url+= "?" ;
+                    
+                    url+= ds.getPageParam() + "=" + i;
                 }
                 org.jsoup.nodes.Document doc = JSoupTransport.retrieveDocument(con, url, ds.getMethod());
                 try {

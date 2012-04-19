@@ -42,6 +42,18 @@ public class ProductService {
     public Collection<Product> findAllProducts() {
         return productDao.findByQuery("Product.findAll");
     }
+    
+    @Transactional(readOnly = true)//, propagation = Propagation.REQUIRED)
+    public Product findProductByLink(String link) {
+        
+        Product result = null;
+
+        Collection<Product> data =  productDao.findByQuery("Product.findByProductLink",link);
+        if (data != null && data.size()>0)
+            result = data.iterator().next();
+        
+        return result;
+    }    
 
 //============================ createProduct ===================================
     @Transactional

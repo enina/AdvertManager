@@ -59,6 +59,7 @@ create table product (
     product_link varchar(256) not null,
     redirect_link varchar(256) not null,
     CONSTRAINT PRODUCT_PK PRIMARY KEY (id),
+    CONSTRAINT PRD_LINK_UQ   UNIQUE prdLinkIdx (product_link(255)),
     CONSTRAINT PRODUCT_PRODUCT_GROUP_FK FOREIGN KEY (product_group_id)  REFERENCES product_group(id) ON DELETE CASCADE,
     CONSTRAINT PRODUCT_AUTHOR_GROUP_FK FOREIGN KEY (author_id) REFERENCES author(id) ON DELETE CASCADE);
 

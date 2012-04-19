@@ -42,7 +42,7 @@ public class DataSpec implements Serializable {
     @NotNull
     @Size(min = 3, max = 8)
     @Column(name = "method")    
-    private String method;
+    private String method="get";
     
 
     @Size(max = 512)
@@ -178,7 +178,7 @@ public class DataSpec implements Serializable {
     }
     
     public void reset() {
-        setMethod("");
+        setMethod("get");
         setListEntrySelector("");
         setPageParam("");
         numPages=-1;

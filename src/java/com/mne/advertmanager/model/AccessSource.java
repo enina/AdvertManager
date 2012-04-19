@@ -20,7 +20,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "AccessSource.findAll", query = "SELECT a FROM AccessSource a"),
     @NamedQuery(name = "AccessSource.findById", query = "SELECT a FROM AccessSource a WHERE a.id = :id"),
-    @NamedQuery(name = "AccessSource.findByAccessSourceDomain", query = "SELECT a FROM AccessSource a WHERE a.accessSourceDomain = :accessSourceDomain"),
+    @NamedQuery(name = "AccessSource.findByAccessSourceDomain", query = "SELECT a FROM AccessSource a WHERE a.accessSourceDomain = ?"),
     @NamedQuery(name = "AccessSource.findByDescription", query = "SELECT a FROM AccessSource a WHERE a.description = :description")})
 public class AccessSource implements Serializable {
     private static final long serialVersionUID = 1L;
