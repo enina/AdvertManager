@@ -44,16 +44,13 @@ public class DataSpec implements Serializable {
     @Column(name = "method")    
     private String method;
     
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 512)
+
+    @Size(max = 512)
     @Column(name = "page_param")    
     private String pageParam;
 
-    @Basic(optional = false)
-    @NotNull
     @Column(name = "num_pages")    
-    private int    numPages;
+    private int    numPages = 0;
     
     @XmlElement
     private String name;
@@ -205,14 +202,19 @@ public class DataSpec implements Serializable {
         List<SelectableItem> dataItems =  new ArrayList<SelectableItem>();
 
         for (SelectableItem item:subItems) {
-            if (!item.getName().equals("root") || !item.getName().equals("listEntry")) {
+            if (!(item.getName().equals("root") || item.getName().equals("listEntry"))) {
                 dataItems.add(item);
-                break;
             }
         }
        
         return dataItems;
     }
+
+    public void setProject(Project project) {
+        this.project = project;
+    }
+    
+    
     
     @Override
     public boolean equals(Object obj) {

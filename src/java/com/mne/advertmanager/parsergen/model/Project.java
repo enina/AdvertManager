@@ -25,9 +25,10 @@ import javax.xml.bind.annotation.*;
 @Table(name = "billing_project_spec")
 @NamedQueries({
     @NamedQuery(name = "Project.findAll", 
-        query = "SELECT p FROM Project p" +
-                " left join fetch p.dataSpecList ds"  +
-                " left join fetch ds.subItems")
+        query = "SELECT p FROM Project p")
+                //+
+                //" left join fetch p.dataSpecList ds"  +
+                //" left join fetch ds.subItems")
 })
 public class Project implements Serializable {
     
@@ -56,19 +57,19 @@ public class Project implements Serializable {
     
     @Basic(optional = false)
     @NotNull
-    @Size(min = 8, max = 16)
+    @Size(min = 1, max = 64)
     @Column(name = "username")    
     private String username;
     
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 16)
+    @Size(min = 1, max = 64)
     @Column(name = "user_field")    
     private String userField;
     
     @Basic(optional = false)
     @NotNull
-    @Size(min = 8, max = 16)
+    @Size(min = 1, max = 64)
     @Column(name = "password")    
     private String password;
     
@@ -86,31 +87,31 @@ public class Project implements Serializable {
 
     @Basic(optional = false)
     @NotNull
-    @Size(min = 8, max = 32)
+    @Size(min = 1, max = 32)
     @Column(name = "cookie_name")    
     private String cookieName;
 
     @Basic(optional = false)
     @NotNull
-    @Size(min = 8, max = 256)
+    @Size(min = 1, max = 256)
     @Column(name = "login_url")    
     private String loginFormUrl;
 
     @Basic(optional = false)
     @NotNull
-    @Size(min = 8, max = 256)
+    @Size(min = 1, max = 256)
     @Column(name = "logout_url")    
     private String logoutUrl;
 
     @Basic(optional = false)
     @NotNull
-    @Size(min = 8, max = 256)
+    @Size(min = 1, max = 256)
     @Column(name = "selector")    
     private String selector;
     
     @Basic(optional = false)
     @NotNull
-    @Size(min = 8, max = 256)
+    @Size(min = 1, max = 256)
     @Column(name = "home_page")    
     private String homePage;
 
@@ -266,8 +267,13 @@ public class Project implements Serializable {
     public void setId(Integer id) {
         this.id = id;
     }
+    
+    @XmlTransient
+    public List<DataSpec> getDataSpecList() {
+        return dataSpecList;
+    }
 
-
+    
     
     
     @Override

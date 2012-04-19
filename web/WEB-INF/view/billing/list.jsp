@@ -3,12 +3,8 @@
     <div style="color:red"><c:out value="${status}"/></div>
 </c:if>
 
-<table name=""  class="menuetable" >
-    <tr>
-        <td class="affTd"><a name="menu" class="menuItem" href="${pageContext.request.contextPath}/billing/new" >Upload Specification</a></td>
-    </tr>
-</table>
-    
+
+<a href="${pageContext.request.contextPath}/mvc/billing/new" >Upload Specification</a>    
 <table border="1" class="affTable">
     
     <c:if test="${data!=null}">
@@ -38,7 +34,7 @@
                     <c:out value="${billingProj.selector}" />
                 </td>
                 <td class="affTd" align="left" >
-                   <a href="${pageContext.request.contextPath}/billing/import" >Import Data</a>
+                   <a href="${pageContext.request.contextPath}/mvc/billing/import/${billingProj.id}">Import Data</a>
                 </td>                
             </tr>   
         </c:forEach>

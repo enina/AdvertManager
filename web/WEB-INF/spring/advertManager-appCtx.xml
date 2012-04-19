@@ -148,7 +148,21 @@
         <constructor-arg >
             <value type="java.lang.Class">com.mne.advertmanager.parsergen.model.Project</value>
         </constructor-arg>
+    </bean>
+    
+    <bean id="dataSpecDao"  parent="adManGenericDao" class="com.mne.advertmanager.dao.GenericDaoHibernateImpl" >
+        <constructor-arg >
+            <value type="java.lang.Class">com.mne.advertmanager.parsergen.model.DataSpec</value>
+        </constructor-arg>
     </bean>    
+
+    
+    <bean id="selectableItemDao"  parent="adManGenericDao" class="com.mne.advertmanager.dao.GenericDaoHibernateImpl" >
+        <constructor-arg >
+            <value type="java.lang.Class">com.mne.advertmanager.parsergen.model.SelectableItem</value>
+        </constructor-arg>
+    </bean>    
+    
     
 <!--============================================================== user DAO     objects end   ===============================================================-->    
 <!--=============================================================  user service beans start ===============================================================--> 
@@ -190,14 +204,31 @@
     <bean id="authorService" class="com.mne.advertmanager.service.AuthorService">
         <property name="authorDao" ref="authorDao"/>
     </bean>    
-    <bean id="authorService" class="com.mne.advertmanager.service.BillingProjectService">
-        <property name="projectDao" ref="projectDao"/>
+    
+    <bean id="accessLogService" class="com.mne.advertmanager.service.AccessLogService">
+        <property name="accessLogDao" ref="accessLogDao"/>
+    </bean>        
+    
+    
+    <bean id="billingProjectService" class="com.mne.advertmanager.service.BillingProjectService">
+        <property name="projectDao"         ref="projectDao"/>
+        <property name="selectableItemDao"  ref="selectableItemDao"/>
+        <property name="dataSpecDao"        ref="dataSpecDao"/>
+        <property name="importers">
+            <map>
+                <entry key="Access" value-ref="accessLogImporter"/>
+            </map>
+        </property>
     </bean>    
     
 <!--=============================================================  user service beans end ===============================================================--> 
     
     <!-- Utility Bean , Used by dataGenService to create objects -->
     <bean id="adManEntityFactory" class="com.mne.advertmanager.util.EntityFactory"/>
+    <bean id="accessLogImporter" class="com.mne.advertmanager.util.AccessLogImporter">
+        <property name="accessLogService"   ref="accessLogService"/>        
+    </bean>
+        
     
     
 
