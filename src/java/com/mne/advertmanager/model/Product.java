@@ -48,7 +48,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Product.findByPrice", query = "SELECT p FROM Product p WHERE p.price = :price"),
     @NamedQuery(name = "Product.findByCommision", query = "SELECT p FROM Product p WHERE p.commision = :commision"),
     @NamedQuery(name = "Product.findBySyncStatus", query = "SELECT p FROM Product p WHERE p.syncStatus = :syncStatus"),
-    @NamedQuery(name = "Product.findByProductLink", query = "SELECT p FROM Product p WHERE p.productLink = :productLink"),
+    @NamedQuery(name = "Product.findByProductLink", query = "SELECT p FROM Product p WHERE p.productLink = ?"),
     @NamedQuery(name = "Product.findByRedirectLink", query = "SELECT p FROM Product p WHERE p.redirectLink = :redirectLink")})
 public class Product implements Serializable {
     

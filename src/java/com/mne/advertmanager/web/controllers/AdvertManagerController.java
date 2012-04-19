@@ -5,10 +5,7 @@
 package com.mne.advertmanager.web.controllers;
 
 import com.google.gson.Gson;
-import com.mne.advertmanager.model.Affiliate;
-import com.mne.advertmanager.model.Author;
-import com.mne.advertmanager.model.Product;
-import com.mne.advertmanager.model.ProductGroup;
+import com.mne.advertmanager.model.*;
 import com.mne.advertmanager.parsergen.model.Project;
 import com.mne.advertmanager.service.*;
 import com.mne.advertmanager.web.model.BillingSpec;
@@ -44,6 +41,7 @@ public class AdvertManagerController {
     private static final String LIST = "/list";
     @SuppressWarnings("unused")
     private static final String GET = "/get";
+    
     private static final String AFFILIATES = "affiliates";
     private static final String PRODUCTS = "products";
     private static final String PROD_GROUPS = "pgroups";
@@ -51,15 +49,23 @@ public class AdvertManagerController {
     private static final String DATAGEN = "dataGen";
     private static final String APPS = "apps";
     private static final String BILLING = "billing";
+    private static final String ACCESS = "access";
+    
+    
     private static final String APPS_PARSERGEN_REQ_MAPPING = APPS + "/parsergen";
+    
     private static final String AFF_LIST_REQ_MAPPING = AFFILIATES + LIST;
     private static final String AFF_NEW_REQ_MAPPING = AFFILIATES + NEW;
     private static final String AFF_ADD_REQ_MAPPING = AFFILIATES + ADD;
+    
     private static final String DG_GEN_REQ_MAPPING = DATAGEN + "/generate";
+    
     private static final String PRODUCT_NEW_REQ_MAPPING = PRODUCTS + NEW;
     private static final String PRODUCT_ADD_REQ_MAPPING = PRODUCTS + ADD;
+    
     private static final String AUTHOR_ADD_REQ_MAPPEING = AUTHORS + ADD;
     private static final String AUTHOR_NEW_REQ_MAPPING = AUTHORS + NEW;
+    
     //private static final String AUTHOR_GET_REQ_MAPPING = AUTHORS+GET;
     //private static final String PROD_GROUPS_GET_REQ_MAPPING = PROD_GROUPS+GET;
     private static final String BLNG_LIST_REQ_MAPPING = BILLING + LIST;
@@ -67,6 +73,8 @@ public class AdvertManagerController {
     private static final String BLNG_ADD_REQ_MAPPING = BILLING + ADD;
     private static final String BLNG_IMPORT_REQ_MAPPING = BILLING + "/import";
     
+    
+    private static final String ACS_LIST_REQ_MAPPING = ACCESS + LIST;
     
     private static Logger logger = LoggerFactory.getLogger(AdvertManagerController.class);
     
@@ -77,11 +85,12 @@ public class AdvertManagerController {
     private AuthorService authorService;
     private ProductGroupService pgService;
     private BillingProjectService billingProjectService;
-    
+    private AccessLogService accessLogService;
     
     private Gson gson = new Gson();
     
     private Unmarshaller jaxbUnmarshaller;
+    
 
     public AdvertManagerController() {
         try {
@@ -368,6 +377,16 @@ public class AdvertManagerController {
 
     //////////////////////////////////////////////////////  Billing       ////////////////////////////////////////////////////////////////////////
     
+    //////////////////////////////////////////////////////  Access       ////////////////////////////////////////////////////////////////////////
+    @RequestMapping(value = ACS_LIST_REQ_MAPPING, method = RequestMethod.GET)
+    public @ModelAttribute("data") Collection<AccessLog> viewAccessLog() {
+
+        Collection<AccessLog> result = accessLogService.findAllAccessLog();
+
+        return result;
+    }
+    //////////////////////////////////////////////////////  Access       ////////////////////////////////////////////////////////////////////////
+    
     
     //////////////////////////////////////////////////////  Utility ////////////////////////////////////////////////////////////////////////
     private String handleException(Exception e, String opType, String entityType, String entityName) {
@@ -418,6 +437,11 @@ public class AdvertManagerController {
     @Autowired
     public void setBillingProjectService(BillingProjectService billingProjectService) {
         this.billingProjectService = billingProjectService;
+    }
+
+    @Autowired
+    public void setAccessLogService(AccessLogService accessLogService) {
+        this.accessLogService = accessLogService;
     }
     
     

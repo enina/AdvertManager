@@ -83,7 +83,7 @@ public class Project implements Serializable {
     @NotNull
     @Size(min = 3, max = 8)
     @Column(name = "method")    
-    private String method;
+    private String method="get";
 
     @Basic(optional = false)
     @NotNull
