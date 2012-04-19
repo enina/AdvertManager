@@ -38,12 +38,12 @@ public class ProductService {
     
 
 //============================ findAllProducts =================================
-    @Transactional(readOnly = true)//, propagation = Propagation.REQUIRED)
+    @Transactional(readOnly = true)
     public Collection<Product> findAllProducts() {
         return productDao.findByQuery("Product.findAll");
     }
     
-    @Transactional(readOnly = true)//, propagation = Propagation.REQUIRED)
+    @Transactional(readOnly = true)
     public Product findProductByLink(String link) {
         
         Product result = null;

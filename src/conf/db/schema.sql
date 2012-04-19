@@ -1,7 +1,8 @@
 DROP SCHEMA IF EXISTS advert_manager_schema;
-CREATE  SCHEMA IF NOT EXISTS advert_manager_schema;
+CREATE  SCHEMA IF NOT EXISTS advert_manager_schema DEFAULT CHARACTER SET 'utf8' COLLATE default;
 use advert_manager_schema;
 SET storage_engine=innodb;
+set CHARSET=utf8
 
 ------------------ application tables --------------
 drop table if exists affiliate_to_product   CASCADE;
@@ -109,6 +110,45 @@ create table partner (
     email         varchar(256) not null ,
     PRIMARY KEY (id));
 
+
+CREATE TABLE `billing_project_spec` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `base_url` varchar(1024) NOT NULL,
+  `cookie_name` varchar(32) NOT NULL,
+  `homeDirectory` varchar(255) DEFAULT NULL,
+  `home_page` varchar(256) NOT NULL,
+  `isValid` tinyint(1) NOT NULL,
+  `login_url` varchar(256) NOT NULL,
+  `logout_url` varchar(256) NOT NULL,
+  `method` varchar(8) NOT NULL,
+  `name` varchar(256) NOT NULL,
+  `password` varchar(64) NOT NULL,
+  `password_field` varchar(16) NOT NULL,
+  `selector` varchar(256) NOT NULL,
+  `user_field` varchar(64) NOT NULL,
+  `username` varchar(64) NOT NULL,
+  PRIMARY KEY (`id`));
+
+CREATE TABLE `billing_data_spec` (
+   `id` int(11) NOT NULL AUTO_INCREMENT,
+   `data_url` varchar(512) NOT NULL,
+   `method` varchar(8) NOT NULL,
+   `name` varchar(255) DEFAULT NULL,
+   `num_pages` int(11) DEFAULT NULL,
+   `page_param` varchar(512) DEFAULT NULL,
+   `project_id` int(11) DEFAULT NULL,
+    PRIMARY KEY (`id`),
+    KEY `projectIdKey` (`project_id`),
+    CONSTRAINT `BLNGDATASPEC_PROJECT_FK` FOREIGN KEY (`project_id`) REFERENCES `billing_project_spec` (`id`) ) ;
+
+CREATE TABLE `selectable_data_item` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `email` varchar(256) NOT NULL,
+  `selector` varchar(256) NOT NULL,
+  `dataspec_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `dataSpecKey` (`dataspec_id`),
+  CONSTRAINT `BLNGDSELECTABLEITEM_DATASPEC_FK` FOREIGN KEY (`dataspec_id`) REFERENCES `billing_data_spec` (`id`));
 
 --------------------------------------------------- Spring Security tables ---------------------------------------------------
 create table authorities (
