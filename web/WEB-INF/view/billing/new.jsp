@@ -10,8 +10,7 @@
         <tr>
             <td><form:label path="specFile">Please select a billing specification file for upload</form:label></td>
             <td><input type="file" name="specFile" /></td>
-        </tr>
-
+         </tr>
         <tr>
             <td colspan="2">
                 <input type="submit" value="upload"/>

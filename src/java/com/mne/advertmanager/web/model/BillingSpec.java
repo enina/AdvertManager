@@ -18,8 +18,6 @@ public class BillingSpec {
 
     }
 
-    
-    
     public MultipartFile getSpecFile() {
         return specFile;
     }
@@ -27,6 +25,7 @@ public class BillingSpec {
     public void setSpecFile(MultipartFile specFile) {
         this.specFile = specFile;
     }
+
     
     
 }

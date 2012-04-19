@@ -81,6 +81,12 @@ public class SelectableItem implements Serializable {
     public boolean isValid() {
         return isStringValid(name) && isStringValid(selector);
     }
+
+    public void setDataSpec(DataSpec dataSpec) {
+        this.dataSpec = dataSpec;
+    }
+    
+    
     
     protected boolean isStringValid(String data) {
         return data!=null && data.length()>0;

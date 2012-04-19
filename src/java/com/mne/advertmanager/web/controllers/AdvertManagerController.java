@@ -16,6 +16,9 @@ import java.io.IOException;
 import java.util.Collection;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,7 +50,7 @@ public class AdvertManagerController {
     private static final String AUTHORS = "authors";
     private static final String DATAGEN = "dataGen";
     private static final String APPS = "apps";
-    private static final String BILLING = "apps";
+    private static final String BILLING = "billing";
     private static final String APPS_PARSERGEN_REQ_MAPPING = APPS + "/parsergen";
     private static final String AFF_LIST_REQ_MAPPING = AFFILIATES + LIST;
     private static final String AFF_NEW_REQ_MAPPING = AFFILIATES + NEW;
@@ -62,13 +65,34 @@ public class AdvertManagerController {
     private static final String BLNG_LIST_REQ_MAPPING = BILLING + LIST;
     private static final String BLNG_NEW_REQ_MAPPING = BILLING + NEW;
     private static final String BLNG_ADD_REQ_MAPPING = BILLING + ADD;
+    private static final String BLNG_IMPORT_REQ_MAPPING = BILLING + "/import";
+    
+    
     private static Logger logger = LoggerFactory.getLogger(AdvertManagerController.class);
+    
+    
     private DataGenService dataGenerator;
     private AffiliateService affiliateService;
     private ProductService productService;
     private AuthorService authorService;
     private ProductGroupService pgService;
+    private BillingProjectService billingProjectService;
+    
+    
     private Gson gson = new Gson();
+    
+    private Unmarshaller jaxbUnmarshaller;
+
+    public AdvertManagerController() {
+        try {
+            JAXBContext jaxbCtx = JAXBContext.newInstance(com.mne.advertmanager.parsergen.model.Project.class);
+            jaxbUnmarshaller = jaxbCtx.createUnmarshaller();
+        } catch (JAXBException ex) {
+            logger.error(ex.toString());
+        }
+    }
+    
+    
 
     @RequestMapping("/")
     public String redirect() {
@@ -146,7 +170,7 @@ public class AdvertManagerController {
     @RequestMapping(value = AUTHOR_NEW_REQ_MAPPING, method = RequestMethod.GET)
     public ModelAndView viewAuthorDefintionForm(SecurityContextHolderAwareRequestWrapper securityContext) {
 
-        System.out.println("controller:viewAuthorDefintionForm");
+        logger.info("viewAuthorDefintionForm");
         ModelAndView mav = new ModelAndView(AUTHOR_NEW_REQ_MAPPING);
 
         mav.addObject("author", new Author());
@@ -225,8 +249,7 @@ public class AdvertManagerController {
     }
 
     @RequestMapping(value = APPS_PARSERGEN_REQ_MAPPING, method = RequestMethod.GET)
-    public @ModelAttribute("codebase")
-    String launchParserGenerator(HttpServletRequest request) {
+    public @ModelAttribute("codebase") String launchParserGenerator(HttpServletRequest request) {
 
         String codebase = "http://" + request.getServerName() + ":" + request.getServerPort() + request.getServletContext().getContextPath() + "/apps";
         logger.info("Returning codebase=" + codebase);
@@ -234,8 +257,7 @@ public class AdvertManagerController {
     }
 
     @RequestMapping(value = AFF_NEW_REQ_MAPPING, method = RequestMethod.GET)
-    public @ModelAttribute("affiliate")
-    Affiliate viewRegistrationForm() {
+    public @ModelAttribute("affiliate")   Affiliate viewRegistrationForm() {
 
         return new Affiliate();
     }
@@ -275,23 +297,33 @@ public class AdvertManagerController {
 
     //////////////////////////////////////////////////////  Billing       ////////////////////////////////////////////////////////////////////////
     @RequestMapping(value = BLNG_LIST_REQ_MAPPING, method = RequestMethod.GET)
-    public @ModelAttribute("data")
-    Collection<Project> viewBillingProjects() {
+    public @ModelAttribute("data") Collection<Project> viewBillingProjects() {
 
-        //Collection<Affiliate> affiliates = affiliateService.findAllAffiliates();
+        Collection<Project> result = billingProjectService.findAllBillingProjects();
 
-        return null;
+        return result;
     }
 
     @RequestMapping(value = BLNG_ADD_REQ_MAPPING, method = RequestMethod.POST)
     public ModelAndView uploadBillingSpecification(@ModelAttribute("billingSpec") BillingSpec blngSpec, SecurityContextHolderAwareRequestWrapper securityContext) {
 
         String status = null;
+        MultipartFile specFile = null;
         try {
-            MultipartFile specFile = blngSpec.getSpecFile();
-            status="File "+ specFile.getOriginalFilename() +"uploaded successfuly";
+            specFile = blngSpec.getSpecFile();
+            
+            
+            Project proj = (Project)jaxbUnmarshaller.unmarshal(specFile.getInputStream());
+            
+            billingProjectService.createProject(proj);
+            
+            status="File "+ specFile.getOriginalFilename() +" uploaded successfuly";
+            
         } catch (Exception e) {
-            status = handleException(e, "upload", "bilingSpec", "");
+            String specName = "";
+            if (specFile != null)
+                specName+=specFile.getName();
+            status = handleException(e, "upload", "billingSpec", specName);
         }
 
         ModelAndView mav = null;
@@ -300,12 +332,39 @@ public class AdvertManagerController {
 
         return mav;
     }
+    
+    @RequestMapping(value = BLNG_IMPORT_REQ_MAPPING+"/{blngProjId}", method = RequestMethod.GET)
+    public ModelAndView importBillingData(@PathVariable final int blngProjId) {
+
+        String status = null;
+        
+        try {
+            new Thread() {
+                @Override
+                public void run() {
+                    setName(BILLING + "DataImportThread");
+                    billingProjectService.importBillingData(blngProjId);
+                }
+            }.start();
+            status="Started importing  BillingData for proj id="+blngProjId;
+        } catch (Exception e) {
+            status = handleException(e, "import", "BillingData", "id="+blngProjId);
+        }        
+        
+        ModelAndView mav = null;
+        mav = forwardToView(BLNG_IMPORT_REQ_MAPPING, BLNG_LIST_REQ_MAPPING, "data", viewBillingProjects());
+        mav.addObject("status", status);
+
+        return mav;
+    }    
 
     @RequestMapping(value = BLNG_NEW_REQ_MAPPING, method = RequestMethod.GET)
     public @ModelAttribute("billingSpec") BillingSpec viewUploadSpecForm() {
 
         return new BillingSpec();
     }
+    
+    
 
     //////////////////////////////////////////////////////  Billing       ////////////////////////////////////////////////////////////////////////
     
@@ -355,4 +414,11 @@ public class AdvertManagerController {
     public void setProductGroupService(ProductGroupService pgService) {
         this.pgService = pgService;
     }
+    
+    @Autowired
+    public void setBillingProjectService(BillingProjectService billingProjectService) {
+        this.billingProjectService = billingProjectService;
+    }
+    
+    
 }

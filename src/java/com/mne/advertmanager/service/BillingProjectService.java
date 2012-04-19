@@ -5,15 +5,17 @@
 package com.mne.advertmanager.service;
 
 import com.mne.advertmanager.dao.GenericDao;
+import com.mne.advertmanager.model.AccessLog;
+import com.mne.advertmanager.model.Affiliate;
+import com.mne.advertmanager.parsergen.model.DataSpec;
 import com.mne.advertmanager.parsergen.model.Project;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
+import com.mne.advertmanager.parsergen.model.SelectableItem;
+import com.mne.advertmanager.util.BillingDataImporter;
+import com.mne.advertmanager.util.JSoupTransport;
+import java.util.*;
+import org.jsoup.Connection;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,58 +24,149 @@ import org.springframework.transaction.annotation.Transactional;
  * @author Nina Eidelshtein and Misha Lebedev
  */
 public class BillingProjectService {
- 
-    private static org.slf4j.Logger logger = LoggerFactory.getLogger(BillingProjectService.class);
-        
-    private GenericDao<Project,Long> projectDao;
 
-    Unmarshaller jaxbUnmarshaller;
+    private static org.slf4j.Logger logger = LoggerFactory.getLogger(BillingProjectService.class);
     
+    private GenericDao<Project, Integer> projectDao;
+    private GenericDao<DataSpec, Integer> dataSpecDao;
+    private GenericDao<SelectableItem, Integer> selectableItemDao;
+    
+    
+    private Map<String,BillingDataImporter> importers = null;
+    
+
     public BillingProjectService() {
-        try {
-            JAXBContext jaxbCtx = JAXBContext.newInstance(com.mne.advertmanager.parsergen.model.Project.class);
-            jaxbUnmarshaller = jaxbCtx.createUnmarshaller();
-        } catch (JAXBException ex) {
-            logger.error(ex.toString());
-        }
     }
-    
+
     /**
-     * for each property defined on bean element in application context we must have a corresponding setter functions
-     * For example:
-     *  <property name="projectDao">
-            <ref bean="projectDao"/>
-        </property>
-     * Corresponding setter functions is setProjectDao
-     * @param projectDao 
+     * for each property defined on bean element in application context we must have a corresponding setter functions For example: <property name="projectDao">
+     * <ref bean="projectDao"/> </property> Corresponding setter functions is setProjectDao
+     *
+     * @param projectDao
      */
-    public void setProjectDao(GenericDao<Project, Long> projectDao) {
+    public void setProjectDao(GenericDao<Project, Integer> projectDao) {
         this.projectDao = projectDao;
     }
 
-    
-    
-    @Transactional(readOnly = true)
-    public Set<Project> findAllBillingProjects() {
-        
-        HashSet<Project> result = new HashSet<Project>();
-        
-        Collection<Project> data = projectDao.findByQuery("Project.findAll");
+    public void setDataSpecDao(GenericDao<DataSpec, Integer> dataSpecDao) {
+        this.dataSpecDao = dataSpecDao;
+    }
 
-        if (data != null)
-            result.addAll(data);
-        
-        return result;
+    public void setSelectableItemDao(GenericDao<SelectableItem, Integer> selectableItemDao) {
+        this.selectableItemDao = selectableItemDao;
+    }
+
+
+    
+    
+    public void setImporters(Map<String, BillingDataImporter> importers) {
+        this.importers = importers;
     }
     
-    /**
+    
 
-     * @param project 
+    @Transactional(readOnly = true)
+    public Set<Project> findAllBillingProjects() {
+
+        HashSet<Project> result = new HashSet<Project>();
+
+        Collection<Project> data = projectDao.findByQuery("Project.findAll");
+
+        if (data != null) {
+            result.addAll(data);
+        }
+
+        return result;
+    }
+
+    /**
+     *
+     * @param project
      */
     @Transactional
     public void createProject(Project project) {
         projectDao.create(project);
+        for (DataSpec ds:project.getDataSpecList()) {
+            ds.setProject(project);
+            dataSpecDao.create(ds);
+            for(SelectableItem si:ds.getAllSubItems()) {
+                si.setDataSpec(ds);
+                selectableItemDao.create(si);
+            }
+        }
+        
     }
 
-    
+    @Transactional
+    public void importBillingData(int blngProjId) {
+
+        Project project = projectDao.read(blngProjId);
+
+        List<DataSpec> dsList = project.getDataSpecList();
+
+        Connection con = JSoupTransport.login(project);
+
+        
+        for (DataSpec ds : dsList) {
+            int i = 0;
+            boolean hasPaging = ds.getNumPages()>0;
+            do{
+                String url = project.getBaseURL() + ds.getDataURL();
+                i++;
+                if (hasPaging) {
+                    url+= "&" + ds.getPageParam() + "=" + i;
+                }
+                org.jsoup.nodes.Document doc = JSoupTransport.retrieveDocument(con, url, ds.getMethod());
+                try {
+                    importPageData(doc, ds);
+                } catch (Exception ex) {
+                    logger.error(ex.toString());
+                }                
+            }while(i <= ds.getNumPages());
+        }
+
+        JSoupTransport.logout(con, project);
+    }
+
+    private void importPageData(org.jsoup.nodes.Document doc, DataSpec dataSpec) {
+
+        Element dataElem = null;
+        Elements dataList = null;
+        
+        BillingDataImporter importer = importers.get(dataSpec.getName());
+        
+        if (importer==null)
+            return;
+        
+        dataElem = doc.select(dataSpec.getSelector()).first();
+        dataList = dataElem.select(dataSpec.getListEntrySelector());
+
+        for (int i = 0; i < dataList.size(); ++i) {
+            Object curDataItem = makeDataItem(dataSpec);
+            for (SelectableItem item : dataSpec.getDataItems()) {
+                Element listEntryElement = dataList.get(i);
+                String selector = item.getSelector();
+                Elements selectedList = listEntryElement.select(selector);
+                if (selectedList != null) {
+                    Element targetElement = selectedList.first();
+                    String propName = item.getName();
+                    String propValue = targetElement.text();
+                    importer.importDataItemProperty(curDataItem, propName, propValue);
+                } else {
+                    logger.error("Error retrieving value of " + selector);
+                }
+            }
+            importer.saveDataItem(curDataItem);
+        }
+    }
+
+    private Object makeDataItem(DataSpec dataSpec) {
+        
+        if("Access".equals(dataSpec.getName()))
+            return new AccessLog();
+        else if ("Affiliate".equals(dataSpec.getName()))
+            return new Affiliate();
+        
+        return null;
+    }
 }

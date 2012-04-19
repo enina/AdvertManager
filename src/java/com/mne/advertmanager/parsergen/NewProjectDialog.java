@@ -68,7 +68,7 @@ public class NewProjectDialog extends javax.swing.JDialog {
         JTextField[] textFields = new  JTextField[]{txtBaseUrl,txtCookie,txtLoginFormURL,txtLogoutURL,txtPassword,
                                                     txtPasswordField,txtSelector,txtUserField,txtUserName,txtHomePage,txtName};
         
-        //debug();
+        debug();
         
         for(JTextField tf:textFields)
             tf.setText(tf.getText());
