@@ -209,7 +209,7 @@ public class Project implements Serializable {
     }
 
     public void setLoginFormUrl(String loginFormUrl) {
-        this.loginFormUrl = baseURL + loginFormUrl;
+        this.loginFormUrl = loginFormUrl;
     }
 
     public String getSelector() {
@@ -225,7 +225,7 @@ public class Project implements Serializable {
     }
 
     public void setLogoutUrl(String logoutUrl) {
-        this.logoutUrl = baseURL + logoutUrl;
+        this.logoutUrl = logoutUrl;
     }
     
     public void addDataSpec(DataSpec dataSpec) {

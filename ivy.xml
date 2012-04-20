@@ -74,6 +74,8 @@
         <dependency org="mysql" name="mysql-connector-java" rev="5.1.18"/>
         <dependency org="com.google.code.gson" name="gson" rev="2.1"/>
         <dependency org="commons-io" name="commons-io" rev="2.2"/>
+        <dependency org="com.googlecode.juniversalchardet" name="juniversalchardet" rev="1.0.3"/>
+            
             		
             		
         <exclude org="com.ibm.websphere"                module="com.springsource.com.ibm.websphere.uow" />

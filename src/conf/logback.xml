@@ -31,6 +31,10 @@
   <logger name="com.mchange" level="info"/>
   
   <logger name="org.springframework.security.core.userdetails.jdbc.JdbcDaoImpl" level="DEBUG"/>
+  
   <logger name="ch.qos.logback.classic.LoggerContext" level="debug"/>
+  
+  <logger name="com.mne.advertmanager.util.JSoupTransport" level="debug"/>
+  
   
 </configuration>

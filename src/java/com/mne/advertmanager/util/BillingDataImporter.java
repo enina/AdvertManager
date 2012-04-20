@@ -4,6 +4,8 @@
  */
 package com.mne.advertmanager.util;
 
+import com.mne.advertmanager.model.Affiliate;
+
 /**
  *
  * @author Nina Eidelshtein and Misha Lebedev
@@ -11,5 +13,5 @@ package com.mne.advertmanager.util;
 public interface BillingDataImporter {
     
     public Object importDataItemProperty(Object dataItem,String itemName,String itemValue);
-    public void saveDataItem(Object dataItem);
+    public void saveDataItem(Affiliate aff,Object dataItem);
 }

@@ -5,14 +5,14 @@
 package com.mne.advertmanager.util;
 
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
 import com.mne.advertmanager.parsergen.model.Project;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -20,11 +20,12 @@ import com.mne.advertmanager.parsergen.model.Project;
  */
 public class JSoupTransport {
 
-    private static final Logger logger = Logger.getLogger(JSoupTransport.class.getName());
-
+    private static final Logger logger = LoggerFactory.getLogger(JSoupTransport.class);
+    
     public static Document retrieveDocument(Connection con, String docUrl, String method) {
         Document result = null;
         try {
+            logger.debug("Retrieve URL:{} by {}",docUrl,method);
             con.url(docUrl).timeout(0);
             if ("post".equals(method)) {
                 result = con.post();
@@ -32,7 +33,7 @@ public class JSoupTransport {
                 result = con.get();
             }
         } catch (IOException ex) {
-            logger.log(Level.SEVERE, "failed to retrieved url {0}:::Exception {1}:::Message {2}" ,new Object[]{ docUrl, ex.getClass().getSimpleName(),ex.getMessage()});
+            logger.error("failed to retrieved url {}:::Exception {}:::Message {}" ,new Object[]{ docUrl, ex.getClass().getSimpleName(),ex.getMessage()});
         }
         return result;
     }
@@ -44,15 +45,17 @@ public class JSoupTransport {
         try {
             //access home page without credentials. get session cookie and redirect to login form
             url=proj.getBaseURL()+proj.getHomePage();
+            logger.debug("Login.Retrieve HomePage:{}",url);
             result = Jsoup.connect(url).timeout(0);
             @SuppressWarnings("unused")
-			Document doc = result.get();
+            Document doc = result.get();
             //submit login form and authenticate
-            String loginUrl = proj.getLoginFormUrl();
+            String loginUrl = proj.getBaseURL()+proj.getLoginFormUrl();
             result.url(loginUrl);
             result.followRedirects(false);
             String firstCookie = result.response().cookie(proj.getCookieName());
 
+            logger.debug("Login.Submit Login Form:{},user:{},password{}",new Object[]{url,proj.getUsername(), proj.getPasswordField()});
             doc = result.data(proj.getUserField(), proj.getUsername(), proj.getPasswordField(), proj.getPassword()).post();
             String secondCookie = result.response().cookie(proj.getCookieName());
             String sesId="";
@@ -74,7 +77,7 @@ public class JSoupTransport {
 
             return result;
         } catch (Exception e) {
-            logger.log(Level.SEVERE, "authentication failure connecting to {0}::: Exception {1}:::Message {2}" ,new Object[]{url,e.getClass().getSimpleName(),e.getMessage()});
+            logger.error("Authentication failure connecting to {}::: Exception {}:::Message {}" ,new Object[]{url,e.getClass().getSimpleName(),e.getMessage()});
             return null;
         }
     }
@@ -82,11 +85,13 @@ public class JSoupTransport {
     public static void logout(Connection con, Project proj) {
         try {
             if (con != null) {
-                con.url(proj.getLogoutUrl()).timeout(0);
+                String logoutURL = proj.getBaseURL()+proj.getLogoutUrl();
+                con.url(logoutURL).timeout(0);
+                logger.debug("Logout:{}",logoutURL);
                 con.get();
             }
         } catch (IOException e) {
-            logger.log(Level.SEVERE, "failed to logout::: Exception {0}:::Message {1}" ,new Object[]{e.getClass().getSimpleName(),e.getMessage()});
+            logger.error("Failed to logout::: Exception {0}:::Message {}" ,e.getClass().getSimpleName(),e.getMessage());
         }
     }
 }

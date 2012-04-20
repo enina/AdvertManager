@@ -92,7 +92,6 @@ public class Product implements Serializable {
     @Column(name = "product_link")
     private String productLink;
     
-    @NotNull
     @Size(min = 1, max = 256)
     @Column(name = "redirect_link")
     private String redirectLink;

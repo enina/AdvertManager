@@ -193,6 +193,8 @@
     
     <bean id="productService" class="com.mne.advertmanager.service.ProductService">
         <property name="productDao" ref="productDao"/>
+        <property name="authorService" ref="authorService"/>
+        <property name="productGroupService" ref="productGroupService"/>
     </bean>    
     
     <bean id="productGroupService" class="com.mne.advertmanager.service.ProductGroupService">

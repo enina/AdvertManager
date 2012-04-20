@@ -18,11 +18,7 @@
             <tiles:insertAttribute name="header" />
         </div>
         <div id="content">
-            <table style="width:100%;"><tr><td style="width: 10%;">&nbsp;</td><td>
             <tiles:insertAttribute name="content" />
-            </td><td style="width: 10%;">&nbsp;</td>
-            </tr>
-            </table>
         </div>
         <div id="footer" style="height: 20px;">
           
