@@ -15,16 +15,16 @@
         
         <c:forEach items="${data}" var="access">
             <tr>
-                <td class="affTd" align="left" >
-                    <c:out value="${access.accessTime}" />
+                <td class="affTd" style="width:150px" >
+                    <c:out value="${access.timeAsString}" />
                 </td>
-                <td class="affTd" align="left">
+                <td class="affTd" >
                     <c:out value="${access.ipAddress}"/>
                 </td>
-                <td class="affTd" align="left" >
+                <td class="affTd" >
                     <c:out value="${access.location}" />
                 </td>
-                <td class="affTd" align="left" >
+                <td class="affTd" >
                     <c:out value="${access.url}" />
                 </td>
             </tr>   

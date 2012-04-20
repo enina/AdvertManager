@@ -5,6 +5,8 @@
 package com.mne.advertmanager.model;
 
 import java.io.Serializable;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Date;
 import javax.persistence.Basic;
@@ -35,7 +37,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "access_log")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "AccessLog.findAll", query = "SELECT a FROM AccessLog a"),
+    @NamedQuery(name = "AccessLog.findAll", query = "SELECT a FROM AccessLog a order by a.accessTime"),
     @NamedQuery(name = "AccessLog.findById", query = "SELECT a FROM AccessLog a WHERE a.id = :id"),
     @NamedQuery(name = "AccessLog.findByAccessTime", query = "SELECT a FROM AccessLog a WHERE a.accessTime = :accessTime"),
     @NamedQuery(name = "AccessLog.findByIpAddress", query = "SELECT a FROM AccessLog a WHERE a.ipAddress = :ipAddress"),
@@ -43,7 +45,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "AccessLog.findByUrl", query = "SELECT a FROM AccessLog a WHERE a.url = :url")})
 public class AccessLog implements Serializable {
     private static final long serialVersionUID = 1L;
-    
+    private static DateFormat df = new SimpleDateFormat("dd.MM.yyyy HH:mm");
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
@@ -60,7 +62,7 @@ public class AccessLog implements Serializable {
     @Column(name = "ip_address")
     private String ipAddress;
     
-    @Size(max = 256)
+    @Size(max = 2048)
     @Column(name = "location")
     private String location;
     
@@ -101,6 +103,10 @@ public class AccessLog implements Serializable {
 
     public Date getAccessTime() {
         return accessTime;
+    }
+    
+    public String getTimeAsString() {
+        return df.format(accessTime);
     }
 
     public void setAccessTime(Date accessTime) {

@@ -98,12 +98,14 @@ public class BillingProjectService {
     }
 
     @Transactional
-    public void importBillingData(int blngProjId) {
+    public void importBillingData(Affiliate aff,int blngProjId) {
 
         Project project = projectDao.read(blngProjId);
 
         List<DataSpec> dsList = project.getDataSpecList();
 
+        logger.info("Started {} project data import. ",project.getName());
+        
         Connection con = JSoupTransport.login(project);
 
         
@@ -123,7 +125,7 @@ public class BillingProjectService {
                 }
                 org.jsoup.nodes.Document doc = JSoupTransport.retrieveDocument(con, url, ds.getMethod());
                 try {
-                    importPageData(doc, ds);
+                    importPageData(aff,doc, ds);
                 } catch (Exception ex) {
                     logger.error(ex.toString());
                 }                
@@ -131,9 +133,10 @@ public class BillingProjectService {
         }
 
         JSoupTransport.logout(con, project);
+        logger.info("Finished {} project data import ",project.getName());
     }
 
-    private void importPageData(org.jsoup.nodes.Document doc, DataSpec dataSpec) {
+    private void importPageData(Affiliate aff,org.jsoup.nodes.Document doc, DataSpec dataSpec) {
 
         Element dataElem = null;
         Elements dataList = null;
@@ -161,7 +164,7 @@ public class BillingProjectService {
                     logger.error("Error retrieving value of " + selector);
                 }
             }
-            importer.saveDataItem(curDataItem);
+            importer.saveDataItem(aff,curDataItem);
         }
     }
 

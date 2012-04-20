@@ -2,7 +2,6 @@ DROP SCHEMA IF EXISTS advert_manager_schema;
 CREATE  SCHEMA IF NOT EXISTS advert_manager_schema DEFAULT CHARACTER SET 'utf8' COLLATE default;
 use advert_manager_schema;
 SET storage_engine=innodb;
-set CHARSET=utf8
 
 ------------------ application tables --------------
 drop table if exists affiliate_to_product   CASCADE;
@@ -58,7 +57,7 @@ create table product (
     commision int not null ,
     sync_status  int not null,
     product_link varchar(256) not null,
-    redirect_link varchar(256) not null,
+    redirect_link varchar(256) null,
     CONSTRAINT PRODUCT_PK PRIMARY KEY (id),
     CONSTRAINT PRD_LINK_UQ   UNIQUE prdLinkIdx (product_link(255)),
     CONSTRAINT PRODUCT_PRODUCT_GROUP_FK FOREIGN KEY (product_group_id)  REFERENCES product_group(id) ON DELETE CASCADE,
@@ -84,7 +83,7 @@ create table access_log (
     product_id  int not null ,
     access_time TIMESTAMP , --vremya perehoda
     ip_address varchar(256) , --client ip address
-    location  varchar(256)  , --client geo location
+    location  varchar(2048)  , --client geo location
     source_domain_id int not null ,
     url varchar(256)  ,
     PRIMARY KEY (id),

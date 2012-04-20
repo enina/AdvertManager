@@ -19,6 +19,8 @@ import javax.xml.bind.Unmarshaller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestWrapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -117,8 +119,7 @@ public class AdvertManagerController {
      * @return
      */
     @RequestMapping(value = "home", method = RequestMethod.GET)
-    public @ModelAttribute("data")
-    Affiliate generateHome(SecurityContextHolderAwareRequestWrapper securityContext) {
+    public @ModelAttribute("data") Affiliate generateHome(SecurityContextHolderAwareRequestWrapper securityContext) {
         String affName = securityContext.getUserPrincipal().getName();
         Affiliate aff = affiliateService.findAffiliateWithProductGroupsAndProducts(affName);
         return aff;
@@ -343,18 +344,22 @@ public class AdvertManagerController {
     }
     
     @RequestMapping(value = BLNG_IMPORT_REQ_MAPPING+"/{blngProjId}", method = RequestMethod.GET)
-    public ModelAndView importBillingData(@PathVariable final int blngProjId) {
+    public ModelAndView importBillingData(@PathVariable final int blngProjId,SecurityContextHolderAwareRequestWrapper securityContextWrapper) {
 
         String status = null;
-        
+        String affName = securityContextWrapper.getUserPrincipal().getName();
+        final Affiliate aff = affiliateService.findAffiliateWithProductGroupsAndProducts(affName);
+        final SecurityContext securityContext = SecurityContextHolder.getContext();
         try {
             new Thread() {
                 @Override
                 public void run() {
+                    SecurityContextHolder.setContext(securityContext);
                     setName(BILLING + "DataImportThread");
-                    billingProjectService.importBillingData(blngProjId);
+                    billingProjectService.importBillingData(aff,blngProjId);
                 }
             }.start();
+            //billingProjectService.importBillingData(aff,blngProjId);
             status="Started importing  BillingData for proj id="+blngProjId;
         } catch (Exception e) {
             status = handleException(e, "import", "BillingData", "id="+blngProjId);
