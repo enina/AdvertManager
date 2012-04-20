@@ -23,6 +23,9 @@
               <Properties>
                 <Property name="text" type="java.lang.String" value="open"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="onOpen"/>
+              </Events>
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="miSave">
               <Properties>
@@ -69,6 +72,14 @@
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="onEditAccess"/>
+              </Events>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="miPurchaseOrder">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="PurchaseOrder"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="onEditPurchaseOrder"/>
               </Events>
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="miAuthor">
