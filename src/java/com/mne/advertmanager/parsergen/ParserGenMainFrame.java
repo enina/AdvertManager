@@ -77,7 +77,6 @@ public class ParserGenMainFrame extends javax.swing.JFrame {
             marshaller = jaxbCtx.createMarshaller();
             marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
             unmarshaller = jaxbCtx.createUnmarshaller();
-
         } catch (Exception ex) {
             isContinue = false;
             logger.log(Level.SEVERE, "Failed to set system look and feel {0}:Message {1}", new Object[]{ex.getClass().getSimpleName(), ex.toString()});
@@ -93,8 +92,6 @@ public class ParserGenMainFrame extends javax.swing.JFrame {
 
             txtSubItemSelector.getDocument().addDocumentListener(new SubItemSelectorDocListener());
             txtUrl.getDocument().addDocumentListener(new URLDocListener());
-            //txtMainSelector.getDocument().addDocumentListener(new MainSelectorDocListener());
-            //txtListEntrySelector.getDocument().addDocumentListener(new ListEntrySelectorDocListener());
             treeHtmlDoc.addMouseListener(new DocTreeMouseListener());
             txtPaging.getDocument().addDocumentListener(new PageParamDocListener());
             txtNumPages.addChangeListener(new NumPagesDocListener());
@@ -711,7 +708,19 @@ public class ParserGenMainFrame extends javax.swing.JFrame {
 
     private void onOpen(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onOpen
         // TODO add your handling code here:
-        //Object project = unmarshaller.unmarshal(new File);
+        JFileChooser fc = new JFileChooser();
+        fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        if (fc.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+            File projectFile = fc.getSelectedFile();
+            try {
+                project =(Project) unmarshaller.unmarshal(projectFile);
+                lblStatus.setText("Status:Success");
+            } catch (JAXBException ex) {
+                logger.log(Level.SEVERE, "Failed to unmarshal project specification", ex);
+                System.out.println("Failed to unmarshal project specification:"+ ex);
+                lblStatus.setText("Status:Failed to parse project file");
+            }
+        }
     }//GEN-LAST:event_onOpen
 
     private TreeNode find(DefaultMutableTreeNode node, String query) {
