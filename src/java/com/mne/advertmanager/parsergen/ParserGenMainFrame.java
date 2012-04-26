@@ -180,11 +180,8 @@ public class ParserGenMainFrame extends javax.swing.JFrame {
         miSave = new javax.swing.JMenuItem();
         miExit = new javax.swing.JMenuItem();
         menuEdit = new javax.swing.JMenu();
-        miProduct = new javax.swing.JMenuItem();
-        miAffiliate = new javax.swing.JMenuItem();
         miAccess = new javax.swing.JMenuItem();
         miPurchaseOrder = new javax.swing.JMenuItem();
-        miAuthor = new javax.swing.JMenuItem();
         menuOptions = new javax.swing.JMenu();
         javax.swing.JMenuItem miAdvanced = new javax.swing.JMenuItem();
 
@@ -469,22 +466,6 @@ public class ParserGenMainFrame extends javax.swing.JFrame {
 
         menuEdit.setText("Edit");
 
-        miProduct.setText("Product");
-        miProduct.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                onEditProduct(evt);
-            }
-        });
-        menuEdit.add(miProduct);
-
-        miAffiliate.setText("Affiliate");
-        miAffiliate.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                onEditAffiliate(evt);
-            }
-        });
-        menuEdit.add(miAffiliate);
-
         miAccess.setText("Access");
         miAccess.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -500,9 +481,6 @@ public class ParserGenMainFrame extends javax.swing.JFrame {
             }
         });
         menuEdit.add(miPurchaseOrder);
-
-        miAuthor.setText("Author");
-        menuEdit.add(miAuthor);
 
         menuBar.add(menuEdit);
 
@@ -542,6 +520,7 @@ public class ParserGenMainFrame extends javax.swing.JFrame {
 
         newProjDialog.setVisible(true);
 
+       
         project = ((NewProjectDialog) newProjDialog).getProject();
         if (project != null && project.isValid()) {
             displayTree(project.getBaseURL() + project.getHomePage(), project.getMethod());
@@ -550,33 +529,6 @@ public class ParserGenMainFrame extends javax.swing.JFrame {
         }
 
     }//GEN-LAST:event_onNew
-
-    private void onEditProduct(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onEditProduct
-
-        if (project != null && project.isValid()) {
-            DataSpec productSpec = new DataSpec("product");
-            productSpec.addSubItem(new SelectableItem("description"));
-            productSpec.addSubItem(new SelectableItem("price"));
-            productSpec.addSubItem(new SelectableItem("commision"));
-            productSpec.addSubItem(new SelectableItem("product_link"));
-            productSpec.addSubItem(new SelectableItem("author"));
-
-            fillComponentPanel(productSpec);
-        }
-    }//GEN-LAST:event_onEditProduct
-
-    private void onEditAffiliate(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onEditAffiliate
-
-        if (project != null && project.isValid()) {
-            DataSpec dataSpec = new DataSpec("Affiliate");
-
-            dataSpec.addSubItem(new SelectableItem("name"));
-            dataSpec.addSubItem(new SelectableItem("email"));
-
-            fillComponentPanel(dataSpec);
-        }
-
-    }//GEN-LAST:event_onEditAffiliate
 
     private void onDisplayData(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onDisplayData
 
@@ -660,15 +612,13 @@ public class ParserGenMainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_onSearch
 
     private void onEditAccess(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onEditAccess
+        
         if (project != null && project.isValid()) {
-            DataSpec dataSpec = new DataSpec("Access");
-
-            dataSpec.addSubItem(new SelectableItem("DateTime"));
-            dataSpec.addSubItem(new SelectableItem("IP"));
-            dataSpec.addSubItem(new SelectableItem("Referer"));
-            dataSpec.addSubItem(new SelectableItem("Target"));
+        
+            DataSpec dataSpec = project.getDataSpec("Access");
 
             fillComponentPanel(dataSpec);
+            
         }
 
     }//GEN-LAST:event_onEditAccess
@@ -679,7 +629,9 @@ public class ParserGenMainFrame extends javax.swing.JFrame {
                 String filePath = project.getHomeDirectory() + File.separator + project.getName() + ".xml";
                 File result = new File(filePath);
                 marshaller.marshal(project, result);
+                lblStatus.setText("Status:Project definition saved to file:"+filePath);
             } catch (JAXBException ex) {
+                lblStatus.setText("Status:Failed to save project definition :"+ex.toString());
                 System.out.println("marshaling error:" + ex.getMessage());
             }
         }
@@ -688,21 +640,9 @@ public class ParserGenMainFrame extends javax.swing.JFrame {
     private void onEditPurchaseOrder(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onEditPurchaseOrder
         // TODO add your handling code here:
         if (project != null && project.isValid()) {
-            DataSpec productSpec = new DataSpec("PurchaseOrder");
-            productSpec.addSubItem(new SelectableItem("status"));
-            productSpec.addSubItem(new SelectableItem("country"));
-            productSpec.addSubItem(new SelectableItem("town"));
-            productSpec.addSubItem(new SelectableItem("paymentSistem"));
-            productSpec.addSubItem(new SelectableItem("commision"));
-            productSpec.addSubItem(new SelectableItem("partner"));
-            productSpec.addSubItem(new SelectableItem("ip"));
-            productSpec.addSubItem(new SelectableItem("date"));
-            productSpec.addSubItem(new SelectableItem("productDescription"));
-            productSpec.addSubItem(new SelectableItem("rpo"));
-            productSpec.addSubItem(new SelectableItem("notes"));
-            productSpec.addSubItem(new SelectableItem("POSum"));
-
-            fillComponentPanel(productSpec);
+            
+            DataSpec dataSpec = project.getDataSpec("PurchaseOrder");
+            fillComponentPanel(dataSpec);
         }
     }//GEN-LAST:event_onEditPurchaseOrder
 
@@ -714,11 +654,13 @@ public class ParserGenMainFrame extends javax.swing.JFrame {
             File projectFile = fc.getSelectedFile();
             try {
                 project =(Project) unmarshaller.unmarshal(projectFile);
-                lblStatus.setText("Status:Success");
+                lblStatus.setText("Status:Project definition successfuly loaded from file:"+projectFile.getAbsolutePath());
+                if (project != null && project.isValid()) 
+                    displayTree(project.getBaseURL() + project.getHomePage(), project.getMethod());
             } catch (JAXBException ex) {
                 logger.log(Level.SEVERE, "Failed to unmarshal project specification", ex);
                 System.out.println("Failed to unmarshal project specification:"+ ex);
-                lblStatus.setText("Status:Failed to parse project file");
+                lblStatus.setText("Status:Failed to parse project file:"+projectFile.getAbsolutePath()+" with error:"+ex.toString());
             }
         }
     }//GEN-LAST:event_onOpen
@@ -841,16 +783,30 @@ public class ParserGenMainFrame extends javax.swing.JFrame {
         lblStatus.setText("Status:");
 
         if (dataSpec != null) {
+            String dataURL = dataSpec.getDataURL();
             lblItemName.setText(dataSpec.getName());
-
+            txtUrl.setText(dataURL);
             for (SelectableItem si : dataSpec.getAllSubItems()) {
                 cmbSubItem.addItem(si.getName());
-                txtSubItemSelector.setText("");
+                txtSubItemSelector.setText(si.getSelector());
             }
 
             panelBasic.setVisible(true);
-            project.addDataSpec(dataSpec);
             curDataSpec = dataSpec.getName();
+            
+            if (dataSpec.getNumPages() > 0)
+                txtNumPages.setValue(dataSpec.getNumPages());
+            else
+                txtNumPages.setValue(0);
+            
+            if (dataSpec.getPageParam()!=null && dataSpec.getPageParam().length()> 0)
+                txtPaging.setText(dataSpec.getPageParam());
+            else
+                txtPaging.setText("");
+            
+            
+            if (dataURL != null && dataURL.length() > 0)
+                displayTree(project.getBaseURL() + dataURL, dataSpec.getMethod());
         }
 
 
@@ -1139,12 +1095,9 @@ public class ParserGenMainFrame extends javax.swing.JFrame {
     private javax.swing.JMenu menuFile;
     private javax.swing.JMenu menuOptions;
     private javax.swing.JMenuItem miAccess;
-    private javax.swing.JMenuItem miAffiliate;
-    private javax.swing.JMenuItem miAuthor;
     private javax.swing.JMenuItem miExit;
     private javax.swing.JMenuItem miNew;
     private javax.swing.JMenuItem miOpen;
-    private javax.swing.JMenuItem miProduct;
     private javax.swing.JMenuItem miPurchaseOrder;
     private javax.swing.JMenuItem miSave;
     private javax.swing.JPanel panelAdvanced;
