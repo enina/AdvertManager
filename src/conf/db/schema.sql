@@ -142,7 +142,7 @@ CREATE TABLE `billing_data_spec` (
 
 CREATE TABLE `selectable_data_item` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `email` varchar(256) NOT NULL,
+  `name` varchar(256) NOT NULL,
   `selector` varchar(256) NOT NULL,
   `dataspec_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
