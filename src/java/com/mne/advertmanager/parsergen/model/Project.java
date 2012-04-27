@@ -6,7 +6,9 @@ package com.mne.advertmanager.parsergen.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -17,21 +19,28 @@ import javax.xml.bind.annotation.*;
  * @author Nina Eidelshtein and Misha Lebedev
  */
 
-@XmlSeeAlso({com.mne.advertmanager.parsergen.model.DataSpec.class,com.mne.advertmanager.parsergen.model.SelectableItem.class})
+@XmlSeeAlso({com.mne.advertmanager.parsergen.model.DataSpec.class, com.mne.advertmanager.parsergen.model.SelectableItem.class})
 @XmlRootElement
-@XmlType(propOrder={"valid","name","homeDirectory", "baseURL" ,"homePage", "username", "userField", "password","passwordField",
-                    "method","cookieName","loginFormUrl","logoutUrl","selector","dataSpecList"})
+@XmlType(propOrder = {"valid", "name", "homeDirectory", "baseURL", "homePage", "username", "userField", "password", "passwordField",
+    "method", "cookieName", "loginFormUrl", "logoutUrl", "selector", "dataSpecList"})
 @Entity
 @Table(name = "billing_project_spec")
 @NamedQueries({
-    @NamedQuery(name = "Project.findAll", 
-        query = "SELECT p FROM Project p")
-                //+
-                //" left join fetch p.dataSpecList ds"  +
-                //" left join fetch ds.subItems")
+    @NamedQuery(name = "Project.findAll",
+    query = "SELECT p FROM Project p")
+//+
+//" left join fetch p.dataSpecList ds"  +
+//" left join fetch ds.subItems")
 })
 public class Project implements Serializable {
     
+    private static final Map<String, String[]> dataSpecConfig=new HashMap<String,String[]>();    
+    static {
+        dataSpecConfig.put("Access", new String[]{"DateTime","IP","Referer","Target"});
+        dataSpecConfig.put("PurchaseOrder", new String[]{"ID","Status","TrackingNumber","Country","City","PurchaseOrder Sum",
+                                                        "Commision","Partner","IP","Date"});
+    }
+
     private static final long serialVersionUID = 1L;
     @XmlTransient
     @Id
@@ -39,98 +48,82 @@ public class Project implements Serializable {
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
-    
-    
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 256)
     @Column(name = "name")
     private String name;
-    
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 1024)
-    @Column(name = "base_url")    
+    @Column(name = "base_url")
     private String baseURL;
-    
     private String homeDirectory;
-    
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 64)
-    @Column(name = "username")    
+    @Column(name = "username")
     private String username;
-    
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 64)
-    @Column(name = "user_field")    
+    @Column(name = "user_field")
     private String userField;
-    
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 64)
-    @Column(name = "password")    
+    @Column(name = "password")
     private String password;
-    
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 16)
-    @Column(name = "password_field")    
+    @Column(name = "password_field")
     private String passwordField;
-
     @Basic(optional = false)
     @NotNull
     @Size(min = 3, max = 8)
-    @Column(name = "method")    
-    private String method="get";
-
+    @Column(name = "method")
+    private String method = "get";
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 32)
-    @Column(name = "cookie_name")    
+    @Column(name = "cookie_name")
     private String cookieName;
-
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 256)
-    @Column(name = "login_url")    
+    @Column(name = "login_url")
     private String loginFormUrl;
-
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 256)
-    @Column(name = "logout_url")    
+    @Column(name = "logout_url")
     private String logoutUrl;
-
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 256)
-    @Column(name = "selector")    
+    @Column(name = "selector")
     private String selector;
-    
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 256)
-    @Column(name = "home_page")    
+    @Column(name = "home_page")
     private String homePage;
-
     private boolean isValid = false;
-
-    @XmlElementWrapper(name = "dataSpecList")    
+    @XmlElementWrapper(name = "dataSpecList")
     @XmlElement(name = "dataSpec")
     @OneToMany(mappedBy = "project")
     private List<DataSpec> dataSpecList = new ArrayList<DataSpec>();
-
-    /**C-tor: empty constructor*/
-    public Project() {
-
-    }    
     
+    /**C-tor: empty constructor*/
+
+    public Project() {
+    }
+
     public Project(Integer id) {
         this.id = id;
     }
-    
+
     public String getBaseURL() {
         return baseURL;
     }
@@ -215,7 +208,7 @@ public class Project implements Serializable {
     public String getSelector() {
         return selector;
     }
-    
+
     public void setSelector(String selector) {
         this.selector = selector;
     }
@@ -227,18 +220,21 @@ public class Project implements Serializable {
     public void setLogoutUrl(String logoutUrl) {
         this.logoutUrl = logoutUrl;
     }
-    
+
     public void addDataSpec(DataSpec dataSpec) {
-        dataSpecList.add( dataSpec);
+        dataSpecList.add(dataSpec);
     }
-    
+
     public DataSpec getDataSpec(String name) {
         DataSpec result = null;
-        for (DataSpec ds: dataSpecList) {
+        for (DataSpec ds : dataSpecList) {
             if (ds.getName().equals(name)) {
                 result = ds;
                 break;
             }
+        }
+        if (result == null) {
+            result = createDataSpec(name);
         }
         return result;
     }
@@ -267,29 +263,26 @@ public class Project implements Serializable {
     public void setId(Integer id) {
         this.id = id;
     }
-    
+
     @XmlTransient
     public List<DataSpec> getDataSpecList() {
         return dataSpecList;
     }
 
-    
-    
-    
     @Override
     public String toString() {
-        return "name="+name+"\n"+
-               "baseURL="+baseURL+"\n"+
-               "homeDirectory="+homeDirectory+"\n"+
-               "username="+username+"\n"+
-                "userField="+userField+"\n"+
-        "password="+password+"\n"+
-        "passwordField="+passwordField+"\n"+
-        "method="+method+"\n"+
-        "cookieName="+cookieName+"\n"+
-        "loginFormUrl="+loginFormUrl+"\n"+
-        "logoutUrl="+logoutUrl+"\n"+
-        "selector="+selector+"\n";
+        return "name=" + name + "\n"
+                + "baseURL=" + baseURL + "\n"
+                + "homeDirectory=" + homeDirectory + "\n"
+                + "username=" + username + "\n"
+                + "userField=" + userField + "\n"
+                + "password=" + password + "\n"
+                + "passwordField=" + passwordField + "\n"
+                + "method=" + method + "\n"
+                + "cookieName=" + cookieName + "\n"
+                + "loginFormUrl=" + loginFormUrl + "\n"
+                + "logoutUrl=" + logoutUrl + "\n"
+                + "selector=" + selector + "\n";
     }
 
     @Override
@@ -316,7 +309,20 @@ public class Project implements Serializable {
     }
 
     private void normalizeBaseUrl() {
-        if (!baseURL.endsWith("/"))
-            baseURL+="/";
+        if (!baseURL.endsWith("/")) {
+            baseURL += "/";
+        }
+    }
+
+    private DataSpec createDataSpec(String name) {
+
+        DataSpec dataSpec = new DataSpec(name);
+        String[] names = dataSpecConfig.get(name);
+        for (String siName:names)
+            dataSpec.addSubItem(new SelectableItem(siName));
+        
+        dataSpecList.add(dataSpec);
+        
+        return dataSpec;
     }
 }

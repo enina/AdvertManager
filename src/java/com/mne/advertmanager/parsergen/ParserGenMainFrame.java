@@ -77,7 +77,6 @@ public class ParserGenMainFrame extends javax.swing.JFrame {
             marshaller = jaxbCtx.createMarshaller();
             marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
             unmarshaller = jaxbCtx.createUnmarshaller();
-
         } catch (Exception ex) {
             isContinue = false;
             logger.log(Level.SEVERE, "Failed to set system look and feel {0}:Message {1}", new Object[]{ex.getClass().getSimpleName(), ex.toString()});
@@ -93,8 +92,6 @@ public class ParserGenMainFrame extends javax.swing.JFrame {
 
             txtSubItemSelector.getDocument().addDocumentListener(new SubItemSelectorDocListener());
             txtUrl.getDocument().addDocumentListener(new URLDocListener());
-            //txtMainSelector.getDocument().addDocumentListener(new MainSelectorDocListener());
-            //txtListEntrySelector.getDocument().addDocumentListener(new ListEntrySelectorDocListener());
             treeHtmlDoc.addMouseListener(new DocTreeMouseListener());
             txtPaging.getDocument().addDocumentListener(new PageParamDocListener());
             txtNumPages.addChangeListener(new NumPagesDocListener());
@@ -496,7 +493,6 @@ public class ParserGenMainFrame extends javax.swing.JFrame {
             }
         });
         menuEdit.add(jMenuItem1);
-
         menuBar.add(menuEdit);
 
         menuOptions.setText("Options");
@@ -537,7 +533,7 @@ public class ParserGenMainFrame extends javax.swing.JFrame {
         //make visible "new project" windo
         newProjDialog.setVisible(true);
         
-        
+       
         project = ((NewProjectDialog) newProjDialog).getProject();
         if (project != null && project.isValid()) {
             displayTree(project.getBaseURL() + project.getHomePage(), project.getMethod());
@@ -629,15 +625,13 @@ public class ParserGenMainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_onSearch
 
     private void onEditAccess(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onEditAccess
+        
         if (project != null && project.isValid()) {
-            DataSpec dataSpec = new DataSpec("Access");
-
-            dataSpec.addSubItem(new SelectableItem("DateTime"));
-            dataSpec.addSubItem(new SelectableItem("IP"));
-            dataSpec.addSubItem(new SelectableItem("Referer"));
-            dataSpec.addSubItem(new SelectableItem("Target"));
+        
+            DataSpec dataSpec = project.getDataSpec("Access");
 
             fillComponentPanel(dataSpec);
+            
         }
 
     }//GEN-LAST:event_onEditAccess
@@ -648,7 +642,9 @@ public class ParserGenMainFrame extends javax.swing.JFrame {
                 String filePath = project.getHomeDirectory() + File.separator + project.getName() + ".xml";
                 File result = new File(filePath);   //create new file in system
                 marshaller.marshal(project, result);//save Project obj to file in xml format
+                lblStatus.setText("Status:Project definition saved to file:"+filePath);
             } catch (JAXBException ex) {
+                lblStatus.setText("Status:Failed to save project definition :"+ex.toString());
                 System.out.println("marshaling error:" + ex.getMessage());
             }
         }
@@ -657,27 +653,29 @@ public class ParserGenMainFrame extends javax.swing.JFrame {
     private void onEditPurchaseOrder(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onEditPurchaseOrder
         // TODO add your handling code here:
         if (project != null && project.isValid()) {
-            DataSpec productSpec = new DataSpec("PurchaseOrder");
-            productSpec.addSubItem(new SelectableItem("status"));
-            productSpec.addSubItem(new SelectableItem("country"));
-            productSpec.addSubItem(new SelectableItem("town"));
-            productSpec.addSubItem(new SelectableItem("paymentSistem"));
-            productSpec.addSubItem(new SelectableItem("commision"));
-            productSpec.addSubItem(new SelectableItem("partner"));
-            productSpec.addSubItem(new SelectableItem("ip"));
-            productSpec.addSubItem(new SelectableItem("date"));
-            productSpec.addSubItem(new SelectableItem("productDescription"));
-            productSpec.addSubItem(new SelectableItem("rpo"));
-            productSpec.addSubItem(new SelectableItem("notes"));
-            productSpec.addSubItem(new SelectableItem("POSum"));
-
-            fillComponentPanel(productSpec);
+            
+            DataSpec dataSpec = project.getDataSpec("PurchaseOrder");
+            fillComponentPanel(dataSpec);
         }
     }//GEN-LAST:event_onEditPurchaseOrder
 
     private void onOpen(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onOpen
         // TODO add your handling code here:
-        //Object project = unmarshaller.unmarshal(new File);
+        JFileChooser fc = new JFileChooser();
+        fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        if (fc.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+            File projectFile = fc.getSelectedFile();
+            try {
+                project =(Project) unmarshaller.unmarshal(projectFile);
+                lblStatus.setText("Status:Project definition successfuly loaded from file:"+projectFile.getAbsolutePath());
+                if (project != null && project.isValid()) 
+                    displayTree(project.getBaseURL() + project.getHomePage(), project.getMethod());
+            } catch (JAXBException ex) {
+                logger.log(Level.SEVERE, "Failed to unmarshal project specification", ex);
+                System.out.println("Failed to unmarshal project specification:"+ ex);
+                lblStatus.setText("Status:Failed to parse project file:"+projectFile.getAbsolutePath()+" with error:"+ex.toString());
+            }
+        }
     }//GEN-LAST:event_onOpen
 
 //================================== onEditPartner =============================
@@ -822,16 +820,30 @@ public class ParserGenMainFrame extends javax.swing.JFrame {
         lblStatus.setText("Status:");
 
         if (dataSpec != null) {
+            String dataURL = dataSpec.getDataURL();
             lblItemName.setText(dataSpec.getName());
-
+            txtUrl.setText(dataURL);
             for (SelectableItem si : dataSpec.getAllSubItems()) {
                 cmbSubItem.addItem(si.getName());
-                txtSubItemSelector.setText("");
+                txtSubItemSelector.setText(si.getSelector());
             }
 
             panelBasic.setVisible(true);
-            project.addDataSpec(dataSpec);
             curDataSpec = dataSpec.getName();
+            
+            if (dataSpec.getNumPages() > 0)
+                txtNumPages.setValue(dataSpec.getNumPages());
+            else
+                txtNumPages.setValue(0);
+            
+            if (dataSpec.getPageParam()!=null && dataSpec.getPageParam().length()> 0)
+                txtPaging.setText(dataSpec.getPageParam());
+            else
+                txtPaging.setText("");
+            
+            
+            if (dataURL != null && dataURL.length() > 0)
+                displayTree(project.getBaseURL() + dataURL, dataSpec.getMethod());
         }
 
 
