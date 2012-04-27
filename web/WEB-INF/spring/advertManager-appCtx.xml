@@ -102,15 +102,15 @@
         </property>
     </bean>
     
-    <bean id="productDao"  parent="adManGenericDao" class="com.mne.advertmanager.dao.GenericDaoHibernateImpl" >
+    <bean id="affProgramDao"  parent="adManGenericDao" class="com.mne.advertmanager.dao.GenericDaoHibernateImpl" >
         <constructor-arg >
-            <value type="java.lang.Class">com.mne.advertmanager.model.Product</value>
+            <value type="java.lang.Class">com.mne.advertmanager.model.AffProgram</value>
         </constructor-arg>
     </bean>
     
-    <bean id="productGroupDao"  parent="adManGenericDao" class="com.mne.advertmanager.dao.GenericDaoHibernateImpl" >
+    <bean id="affProgramGroupDao"  parent="adManGenericDao" class="com.mne.advertmanager.dao.GenericDaoHibernateImpl" >
         <constructor-arg >
-            <value type="java.lang.Class">com.mne.advertmanager.model.ProductGroup</value>
+            <value type="java.lang.Class">com.mne.advertmanager.model.AffProgramGroup</value>
         </constructor-arg>
     </bean>    
     
@@ -172,9 +172,9 @@
         Transactions are defined on methods of the service beans
     -->
 
-    <bean id="advertManagerProductService" class="com.mne.advertmanager.service.ProductService">
-        <property name="productDao"          ref="productDao"/>
-        <property name="productGroupService" ref="productGroupService"/>        
+    <bean id="advertManagerAffProgramService" class="com.mne.advertmanager.service.AffProgramService">
+        <property name="affProgramDao"          ref="affProgramDao"/>
+        <property name="affProgramGroupService" ref="affProgramGroupService"/>        
         <property name="authorService"       ref="authorService"/>        
     </bean>
 
@@ -182,8 +182,8 @@
     <bean id="adManDataGenService" class="com.mne.advertmanager.service.DataGenService">
         <property name="affiliateService" ref="affiliateService"/>
         <property name="authorDao"        ref="authorDao"/>
-        <property name="productDao"       ref="productDao"/>
-        <property name="productGroupDao"  ref="productGroupDao"/>
+        <property name="affProgramDao"       ref="affProgramDao"/>
+        <property name="affProgramGroupDao"  ref="affProgramGroupDao"/>
         <property name="accessSourceDao"  ref="accessSourceDao"/>
         <property name="accessLogDao"     ref="accessLogDao"/>
         <property name="purchaseOrderDao" ref="purchaseOrderDao"/>
@@ -191,21 +191,21 @@
     </bean>
     
     
-    <bean id="productService" class="com.mne.advertmanager.service.ProductService">
-        <property name="productDao" ref="productDao"/>
+    <bean id="affProgramService" class="com.mne.advertmanager.service.AffProgramService">
+        <property name="affProgramDao" ref="affProgramDao"/>
         <property name="authorService" ref="authorService"/>
-        <property name="productGroupService" ref="productGroupService"/>
+        <property name="affProgramGroupService" ref="affProgramGroupService"/>
     </bean>    
     
-    <bean id="productGroupService" class="com.mne.advertmanager.service.ProductGroupService">
-        <property name="productGroupDao" ref="productGroupDao"/>
+    <bean id="affProgramGroupService" class="com.mne.advertmanager.service.AffProgramGroupService">
+        <property name="affProgramGroupDao" ref="affProgramGroupDao"/>
         <property name="affiliateService"    ref="affiliateService"/>                
     </bean>
     
     <bean id="affiliateService" class="com.mne.advertmanager.service.AffiliateService">
         <property name="affiliateDao" ref="affiliateDao"/>
         <property name="jdbcTemplate" ref ="adManJdbcTemplate"/>
-        <property name="productGroupService" ref="productGroupService"/>
+        <property name="affProgramGroupService" ref="affProgramGroupService"/>
     </bean>    
     
     <bean id="authorService" class="com.mne.advertmanager.service.AuthorService">
@@ -229,6 +229,7 @@
         <property name="importers">
             <map>
                 <entry key="Access" value-ref="accessLogImporter"/>
+    <!-- edit--><entry key="Partners" value-ref="partnersLogImporter"/> 
             </map>
         </property>
     </bean>    
@@ -240,10 +241,15 @@
     <bean id="accessLogImporter" class="com.mne.advertmanager.util.AccessLogImporter">
         <property name="accessLogService"       ref="accessLogService"/>        
         <property name="accessSourceService"    ref="accessSourceService"/>                
-        <property name="productService"         ref="productService"/>        
+        <property name="affProgramService"         ref="affProgramService"/>        
     </bean>
-        
     
+    <!-- edit 
+    <bean id="partnersLogImporter" class="com.mne.advertmanager.util.PartnersLogImporter"> 
+        <property name="accessSourceService"    ref="accessSourceService"/>                
+        <property name="affProgramService"         ref="affProgramService"/>        
+    </bean>    
+    -->
     
 
 </beans>

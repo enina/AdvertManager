@@ -45,8 +45,8 @@ public class AdvertManagerController {
     private static final String GET = "/get";
     
     private static final String AFFILIATES = "affiliates";
-    private static final String PRODUCTS = "products";
-    private static final String PROD_GROUPS = "pgroups";
+    private static final String AFFPROGRAM = "affprogram";
+    private static final String AFFPROG_GROUPS = "afprgroups";
     private static final String AUTHORS = "authors";
     private static final String DATAGEN = "dataGen";
     private static final String APPS = "apps";
@@ -62,8 +62,9 @@ public class AdvertManagerController {
     
     private static final String DG_GEN_REQ_MAPPING = DATAGEN + "/generate";
     
-    private static final String PRODUCT_NEW_REQ_MAPPING = PRODUCTS + NEW;
-    private static final String PRODUCT_ADD_REQ_MAPPING = PRODUCTS + ADD;
+    private static final String AFFPROGRAM_NEW_REQ_MAPPING = AFFPROGRAM + NEW;
+    private static final String AFFPROGRAM_ADD_REQ_MAPPING = AFFPROGRAM + ADD;
+    private static final String AFFPROGRAM_LIST_REQ_MAPPING = AFFPROGRAM + LIST;
     
     private static final String AUTHOR_ADD_REQ_MAPPEING = AUTHORS + ADD;
     private static final String AUTHOR_NEW_REQ_MAPPING = AUTHORS + NEW;
@@ -83,9 +84,8 @@ public class AdvertManagerController {
     
     private DataGenService dataGenerator;
     private AffiliateService affiliateService;
-    private ProductService productService;
-    private AuthorService authorService;
-    private ProductGroupService pgService;
+    private AffProgramService affProgramService;
+    private AffProgramGroupService apgService;
     private BillingProjectService billingProjectService;
     private AccessLogService accessLogService;
     
@@ -121,7 +121,7 @@ public class AdvertManagerController {
     @RequestMapping(value = "home", method = RequestMethod.GET)
     public @ModelAttribute("data") Affiliate generateHome(SecurityContextHolderAwareRequestWrapper securityContext) {
         String affName = securityContext.getUserPrincipal().getName();
-        Affiliate aff = affiliateService.findAffiliateWithProductGroupsAndProducts(affName);
+        Affiliate aff = affiliateService.findAffiliateWithAffPrograms(affName);
         return aff;
     }
 
@@ -138,91 +138,59 @@ public class AdvertManagerController {
 
         return forwardToView(DG_GEN_REQ_MAPPING, "home", "message", "Greetings from AdMan DataGen .Dummy Data is being generated!");
     }
-    ////////////////////////////////////////////// Products /////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////// AffPrograms /////////////////////////////////////////////////////////////////////////////
 
-    @RequestMapping(value = PRODUCT_NEW_REQ_MAPPING, method = RequestMethod.GET)
-    public ModelAndView viewProductDefintionForm(SecurityContextHolderAwareRequestWrapper securityContext) {
+    @RequestMapping(value = AFFPROGRAM_NEW_REQ_MAPPING, method = RequestMethod.GET)
+    public ModelAndView viewAffProgDefintionForm(SecurityContextHolderAwareRequestWrapper securityContext) {
 
-        ModelAndView mav = new ModelAndView(PRODUCT_NEW_REQ_MAPPING);
+        ModelAndView mav = new ModelAndView(AFFPROGRAM_NEW_REQ_MAPPING);
         String affName = securityContext.getUserPrincipal().getName();
 
-        Collection<Author> authors = authorService.findAllAuthors();
-        Collection<ProductGroup> prdGroups = pgService.findAffiliateProductGroups(affName);
+        Collection<AffProgramGroup> apGroups = apgService.findAffiliateProgramGroups(affName);
 
-        mav.addObject("product", new Product());
-        mav.addObject("authors", authors);
-        mav.addObject("prdGroups", prdGroups);
+        mav.addObject("affprogram", new AffProgram());
+        mav.addObject("apGroups", apGroups);
 
         return mav;
 
     }
-//============================ addProduct ===============================================
+//============================ addAffProgram ===================================
 
-    @RequestMapping(value = PRODUCT_ADD_REQ_MAPPING, method = RequestMethod.POST)
-    public ModelAndView addProduct(@ModelAttribute("product") Product product, SecurityContextHolderAwareRequestWrapper securityContext) {
+    @RequestMapping(value = AFFPROGRAM_ADD_REQ_MAPPING, method = RequestMethod.POST)
+    public ModelAndView addAffProgram(@ModelAttribute("affprogram") AffProgram affprogram, SecurityContextHolderAwareRequestWrapper securityContext) {
 
         String status = "";
         try {
-            productService.createProduct(product);
-            status = "Product:" + product.getName() + " created successfully";
+            affProgramService.createAffProgram(affprogram);
+            status = "Affprogram:" + affprogram.getName() + " created successfully";
         } catch (Exception e) {
-            status = handleException(e, "create", "product", product.getName());
+            status = handleException(e, "create", "Affprogram", affprogram.getName());
         }
 
-        ModelAndView mav = forwardToView(PRODUCT_ADD_REQ_MAPPING, "home", "data", generateHome(securityContext));
+        ModelAndView mav = forwardToView(AFFPROGRAM_ADD_REQ_MAPPING, "home", "data", generateHome(securityContext));
 
         mav.addObject("status", status);
 
         return mav;
     }
-//============================= newAuthor redirection ==========================
 
-    @RequestMapping(value = AUTHOR_NEW_REQ_MAPPING, method = RequestMethod.GET)
-    public ModelAndView viewAuthorDefintionForm(SecurityContextHolderAwareRequestWrapper securityContext) {
 
-        logger.info("viewAuthorDefintionForm");
-        ModelAndView mav = new ModelAndView(AUTHOR_NEW_REQ_MAPPING);
-
-        mav.addObject("author", new Author());
-
-        return mav;
-
-    }
-//============================= addAuthor ======================================
-
-    @RequestMapping(value = AUTHOR_ADD_REQ_MAPPEING, method = RequestMethod.POST)
-    public ModelAndView addAuthor(@ModelAttribute("author") Author author, SecurityContextHolderAwareRequestWrapper securityContext) {
-
-        String status = "";
-        try {
-            authorService.createAuthor(author);
-            status = "Author: " + author.getAuthorName() + " created successfully";
-        } catch (Exception e) {
-            status = handleException(e, "create", "author", author.getAuthorName());
-        }
-
-        ModelAndView mav = forwardToView(AUTHOR_ADD_REQ_MAPPEING, "home", "data", generateHome(securityContext));
-        mav.addObject("status", status);
-
-        return mav;
-    }
-
-//=============================== viewProducts =================================
-    @RequestMapping(value = "products/list", method = RequestMethod.GET)
+//=============================== viewAffPrograms =================================
+    @RequestMapping(value = AFFPROGRAM_LIST_REQ_MAPPING, method = RequestMethod.GET)
     public @ModelAttribute("data")
-    Collection<Product> viewProducts() {
+    Collection<AffProgram> viewAffPrograms() {
 
 
-        logger.info("getting product data");
+        logger.info("getting affprogram data");
 
-        Collection<Product> products = productService.findAllProducts();
+        Collection<AffProgram> affprograms = affProgramService.findAllAffPrograms();
 
-        int size = (products != null) ? products.size() : 0;
+        int size = (affprograms != null) ? affprograms.size() : 0;
 
-        logger.info("return product data to view. found {} products", size);
+        logger.info("return affprogram data to view. found {} affprograms", size);
 
 
-        return products;
+        return affprograms;
     }
 
     //////////////////////////////////////////////////// Affiliates ////////////////////////////////////////////////////////////
@@ -272,38 +240,24 @@ public class AdvertManagerController {
         return new Affiliate();
     }
 
-    //////////////////////////////////////////////////////  Author  ////////////////////////////////////////////////////////////////////////
-    @RequestMapping(value = AUTHORS + "/{authorId}", method = RequestMethod.GET)
-    public void getAuthor(@PathVariable int authorId, HttpServletResponse response) {
-        try {
-            Author author = authorService.findById(authorId);
-            author.setProductCollection(null);
-            String result = gson.toJson(author);
-            logger.info(result);
-            response.getWriter().write(result);
-        } catch (IOException e) {
-            String errMsg = ",Exception:" + e.getClass().getSimpleName() + ((e.getMessage() == null) ? "" : " ,Message:" + e.getMessage());
-            logger.error("failed to retrieve author(id={},Exception:{})", authorId, errMsg);
-        }
-    }
-    //////////////////////////////////////////////////////  Author  ////////////////////////////////////////////////////////////////////////
 
-    //////////////////////////////////////////////////////  Product Group ////////////////////////////////////////////////////////////////////////
-    @RequestMapping(value = PROD_GROUPS + "/{pgId}", method = RequestMethod.GET)
-    public void getProductGroup(@PathVariable int pgId, HttpServletResponse response) {
+ 
+    //////////////////////////////////////////////////////  AffProgram Group ////////////////////////////////////////////////////////////////////////
+    @RequestMapping(value = AFFPROG_GROUPS + "/{pgId}", method = RequestMethod.GET)
+    public void getAffProgramGroup(@PathVariable int pgId, HttpServletResponse response) {
         try {
-            ProductGroup pg = pgService.findById(pgId);
-            pg.setProductCollection(null);
+            AffProgramGroup pg = apgService.findById(pgId);
+            pg.setProgramCollection(null);
             pg.setAffiliateId(null);
             String result = gson.toJson(pg);
             logger.info(result);
             response.getWriter().write(result);
         } catch (IOException e) {
             String errMsg = ",Exception:" + e.getClass().getSimpleName() + ((e.getMessage() == null) ? "" : " ,Message:" + e.getMessage());
-            logger.error("failed to retrieve product  group (id={},Exception:{})", pgId, errMsg);
+            logger.error("failed to retrieve affprogram  group (id={},Exception:{})", pgId, errMsg);
         }
     }
-    //////////////////////////////////////////////////////  Product Group ////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////  AffProgram Group ////////////////////////////////////////////////////////////////////////
 
     //////////////////////////////////////////////////////  Billing       ////////////////////////////////////////////////////////////////////////
     @RequestMapping(value = BLNG_LIST_REQ_MAPPING, method = RequestMethod.GET)
@@ -325,12 +279,13 @@ public class AdvertManagerController {
             
             Project proj = (Project)jaxbUnmarshaller.unmarshal(specFile.getInputStream());
             
+            //create new Billing Project and save it to DB
             billingProjectService.createProject(proj);
             
             status="File "+ specFile.getOriginalFilename() +" uploaded successfuly";
             
         } catch (Exception e) {
-            String specName = "";
+            String specName = "";  
             if (specFile != null)
                 specName+=specFile.getName();
             status = handleException(e, "upload", "billingSpec", specName);
@@ -346,16 +301,22 @@ public class AdvertManagerController {
     @RequestMapping(value = BLNG_IMPORT_REQ_MAPPING+"/{blngProjId}", method = RequestMethod.GET)
     public ModelAndView importBillingData(@PathVariable final int blngProjId,SecurityContextHolderAwareRequestWrapper securityContextWrapper) {
 
-        String status = null;
+        String status = null; // hold msg that will apear to user upon failure/success.
+        
         String affName = securityContextWrapper.getUserPrincipal().getName();
-        final Affiliate aff = affiliateService.findAffiliateWithProductGroupsAndProducts(affName);
+        final Affiliate aff = affiliateService.findAffiliateWithAffPrograms(affName);
         final SecurityContext securityContext = SecurityContextHolder.getContext();
+        
+        //run data collection in separate Thread:
         try {
             new Thread() {
                 @Override
                 public void run() {
+                    //set security context of this Thread
                     SecurityContextHolder.setContext(securityContext);
+                    //set thred name
                     setName(BILLING + "DataImportThread");
+                    //go to collecd data:
                     billingProjectService.importBillingData(aff,blngProjId);
                 }
             }.start();
@@ -363,10 +324,14 @@ public class AdvertManagerController {
             status="Started importing  BillingData for proj id="+blngProjId;
         } catch (Exception e) {
             status = handleException(e, "import", "BillingData", "id="+blngProjId);
-        }        
+        }
         
+        //transfer user back to import page(same place he came from)
         ModelAndView mav = null;
         mav = forwardToView(BLNG_IMPORT_REQ_MAPPING, BLNG_LIST_REQ_MAPPING, "data", viewBillingProjects());
+        
+        //define status property in mav. this property will be availible in web page
+        //and displayd to user/
         mav.addObject("status", status);
 
         return mav;
@@ -423,20 +388,16 @@ public class AdvertManagerController {
     }
 
     @Autowired
-    public void setProductService(ProductService productService) {
+    public void setAffProgramService(AffProgramService affprogramService) {
 
-        logger.info("AdvertManagerController:setProductService...");
-        this.productService = productService;
+        logger.info("AdvertManagerController:setAffProgramService...");
+        this.affProgramService = affprogramService;
     }
 
-    @Autowired
-    public void setAuthorService(AuthorService authorService) {
-        this.authorService = authorService;
-    }
 
     @Autowired
-    public void setProductGroupService(ProductGroupService pgService) {
-        this.pgService = pgService;
+    public void setAffProgramGroupService(AffProgramGroupService pgService) {
+        this.apgService = pgService;
     }
     
     @Autowired

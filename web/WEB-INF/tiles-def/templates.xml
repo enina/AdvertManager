@@ -29,19 +29,16 @@
        <put-attribute name="content" value="/WEB-INF/view/affiliates/new.jsp" />
    </definition>
    
-   <definition name="products/new" extends=".mainTemplate">
-       <put-attribute name="title" value="Product Definition" type="string" />
-       <put-attribute name="content" value="/WEB-INF/view/products/new.jsp" />
+   <definition name="affprograms/new" extends=".mainTemplate">
+       <put-attribute name="title" value="Program Definition" type="string" />
+       <put-attribute name="content" value="/WEB-INF/view/affprograms/new.jsp" />
    </definition>
    
-   <definition name="authors/new" extends=".mainTemplate">
-       <put-attribute name="title" value="Author Definition" type="string" />
-       <put-attribute name="content" value="/WEB-INF/view/authors/new.jsp" />
-   </definition>  
+ 
 
-   <definition name="products/list" extends=".mainTemplate">
-       <put-attribute name="title" value="Products" type="string" />
-       <put-attribute name="content" value="/WEB-INF/view/products/list.jsp" />
+   <definition name="affprograms/list" extends=".mainTemplate">
+       <put-attribute name="title" value="Affiliate Programs" type="string" />
+       <put-attribute name="content" value="/WEB-INF/view/affprograms/list.jsp" />
    </definition>
    
    <definition name="billing/list" extends=".mainTemplate">

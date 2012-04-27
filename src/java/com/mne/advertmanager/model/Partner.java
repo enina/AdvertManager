@@ -21,8 +21,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "Partner.findAll", query = "SELECT p FROM Partner p"),
     @NamedQuery(name = "Partner.findById", query = "SELECT p FROM Partner p WHERE p.id = :id"),
-    @NamedQuery(name = "Partner.findByPaymentTransferTime", query = "SELECT p FROM Partner p WHERE p.paymentTransferTime = :paymentTransferTime"),
-    @NamedQuery(name = "Partner.findByPaymentAmount", query = "SELECT p FROM Partner p WHERE p.paymentAmount = :paymentAmount"),
+    @NamedQuery(name = "Partner.findByName", query = "SELECT p FROM Partner p WHERE p.name = :name"),
     @NamedQuery(name = "Partner.findByEmail", query = "SELECT p FROM Partner p WHERE p.email = :email")})
 public class Partner implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -31,19 +30,11 @@ public class Partner implements Serializable {
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
-    
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "payment_transfer_time")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date paymentTransferTime;
-    
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "payment_amount")
-    private int paymentAmount;
-    // @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="Invalid email")//if the field contains email address consider using this annotation to enforce field validation
 
+    @Basic(optional = false)
+    @Column(name = "name")
+    String name;
+    
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 256)
@@ -57,11 +48,18 @@ public class Partner implements Serializable {
         this.id = id;
     }
 
-    public Partner(Integer id, Date paymentTransferTime, int paymentAmount, String email) {
+    public Partner(Integer id, String name, String email) {
         this.id = id;
-        this.paymentTransferTime = paymentTransferTime;
-        this.paymentAmount = paymentAmount;
+        this.name = name;
         this.email = email;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public Integer getId() {
@@ -70,22 +68,6 @@ public class Partner implements Serializable {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public Date getPaymentTransferTime() {
-        return paymentTransferTime;
-    }
-
-    public void setPaymentTransferTime(Date paymentTransferTime) {
-        this.paymentTransferTime = paymentTransferTime;
-    }
-
-    public int getPaymentAmount() {
-        return paymentAmount;
-    }
-
-    public void setPaymentAmount(int paymentAmount) {
-        this.paymentAmount = paymentAmount;
     }
 
     public String getEmail() {

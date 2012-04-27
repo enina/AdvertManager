@@ -1,15 +1,19 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+
+/**
+    *EntityFactory class.
+    *This class provide Entites prefilled with some random data 
+    *this class used by Data Generation class to make some test data.
+    *then this data putted to DB.
  */
+
+
 package com.mne.advertmanager.util;
 
-import com.mne.advertmanager.model.Product;
+import com.mne.advertmanager.model.AffProgram;
 import com.mne.advertmanager.model.AccessLog;
 import com.mne.advertmanager.model.AccessSource;
 import com.mne.advertmanager.model.Affiliate;
-import com.mne.advertmanager.model.Author;
-import com.mne.advertmanager.model.ProductGroup;
+import com.mne.advertmanager.model.AffProgramGroup;
 import com.mne.advertmanager.model.PurchaseOrder;
 import java.util.Calendar;
 import java.util.Random;
@@ -28,21 +32,28 @@ public class EntityFactory {
         if (magicNum < 0 )
             magicNum*=-1;
     }
-    
-    public Product  makeProduct() {
+//========================== makeAffProgram =======================================
+/**this function create new AffProgram prefilled with some random data.
+ * params: none
+ * return: AffProgram object;
+ */
+    public AffProgram  makeAffProgram() {
         
-        Product result = new Product();
+        AffProgram result = new AffProgram();
 
-        result.setCommision( (++magicNum % 100)/100);
-        result.setName("ProductName"+ ++magicNum);
-        result.setDescription("ProductDescription"+ ++magicNum);
-        result.setPrice(++magicNum);
-        result.setProductLink("http://site/productLink/"+ ++magicNum);
+        
+        result.setName("AffProgramName"+ ++magicNum);
+        result.setDescription("AffProgramDescription"+ ++magicNum);
+        
+        result.setAffProgramLink("http://site/AffProgramLink/"+ ++magicNum);
         result.setRedirectLink("http://site/redirectLink/"+ ++magicNum);
         result.setSyncStatus(++magicNum%2);
 
         return result;
     }
+//========================== makeAffiliate =====================================
+/**
+ */
     public Affiliate  makeAffiliate() {
         Affiliate result = new Affiliate();
         result.setAffiliateName("AffiliateName"+ ++magicNum);
@@ -52,26 +63,24 @@ public class EntityFactory {
         return result;
 
     }
-    public Author  makeAuthor() {
 
-        Author result = new Author();
 
-        result.setAuthorName("AuthorName"+ ++magicNum);
-        result.setEmail("Author@email.address."+ ++magicNum);
-
-        return result;
-    }
-    public ProductGroup  makeProductGroup() {
+//========================== makeAffProgramGroup ==================================
+/**
+ */
+    public AffProgramGroup  makeAffProgramGroup() {
         
-        ProductGroup result = new ProductGroup();
+        AffProgramGroup result = new AffProgramGroup();
 
-        result.setDescription("ProductGroupDescription"+ ++magicNum);
-        result.setGroupName("ProductGroupName"+ ++magicNum);
+        result.setDescription("AffProgramGroupDescription"+ ++magicNum);
+        result.setGroupName("AffProgramGroupName"+ ++magicNum);
 
         return result;
 
     }
-
+//========================== makeAccessSource ==================================
+/**
+ */
     public AccessSource  makeAccessSource() {
     
         AccessSource result = new AccessSource();
@@ -82,6 +91,9 @@ public class EntityFactory {
         return result;
 
     }
+//========================== makeAccessLog =====================================
+/**
+ */
     public AccessLog  makeAccessLog() {
 
         AccessLog result = new AccessLog();
@@ -93,7 +105,9 @@ public class EntityFactory {
 
         return result;
     }
-
+//========================== makePurchaseOrder =================================
+/**
+ */
     public PurchaseOrder makePurchaseOrder() {
 
         PurchaseOrder result = new PurchaseOrder();

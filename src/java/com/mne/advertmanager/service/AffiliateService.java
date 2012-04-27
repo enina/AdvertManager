@@ -6,7 +6,7 @@ package com.mne.advertmanager.service;
 
 import com.mne.advertmanager.dao.GenericDao;
 import com.mne.advertmanager.model.Affiliate;
-import com.mne.advertmanager.model.ProductGroup;
+import com.mne.advertmanager.model.AffProgramGroup;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -20,7 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class AffiliateService {
  
     private GenericDao<Affiliate,Long> affiliateDao;
-    private ProductGroupService        productGroupService;
+    private AffProgramGroupService        apgService;
     
     private JdbcTemplate jdbcTemplate;
 
@@ -45,8 +45,8 @@ public class AffiliateService {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public void setProductGroupService(ProductGroupService productGroupService) {
-        this.productGroupService = productGroupService;
+    public void setApgService(AffProgramGroupService apgService) {
+        this.apgService = apgService;
     }
     
     
@@ -65,11 +65,11 @@ public class AffiliateService {
     }
     
     @Transactional(readOnly = true)
-    public Affiliate findAffiliateWithProductGroupsAndProducts(String affiliateName) {
+    public Affiliate findAffiliateWithAffPrograms(String affiliateName) {
         
         Affiliate result = null;
         
-        Collection<Affiliate> data = affiliateDao.findByQuery("Affiliate.findByAffiliateNameWithProductsAndGroups",affiliateName);
+        Collection<Affiliate> data = affiliateDao.findByQuery("Affiliate.findByAffiliateNameWithAffProgramsAndGroups",affiliateName);
 
         result = getFirstElement(data);
         
@@ -88,11 +88,11 @@ public class AffiliateService {
     public void createAffiliate(Affiliate affiliate) {
         affiliateDao.create(affiliate);
         jdbcTemplate.update("insert into authorities values(?,?)",new Object[]{affiliate.getId(),"ROLE_USER"});
-        ProductGroup pg = new ProductGroup();
+        AffProgramGroup pg = new AffProgramGroup();
         pg.setGroupName("Default");
-        pg.setDescription("Default product group");
+        pg.setDescription("Default program group");
         pg.setAffiliateId(affiliate);
-        productGroupService.createProductGroup(pg);
+        apgService.createAffiliateProgramGroup(pg);
     }
 
     public Affiliate findAffiliateByName(String affName) {

@@ -74,9 +74,9 @@ public class AccessLog implements Serializable {
     @ManyToOne(optional = false)
     private AccessSource sourceDomain;
     
-    @JoinColumn(name = "product_id", referencedColumnName = "id")
+    @JoinColumn(name = "affprogram_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
-    private Product productId;
+    private AffProgram affProgram;
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "accessId")
     private Collection<PurchaseOrder> purchaseOrderCollection;
@@ -145,12 +145,12 @@ public class AccessLog implements Serializable {
         this.sourceDomain = sourceDomain;
     }
 
-    public Product getProductId() {
-        return productId;
+    public AffProgram getAffProgram() {
+        return affProgram;
     }
 
-    public void setProductId(Product productId) {
-        this.productId = productId;
+    public void setAffProgram(AffProgram affProgram) {
+        this.affProgram = affProgram;
     }
 
     @XmlTransient

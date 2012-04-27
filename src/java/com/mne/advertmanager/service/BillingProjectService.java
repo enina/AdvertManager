@@ -7,6 +7,7 @@ package com.mne.advertmanager.service;
 import com.mne.advertmanager.dao.GenericDao;
 import com.mne.advertmanager.model.AccessLog;
 import com.mne.advertmanager.model.Affiliate;
+import com.mne.advertmanager.model.Partner;
 import com.mne.advertmanager.parsergen.model.DataSpec;
 import com.mne.advertmanager.parsergen.model.Project;
 import com.mne.advertmanager.parsergen.model.SelectableItem;
@@ -34,38 +35,42 @@ public class BillingProjectService {
     
     private Map<String,BillingDataImporter> importers = null;
     
-
+    /**empty C-tor*/
     public BillingProjectService() {
     }
 
     /**
-     * for each property defined on bean element in application context we must have a corresponding setter functions For example: <property name="projectDao">
-     * <ref bean="projectDao"/> </property> Corresponding setter functions is setProjectDao
-     *
+     * for each property defined on bean element in application context we must
+     * have a corresponding setter functions For example:
+     * <property name="projectDao">
+     *      <ref bean="projectDao"/> 
+     * </property>
+     * Corresponding setter functions is setProjectDao
      * @param projectDao
      */
+    //seter used by Spring context injection
     public void setProjectDao(GenericDao<Project, Integer> projectDao) {
         this.projectDao = projectDao;
     }
-
+    //seter used by Spring context injection
     public void setDataSpecDao(GenericDao<DataSpec, Integer> dataSpecDao) {
         this.dataSpecDao = dataSpecDao;
     }
-
+    //seter used by Spring context injection
     public void setSelectableItemDao(GenericDao<SelectableItem, Integer> selectableItemDao) {
         this.selectableItemDao = selectableItemDao;
     }
-
-
-    
-    
+    //seter used by Spring context injection
     public void setImporters(Map<String, BillingDataImporter> importers) {
         this.importers = importers;
     }
-    
-    
-
-    @Transactional(readOnly = true)
+//============================== findAllBillingProjects ======================== 
+/**This function bring all Billing Projects from DB(using DAO obj) and return
+ * them as set.
+ * params: none.
+ * return: set (hashSet) of Billing Projects
+*/
+    @Transactional(readOnly = true) 
     public Set<Project> findAllBillingProjects() {
 
         HashSet<Project> result = new HashSet<Project>();
@@ -75,14 +80,14 @@ public class BillingProjectService {
         if (data != null) {
             result.addAll(data);
         }
-
         return result;
     }
-
-    /**
-     *
-     * @param project
-     */
+//================================ createProject ===============================
+/**this function persist given Project obj to DB by calling respective DAO
+ * objects
+*
+* @param project
+*/
     @Transactional
     public void createProject(Project project) {
         projectDao.create(project);
@@ -96,26 +101,39 @@ public class BillingProjectService {
         }
         
     }
-
+//================================ importBillingData ===========================
+/**
+*/
     @Transactional
     public void importBillingData(Affiliate aff,int blngProjId) {
 
+        //load projec from DB
         Project project = projectDao.read(blngProjId);
+        
+        //get Progects Data spec
+        List<DataSpec> dsList = project.getDataSpecList();  
 
-        List<DataSpec> dsList = project.getDataSpecList();
-
+        //log action
         logger.info("Started {} project data import. ",project.getName());
         
+        //connect to src web site
         Connection con = JSoupTransport.login(project);
 
-        
+        //get data of each dataSpec ( include all pages ) of given Project
         for (DataSpec ds : dsList) {
             int i = 0;
             boolean hasPaging = ds.getNumPages()>0;
+            
+            //get data from all pages of current dataSpec 
             do{
+                if (i > ds.getNumPages())
+                    break;
+                
                 String url = project.getBaseURL() + ds.getDataURL();
                 i++;
+                
                 if (hasPaging) {
+                    //calculate url with pageing:
                     if (url.indexOf('?')>0)
                         url+= "&" ;
                     else
@@ -123,24 +141,32 @@ public class BillingProjectService {
                     
                     url+= ds.getPageParam() + "=" + i;
                 }
+                //get document with wanted data
                 org.jsoup.nodes.Document doc = JSoupTransport.retrieveDocument(con, url, ds.getMethod());
                 try {
+                    //extract data from current document to DB
                     importPageData(aff,doc, ds);
                 } catch (Exception ex) {
                     logger.error(ex.toString());
                 }                
-            }while(i <= ds.getNumPages());
+            }while(true);
         }
 
         JSoupTransport.logout(con, project);
         logger.info("Finished {} project data import ",project.getName());
     }
-
+//================================ importPageData ==============================
+/**this function extract data from one page( given document ) to DB
+ * params:affiliate obj, preloaded document with wanted data, dataSpec that
+ *        identify data location in document.
+ * return:none
+*/
     private void importPageData(Affiliate aff,org.jsoup.nodes.Document doc, DataSpec dataSpec) {
 
-        Element dataElem = null;
-        Elements dataList = null;
+        Element dataElem = null;    //hold data root element (used as relative start path to other elements)
+        Elements dataList = null;   //hold all sibling html elements with wanted data;
         
+        //get proper importer for given dataSpec
         BillingDataImporter importer = importers.get(dataSpec.getName());
         
         if (importer==null)
@@ -150,7 +176,11 @@ public class BillingProjectService {
         dataList = dataElem.select(dataSpec.getListEntrySelector());
 
         for (int i = 0; i < dataList.size(); ++i) {
+            
+            //create new data entity (type of entity defined in makeDataItem fun.
             Object curDataItem = makeDataItem(dataSpec);
+            
+            
             for (SelectableItem item : dataSpec.getDataItems()) {
                 Element listEntryElement = dataList.get(i);
                 String selector = item.getSelector();
@@ -167,13 +197,20 @@ public class BillingProjectService {
             importer.saveDataItem(aff,curDataItem);
         }
     }
-
+//================================ makeDataItem ================================
+/**this function identify dataSpec by it's name, then create instance of proper
+ * data(model) type (one that match dataSpec name).
+ * params: dataSpec
+ * return: new instance of model entity that mutch given dataSpec.
+*/
     private Object makeDataItem(DataSpec dataSpec) {
         
         if("Access".equals(dataSpec.getName()))
             return new AccessLog();
         else if ("Affiliate".equals(dataSpec.getName()))
             return new Affiliate();
+        else if ("Partner".equals(dataSpec.getName()))
+                return new Partner();
         
         return null;
     }

@@ -58,9 +58,9 @@ public class PurchaseOrder implements Serializable {
     @JoinColumn(name = "access_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private AccessLog accessId;
-    @JoinColumn(name = "product_id", referencedColumnName = "id")
+    @JoinColumn(name = "affprogram_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
-    private Product productId;
+    private AffProgram affProgram;
 
     public PurchaseOrder() {
     }
@@ -116,12 +116,12 @@ public class PurchaseOrder implements Serializable {
         this.accessId = accessId;
     }
 
-    public Product getProductId() {
-        return productId;
+    public AffProgram getAffProgram() {
+        return affProgram;
     }
 
-    public void setProductId(Product productId) {
-        this.productId = productId;
+    public void setAffProgram(AffProgram affProgram) {
+        this.affProgram = affProgram;
     }
 
     @Override

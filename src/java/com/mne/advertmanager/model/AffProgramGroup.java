@@ -29,20 +29,20 @@ import javax.validation.constraints.Size;
  * @author Nina Eidelshtein and Misha Lebedev
  */
 @Entity
-@Table(name = "product_group")
+@Table(name = "affprog_group")
 @NamedQueries({
-    @NamedQuery(name = "ProductGroup.findAllByAffName", 
-        query = "SELECT pg FROM ProductGroup pg" +
+    @NamedQuery(name = "AffProgramGroup.findAllByAffName", 
+        query = "SELECT pg FROM AffProgramGroup pg" +
                  " left join fetch pg.affiliateId aff" +
                  " where aff.affiliateName=?"),
-    @NamedQuery(name = "ProductGroup.findAll", query = "SELECT pg FROM ProductGroup pg"),
-    @NamedQuery(name = "ProductGroup.findById", query = "SELECT pg FROM ProductGroup pg WHERE pg.id = :id"),
-    @NamedQuery(name = "ProductGroup.findByGroupName", query = "SELECT pg FROM ProductGroup pg WHERE pg.groupName = :groupName"),
-    @NamedQuery(name = "ProductGroup.findByDescription", query = "SELECT pg FROM ProductGroup pg WHERE pg.description = :description")})
+    @NamedQuery(name = "AffProgramGroup.findAll", query = "SELECT pg FROM AffProgramGroup pg"),
+    @NamedQuery(name = "AffProgramGroup.findById", query = "SELECT pg FROM AffProgramGroup pg WHERE pg.id = :id"),
+    @NamedQuery(name = "AffProgramGroup.findByGroupName", query = "SELECT pg FROM AffProgramGroup pg WHERE pg.groupName = :groupName"),
+    @NamedQuery(name = "AffProgramGroup.findByDescription", query = "SELECT pg FROM AffProgramGroup pg WHERE pg.description = :description")})
 
 
 
-public class ProductGroup implements Serializable {
+public class AffProgramGroup implements Serializable {
     private static final long serialVersionUID = 1L;
     
     @Id
@@ -59,18 +59,18 @@ public class ProductGroup implements Serializable {
     @Column(name = "description")
     private String description;
     
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "productGroupId")
-    private Set<Product> productCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "apg")
+    private Set<AffProgram> programCollection;
 
     @JoinColumn(name = "affiliate_id", referencedColumnName = "id")
     @ManyToOne(fetch=FetchType.LAZY)
     private Affiliate affiliateId;
 
-    public ProductGroup() {
-        productCollection = new HashSet<Product>();
+    public AffProgramGroup() {
+        programCollection = new HashSet<AffProgram>();
     }
 
-    public ProductGroup(Integer id) {
+    public AffProgramGroup(Integer id) {
         super();
         this.id = id;
     }
@@ -99,12 +99,12 @@ public class ProductGroup implements Serializable {
         this.description = description;
     }
 
-    public Set<Product> getProductCollection() {
-        return productCollection;
+    public Set<AffProgram> getProgramCollection() {
+        return programCollection;
     }
 
-    public void setProductCollection(Set<Product> productCollection) {
-        this.productCollection = productCollection;
+    public void setProgramCollection(Set<AffProgram> programCollection) {
+        this.programCollection = programCollection;
     }
 
     public Affiliate getAffiliateId() {
@@ -125,10 +125,10 @@ public class ProductGroup implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof ProductGroup)) {
+        if (!(object instanceof AffProgramGroup)) {
             return false;
         }
-        ProductGroup other = (ProductGroup) object;
+        AffProgramGroup other = (AffProgramGroup) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -137,11 +137,11 @@ public class ProductGroup implements Serializable {
 
     @Override
     public String toString() {
-        return "com.mne.advertmanager.model.ProductGroup[ id=" + id + " ]";
+        return "com.mne.advertmanager.model.AffProgramGroup[ id=" + id + " ]";
     }
 
-    public void addProduct(Product curProd) {
-        productCollection.add(curProd);
+    public void addProgram(AffProgram curProd) {
+        programCollection.add(curProd);
     }
     
 }
