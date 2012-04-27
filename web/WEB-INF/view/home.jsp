@@ -10,34 +10,34 @@
 </c:if>
 <c:if test="${data!=null}">
     <table border="1" class="affTable">
-        <c:forEach items="${data.productGroupCollection}" var="pg">
+        <c:forEach items="${data.apgCollection}" var="apg">
             <tr><td>
-                <div>Product Group:<c:out value="${pg.groupName}" /></div>
+                <div>Program Group:<c:out value="${apg.groupName}" /></div>
                 <table border="1" class="affTable">
                     <thead>
                         <tr style="background-color: #999999;">
-                            <th>Product ID</td><td>Author Name</td><td>Author Email</td><td>Description</td><td>Price</td><td>Link</td>
+                            <th>Program ID</td>
+                            <td>Description</td>
+                            <td>Link</td>
+                            <td>User Name</td>
+                            <td>Password</td>
                         </tr>
                     </thead>                
-                    <c:forEach items="${pg.productCollection}" var="product">
+                    <c:forEach items="${apg.programCollection}" var="program">
                         <tr>
                             <td class="affTd" align="left" >
-                                <c:out value="${product.id}" />
+                                <c:out value="${program.id}" />
                             </td>
-                            <td class="affTd" align="left" >
-                                <c:out value="${product.authorId.authorName}" />
-                            </td>                        
-                            <td class="affTd" align="left" >
-                                <c:out value="${product.authorId.email}" />
+                 
                             </td>                                                
                             <td class="affTd" align="left" >
-                                <c:out value="${product.description}" />
+                                <c:out value="${program.description}" />
                             </td>
                             <td class="affTd" align="left" >
-                                <c:out value="${product.price}" />
+                                <c:out value="${program.price}" />
                             </td>
                             <td class="affTd" align="left" >
-                                <c:out value="${product.productLink}" />
+                                <c:out value="${program.programLink}" />
                             </td>
                         </tr>   
                     </c:forEach>

@@ -31,10 +31,10 @@ import javax.validation.constraints.Size;
     @NamedQuery(name = "Affiliate.findAll", query = "SELECT a FROM Affiliate a"),
     @NamedQuery(name = "Affiliate.findById", query = "SELECT a FROM Affiliate a WHERE a.id = :id"),
     @NamedQuery(name = "Affiliate.findByName", query = "SELECT a FROM Affiliate a WHERE a.affiliateName = ?"),
-    @NamedQuery(name = "Affiliate.findByAffiliateNameWithProductsAndGroups",
+    @NamedQuery(name = "Affiliate.findByAffiliateNameWithAffProgramsAndGroups",
         query = "SELECT a FROM Affiliate a "
-                + " left join fetch a.productGroupCollection pg"
-                + " left join fetch pg.productCollection prd"
+                + " left join fetch a.AffProgramGroupCollection pg"
+                + " left join fetch pg.AffProgramCollection prd"
                 + " left join fetch prd.authorId"
                 + " WHERE a.affiliateName = ?"),
     @NamedQuery(name = "Affiliate.findByEmail", query = "SELECT a FROM Affiliate a WHERE a.email = :email")})
@@ -74,7 +74,7 @@ public class Affiliate implements Serializable {
     
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "affiliateId")
-    private Set<ProductGroup> productGroupCollection;
+    private Set<AffProgramGroup> apgCollection;
 
     public Affiliate() {
     }
@@ -130,12 +130,12 @@ public class Affiliate implements Serializable {
     }
     
 
-    public Set<ProductGroup> getProductGroupCollection() {
-        return productGroupCollection;
+    public Set<AffProgramGroup> getAffProgramGroupCollection() {
+        return apgCollection;
     }
 
-    public void setProductGroupCollection(Set<ProductGroup> productGroupCollection) {
-        this.productGroupCollection = productGroupCollection;
+    public void setAffProgramGroupCollection(Set<AffProgramGroup> AffProgramGroupCollection) {
+        this.apgCollection = AffProgramGroupCollection;
     }
 
     @Override

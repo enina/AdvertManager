@@ -3,23 +3,23 @@
     <c:if test="${data!=null}">
         <thead>
             <tr >
-                <th>Product ID</th><th>Product Description</th><th>Price</th><th>Link</th>
+                <th>Program ID</th><th>Program Description</th><th>Link</th>
             </tr>
         </thead>
         <tbody>
-            <c:forEach items="${data}" var="product">
+            <c:forEach items="${data}" var="affProgram">
                 <tr>
                     <td class="affTd" align="left" >
-                        <c:out value="${product.id}" />
+                        <c:out value="${affProgram.id}" />
                     </td>
                     <td class="affTd" align="left" >
-                        <c:out value="${product.description}" />
+                        <c:out value="${affProgram.description}" />
                     </td>
                     <td class="affTd" align="left" >
-                        <c:out value="${product.price}" />
+                        <c:out value="${affProgram.price}" />
                     </td>
                     <td class="affTd" align="left" >
-                        <c:out value="${product.productLink}" />
+                        <c:out value="${affProgram.affProgramLink}" />
                     </td>                
                 </tr>   
             </c:forEach>

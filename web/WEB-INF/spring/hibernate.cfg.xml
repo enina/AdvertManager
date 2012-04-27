@@ -16,8 +16,8 @@ Contains list of classes which comprise our model and cache provider definition
         <mapping class="com.mne.advertmanager.model.Affiliate"/>
         <mapping class="com.mne.advertmanager.model.Author"/>
         <mapping class="com.mne.advertmanager.model.Partner"/>        
-        <mapping class="com.mne.advertmanager.model.Product"/>
-        <mapping class="com.mne.advertmanager.model.ProductGroup"/>
+        <mapping class="com.mne.advertmanager.model.AffProgram"/>
+        <mapping class="com.mne.advertmanager.model.AffProgramGroup"/>
         <mapping class="com.mne.advertmanager.model.PurchaseOrder"/>
         <mapping class="com.mne.advertmanager.model.AccessSource"/>        
         <mapping class="com.mne.advertmanager.model.AccessLog"/>

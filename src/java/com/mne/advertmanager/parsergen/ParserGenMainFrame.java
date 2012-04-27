@@ -147,6 +147,7 @@ public class ParserGenMainFrame extends javax.swing.JFrame {
     private void initComponents() {
 
         radioGroup = new javax.swing.ButtonGroup();
+        jMenuItem2 = new javax.swing.JMenuItem();
         splitPane = new javax.swing.JSplitPane();
         panelProperties = new javax.swing.JPanel();
         panelAdvanced = new javax.swing.JPanel();
@@ -183,13 +184,13 @@ public class ParserGenMainFrame extends javax.swing.JFrame {
         miSave = new javax.swing.JMenuItem();
         miExit = new javax.swing.JMenuItem();
         menuEdit = new javax.swing.JMenu();
-        miProduct = new javax.swing.JMenuItem();
-        miAffiliate = new javax.swing.JMenuItem();
         miAccess = new javax.swing.JMenuItem();
         miPurchaseOrder = new javax.swing.JMenuItem();
-        miAuthor = new javax.swing.JMenuItem();
+        jMenuItem1 = new javax.swing.JMenuItem();
         menuOptions = new javax.swing.JMenu();
         javax.swing.JMenuItem miAdvanced = new javax.swing.JMenuItem();
+
+        jMenuItem2.setText("jMenuItem2");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Parser Configuration");
@@ -393,7 +394,7 @@ public class ParserGenMainFrame extends javax.swing.JFrame {
                 .addComponent(panelAdvanced, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(panelPaging, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 226, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 238, Short.MAX_VALUE)
                 .addComponent(panelStatus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
@@ -472,22 +473,6 @@ public class ParserGenMainFrame extends javax.swing.JFrame {
 
         menuEdit.setText("Edit");
 
-        miProduct.setText("Product");
-        miProduct.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                onEditProduct(evt);
-            }
-        });
-        menuEdit.add(miProduct);
-
-        miAffiliate.setText("Affiliate");
-        miAffiliate.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                onEditAffiliate(evt);
-            }
-        });
-        menuEdit.add(miAffiliate);
-
         miAccess.setText("Access");
         miAccess.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -504,8 +489,13 @@ public class ParserGenMainFrame extends javax.swing.JFrame {
         });
         menuEdit.add(miPurchaseOrder);
 
-        miAuthor.setText("Author");
-        menuEdit.add(miAuthor);
+        jMenuItem1.setText("Partner");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                onEditPartner(evt);
+            }
+        });
+        menuEdit.add(jMenuItem1);
 
         menuBar.add(menuEdit);
 
@@ -539,12 +529,15 @@ public class ParserGenMainFrame extends javax.swing.JFrame {
     private void onNew(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onNew
 
         reset();
+        //create new project windo 
         JDialog newProjDialog = new NewProjectDialog(this, true);
-
+        //set new project windo position
         newProjDialog.setLocation(this.getLocation().x + 50, this.getLocation().y + 70);
 
+        //make visible "new project" windo
         newProjDialog.setVisible(true);
-
+        
+        
         project = ((NewProjectDialog) newProjDialog).getProject();
         if (project != null && project.isValid()) {
             displayTree(project.getBaseURL() + project.getHomePage(), project.getMethod());
@@ -553,33 +546,6 @@ public class ParserGenMainFrame extends javax.swing.JFrame {
         }
 
     }//GEN-LAST:event_onNew
-
-    private void onEditProduct(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onEditProduct
-
-        if (project != null && project.isValid()) {
-            DataSpec productSpec = new DataSpec("product");
-            productSpec.addSubItem(new SelectableItem("description"));
-            productSpec.addSubItem(new SelectableItem("price"));
-            productSpec.addSubItem(new SelectableItem("commision"));
-            productSpec.addSubItem(new SelectableItem("product_link"));
-            productSpec.addSubItem(new SelectableItem("author"));
-
-            fillComponentPanel(productSpec);
-        }
-    }//GEN-LAST:event_onEditProduct
-
-    private void onEditAffiliate(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onEditAffiliate
-
-        if (project != null && project.isValid()) {
-            DataSpec dataSpec = new DataSpec("Affiliate");
-
-            dataSpec.addSubItem(new SelectableItem("name"));
-            dataSpec.addSubItem(new SelectableItem("email"));
-
-            fillComponentPanel(dataSpec);
-        }
-
-    }//GEN-LAST:event_onEditAffiliate
 
     private void onDisplayData(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onDisplayData
 
@@ -603,7 +569,7 @@ public class ParserGenMainFrame extends javax.swing.JFrame {
                 selectorText = subItemSpec.getSelector();
 
                 if (selectorText == null) {
-                    selectorText = "Enter sub item selector";
+                   selectorText = "Enter sub item selector";
                 }
                 txtSubItemSelector.setText(selectorText);
             }
@@ -680,8 +646,8 @@ public class ParserGenMainFrame extends javax.swing.JFrame {
         if (project != null && project.isValid()) {
             try {
                 String filePath = project.getHomeDirectory() + File.separator + project.getName() + ".xml";
-                File result = new File(filePath);
-                marshaller.marshal(project, result);
+                File result = new File(filePath);   //create new file in system
+                marshaller.marshal(project, result);//save Project obj to file in xml format
             } catch (JAXBException ex) {
                 System.out.println("marshaling error:" + ex.getMessage());
             }
@@ -713,6 +679,30 @@ public class ParserGenMainFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
         //Object project = unmarshaller.unmarshal(new File);
     }//GEN-LAST:event_onOpen
+
+//================================== onEditPartner =============================
+/**This function help to collect data about affiliates Partners:
+ * upon selection from edit tab "Partners" option, this function create
+ * dataSpec object with two params : Name and Email. those params then appear
+ * in advanced option of right screen and in context menu of left mous button
+ * when clicked on DOM tree to select proper DOM object for Name, Email.
+ */
+    private void onEditPartner(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onEditPartner
+        
+        if (project != null && project.isValid()) {
+            
+            //create dataSpec object with name Partners
+            DataSpec dataSpec = new DataSpec("Partners");
+            
+            //add to data spec two data types: name, email
+            dataSpec.addSubItem(new SelectableItem("Name"));
+            dataSpec.addSubItem(new SelectableItem("Email"));
+            
+            //add proper items(according to dataSpec) to mouse contex menu 
+            //and to component panel (right window sede).
+            fillComponentPanel(dataSpec);
+        }
+    }//GEN-LAST:event_onEditPartner
 
     private TreeNode find(DefaultMutableTreeNode node, String query) {
 
@@ -1118,6 +1108,8 @@ public class ParserGenMainFrame extends javax.swing.JFrame {
     private javax.swing.JComboBox cmbSubItem;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JLabel lblItem;
     private javax.swing.JLabel lblItemName;
     private javax.swing.JLabel lblMethod;
@@ -1130,12 +1122,9 @@ public class ParserGenMainFrame extends javax.swing.JFrame {
     private javax.swing.JMenu menuFile;
     private javax.swing.JMenu menuOptions;
     private javax.swing.JMenuItem miAccess;
-    private javax.swing.JMenuItem miAffiliate;
-    private javax.swing.JMenuItem miAuthor;
     private javax.swing.JMenuItem miExit;
     private javax.swing.JMenuItem miNew;
     private javax.swing.JMenuItem miOpen;
-    private javax.swing.JMenuItem miProduct;
     private javax.swing.JMenuItem miPurchaseOrder;
     private javax.swing.JMenuItem miSave;
     private javax.swing.JPanel panelAdvanced;

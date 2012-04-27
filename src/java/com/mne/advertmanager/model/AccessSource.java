@@ -1,6 +1,14 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+
+
+/**AccessSource class:
+ * This class is entity representation of access_source table in DB.
+ * purpose: hold distinct access source domain names. eg. when client write in
+ * google some search and then thru result of his search come to 
+ * purchase site. then in billing system we see that source of client access
+ * is google... something, and destination is the  purchase site.
+ * so we store those access source domain for statistical purpose. we may for
+ * example retrieve most popular domains, that generated lots of accesses
+ * to purchase sites etc.    
  */
 package com.mne.advertmanager.model;
 
@@ -14,39 +22,47 @@ import javax.xml.bind.annotation.XmlRootElement;
  *
  * @author Nina Eidelshtein and Misha Lebedev
  */
-@Entity
-@Table(name = "access_source")
-@XmlRootElement
-@NamedQueries({
+@Entity                         //tell to hibernate that this class is DB entity
+@Table(name = "access_source")  //tell to hibernate what table in db this class represent
+@XmlRootElement                 //used to persist this class to file in xml maner and viceversa  ( not needed! )
+
+@NamedQueries({                 //known DB queries : 
     @NamedQuery(name = "AccessSource.findAll", query = "SELECT a FROM AccessSource a"),
     @NamedQuery(name = "AccessSource.findById", query = "SELECT a FROM AccessSource a WHERE a.id = :id"),
     @NamedQuery(name = "AccessSource.findByAccessSourceDomain", query = "SELECT a FROM AccessSource a WHERE a.accessSourceDomain = ?"),
     @NamedQuery(name = "AccessSource.findByDescription", query = "SELECT a FROM AccessSource a WHERE a.description = :description")})
 public class AccessSource implements Serializable {
     private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "id")
-    private Integer id;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 256)
-    @Column(name = "access_source_domain")
-    private String accessSourceDomain;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 256)
-    @Column(name = "description")
-    private String description;
+    
+    
+    @Id                                                 //id: unique key
+    @GeneratedValue(strategy = GenerationType.IDENTITY) //in DB.
+    @Basic(optional = false)                            //
+    @Column(name = "id")                                //
+    private Integer id;                                 //
+    
+    @Basic(optional = false)                //accessSourceDomain: ex. 
+    @NotNull                                //http://www.google.co.il/
+    @Size(min = 1, max = 256)               //
+    @Column(name = "access_source_domain")  //
+    private String accessSourceDomain;      //
+    
+    
+    @Basic(optional = false)            //description: ex. search engine
+    @NotNull                            //
+    @Size(min = 1, max = 256)           //
+    @Column(name = "description")       //
+    private String description;         //
 
+   /**empty C-tor*/
     public AccessSource() {
     }
-
+    /**C-tor: params: id. set obj id with given id*/
     public AccessSource(Integer id) {
         this.id = id;
     }
-
+    /**C-tor: params: id, accessSourceDomain, description.
+     * set obj properties with those given in params. */
     public AccessSource(Integer id, String accessSourceDomain, String description) {
         this.id = id;
         this.accessSourceDomain = accessSourceDomain;

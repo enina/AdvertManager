@@ -4,13 +4,12 @@
  */
 package com.mne.advertmanager.service;
 
-import com.mne.advertmanager.model.Product;
+import com.mne.advertmanager.model.AffProgram;
 import com.mne.advertmanager.dao.GenericDao;
 import com.mne.advertmanager.model.AccessLog;
 import com.mne.advertmanager.model.AccessSource;
 import com.mne.advertmanager.model.Affiliate;
-import com.mne.advertmanager.model.Author;
-import com.mne.advertmanager.model.ProductGroup;
+import com.mne.advertmanager.model.AffProgramGroup;
 import com.mne.advertmanager.model.PurchaseOrder;
 import com.mne.advertmanager.util.EntityFactory;
 import java.util.ArrayList;
@@ -23,10 +22,9 @@ import org.springframework.transaction.annotation.Transactional;
  */
 public class DataGenService {
     
-    private GenericDao<Product,Long> productDao;
+    private GenericDao<AffProgram,Long> AffProgramDao;
     private AffiliateService        affService;
-    private GenericDao<Author,Long> authorDao;
-    private GenericDao<ProductGroup,Long> productGroupDao;
+    private GenericDao<AffProgramGroup,Long> AffProgramGroupDao;
     private GenericDao<AccessSource,Long> accessSourceDao;
     private GenericDao<AccessLog,Long> accessLogDao;
     private GenericDao<PurchaseOrder,Long> purchaseOrderDao;
@@ -53,16 +51,14 @@ public class DataGenService {
         this.affService = affiliateService;
     }
 
-    public void setAuthorDao(GenericDao<Author, Long> authorDao) {
-        this.authorDao = authorDao;
+  
+
+    public void setAffProgramGroupDao(GenericDao<AffProgramGroup, Long> AffProgramGroupDao) {
+        this.AffProgramGroupDao = AffProgramGroupDao;
     }
 
-    public void setProductGroupDao(GenericDao<ProductGroup, Long> productGroupDao) {
-        this.productGroupDao = productGroupDao;
-    }
-
-    public void setProductDao(GenericDao<Product,Long> productDao) {
-        this.productDao = productDao;
+    public void setAffProgramDao(GenericDao<AffProgram,Long> AffProgramDao) {
+        this.AffProgramDao = AffProgramDao;
     }
     
     @Transactional(readOnly = false, propagation = Propagation.REQUIRED)
@@ -79,36 +75,28 @@ public class DataGenService {
         }
         
         //////////////////////////////////////////////////////////////////////////////////////////////        
-        ArrayList<ProductGroup> pgList = new ArrayList<ProductGroup>();
+        ArrayList<AffProgramGroup> pgList = new ArrayList<AffProgramGroup>();
         for (int i = 0; i < 10;++i) {
-            ProductGroup curProdGroup = entityFactory.makeProductGroup();
+            AffProgramGroup curProdGroup = entityFactory.makeAffProgramGroup();
             curProdGroup.setAffiliateId(affList.get(i%affList.size()));
             pgList.add(curProdGroup);        
-            productGroupDao.create(curProdGroup);
+            AffProgramGroupDao.create(curProdGroup);
             rowCounter++;
         }
         
-        //////////////////////////////////////////////////////////////////////////////////////////////                
-        ArrayList<Author> authorSet = new ArrayList<Author>();
-        for (int i = 0; i < 10;++i) {
-            Author curAuthor = entityFactory.makeAuthor();
-            authorSet.add(curAuthor);        
-            authorDao.create(curAuthor);
-            rowCounter++;
-        }
+
         
         //////////////////////////////////////////////////////////////////////////////////////////////        
-        ArrayList<Product> productSet = new ArrayList<Product>();
+        ArrayList<AffProgram> AffProgramSet = new ArrayList<AffProgram>();
         for (int i = 0; i < 100;++i) {
-            Product curProd = entityFactory.makeProduct();
-            productSet.add(curProd);
-            curProd.setAuthorId(authorSet.get(i/authorSet.size()));
-            curProd.setProductGroupId(pgList.get(i/pgList.size()));
-            productDao.create(curProd);
+            AffProgram curProd = entityFactory.makeAffProgram();
+            AffProgramSet.add(curProd);
+            curProd.setAffProgramGroupId(pgList.get(i/pgList.size()));
+            AffProgramDao.create(curProd);
             rowCounter++;
         }
         
-        productDao.flush();
+        AffProgramDao.flush();
         
         
         ///////////////////////////////////////////////////////////////////////////////////////////////        
@@ -124,8 +112,8 @@ public class DataGenService {
         ArrayList<PurchaseOrder> orderList = new ArrayList<PurchaseOrder>();
         for (int i = 0; i < 100000;++i) {
             AccessLog curAccessLog = entityFactory.makeAccessLog();
-            Product curProduct  = productSet.get(i%productSet.size());
-            curAccessLog.setProductId(curProduct);
+            AffProgram curAffProgram  = AffProgramSet.get(i%AffProgramSet.size());
+            curAccessLog.setAffProgram(curAffProgram);
             curAccessLog.setSourceDomainId(accessSourceList.get(i%accessSourceList.size()));
             accessLogList.add(curAccessLog);  
             accessLogDao.create(curAccessLog);
@@ -133,7 +121,7 @@ public class DataGenService {
             if ((i % 1000)==0) {
                 PurchaseOrder curOrder = entityFactory.makePurchaseOrder();
                 curOrder.setAccessId(curAccessLog);
-                curOrder.setProductId(curProduct);
+                curOrder.setAffProgram(curAffProgram);
                 orderList.add(curOrder);
                 purchaseOrderDao.create(curOrder);
                 rowCounter++;

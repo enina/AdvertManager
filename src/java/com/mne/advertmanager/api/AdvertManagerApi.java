@@ -10,8 +10,8 @@ package com.mne.advertmanager.api;
  */
 public interface AdvertManagerApi {
     public AuthorDTO[]  getAuthors();
-    public ProductDTO   getProduct(int productId);
-    public ProductDTO[] getAllProducts();
+    public ProgramDTO   getPrograms(int programId);
+    public ProgramDTO[] getAllPrograms();
     public OrderDTO     getOrder(int orderId);
     public OrderDTO[]   getAllOrders();
     public int          getTotalAccessNumber();

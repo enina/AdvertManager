@@ -38,13 +38,16 @@ public class JSoupTransport {
         }
         return result;
     }
-
+//================================ login =======================================
+/**
+ */
     public static Connection login(Project proj) {
 
         Connection result = null;
         String url="";
         try {
-            //access home page without credentials. get session cookie and redirect to login form
+            //access home page without credentials. get session cookie and 
+            //redirect to login form
             url=proj.getBaseURL()+proj.getHomePage();
             logger.log(Level.FINE,"Login:::Retrieve HomePage::: URL:{0}",url);
             result = Jsoup.connect(url).timeout(0);
@@ -82,7 +85,9 @@ public class JSoupTransport {
             return null;
         }
     }
-
+//=============================== logout =======================================
+/**
+ */
     public static void logout(Connection con, Project proj) {
         try {
             if (con != null) {

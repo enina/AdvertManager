@@ -17,11 +17,11 @@
         <tr>
             <td class="affTd"><a name="menu" class="menuItem" href="${pageContext.request.contextPath}/mvc/home" >Home</a></td>
             <td class="affTd"> <a class="menuItem" href="${pageContext.request.contextPath}/mvc/affiliates/list">Affiliates</a></td>
-            <td class="affTd"> <a class="menuItem" href="${pageContext.request.contextPath}/mvc/products/list"> Products </a></td>
+            <td class="affTd"> <a class="menuItem" href="${pageContext.request.contextPath}/mvc/affprograms/list"> Programs </a></td>
             <td class="affTd"> <a class="menuItem" href="${pageContext.request.contextPath}/mvc/access/list"> AccessLog </a></td>
 
-            <td class="affTd"><a name="menu" class="menuItem" href="${pageContext.request.contextPath}/mvc/products/new">Add Product</a></td>
-            <td class="affTd"><a name="menu" class="menuItem" href="${pageContext.request.contextPath}/mvc/authors/new">Add Author</a></td> 
+            <td class="affTd"><a name="menu" class="menuItem" href="${pageContext.request.contextPath}/mvc/affprograms/new">Add Program</a></td>
+ 
             <sec:authorize access="hasRole('ROLE_ADMIN')">
                 <td class="affTd"> <a class="menuItem" href="${pageContext.request.contextPath}/mvc/dataGen/generate">Generate Data</a></td>
                 <td class="affTd"> <a class="menuItem" href="${pageContext.request.contextPath}/mvc/affiliates/new">Register Affiliate</a></td>

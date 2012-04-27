@@ -4,12 +4,11 @@ use advert_manager_schema;
 SET storage_engine=innodb;
 
 ------------------ application tables --------------
-drop table if exists affiliate_to_product   CASCADE;
 drop table if exists purchase_order         CASCADE;
 drop table if exists access_log             CASCADE;
-drop table if exists product                CASCADE;
+drop table if exists aff_program            CASCADE;
 drop table if exists author                 CASCADE;
-drop table if exists product_group          CASCADE;
+drop table if exists affprog_group         CASCADE;
 drop table if exists affiliate              CASCADE;
 drop table if exists partner                CASCADE;
 drop table if exists access_source          CASCADE;
@@ -39,37 +38,30 @@ create table affiliate (
     CONSTRAINT AFFILIATE_NAME_UQ    UNIQUE affNameIdx  (affiliateName(255)),
     CONSTRAINT AFFILIATE_EMAIL_UQ   UNIQUE affEmailIdx (email(255)) );
 
-create table product_group (
+create table affprog_group(
     id INT NOT NULL AUTO_INCREMENT,
     affiliate_id int not null ,
     group_name  varchar(256),
     description varchar(256),
-    CONSTRAINT PRODUCT_GROUP_PK PRIMARY KEY (id),
-    CONSTRAINT PRODUCT_GROUP_AFFILIATE_FK FOREIGN KEY (affiliate_id) REFERENCES affiliate(id) ON DELETE CASCADE);
+    CONSTRAINT PROGRAM_GROUP_PK PRIMARY KEY (id),
+    CONSTRAINT PROGRAM_GROUP_AFFILIATE_FK FOREIGN KEY (affiliate_id) REFERENCES affiliate(id) ON DELETE CASCADE);
 
-create table product (
+create table aff_program (
     id INT NOT NULL AUTO_INCREMENT,
-    product_group_id  int not null,
+    program_group_id  int not null,
     author_id int not null,
     name varchar(256) not null,
     description varchar(256),
     price int not null ,
     commision int not null ,
     sync_status  int not null,
-    product_link varchar(256) not null,
+    program_link varchar(256) not null,
     redirect_link varchar(256) null,
-    CONSTRAINT PRODUCT_PK PRIMARY KEY (id),
-    CONSTRAINT PRD_LINK_UQ   UNIQUE prdLinkIdx (product_link(255)),
-    CONSTRAINT PRODUCT_PRODUCT_GROUP_FK FOREIGN KEY (product_group_id)  REFERENCES product_group(id) ON DELETE CASCADE,
-    CONSTRAINT PRODUCT_AUTHOR_GROUP_FK FOREIGN KEY (author_id) REFERENCES author(id) ON DELETE CASCADE);
+    CONSTRAINT PROGRAM_PK PRIMARY KEY (id),
+    CONSTRAINT PRD_LINK_UQ   UNIQUE prdLinkIdx (program_link(255)),
+    CONSTRAINT PROGRAM_PROGRAM_GROUP_FK FOREIGN KEY (program_group_id)  REFERENCES affprog_group(id) ON DELETE CASCADE);
+    
 
-create table affiliate_to_product (
-    id INT NOT NULL AUTO_INCREMENT,
-    affiliate_id int not null ,
-    product_id   int  not null ,
-    PRIMARY KEY (id),
-    FOREIGN KEY (affiliate_id) REFERENCES affiliate(id) ON DELETE CASCADE,
-    FOREIGN KEY (product_id) REFERENCES product(id) ON DELETE CASCADE);
 
 create table access_source (
     id INT NOT NULL AUTO_INCREMENT,
@@ -80,34 +72,34 @@ create table access_source (
 
 create table access_log (
     id INT NOT NULL AUTO_INCREMENT,
-    product_id  int not null ,
+    program_id  int not null ,
     access_time TIMESTAMP , --vremya perehoda
     ip_address varchar(256) , --client ip address
     location  varchar(2048)  , --client geo location
     source_domain_id int not null ,
     url varchar(256)  ,
     PRIMARY KEY (id),
-    FOREIGN KEY (product_id) REFERENCES product(id) on delete cascade,
+    FOREIGN KEY (program_id) REFERENCES aff_program(id) on delete cascade,
     FOREIGN KEY (source_domain_id) REFERENCES access_source(id) ON DELETE CASCADE);
 
 
 create table purchase_order (
     id          int not null auto_increment ,
-    product_id  int not null ,
+    program_id  int not null ,
     access_id   int not null,--ukazatel tablica perehodov
     status      int  not null,--order status
     discount    int not null, --skidka
     ordertime   TIMESTAMP , --vremya zakaza
     PRIMARY KEY (id),
-    FOREIGN KEY (product_id) REFERENCES product(id) on delete cascade,
+    FOREIGN KEY (program_id) REFERENCES aff_program(id) on delete cascade,
     FOREIGN KEY (access_id)  REFERENCES access_log(id) on delete cascade);
 
 create table partner (
     id                      int         not null auto_increment,
-    payment_transfer_time   TIMESTAMP , --vremya zakaza
-    payment_amount          int         not null ,
+    name        varchar(50)    not null ,
     email         varchar(256) not null ,
     PRIMARY KEY (id));
+
 
 
 CREATE TABLE `billing_project_spec` (
@@ -142,7 +134,7 @@ CREATE TABLE `billing_data_spec` (
 
 CREATE TABLE `selectable_data_item` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `email` varchar(256) NOT NULL,
+  `name` varchar(256) NOT NULL,
   `selector` varchar(256) NOT NULL,
   `dataspec_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
@@ -189,11 +181,11 @@ insert into authorities  select id ,'ROLE_ADMIN' from affiliate where affiliateN
 insert into authorities  select id ,'ROLE_USER' from affiliate where affiliateName='vasya';
 insert into authorities  select id ,'ROLE_ADMIN' from affiliate where affiliateName='hacker';
 
-insert into product_group (affiliate_id,group_name,description) select id,'Default','Default Group' from affiliate where affiliateName='ilya' ;
-insert into product_group (affiliate_id,group_name,description) select id,'Default','Default Group' from affiliate where affiliateName='nina' ;
-insert into product_group (affiliate_id,group_name,description) select id,'Default','Default Group' from affiliate where affiliateName='misha' ;
-insert into product_group (affiliate_id,group_name,description) select id,'Default','Default Group' from affiliate where affiliateName='root' ;
-insert into product_group (affiliate_id,group_name,description) select id,'Default','Default Group' from affiliate where affiliateName='vasya' ;
+insert into affprog_group(affiliate_id,group_name,description) select id,'Default','Default Group' from affiliate where affiliateName='ilya' ;
+insert into affprog_group(affiliate_id,group_name,description) select id,'Default','Default Group' from affiliate where affiliateName='nina' ;
+insert into affprog_group(affiliate_id,group_name,description) select id,'Default','Default Group' from affiliate where affiliateName='misha' ;
+insert into affprog_group(affiliate_id,group_name,description) select id,'Default','Default Group' from affiliate where affiliateName='root' ;
+insert into affprog_group(affiliate_id,group_name,description) select id,'Default','Default Group' from affiliate where affiliateName='vasya' ;
 
 
 commit;

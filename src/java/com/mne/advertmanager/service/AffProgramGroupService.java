@@ -6,7 +6,7 @@ package com.mne.advertmanager.service;
 
 import com.mne.advertmanager.dao.GenericDao;
 import com.mne.advertmanager.model.Affiliate;
-import com.mne.advertmanager.model.ProductGroup;
+import com.mne.advertmanager.model.AffProgramGroup;
 import java.util.Collection;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
@@ -16,44 +16,44 @@ import org.springframework.transaction.annotation.Transactional;
  *
  * @author Nina Eidelshtein and Misha Lebedev
  */
-public class ProductGroupService {
+public class AffProgramGroupService {
 
-    private GenericDao<ProductGroup, Integer> productGroupDao;
+    private GenericDao<AffProgramGroup, Integer> apgDao;
     private AffiliateService affiliateService;
 
-    public void setProductGroupDao(GenericDao<ProductGroup, Integer> productGroupDao) {
-        this.productGroupDao = productGroupDao;
+    public void setAPGDao(GenericDao<AffProgramGroup, Integer> apgDao) {
+        this.apgDao = apgDao;
     }
 
     public void setAffiliateService(AffiliateService affiliateService) {
         this.affiliateService = affiliateService;
     }
 
-//============================ findAllProducts =================================
+//============================ findAllPrograms =================================
     @Transactional(readOnly = true)//, propagation = Propagation.REQUIRED)
-    public Collection<ProductGroup> findAffiliateProductGroups(String affName) {
-        return productGroupDao.findByQuery("ProductGroup.findAllByAffName", affName);
+    public Collection<AffProgramGroup> findAffiliateProgramGroups(String affName) {
+        return apgDao.findByQuery("AffProgramGroup.findAllByAffName", affName);
     }
 
     @Transactional
-    public void createProductGroup(ProductGroup productGroup) {
-        productGroupDao.create(productGroup);
+    public void createAffiliateProgramGroup(AffProgramGroup progGroup) {
+        apgDao.create(progGroup);
     }
 
     @Transactional(readOnly = true)
-    public ProductGroup findById(int pgId) {
-        return productGroupDao.read(pgId);
+    public AffProgramGroup findById(int pgId) {
+        return apgDao.read(pgId);
     }
 
-    public ProductGroup createOrUpdate(ProductGroup pg) {
+    public AffProgramGroup createOrUpdate(AffProgramGroup pg) {
 
         String userName = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
         Affiliate aff = affiliateService.findAffiliateByName(userName);
         pg.setAffiliateId(aff);
         if (pg.getId() == 0) {
-            productGroupDao.create(pg);
+            apgDao.create(pg);
         } else {
-            productGroupDao.update(pg);
+            apgDao.update(pg);
         }
 
         return pg;

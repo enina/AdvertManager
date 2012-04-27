@@ -122,7 +122,7 @@ public class Project implements Serializable {
     @OneToMany(mappedBy = "project")
     private List<DataSpec> dataSpecList = new ArrayList<DataSpec>();
 
-    
+    /**C-tor: empty constructor*/
     public Project() {
 
     }    
