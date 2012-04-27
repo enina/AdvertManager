@@ -34,10 +34,7 @@
                                 <c:out value="${program.description}" />
                             </td>
                             <td class="affTd" align="left" >
-                                <c:out value="${program.price}" />
-                            </td>
-                            <td class="affTd" align="left" >
-                                <c:out value="${program.programLink}" />
+                                <c:out value="${program.affProgramLink}" />
                             </td>
                         </tr>   
                     </c:forEach>

@@ -56,13 +56,13 @@ public class AffProgramService {
     public void createAffProgram(AffProgram AffProgram) {
         
         AffProgramGroup pg = null;
-        pg = AffProgram.getAffProgramGroupId();
+        pg = AffProgram.getAffProgramGroup();
         
  
         if (pg != null)
             pg = afPrGrService.createOrUpdate(pg);
         
-        AffProgram.setAffProgramGroupId(pg);
+        AffProgram.setAffProgramGroup(pg);
         AffProgramDao.create(AffProgram);
     }
     
