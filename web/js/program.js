@@ -7,8 +7,8 @@ var xhr = new XMLHttpRequest;
 
 function apgSelected(ctxPath) {
 
-    var selBox = document.getElementById("pGroups");
-    document.getElementById("apgData").style.display="block";
+    var selBox = document.getElementById("apGroups");
+    document.getElementById("apGroupData").style.display="block";
     var pgId=selBox.options[selBox.selectedIndex].value;
 
     if (pgId != 0) {

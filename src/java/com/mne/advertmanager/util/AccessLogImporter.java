@@ -125,7 +125,7 @@ public class AccessLogImporter implements BillingDataImporter{
             p = new AffProgram();
             p.setName("ImportedAffProgram");
             p.setAffProgramLink(access.getUrl());
-            p.setAffProgramGroupId(aff.getAffProgramGroupCollection().iterator().next());
+            p.setAffProgramGroup(aff.getApgCollection().iterator().next());
             AffProgramService.createAffProgram(p);
         }
         access.setAffProgram(p);

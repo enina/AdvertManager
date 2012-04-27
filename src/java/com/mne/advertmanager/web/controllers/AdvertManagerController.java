@@ -45,7 +45,7 @@ public class AdvertManagerController {
     private static final String GET = "/get";
     
     private static final String AFFILIATES = "affiliates";
-    private static final String AFFPROGRAM = "affprogram";
+    private static final String AFFPROGRAM = "affprograms";
     private static final String AFFPROG_GROUPS = "afprgroups";
     private static final String AUTHORS = "authors";
     private static final String DATAGEN = "dataGen";
@@ -65,9 +65,9 @@ public class AdvertManagerController {
     private static final String AFFPROGRAM_NEW_REQ_MAPPING = AFFPROGRAM + NEW;
     private static final String AFFPROGRAM_ADD_REQ_MAPPING = AFFPROGRAM + ADD;
     private static final String AFFPROGRAM_LIST_REQ_MAPPING = AFFPROGRAM + LIST;
+    private static final String AFFPROGRAM_DETAILS_REQ_MAPPING = AFFPROGRAM +"/details";
+   
     
-    private static final String AUTHOR_ADD_REQ_MAPPEING = AUTHORS + ADD;
-    private static final String AUTHOR_NEW_REQ_MAPPING = AUTHORS + NEW;
     
     //private static final String AUTHOR_GET_REQ_MAPPING = AUTHORS+GET;
     //private static final String PROD_GROUPS_GET_REQ_MAPPING = PROD_GROUPS+GET;
@@ -75,7 +75,7 @@ public class AdvertManagerController {
     private static final String BLNG_NEW_REQ_MAPPING = BILLING + NEW;
     private static final String BLNG_ADD_REQ_MAPPING = BILLING + ADD;
     private static final String BLNG_IMPORT_REQ_MAPPING = BILLING + "/import";
-    
+
     
     private static final String ACS_LIST_REQ_MAPPING = ACCESS + LIST;
     
@@ -192,7 +192,18 @@ public class AdvertManagerController {
 
         return affprograms;
     }
-
+//====================================== viewProgramDetails() ===================
+   @RequestMapping(value = AFFPROGRAM_DETAILS_REQ_MAPPING +"/{affProgramId}", method = RequestMethod.GET)
+    public @ModelAttribute("data")
+               
+    Collection<AffProgram> viewProgramDetails(@PathVariable final int affProgramId) {
+       
+       
+        
+        return null;
+    }
+    
+    //A
     //////////////////////////////////////////////////// Affiliates ////////////////////////////////////////////////////////////
     @RequestMapping(value = AFF_LIST_REQ_MAPPING, method = RequestMethod.GET)
     public @ModelAttribute("data")

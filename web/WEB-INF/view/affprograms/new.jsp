@@ -5,16 +5,16 @@
 --%>
 
 <%@include file="../common/taglibs.jsp" %>
-<form:form  modelAttribute="affprogram" method="post" action="add">
+<form:form  modelAttribute="affprogram" method="post" action="add" accept-charset="UTF-8">
     <table>
 
         <tr>
      
             <td>
                 Program Group:
-                <form:select id="apGroups" path="apGroups.id" onchange="apGroupSelected('${pageContext.request.contextPath}')">
+                <form:select id="apGroups" path="affProgramGroup.id" onchange="apgSelected('${pageContext.request.contextPath}')">
                     <form:option value="0" label="Define new program group" />
-                    <form:options items="${prdGroups}" itemValue="id" itemLabel="groupName" />
+                    <form:options items="${apGroups}" itemValue="id" itemLabel="groupName" />
                 </form:select>
             </td>        
 
@@ -31,10 +31,17 @@
         </tr>        
 
         <tr>
-            <td><form:label path="programLink">Link</form:label></td>
-            <td><form:input path="programLink" /></td>
+            <td><form:label path="affProgramLink">Link</form:label></td>
+            <td><form:input path="affProgramLink" /></td>
         </tr>
-
+        <tr>
+            <td><form:label path="userName">User Name</form:label></td>
+            <td><form:input path="userName" /></td>
+        </tr>
+        <tr>
+            <td><form:label path="password">Password</form:label></td>
+            <td><form:input path="password" /></td>
+        </tr>
         <tr>
             <td><form:label path="redirectLink">Redirect Link</form:label></td>
             <td><form:input path="redirectLink" /></td>
@@ -48,12 +55,12 @@
 
     <table id="apGroupData" style="display:none">
         <tr>
-            <td><form:label    path="apGroupId.groupName">Group Name</form:label></td>
-            <td><form:input    path="apGroupId.groupName" /></td>
+            <td><form:label    path="affProgramGroup.groupName">Group Name</form:label></td>
+            <td><form:input    path="affProgramGroup.groupName" /></td>
         </tr>
         <tr>
-            <td><form:label    path="apGroupId.description">Group Description</form:label></td>
-            <td><form:input    path="apGroupId.description" /></td>
+            <td><form:label    path="affProgramGroup.description">Group Description</form:label></td>
+            <td><form:input    path="affProgramGroup.description" /></td>
         </tr>
     </table>
 

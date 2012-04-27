@@ -28,25 +28,21 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "AffProgram.findAll",
         query = "SELECT p FROM AffProgram p "
-                + "left join fetch p.AffProgramGroupId pg "
-                + "left join fetch pg.affiliateId "
-                + "left join fetch p.authorId"
-        ),
+                + "left join fetch p.apg apg "
+                + "left join fetch apg.affiliateId "),
     @NamedQuery(name = "AffProgram.findById", query = "SELECT p FROM AffProgram p WHERE p.id = :id"),
     @NamedQuery(name = "AffProgram.findByDescription", query = "SELECT p FROM AffProgram p WHERE p.description = :description"),
-    @NamedQuery(name = "AffProgram.findByPrice", query = "SELECT p FROM AffProgram p WHERE p.price = :price"),
-    @NamedQuery(name = "AffProgram.findByCommision", query = "SELECT p FROM AffProgram p WHERE p.commision = :commision"),
     @NamedQuery(name = "AffProgram.findBySyncStatus", query = "SELECT p FROM AffProgram p WHERE p.syncStatus = :syncStatus"),
-    @NamedQuery(name = "AffProgram.findByAffProgramLink", query = "SELECT p FROM AffProgram p WHERE p.AffProgramLink = ?"),
+    @NamedQuery(name = "AffProgram.findByAffProgramLink", query = "SELECT p FROM AffProgram p WHERE p.affProgramLink = ?"),
     @NamedQuery(name = "AffProgram.findByRedirectLink", query = "SELECT p FROM AffProgram p WHERE p.redirectLink = :redirectLink")})
 public class AffProgram implements Serializable {
     
     private static final long serialVersionUID = 1L;    
     
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "AffProgramId")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "affProgram")
     private Set<AccessLog> accessLogCollection;
     
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "AffProgramId")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "affProgram")
     private Set<PurchaseOrder> purchaseOrderCollection;
     
 
@@ -58,7 +54,7 @@ public class AffProgram implements Serializable {
     
     @Size(max = 256)
     @Column(name = "description")
-    private String description;
+    private String description="";
     
     
 
@@ -69,7 +65,7 @@ public class AffProgram implements Serializable {
 
     @NotNull
     @Size(min = 1, max = 256)
-    @Column(name = "AffProgram_link")
+    @Column(name = "affprogram_link")
     private String affProgramLink;
 
     @NotNull                        //hold user name of back office 
@@ -81,10 +77,18 @@ public class AffProgram implements Serializable {
     @Size(min = 1, max = 256)
     @Column(name = "password")
     private String password;
+
+    public AffProgramGroup getApg() {
+        return apg;
+    }
+
+    public void setApg(AffProgramGroup apg) {
+        this.apg = apg;
+    }
     
-    @Size(min = 1, max = 256)
+    @Size(min = 0, max = 256)
     @Column(name = "redirect_link")
-    private String redirectLink;
+    private String redirectLink ="";
     
   
     @JoinColumn(name = "program_group_id", referencedColumnName = "id")
@@ -98,8 +102,8 @@ public class AffProgram implements Serializable {
     
     
     @ManyToMany(cascade = CascadeType.ALL)    
-    @JoinTable(name = "AffProgram_PARTNER", joinColumns =
-    { @JoinColumn(name = "id") }, inverseJoinColumns = { @JoinColumn(name = "id") }) 
+    @JoinTable(name = "affprogram_partner", joinColumns =
+    { @JoinColumn(name = "program_id") }, inverseJoinColumns = { @JoinColumn(name = "partner_id") }) 
     private Set<Partner> partners = new HashSet<Partner>(0);
 
     public Set<Partner> getPartners() {
@@ -150,6 +154,22 @@ public class AffProgram implements Serializable {
         this.syncStatus = syncStatus;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
     public String getAffProgramLink() {
         return affProgramLink;
     }
@@ -168,12 +188,12 @@ public class AffProgram implements Serializable {
 
   
 
-    public AffProgramGroup getAffProgramGroupId() {
+    public AffProgramGroup getAffProgramGroup() {
         return apg;
     }
 
-    public void setAffProgramGroupId(AffProgramGroup AffProgramGroupId) {
-        this.apg = AffProgramGroupId;
+    public void setAffProgramGroup(AffProgramGroup affProgramGroup) {
+        this.apg = affProgramGroup;
     }
 
     public String getName() {

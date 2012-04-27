@@ -33,9 +33,8 @@ import javax.validation.constraints.Size;
     @NamedQuery(name = "Affiliate.findByName", query = "SELECT a FROM Affiliate a WHERE a.affiliateName = ?"),
     @NamedQuery(name = "Affiliate.findByAffiliateNameWithAffProgramsAndGroups",
         query = "SELECT a FROM Affiliate a "
-                + " left join fetch a.AffProgramGroupCollection pg"
-                + " left join fetch pg.AffProgramCollection prd"
-                + " left join fetch prd.authorId"
+                + " left join fetch a.apgCollection apg"
+                + " left join fetch apg.programCollection prgs"
                 + " WHERE a.affiliateName = ?"),
     @NamedQuery(name = "Affiliate.findByEmail", query = "SELECT a FROM Affiliate a WHERE a.email = :email")})
 public class Affiliate implements Serializable {
@@ -130,12 +129,12 @@ public class Affiliate implements Serializable {
     }
     
 
-    public Set<AffProgramGroup> getAffProgramGroupCollection() {
+    public Set<AffProgramGroup> getApgCollection() {
         return apgCollection;
     }
 
-    public void setAffProgramGroupCollection(Set<AffProgramGroup> AffProgramGroupCollection) {
-        this.apgCollection = AffProgramGroupCollection;
+    public void setApgCollection(Set<AffProgramGroup> apgCollection) {
+        this.apgCollection = apgCollection;
     }
 
     @Override

@@ -91,7 +91,7 @@ public class DataGenService {
         for (int i = 0; i < 100;++i) {
             AffProgram curProd = entityFactory.makeAffProgram();
             AffProgramSet.add(curProd);
-            curProd.setAffProgramGroupId(pgList.get(i/pgList.size()));
+            curProd.setAffProgramGroup(pgList.get(i/pgList.size()));
             AffProgramDao.create(curProd);
             rowCounter++;
         }

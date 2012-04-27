@@ -14,7 +14,6 @@ Contains list of classes which comprise our model and cache provider definition
         <property name="cache.region.factory_class">org.hibernate.cache.EhCacheRegionFactory</property>
 
         <mapping class="com.mne.advertmanager.model.Affiliate"/>
-        <mapping class="com.mne.advertmanager.model.Author"/>
         <mapping class="com.mne.advertmanager.model.Partner"/>        
         <mapping class="com.mne.advertmanager.model.AffProgram"/>
         <mapping class="com.mne.advertmanager.model.AffProgramGroup"/>
@@ -23,6 +22,6 @@ Contains list of classes which comprise our model and cache provider definition
         <mapping class="com.mne.advertmanager.model.AccessLog"/>
         <mapping class="com.mne.advertmanager.parsergen.model.Project"/>
         <mapping class="com.mne.advertmanager.parsergen.model.DataSpec"/>
-        <mapping class="com.mne.advertmanager.parsergen.model.SelectableItem"/>
+        <mapping class="com.mne.advertmanager.parsergen.model.SelectableItem"/><!--  -->
     </session-factory>
 </hibernate-configuration>
