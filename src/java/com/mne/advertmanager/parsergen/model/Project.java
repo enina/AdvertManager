@@ -41,7 +41,7 @@ public class Project implements Serializable {
     private static final Map<String, String[]> dataSpecConfig=new HashMap<String,String[]>();    
     static {
         dataSpecConfig.put("Access", new String[]{"DateTime","IP","Referer","Target"});
-        dataSpecConfig.put("PurchaseOrder", new String[]{"ID","Status","TrackingNumber","Country","City","PurchaseOrder Sum",
+        dataSpecConfig.put("PurchaseOrder", new String[]{"ID","Status","TrackingNumber","Country","City","PurchaseOrderSum",
                                                         "Commision","Partner","IP","Date"});
         dataSpecConfig.put("Partner", new String[]{"Name","Email"});
     }
