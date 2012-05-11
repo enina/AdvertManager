@@ -78,7 +78,7 @@ public class AccessLog implements Serializable {
     @ManyToOne(optional = false)
     private AffProgram affProgram;
     
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "accessId")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "access")
     private Collection<PurchaseOrder> purchaseOrderCollection;
 
     public AccessLog() {

@@ -7,7 +7,6 @@ SET storage_engine=innodb;
 drop table if exists purchase_order         CASCADE;
 drop table if exists access_log             CASCADE;
 drop table if exists aff_program            CASCADE;
-drop table if exists author                 CASCADE;
 drop table if exists affprog_group         CASCADE;
 drop table if exists affiliate              CASCADE;
 drop table if exists partner                CASCADE;
@@ -21,12 +20,6 @@ drop table if exists group_authorities  CASCADE;
 drop table if exists group_members      CASCADE;
 ---------- spring security tables ------------------
 
-
-create table author (
-    id INT NOT NULL AUTO_INCREMENT,
-    authorName varchar(256) not null ,
-    email      varchar(256) not null ,
-    CONSTRAINT AUTHOR_PK PRIMARY KEY (id));
 
 create table affiliate (
     id INT NOT NULL AUTO_INCREMENT,
@@ -82,9 +75,9 @@ create table access_log (
 
 
 create table partner (
-    id                      int         not null auto_increment,
-    name        varchar(50)    not null ,
-    email         varchar(256) not null ,
+    id          int          not null auto_increment,
+    name        varchar(64)  not null ,
+    email       varchar(256) not null ,
     PRIMARY KEY (id));
 
 create table purchase_order (
