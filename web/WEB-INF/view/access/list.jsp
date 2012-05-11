@@ -1,3 +1,13 @@
+
+
+<% 
+    /* AdvertManager\web\WEB-INF\view\access\list.jsp
+     * this file generate presentation of accesses for given affiliate pragram
+     * 
+    */
+%> 
+
+
 <%@ include file="../common/taglibs.jsp" %>
     
 <table border="1" class="affTable">

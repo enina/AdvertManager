@@ -4,6 +4,7 @@
  */
 package com.mne.advertmanager.dao;
 
+import com.mne.advertmanager.model.AffProgram;
 import java.io.Serializable;
 import java.util.Collection;
 
@@ -32,4 +33,5 @@ public interface GenericDao <T, PK extends Serializable> {
     public Collection<T> findByExample(T example);
     
     public void flush();
+
 }

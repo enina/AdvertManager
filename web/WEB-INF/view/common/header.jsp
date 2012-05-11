@@ -5,7 +5,7 @@
 <div style="height: 70px; background-color: #353535;">
     
     
-     <span style="float: right; font-size: 1.3em; position: relative; left: -40px; top: 10px; color: white;">
+     <span id="welcomeUser">
         Hello
         <!---->
         <sec:authorize access="hasRole('ROLE_USER')">
@@ -13,24 +13,24 @@
         </sec:authorize>
             
      </span>
-    <table name=""  class="menuetable" > <!--style="; display: block; margin:0px; padding:2px; border-collapse: collapse; " -->
-        <tr>
-            <td class="affTd"><a name="menu" class="menuItem" href="${pageContext.request.contextPath}/mvc/home" >Home</a></td>
-            <td class="affTd"> <a class="menuItem" href="${pageContext.request.contextPath}/mvc/affiliates/list">Affiliates</a></td>
-            <td class="affTd"> <a class="menuItem" href="${pageContext.request.contextPath}/mvc/affprograms/list"> Programs </a></td>
-            <td class="affTd"> <a class="menuItem" href="${pageContext.request.contextPath}/mvc/access/list"> AccessLog </a></td>
+    <ul  id="topMenue" > 
+    
+            <li class=""> <a class="menuItem" href="${pageContext.request.contextPath}/mvc/home" >Home</a></li>
+            <li class=""> <a class="menuItem" href="${pageContext.request.contextPath}/mvc/affiliates/list">Affiliates</a></li>
+            <li class=""> <a class="menuItem" href="${pageContext.request.contextPath}/mvc/affprograms/list"> Programs </a></li>
+            <li class=""> <a class="menuItem" href="${pageContext.request.contextPath}/mvc/access/list"> AccessLog </a></li>
 
-            <td class="affTd"><a name="menu" class="menuItem" href="${pageContext.request.contextPath}/mvc/affprograms/new">Add Program</a></td>
+            <li class=""><a class="menuItem" href="${pageContext.request.contextPath}/mvc/affprograms/new">Add Program</a></li>
  
             <sec:authorize access="hasRole('ROLE_ADMIN')">
-                <td class="affTd"> <a class="menuItem" href="${pageContext.request.contextPath}/mvc/dataGen/generate">Generate Data</a></td>
-                <td class="affTd"> <a class="menuItem" href="${pageContext.request.contextPath}/mvc/affiliates/new">Register Affiliate</a></td>
-                <td class="affTd"> <a class="menuItem" href="${pageContext.request.contextPath}/mvc/apps/parsergen">Configure Parser</a></td>  
-                <td class="affTd"> <a class="menuItem" href="${pageContext.request.contextPath}/mvc/billing/list">Billing sites</a></td>
+                <li class=""> <a class="menuItem" href="${pageContext.request.contextPath}/mvc/dataGen/generate">Generate Data</a></li>
+                <li class=""> <a class="menuItem" href="${pageContext.request.contextPath}/mvc/affiliates/new">Register Affiliate</a></li>
+                <li class=""> <a class="menuItem" href="${pageContext.request.contextPath}/mvc/apps/parsergen">Configure Parser</a></li>  
+                <li class=""> <a class="menuItem" href="${pageContext.request.contextPath}/mvc/billing/list">Billing sites</a></li>
             </sec:authorize> 
-            <td class="affTd"><a name="menu" class="menuItem" href="${pageContext.request.contextPath}/j_spring_security_logout">Logout</a></td>
-        </tr>
-    </table>
+            <li class=""><a name="menu" class="menuItem" href="${pageContext.request.contextPath}/j_spring_security_logout">Logout</a></li>
+      
+    </ul>
 
 
   
