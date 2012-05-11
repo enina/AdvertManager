@@ -223,6 +223,7 @@
             <map>
                 <entry key="Access" value-ref="accessLogImporter"/>
                 <entry key="Partners" value-ref="partnerImporter"/>
+                <entry key="PurchaseOrder" value-ref="PurchaseOrderImporter"/>
             </map>
         </property>
     </bean>    
@@ -232,6 +233,12 @@
     <!-- Utility Bean , Used by dataGenService to create objects -->
     <bean id="adManEntityFactory" class="com.mne.advertmanager.util.EntityFactory"/>
     <bean id="accessLogImporter" class="com.mne.advertmanager.util.AccessLogImporter">
+        <property name="accessLogService"       ref="accessLogService"/>        
+        <property name="accessSourceService"    ref="accessSourceService"/>                
+        <property name="affProgramService"         ref="affProgramService"/>        
+    </bean>
+    
+    <bean id="PurchaseOrderImporter" class="com.mne.advertmanager.util.PurchaseOrderImporter">
         <property name="accessLogService"       ref="accessLogService"/>        
         <property name="accessSourceService"    ref="accessSourceService"/>                
         <property name="affProgramService"         ref="affProgramService"/>        

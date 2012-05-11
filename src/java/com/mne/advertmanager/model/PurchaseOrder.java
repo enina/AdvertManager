@@ -148,5 +148,41 @@ public class PurchaseOrder implements Serializable {
     public String toString() {
         return "com.mne.advertmanager.model.PurchaseOrder[ id=" + id + " ]";
     }
+
+    public void setOriginalOrderId(String itemValue) {
+        throw new UnsupportedOperationException("Not yet implemented");
+    }
+
+    public void setOriginalOrderStatus(String itemValue) {
+        throw new UnsupportedOperationException("Not yet implemented");
+    }
+
+    public void setTrackingNumber(String itemValue) {
+        throw new UnsupportedOperationException("Not yet implemented");
+    }
+
+    public void setCountry(String itemValue) {
+        throw new UnsupportedOperationException("Not yet implemented");
+    }
+
+    public void setCity(String itemValue) {
+        throw new UnsupportedOperationException("Not yet implemented");
+    }
+
+    public void setPOSum(String itemValue) {
+        throw new UnsupportedOperationException("Not yet implemented");
+    }
+
+    public void setCommison(String itemValue) {
+        throw new UnsupportedOperationException("Not yet implemented");
+    }
+
+    public void setPartner(String itemValue) {
+        throw new UnsupportedOperationException("Not yet implemented");
+    }
+
+    public void setIP(String itemValue) {
+        throw new UnsupportedOperationException("Not yet implemented");
+    }
     
 }
