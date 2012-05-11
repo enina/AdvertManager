@@ -82,7 +82,7 @@ create table partner (
 
 create table purchase_order (
     id          int not null auto_increment ,
-    program_id  int not null ,
+    affprogram_id  int not null ,
     partner_id  int ,
     access_id   int ,--ukazatel tablica perehodov
     status      varchar(256)  ,--order status
