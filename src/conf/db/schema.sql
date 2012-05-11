@@ -70,16 +70,22 @@ create table access_source (
 
 create table access_log (
     id INT NOT NULL AUTO_INCREMENT,
-    program_id  int not null ,
+    affprogram_id  int not null ,
     access_time TIMESTAMP , --vremya perehoda
     ip_address varchar(256) , --client ip address
     location  varchar(2048)  , --client geo location
     source_domain_id int not null ,
     url varchar(256)  ,
     PRIMARY KEY (id),
-    FOREIGN KEY (program_id) REFERENCES aff_program(id) on delete cascade,
+    FOREIGN KEY (affprogram_id) REFERENCES aff_program(id) on delete cascade,
     FOREIGN KEY (source_domain_id) REFERENCES access_source(id) ON DELETE CASCADE);
 
+
+create table partner (
+    id                      int         not null auto_increment,
+    name        varchar(50)    not null ,
+    email         varchar(256) not null ,
+    PRIMARY KEY (id));
 
 create table purchase_order (
     id          int not null auto_increment ,
@@ -92,11 +98,6 @@ create table purchase_order (
     FOREIGN KEY (program_id) REFERENCES aff_program(id) on delete cascade,
     FOREIGN KEY (access_id)  REFERENCES access_log(id) on delete cascade);
 
-create table partner (
-    id                      int         not null auto_increment,
-    name        varchar(50)    not null ,
-    email         varchar(256) not null ,
-    PRIMARY KEY (id));
 
 
 
