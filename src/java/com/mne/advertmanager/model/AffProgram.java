@@ -30,7 +30,11 @@ import javax.xml.bind.annotation.XmlTransient;
         query = "SELECT p FROM AffProgram p "
                 + "left join fetch p.apg apg "
                 + "left join fetch apg.affiliateId "),
-    @NamedQuery(name = "AffProgram.findById", query = "SELECT p FROM AffProgram p WHERE p.id = :id"),
+    @NamedQuery(name = "AffProgram.findByIdAndAffiliate",
+        query = "SELECT p FROM AffProgram p "
+                + "left join fetch p.apg apg "
+                + "left join fetch apg.affiliateId aff "
+                + "WHERE p.id = ? and aff.affiliateName=?"),
     @NamedQuery(name = "AffProgram.findByDescription", query = "SELECT p FROM AffProgram p WHERE p.description = :description"),
     @NamedQuery(name = "AffProgram.findBySyncStatus", query = "SELECT p FROM AffProgram p WHERE p.syncStatus = :syncStatus"),
     @NamedQuery(name = "AffProgram.findByAffProgramLink", query = "SELECT p FROM AffProgram p WHERE p.affProgramLink = ?"),
@@ -78,13 +82,7 @@ public class AffProgram implements Serializable {
     @Column(name = "password")
     private String password;
 
-    public AffProgramGroup getApg() {
-        return apg;
-    }
-
-    public void setApg(AffProgramGroup apg) {
-        this.apg = apg;
-    }
+   
     
     @Size(min = 0, max = 256)
     @Column(name = "redirect_link")
@@ -101,6 +99,26 @@ public class AffProgram implements Serializable {
     private String name;            //
     
     
+    
+    /**C-tor: empty*/
+    public AffProgram() {
+        id=-1;
+        apg = new AffProgramGroup(-1);
+        
+    }
+    /**C-tor: set id only*/
+    public AffProgram(Integer id) {
+        this.id = id;
+    }    
+    
+    public AffProgramGroup getApg() {
+        return apg;
+    }
+
+    public void setApg(AffProgramGroup apg) {
+        this.apg = apg;
+    }    
+    
     @ManyToMany(cascade = CascadeType.ALL)    
     @JoinTable(name = "affprogram_partner", joinColumns =
     { @JoinColumn(name = "program_id") }, inverseJoinColumns = { @JoinColumn(name = "partner_id") }) 
@@ -114,16 +132,7 @@ public class AffProgram implements Serializable {
         this.partners = partners;
     }
 
-    /**C-tor: empty*/
-    public AffProgram() {
-        id=-1;
-        apg = new AffProgramGroup(-1);
-        
-    }
-    /**C-tor: set id only*/
-    public AffProgram(Integer id) {
-        this.id = id;
-    }
+    
 
 
     public Integer getId() {

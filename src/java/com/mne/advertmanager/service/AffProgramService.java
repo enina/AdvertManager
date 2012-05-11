@@ -11,6 +11,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.mne.advertmanager.dao.GenericDao;
 import com.mne.advertmanager.model.AffProgram;
 import com.mne.advertmanager.model.AffProgramGroup;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 
 /**
  *
@@ -18,11 +20,11 @@ import com.mne.advertmanager.model.AffProgramGroup;
  */
 public class AffProgramService {
 
-    private GenericDao<AffProgram, Integer> AffProgramDao;
+    private GenericDao<AffProgram, Integer> affProgramDao;
     private AffProgramGroupService afPrGrService;
 
     public void setAffProgramDao(GenericDao<AffProgram, Integer> AffProgramDao) {
-        this.AffProgramDao = AffProgramDao;
+        this.affProgramDao = AffProgramDao;
     }
 
   
@@ -36,7 +38,7 @@ public class AffProgramService {
 //============================ findAllAffPrograms ==============================
     @Transactional(readOnly = true)
     public Collection<AffProgram> findAllAffPrograms() {
-        return AffProgramDao.findByQuery("AffProgram.findAll");
+        return affProgramDao.findByQuery("AffProgram.findAll");
     }
 //=========================== findAffProgramByLink =============================
     @Transactional(readOnly = true)
@@ -44,7 +46,7 @@ public class AffProgramService {
         
         AffProgram result = null;
 
-        Collection<AffProgram> data =  AffProgramDao.findByQuery("AffProgram.findByAffProgramLink",link);
+        Collection<AffProgram> data =  affProgramDao.findByQuery("AffProgram.findByAffProgramLink",link);
         if (data != null && data.size()>0)
             result = data.iterator().next();
         
@@ -55,11 +57,11 @@ public class AffProgramService {
     public AffProgram findAffProgramByID(int id) {
         
         AffProgram result = null;
-
-        AffProgram data =  AffProgramDao.read(id);
-       // Project project = projectDao.read(blngProjId);
-        if (data != null )
-            result = data; 
+        String userName = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
+        Collection<AffProgram> tmp = affProgramDao.findByQuery("AffProgram.findByIdAndAffiliate",id,userName);
+        if (tmp != null && tmp.size()>0)
+            result = tmp.iterator().next();
+       
         return result;
     }  
 //============================ createAffProgram ================================
@@ -74,7 +76,7 @@ public class AffProgramService {
             pg = afPrGrService.createOrUpdate(pg);
         
         AffProgram.setAffProgramGroup(pg);
-        AffProgramDao.create(AffProgram);
+        affProgramDao.create(AffProgram);
     }
     
 }
