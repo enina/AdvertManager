@@ -96,7 +96,7 @@ create table purchase_order (
     country varchar(256),
     city varchar(256),
     PRIMARY KEY (id),
-    FOREIGN KEY (program_id)  REFERENCES aff_program(id) on delete cascade,
+    FOREIGN KEY (affprogram_id)  REFERENCES aff_program(id) on delete cascade,
     FOREIGN KEY (access_id)   REFERENCES access_log(id) on delete cascade,
     FOREIGN KEY (partner_id)  REFERENCES partner(id) on delete cascade);
 
