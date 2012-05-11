@@ -30,4 +30,8 @@ public class AccessLogService {
     public Integer createAccessLog(AccessLog access) {
         return accessLogDao.create(access);
     }
+
+    public AccessLog findAccessByIP(String ipAddress) {
+        return accessLogDao.findSingleItemByQuery("AccessLog.findByIpAddress", ipAddress);
+    }
 }
