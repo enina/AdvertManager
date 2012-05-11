@@ -49,7 +49,7 @@ public class PartnerImporter  implements BillingDataImporter{
 //==================================== saveDataItem ============================
 //this function save given Partner(dataItem) to DB
     @Override
-    public void saveDataItem(Affiliate aff,Object dataItem) {
+    public void saveDataItem(AffProgram program,Object dataItem) {
         Partner partner = (Partner)dataItem;
 //
 //        aff.getId()

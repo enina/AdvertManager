@@ -8,7 +8,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 /**
  *
- * @author ilyae
+ * @author Misha Lebedev & Nina Edelstain 
  */
 public class BillingSpec {
     

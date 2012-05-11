@@ -18,10 +18,10 @@ import com.mne.advertmanager.model.AffProgramGroup;
  */
 public class AffProgramService {
 
-    private GenericDao<AffProgram, Long> AffProgramDao;
+    private GenericDao<AffProgram, Integer> AffProgramDao;
     private AffProgramGroupService afPrGrService;
 
-    public void setAffProgramDao(GenericDao<AffProgram, Long> AffProgramDao) {
+    public void setAffProgramDao(GenericDao<AffProgram, Integer> AffProgramDao) {
         this.AffProgramDao = AffProgramDao;
     }
 
@@ -33,12 +33,12 @@ public class AffProgramService {
     
     
 
-//============================ findAllAffPrograms =================================
+//============================ findAllAffPrograms ==============================
     @Transactional(readOnly = true)
     public Collection<AffProgram> findAllAffPrograms() {
         return AffProgramDao.findByQuery("AffProgram.findAll");
     }
-    
+//=========================== findAffProgramByLink =============================
     @Transactional(readOnly = true)
     public AffProgram findAffProgramByLink(String link) {
         
@@ -50,8 +50,19 @@ public class AffProgramService {
         
         return result;
     }    
+//============================= findAffProgramByLink ===========================
+    @Transactional(readOnly = true)
+    public AffProgram findAffProgramByID(int id) {
+        
+        AffProgram result = null;
 
-//============================ createAffProgram ===================================
+        AffProgram data =  AffProgramDao.read(id);
+       // Project project = projectDao.read(blngProjId);
+        if (data != null )
+            result = data; 
+        return result;
+    }  
+//============================ createAffProgram ================================
     @Transactional
     public void createAffProgram(AffProgram AffProgram) {
         
