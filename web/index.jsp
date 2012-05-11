@@ -48,7 +48,7 @@
                         </ul>
                          
                         <ul id="formButtons">
-                            <li><a  id="loginButton"    onclick="document.getElementById('loginForm').submit();">Login</a></li>  <!-- <input name="submit" type="submit" value="Login"/> -->
+                            <li><a  id="loginButton"    onclick="$('form').submit();">Login</a></li>  <!-- <input name="submit" type="submit" value="Login"/> -->
                             <li><a  id="registerButton" href="${pageContext.request.contextPath}/mvc/affiliates/new">Register</li></a>
                         </ul>
                         

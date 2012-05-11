@@ -37,7 +37,7 @@
                     <c:forEach items="${apg.programCollection}" var="program">
                     <tr>
                         <td >
-                            <a href="${pageContext.request.contextPath}/mvc/affprograms/details/${program.id}" >
+                            <a href="${pageContext.request.contextPath}/mvc/affprograms/details?programId=${program.id}" >
                                 <c:out value="${program.name}" />
                             </a>
                         </td>
