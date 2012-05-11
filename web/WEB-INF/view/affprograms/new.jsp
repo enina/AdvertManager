@@ -9,11 +9,12 @@
     <table>
 
         <tr>
-     
+
             <td>
                 Program Group:
                 <form:select id="apGroups" path="affProgramGroup.id" onchange="apgSelected('${pageContext.request.contextPath}')">
-                    <form:option value="0" label="Define new program group" />
+                    <form:option value="-1" label="Select or create program group" />
+                    <form:option value="0" label="Create new program group" />
                     <form:options items="${apGroups}" itemValue="id" itemLabel="groupName" />
                 </form:select>
             </td>        
@@ -46,11 +47,11 @@
             <td><form:label path="redirectLink">Redirect Link</form:label></td>
             <td><form:input path="redirectLink" /></td>
         </tr>
-        
+
 
     </table>
 
-    
+
 
 
     <table id="apGroupData" style="display:none">
