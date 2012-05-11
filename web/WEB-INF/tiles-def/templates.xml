@@ -41,7 +41,7 @@
        <put-attribute name="content" value="/WEB-INF/view/affprograms/list.jsp" />
    </definition>
    
-   <definition name="affprograms/details/*" extends=".mainTemplate">
+   <definition name="affprograms/details" extends=".mainTemplate">
        <put-attribute name="title" value="Affiliate Programs" type="string" />
        <put-attribute name="content" value="/WEB-INF/view/affprograms/details.jsp" />
    </definition>

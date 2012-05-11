@@ -21,9 +21,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Partner.findAll", query = "SELECT p FROM Partner p"),
-    @NamedQuery(name = "Partner.findById", query = "SELECT p FROM Partner p WHERE p.id = :id"),
-    @NamedQuery(name = "Partner.findByName", query = "SELECT p FROM Partner p WHERE p.name = :name"),
-    @NamedQuery(name = "Partner.findByEmail", query = "SELECT p FROM Partner p WHERE p.email = :email")})
+    @NamedQuery(name = "Partner.findById", query = "SELECT p FROM Partner p WHERE p.id = ?"),
+    @NamedQuery(name = "Partner.findByName", query = "SELECT p FROM Partner p WHERE p.name = ?"),
+    @NamedQuery(name = "Partner.findByEmail", query = "SELECT p FROM Partner p WHERE p.email = ?")})
 public class Partner implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id

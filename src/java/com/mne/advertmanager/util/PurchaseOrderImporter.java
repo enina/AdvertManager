@@ -83,12 +83,17 @@ public class PurchaseOrderImporter implements BillingDataImporter {
     
     
     
-    private int processSum(String itemValue, PurchaseOrder po) {
-        int result = 0;
+    private float processSum(String itemValue, PurchaseOrder po) {
+        float result = 0;
         String[] items = itemValue.split(" ");
         if (items != null) {
             if (items.length > 0) {
-                result = Integer.parseInt(items[0]);
+                try {
+                    result = Float.parseFloat(items[0]);
+                }catch(Exception ex) {
+                    logger.error("Error {} parsing float from {}",ex.toString() , items[0]);
+                    result= 0f;
+                }
             }
             if (items.length > 1) {
                 po.setCurrency(items[1]);
@@ -98,12 +103,17 @@ public class PurchaseOrderImporter implements BillingDataImporter {
         return result;
     }
     
-    private int processCommision(String itemValue) {
-        int result = 0;
+    private float processCommision(String itemValue) {
+        float result = 0;
         String[] items = itemValue.split(" ");
         if (items != null) {
             if (items.length > 0) {
-                result = Integer.parseInt(items[0]);
+                 try {
+                    result = Float.parseFloat(items[0]);
+                }catch(Exception ex) {
+                    logger.error("Error {} parsing float from {}",ex.toString(),items[0]);
+                    result= 0f;
+                }
             }
         }
         return result;
