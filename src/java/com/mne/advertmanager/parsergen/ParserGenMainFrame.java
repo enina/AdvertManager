@@ -1076,7 +1076,7 @@ public class ParserGenMainFrame extends javax.swing.JFrame {
                 selector = buildSinglePathElementSelector((DefaultMutableTreeNode) path.getLastPathComponent(), false, true);
             }
             cmbSubItem.setSelectedItem(cmd);
-            txtSubItemSelector.setText(selector);
+            txtSubItemSelector.setText(selector.trim());
         }
 
         private String buildSinglePathElementSelector(DefaultMutableTreeNode curPathElem, boolean isPrefixRequired, boolean isSuffixRequired) {
