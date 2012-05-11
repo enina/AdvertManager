@@ -5,7 +5,6 @@
 package com.mne.advertmanager.util;
 
 import com.mne.advertmanager.model.AffProgram;
-import com.mne.advertmanager.model.Affiliate;
 
 /**
  *
