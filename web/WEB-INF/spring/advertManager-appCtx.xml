@@ -152,6 +152,11 @@
         </constructor-arg>
     </bean>    
 
+    <bean id="partnerDao"  parent="adManGenericDao" class="com.mne.advertmanager.dao.GenericDaoHibernateImpl" >
+        <constructor-arg >
+            <value type="java.lang.Class">com.mne.advertmanager.model.Partner</value>
+        </constructor-arg>
+    </bean>    
     
     <bean id="selectableItemDao"  parent="adManGenericDao" class="com.mne.advertmanager.dao.GenericDaoHibernateImpl" >
         <constructor-arg >
@@ -204,8 +209,11 @@
     
     <bean id="accessLogService" class="com.mne.advertmanager.service.AccessLogService">
         <property name="accessLogDao" ref="accessLogDao"/>
-    </bean>        
+    </bean>   
     
+    <bean id="partnerService" class="com.mne.advertmanager.service.PartnerService">
+        <property name="partnerDao" ref="partnerDao"/>
+    </bean>   
     
     <bean id="billingProjectService" class="com.mne.advertmanager.service.BillingProjectService">
         <property name="projectDao"         ref="projectDao"/>
@@ -214,7 +222,8 @@
         <property name="importers">
             <map>
                 <entry key="Access" value-ref="accessLogImporter"/>
-    <!-- edit<entry key="Partners" value-ref="partnersLogImporter"/> -->
+                <entry key="Partners" value-ref="partnerImporter"/>
+                <entry key="PurchaseOrder" value-ref="PurchaseOrderImporter"/>
             </map>
         </property>
     </bean>    
@@ -229,12 +238,17 @@
         <property name="affProgramService"         ref="affProgramService"/>        
     </bean>
     
-    <!-- edit 
-    <bean id="partnersLogImporter" class="com.mne.advertmanager.util.PartnersLogImporter"> 
+    <bean id="PurchaseOrderImporter" class="com.mne.advertmanager.util.PurchaseOrderImporter">
+        <property name="accessLogService"       ref="accessLogService"/>        
         <property name="accessSourceService"    ref="accessSourceService"/>                
         <property name="affProgramService"         ref="affProgramService"/>        
+    </bean>
+    
+    
+    <bean id="partnerImporter" class="com.mne.advertmanager.util.PartnerImporter"> 
+        <property name="partnerService"    ref="partnerService"/>                       
     </bean>    
-    -->
+   
     
 
 </beans>
