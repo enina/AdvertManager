@@ -69,6 +69,17 @@ public class GenericDaoHibernateImpl<T, PK extends Serializable> implements Gene
         return result;
     }
 
+    public T findSingleItemByQuery(String queryName, Object... params) {
+
+        T result = null;
+        Collection<T> data = findByQuery(queryName, params);
+        if (data != null && data.size() > 0) {
+            result = data.iterator().next();
+        }
+
+        return result;
+    }
+
     public void setSessionFactory(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
     }
