@@ -112,21 +112,9 @@ public class BillingProjectService {
     @Transactional
     public void importBillingData(AffProgram program) {
 
-        //get affProgram URL
-        URL programBackOfficeUrl = null;
-        String domainName  = null;
-        try {
-            programBackOfficeUrl = new URL( program.getAffProgramLink() );
-            
-            //extract domain name from URL
-            domainName = programBackOfficeUrl.getHost();
-        } catch (MalformedURLException ex) {
-            
-            Logger.getLogger(BillingProjectService.class.getName()).log(Level.SEVERE, null, ex);
-        }
         
         //get all domains from progect table, go over domains and find one that
-        //match substring of program url. use progect that has this domain to
+        //match substring of program url. use project that has this domain to
         //import data.
         
         
@@ -139,7 +127,7 @@ public class BillingProjectService {
             if(projectCollection.iterator().hasNext() ){
                 project = projectCollection.iterator().next();
 
-            if( program.getAffProgramLink().contains( project.getBaseURL() ) )
+            if( program.getAffProgramLink().contains( project.getName() ) )
                                 break;     
             }
             else
@@ -156,14 +144,15 @@ public class BillingProjectService {
         if(project == null)
             return;
         
+        //project baseUrl = programBackOfficeUrl - projectLoginUrl:
+        String programBackOfficeUrl = program.getAffProgramLink();
+        String projectLoginUrl = project.getLoginFormUrl();      
         
-        
-        //inject to project: curent program url of back office with userName and Password
-        if(programBackOfficeUrl != null){
-            project.setBaseURL( programBackOfficeUrl.toString() );
-            project.setUsername(program.getUserName());
-            project.setPassword(program.getPassword());
-        }
+        //inject to project: baseUrl of back office with userName and Password
+        project.setBaseURL( programBackOfficeUrl.replace(projectLoginUrl,"") );
+        project.setUsername(program.getUserName());
+        project.setPassword(program.getPassword());
+
        // project
         
         //get load projec from DB by domain name
@@ -182,17 +171,20 @@ public class BillingProjectService {
 
         //get data of each dataSpec ( include all pages ) of given Project
         for (DataSpec ds : dsList) {
-            int i = 0;
-            boolean hasPaging = ds.getNumPages()>0;
+            int i = 1;
+            boolean hasPaging = ds.getNumPages()>1;
             
             //get data from all pages of current dataSpec 
+            //if thare pages than we neet to add page var and val to end of url
+            //else thare no pages -> don't add page val to url
             do{
-                if (i > ds.getNumPages())
+                if (i > ds.getNumPages()  )
                     break;
                 
                 String url = project.getBaseURL() + ds.getDataURL();
-                i++;
                 
+                
+                //append page var and val to url(if thare is paging)
                 if (hasPaging) {
                     //calculate url with pageing:
                     if (url.indexOf('?')>0)
@@ -209,8 +201,11 @@ public class BillingProjectService {
                     importPageData(program,doc, ds);
                 } catch (Exception ex) {
                     logger.error(ex.toString());
-                }                
+                }
+                
+                i++;
             }while(true);
+            
         }
 
         JSoupTransport.logout(con, project);
@@ -270,7 +265,7 @@ public class BillingProjectService {
             return new AccessLog();
         else if ("Affiliate".equals(dataSpec.getName()))
             return new Affiliate();
-        else if ("Partner".equals(dataSpec.getName()))
+        else if ("Partners".equals(dataSpec.getName()))
                 return new Partner();
         
         return null;

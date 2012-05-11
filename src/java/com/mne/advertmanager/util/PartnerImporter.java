@@ -51,21 +51,10 @@ public class PartnerImporter  implements BillingDataImporter{
     @Override
     public void saveDataItem(AffProgram program,Object dataItem) {
         Partner partner = (Partner)dataItem;
-//
-//        aff.getId()
-//        //save to Partner table :
-//        //save to affiliate_to_partner table :
-//        if (p==null) {
-//            Author a = new Author(0, "ImportedProductAuthor", "Author@email.com");
-//            p = new Product();
-//            p.setName("ImportedProduct");
-//            p.setProductLink(access.getUrl());
-//            p.setProductGroupId(aff.getProductGroupCollection().iterator().next());
-//            p.setAuthorId(a);
-//            productService.createProduct(p);
-//        }
-//        access.setProductId(p);
-//        accessLogService.createAccessLog(access);
+        
+        //persist partner to db
+        partnerService.creatPartner(partner);
+
     }
     
 
