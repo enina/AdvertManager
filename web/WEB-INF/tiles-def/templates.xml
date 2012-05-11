@@ -41,7 +41,7 @@
        <put-attribute name="content" value="/WEB-INF/view/affprograms/list.jsp" />
    </definition>
    
-   <definition name="affprograms/details" extends=".mainTemplate">
+   <definition name="affprograms/details/*" extends=".mainTemplate">
        <put-attribute name="title" value="Affiliate Programs" type="string" />
        <put-attribute name="content" value="/WEB-INF/view/affprograms/details.jsp" />
    </definition>
@@ -68,7 +68,7 @@
    
    
  
-   <!--for gui we defined template that not extends main, meas that it gust go to the jsp page -->
+   <!--for gui we defined template that not extends main, means that it just go to the jsp page -->
    <definition name="apps/parsergen" template="/WEB-INF/view/apps/parsergen.jsp"/>
    
    <definition name="login" template="/index.jsp"/>

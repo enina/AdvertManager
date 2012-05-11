@@ -118,17 +118,17 @@ public class AccessLogImporter implements BillingDataImporter{
     }
 //========================= saveDataItem =======================================
     @Override
-    public void saveDataItem(Affiliate aff,Object dataItem) {
+    public void saveDataItem(AffProgram program,Object dataItem) {
         AccessLog access = (AccessLog)dataItem;
-        AffProgram p = AffProgramService.findAffProgramByLink(access.getUrl());
-        if (p==null) {
-            p = new AffProgram();
-            p.setName("ImportedAffProgram");
-            p.setAffProgramLink(access.getUrl());
-            p.setAffProgramGroup(aff.getApgCollection().iterator().next());
-            AffProgramService.createAffProgram(p);
-        }
-        access.setAffProgram(p);
+//        AffProgram p = AffProgramService.findAffProgramByLink(access.getUrl());
+//        if (p==null) {
+//            p = new AffProgram();
+//            p.setName("ImportedAffProgram");
+//            p.setAffProgramLink(access.getUrl());
+//            p.setAffProgramGroup(aff.getApgCollection().iterator().next());
+//            AffProgramService.createAffProgram(p);
+//        }
+        access.setAffProgram(program);
         accessLogService.createAccessLog(access);
     }
 //============================== processDate ===================================

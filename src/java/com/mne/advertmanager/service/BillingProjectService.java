@@ -6,6 +6,7 @@ package com.mne.advertmanager.service;
 
 import com.mne.advertmanager.dao.GenericDao;
 import com.mne.advertmanager.model.AccessLog;
+import com.mne.advertmanager.model.AffProgram;
 import com.mne.advertmanager.model.Affiliate;
 import com.mne.advertmanager.model.Partner;
 import com.mne.advertmanager.parsergen.model.DataSpec;
@@ -13,7 +14,11 @@ import com.mne.advertmanager.parsergen.model.Project;
 import com.mne.advertmanager.parsergen.model.SelectableItem;
 import com.mne.advertmanager.util.BillingDataImporter;
 import com.mne.advertmanager.util.JSoupTransport;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.jsoup.Connection;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -105,10 +110,66 @@ public class BillingProjectService {
 /**
 */
     @Transactional
-    public void importBillingData(Affiliate aff,int blngProjId) {
+    public void importBillingData(AffProgram program) {
 
+        //get affProgram URL
+        URL programBackOfficeUrl = null;
+        String domainName  = null;
+        try {
+            programBackOfficeUrl = new URL( program.getAffProgramLink() );
+            
+            //extract domain name from URL
+            domainName = programBackOfficeUrl.getHost();
+        } catch (MalformedURLException ex) {
+            
+            Logger.getLogger(BillingProjectService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        //get all domains from progect table, go over domains and find one that
+        //match substring of program url. use progect that has this domain to
+        //import data.
+        
+        
+        
+        //find progect by baseUrl
+        Project project = null;
+        Collection<Project> projectCollection = projectDao.findByQuery("Project.findAll");
+        do{
+            
+            if(projectCollection.iterator().hasNext() ){
+                project = projectCollection.iterator().next();
+
+            if( program.getAffProgramLink().contains( project.getBaseURL() ) )
+                                break;     
+            }
+            else
+                project = null;
+
+        }while(project != null);
+        
+        /*if no proper import project found then no import can be done 
+         *(its unusual case because we only approve add new affProgram if 
+         * thare is ready project to import data).
+         * TODO: if we here we should response with some msg to cliant that
+         * he should contact support.
+         */
+        if(project == null)
+            return;
+        
+        
+        
+        //inject to project: curent program url of back office with userName and Password
+        if(programBackOfficeUrl != null){
+            project.setBaseURL( programBackOfficeUrl.toString() );
+            project.setUsername(program.getUserName());
+            project.setPassword(program.getPassword());
+        }
+       // project
+        
+        //get load projec from DB by domain name
+        //Project project = projectDao.read(domainName);
         //load projec from DB
-        Project project = projectDao.read(blngProjId);
+        //Project project = projectDao.read(blngProjId);
         
         //get Progects Data spec
         List<DataSpec> dsList = project.getDataSpecList();  
@@ -145,7 +206,7 @@ public class BillingProjectService {
                 org.jsoup.nodes.Document doc = JSoupTransport.retrieveDocument(con, url, ds.getMethod());
                 try {
                     //extract data from current document to DB
-                    importPageData(aff,doc, ds);
+                    importPageData(program,doc, ds);
                 } catch (Exception ex) {
                     logger.error(ex.toString());
                 }                
@@ -161,7 +222,7 @@ public class BillingProjectService {
  *        identify data location in document.
  * return:none
 */
-    private void importPageData(Affiliate aff,org.jsoup.nodes.Document doc, DataSpec dataSpec) {
+    private void importPageData(AffProgram program,org.jsoup.nodes.Document doc, DataSpec dataSpec) {
 
         Element dataElem = null;    //hold data root element (used as relative start path to other elements)
         Elements dataList = null;   //hold all sibling html elements with wanted data;
@@ -194,7 +255,7 @@ public class BillingProjectService {
                     logger.error("Error retrieving value of " + selector);
                 }
             }
-            importer.saveDataItem(aff,curDataItem);
+            importer.saveDataItem(program,curDataItem);
         }
     }
 //================================ makeDataItem ================================

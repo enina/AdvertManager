@@ -4,6 +4,7 @@
  */
 package com.mne.advertmanager.util;
 
+import com.mne.advertmanager.model.AffProgram;
 import com.mne.advertmanager.model.Affiliate;
 
 /**
@@ -13,5 +14,5 @@ import com.mne.advertmanager.model.Affiliate;
 public interface BillingDataImporter {
     
     public Object importDataItemProperty(Object dataItem,String itemName,String itemValue);
-    public void saveDataItem(Affiliate aff,Object dataItem);
+    public void saveDataItem(AffProgram program,Object dataItem);
 }

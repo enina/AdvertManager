@@ -10,13 +10,10 @@
         <tbody>
             <c:forEach items="${data}" var="affProgram">
                 <tr>
-                    <td class="affTd" align="left" >
-                        <c:out value="${affProgram.id}" />
-                    </td>
                     
-    <td class="affTd" align="left" >
-        <a href="${pageContext.request.contextPath}/mvc/affprograms/details/${affProgram.id}">${affProgram.name}</a>
-    </td> 
+                    <td class="affTd" align="left" >
+                        <a href="${pageContext.request.contextPath}/mvc/affprograms/details/${affProgram.id}">${affProgram.name}</a>
+                    </td> 
                     <td class="affTd" align="left" >
                         <c:out value="${affProgram.description}" />
                     </td>
