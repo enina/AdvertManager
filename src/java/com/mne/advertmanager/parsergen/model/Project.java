@@ -27,7 +27,11 @@ import javax.xml.bind.annotation.*;
 @Table(name = "billing_project_spec")
 @NamedQueries({
     @NamedQuery(name = "Project.findAll",
-    query = "SELECT p FROM Project p")
+    query = "SELECT p FROM Project p"),
+        
+
+    @NamedQuery(name = "Project.findByBaseUrl", query = "SELECT a FROM Project a WHERE a.baseURL = ?")
+        
 //+
 //" left join fetch p.dataSpecList ds"  +
 //" left join fetch ds.subItems")
@@ -42,73 +46,92 @@ public class Project implements Serializable {
     }
 
     private static final long serialVersionUID = 1L;
+    
     @XmlTransient
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 256)
-    @Column(name = "name")
-    private String name;
+    
+    
+  
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 1024)
     @Column(name = "base_url")
     private String baseURL;
+    
+    
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 256)
+    @Column(name = "name")
+    private String name;
+    
+
     private String homeDirectory;
+    
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 64)
     @Column(name = "username")
     private String username;
+    
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 64)
     @Column(name = "user_field")
     private String userField;
+    
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 64)
     @Column(name = "password")
     private String password;
+    
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 16)
     @Column(name = "password_field")
     private String passwordField;
+    
     @Basic(optional = false)
     @NotNull
     @Size(min = 3, max = 8)
     @Column(name = "method")
     private String method = "get";
+    
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 32)
     @Column(name = "cookie_name")
     private String cookieName;
+    
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 256)
     @Column(name = "login_url")
     private String loginFormUrl;
+    
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 256)
     @Column(name = "logout_url")
     private String logoutUrl;
+    
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 256)
     @Column(name = "selector")
     private String selector;
+    
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 256)
     @Column(name = "home_page")
     private String homePage;
+    
     private boolean isValid = false;
     @XmlElementWrapper(name = "dataSpecList")
     @XmlElement(name = "dataSpec")
@@ -120,6 +143,10 @@ public class Project implements Serializable {
     public Project() {
     }
 
+//    public Project(String baseURL) {
+//        this.baseURL = baseURL;
+//    }
+    
     public Project(Integer id) {
         this.id = id;
     }
@@ -293,6 +320,13 @@ public class Project implements Serializable {
         if (getClass() != obj.getClass()) {
             return false;
         }
+        
+//        final Project other = (Project) obj;
+//        if (this.baseURL != other.baseURL && (this.baseURL == null || !this.baseURL.equals(other.baseURL))) {
+//            return false;
+//        }
+        
+        
         final Project other = (Project) obj;
         if (this.id != other.id && (this.id == null || !this.id.equals(other.id))) {
             return false;
@@ -300,11 +334,13 @@ public class Project implements Serializable {
 
         return true;
     }
-
+//========================== hashCode ==========================================
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
+//        hash += (id != null ? id.hashCode() : 0);
+        
+        hash += (baseURL != null ? baseURL.hashCode() : 0);
         return hash;
     }
 

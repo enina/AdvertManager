@@ -10,6 +10,8 @@ import com.mne.advertmanager.parsergen.model.Project;
 import com.mne.advertmanager.service.*;
 import com.mne.advertmanager.web.model.BillingSpec;
 import java.io.IOException;
+import java.net.URL;
+import java.security.Principal;
 import java.util.Collection;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -104,27 +106,34 @@ public class AdvertManagerController {
     }
     
     
-
+//=========================== redirect =========================================
+/**this ctrl function redirect users from root URL to home page URL
+ */
     @RequestMapping("/")
     public String redirect() {
         logger.info("redirecting to home page");
         return "redirect:mvc/home/";
     }
-
+//======================== generateHome ========================================
     /**
-     * view resolution works through tiles configuration file WEB-INF/tiles-def/templates.xml tile which defines presentation automatically equals the url for example for url
-     * "home" corresponding tile is <definition name="home" extends=".mainTemplate"> <put-attribute name="content" value="/WEB-INF/view/home.jsp" /> </definition>
-     *
+     * view resolution works through tiles configuration file 
+     * WEB-INF/tiles-def/templates.xml tile which defines presentation 
+     * automatically equals the url for example for url
+     * "home" corresponding tile is
+     * <definition name="home" extends=".mainTemplate">
+     * <put-attribute name="content" value="/WEB-INF/view/home.jsp" />
+     * </definition>
      * @param securityContext
      * @return
      */
     @RequestMapping(value = "home", method = RequestMethod.GET)
-    public @ModelAttribute("data") Affiliate generateHome(SecurityContextHolderAwareRequestWrapper securityContext) {
+    public @ModelAttribute("data") Affiliate generateHome
+                    (SecurityContextHolderAwareRequestWrapper securityContext) {
         String affName = securityContext.getUserPrincipal().getName();
         Affiliate aff = affiliateService.findAffiliateWithAffPrograms(affName);
         return aff;
     }
-
+//========================== generateData ======================================
     @RequestMapping(value = DG_GEN_REQ_MAPPING, method = RequestMethod.GET)
     public ModelAndView generateData() {
         new Thread() {
@@ -136,10 +145,11 @@ public class AdvertManagerController {
             }
         }.start();
 
-        return forwardToView(DG_GEN_REQ_MAPPING, "home", "message", "Greetings from AdMan DataGen .Dummy Data is being generated!");
+        return forwardToView(DG_GEN_REQ_MAPPING, "home", "message",
+                "Greetings from AdMan DataGen .Dummy Data is being generated!");
     }
-    ////////////////////////////////////////////// AffPrograms /////////////////////////////////////////////////////////////////////////////
-
+ 
+//========================== viewAffProgDefintionForm ==========================
     @RequestMapping(value = AFFPROGRAM_NEW_REQ_MAPPING, method = RequestMethod.GET)
     public ModelAndView viewAffProgDefintionForm(SecurityContextHolderAwareRequestWrapper securityContext) {
 
@@ -157,7 +167,8 @@ public class AdvertManagerController {
 //============================ addAffProgram ===================================
 
     @RequestMapping(value = AFFPROGRAM_ADD_REQ_MAPPING, method = RequestMethod.POST)
-    public ModelAndView addAffProgram(@ModelAttribute("affprogram") AffProgram affprogram, SecurityContextHolderAwareRequestWrapper securityContext) {
+    public ModelAndView addAffProgram(@ModelAttribute("affprogram") AffProgram affprogram,
+                    SecurityContextHolderAwareRequestWrapper securityContext) {
 
         String status = "";
         try {
@@ -167,7 +178,8 @@ public class AdvertManagerController {
             status = handleException(e, "create", "Affprogram", affprogram.getName());
         }
 
-        ModelAndView mav = forwardToView(AFFPROGRAM_ADD_REQ_MAPPING, "home", "data", generateHome(securityContext));
+        ModelAndView mav = forwardToView(AFFPROGRAM_ADD_REQ_MAPPING, "home",
+                                        "data", generateHome(securityContext));
 
         mav.addObject("status", status);
 
@@ -175,7 +187,7 @@ public class AdvertManagerController {
     }
 
 
-//=============================== viewAffPrograms =================================
+//=============================== viewAffPrograms ==============================
     @RequestMapping(value = AFFPROGRAM_LIST_REQ_MAPPING, method = RequestMethod.GET)
     public @ModelAttribute("data")
     Collection<AffProgram> viewAffPrograms() {
@@ -192,19 +204,33 @@ public class AdvertManagerController {
 
         return affprograms;
     }
-//====================================== viewProgramDetails() ===================
-   @RequestMapping(value = AFFPROGRAM_DETAILS_REQ_MAPPING +"/{affProgramId}", method = RequestMethod.GET)
-    public @ModelAttribute("data")
-               
-    Collection<AffProgram> viewProgramDetails(@PathVariable final int affProgramId) {
-       
-       
-        
-        return null;
+//=============================== viewProgramDetails() =========================
+/**This function response when user want see an affProgram detailed 
+ * information and graphs.
+ * the function find all relevant data, then redirect user view to proper window
+ */
+   @RequestMapping(value = AFFPROGRAM_DETAILS_REQ_MAPPING +"/{affProgramId}",
+                                                    method = RequestMethod.GET)
+   // public ModelAndView  
+    public @ModelAttribute("program")
+         AffProgram  viewProgramDetails(@PathVariable final int affProgramId,Principal principal) {
+     
+        final String currentUser = principal.getName(); 
+        /*TODO : chack if curent user is same as one how hase this affProgram,
+        * if so redirect to details. else redirect to home
+        * to accomplish this we must retrive the owner affiliate of wanted program
+        */
+
+        AffProgram program  =  affProgramService.findAffProgramByID(affProgramId);
+
+        return program;
+        /*after return statement, the redirection goes to view with same 
+        requestMapping as one that bring control to this function 
+        ( it happens automaticly by spring control-->view resolver ) 
+        */
     }
     
-    //A
-    //////////////////////////////////////////////////// Affiliates ////////////////////////////////////////////////////////////
+//=========================== viewAffiliates ===================================  
     @RequestMapping(value = AFF_LIST_REQ_MAPPING, method = RequestMethod.GET)
     public @ModelAttribute("data")
     Collection<Affiliate> viewAffiliates() {
@@ -213,9 +239,10 @@ public class AdvertManagerController {
 
         return affiliates;
     }
-
+//============================= addUser ========================================
     @RequestMapping(value = AFF_ADD_REQ_MAPPING, method = RequestMethod.POST)
-    public ModelAndView addUser(@ModelAttribute("affiliate") Affiliate affiliate, SecurityContextHolderAwareRequestWrapper securityContext) {
+    public ModelAndView addUser(@ModelAttribute("affiliate") Affiliate affiliate,
+                     SecurityContextHolderAwareRequestWrapper securityContext) {
 
         String status = null;
         try {
@@ -236,11 +263,15 @@ public class AdvertManagerController {
 
         return mav;
     }
-
+//===================================== launchParserGenerator ==================
     @RequestMapping(value = APPS_PARSERGEN_REQ_MAPPING, method = RequestMethod.GET)
     public @ModelAttribute("codebase") String launchParserGenerator(HttpServletRequest request) {
 
-        String codebase = "http://" + request.getServerName() + ":" + request.getServerPort() + request.getServletContext().getContextPath() + "/apps";
+        String codebase = "http://" + request.getServerName() + ":" 
+                + request.getServerPort() 
+                + request.getServletContext().getContextPath() 
+                + "/apps";
+        
         logger.info("Returning codebase=" + codebase);
         return codebase;
     }
@@ -250,10 +281,8 @@ public class AdvertManagerController {
 
         return new Affiliate();
     }
-
-
- 
-    //////////////////////////////////////////////////////  AffProgram Group ////////////////////////////////////////////////////////////////////////
+    
+//============================= getAffProgramGroup =============================
     @RequestMapping(value = AFFPROG_GROUPS + "/{pgId}", method = RequestMethod.GET)
     public void getAffProgramGroup(@PathVariable int pgId, HttpServletResponse response) {
         try {
@@ -264,13 +293,14 @@ public class AdvertManagerController {
             logger.info(result);
             response.getWriter().write(result);
         } catch (IOException e) {
-            String errMsg = ",Exception:" + e.getClass().getSimpleName() + ((e.getMessage() == null) ? "" : " ,Message:" + e.getMessage());
+            String errMsg = ",Exception:" + e.getClass().getSimpleName() 
+                    + ((e.getMessage() == null) ? "" : " ,Message:" 
+                    + e.getMessage());
+            
             logger.error("failed to retrieve affprogram  group (id={},Exception:{})", pgId, errMsg);
         }
     }
-    //////////////////////////////////////////////////////  AffProgram Group ////////////////////////////////////////////////////////////////////////
-
-    //////////////////////////////////////////////////////  Billing       ////////////////////////////////////////////////////////////////////////
+//============================= viewBillingProjects ============================
     @RequestMapping(value = BLNG_LIST_REQ_MAPPING, method = RequestMethod.GET)
     public @ModelAttribute("data") Collection<Project> viewBillingProjects() {
 
@@ -278,21 +308,28 @@ public class AdvertManagerController {
 
         return result;
     }
-
+//============================= uploadBillingSpecification =====================
+/**This function open Billing specification file, then create billing Project 
+ * and store it in db.
+ */
     @RequestMapping(value = BLNG_ADD_REQ_MAPPING, method = RequestMethod.POST)
-    public ModelAndView uploadBillingSpecification(@ModelAttribute("billingSpec") BillingSpec blngSpec, SecurityContextHolderAwareRequestWrapper securityContext) {
+    public ModelAndView uploadBillingSpecification(@ModelAttribute("billingSpec") BillingSpec blngSpec,
+                            SecurityContextHolderAwareRequestWrapper securityContext) {
 
         String status = null;
-        MultipartFile specFile = null;
+        MultipartFile specFile = null;  //spec file handler
         try {
+            //get spec file that uploaded
             specFile = blngSpec.getSpecFile();
             
-            
+            //create new Billing Project form uploaded file data
             Project proj = (Project)jaxbUnmarshaller.unmarshal(specFile.getInputStream());
             
-            //create new Billing Project and save it to DB
+
+            //save Billing Project to DB
             billingProjectService.createProject(proj);
             
+            //compose status massege
             status="File "+ specFile.getOriginalFilename() +" uploaded successfuly";
             
         } catch (Exception e) {
@@ -308,38 +345,56 @@ public class AdvertManagerController {
 
         return mav;
     }
-    
-    @RequestMapping(value = BLNG_IMPORT_REQ_MAPPING+"/{blngProjId}", method = RequestMethod.GET)
-    public ModelAndView importBillingData(@PathVariable final int blngProjId,SecurityContextHolderAwareRequestWrapper securityContextWrapper) {
+//============================= importBillingData ==============================
+/**This function start importing process of data for specified AffProgramm 
+ * this function invoked from by web link and has context variable affProgramId
+ */
+    @RequestMapping(value = BLNG_IMPORT_REQ_MAPPING+"/{affProgramId}", method = RequestMethod.GET)
+    public ModelAndView importBillingData(@PathVariable final int  affProgramId, //old blngProjId,
+                            SecurityContextHolderAwareRequestWrapper securityContextWrapper) {
 
         String status = null; // hold msg that will apear to user upon failure/success.
         
+        //get current affName
         String affName = securityContextWrapper.getUserPrincipal().getName();
+        //find curent affiliate by name
         final Affiliate aff = affiliateService.findAffiliateWithAffPrograms(affName);
+        //get security context data
         final SecurityContext securityContext = SecurityContextHolder.getContext();
+        //find wanted affProgram
+        final AffProgram program  =  affProgramService.findAffProgramByID(affProgramId);
+        
+        /**TODO verify that current affiliate is owner of subject affProgram
+         * and only then proceed to data importing task!!!
+         */
         
         //run data collection in separate Thread:
         try {
             new Thread() {
+                //prepare new thread function 
                 @Override
                 public void run() {
                     //set security context of this Thread
                     SecurityContextHolder.setContext(securityContext);
                     //set thred name
-                    setName(BILLING + "DataImportThread");
-                    //go to collecd data:
-                    billingProjectService.importBillingData(aff,blngProjId);
+                    setName(BILLING + "DataImportThread" + " programId " + affProgramId );
+                    
+                   //go collect data:
+                   //old: billingProjectService.importBillingData(aff,blngProjId);
+                     billingProjectService.importBillingData(program);
                 }
+            //start thread execution
             }.start();
+            
             //billingProjectService.importBillingData(aff,blngProjId);
-            status="Started importing  BillingData for proj id="+blngProjId;
+            status="Started importing  ProgramData for porgram id="+affProgramId;
         } catch (Exception e) {
-            status = handleException(e, "import", "BillingData", "id="+blngProjId);
+            status = handleException(e, "import", "Program Data", "id="+ affProgramId);
         }
         
         //transfer user back to import page(same place he came from)
         ModelAndView mav = null;
-        mav = forwardToView(BLNG_IMPORT_REQ_MAPPING, BLNG_LIST_REQ_MAPPING, "data", viewBillingProjects());
+        mav = forwardToView(BLNG_IMPORT_REQ_MAPPING, AFFPROGRAM_DETAILS_REQ_MAPPING +"/{affProgramId}",null,null);
         
         //define status property in mav. this property will be availible in web page
         //and displayd to user/
@@ -347,18 +402,14 @@ public class AdvertManagerController {
 
         return mav;
     }    
-
+//============================= viewUploadSpecForm =============================
     @RequestMapping(value = BLNG_NEW_REQ_MAPPING, method = RequestMethod.GET)
     public @ModelAttribute("billingSpec") BillingSpec viewUploadSpecForm() {
 
         return new BillingSpec();
     }
-    
-    
 
-    //////////////////////////////////////////////////////  Billing       ////////////////////////////////////////////////////////////////////////
-    
-    //////////////////////////////////////////////////////  Access       ////////////////////////////////////////////////////////////////////////
+//============================= viewAccessLog =================================
     @RequestMapping(value = ACS_LIST_REQ_MAPPING, method = RequestMethod.GET)
     public @ModelAttribute("data") Collection<AccessLog> viewAccessLog() {
 
@@ -366,17 +417,20 @@ public class AdvertManagerController {
 
         return result;
     }
-    //////////////////////////////////////////////////////  Access       ////////////////////////////////////////////////////////////////////////
     
-    
-    //////////////////////////////////////////////////////  Utility ////////////////////////////////////////////////////////////////////////
+//============================= handleException ================================
     private String handleException(Exception e, String opType, String entityType, String entityName) {
-        String errMsg = ",Exception:" + e.getClass().getSimpleName() + ((e.getMessage() == null) ? "" : " ,Message:" + e.getMessage());
-        String status = "Failed to " + opType + " " + entityType + " : " + entityName + errMsg;
+        String errMsg = ",Exception:" + e.getClass().getSimpleName() 
+                + ((e.getMessage() == null) ? "" : " ,Message:" 
+                + e.getMessage());
+        
+        String status = "Failed to " + opType + " " + entityType + " : " 
+                                                    + entityName + errMsg;
+        
         logger.error(status);
         return status;
     }
-
+//============================= forwardToView ==================================
     private ModelAndView forwardToView(String requestMapping, String viewName, String key, Object data) {
         ModelAndView mav = new ModelAndView();
         mav.setViewName(viewName);
@@ -387,17 +441,17 @@ public class AdvertManagerController {
         return mav;
     }
 
-    ///////////////////////////////////////// Setters /////////////////////////////////////////////////////////////////////////////////
+//============================= setDataGenerator ===============================
     @Autowired
     public void setDataGenerator(DataGenService dataGenerator) {
         this.dataGenerator = dataGenerator;
     }
-
+//============================= setAffiliateService ============================
     @Autowired
     public void setAffiliateService(AffiliateService affiliateService) {
         this.affiliateService = affiliateService;
     }
-
+//============================= setAffProgramService ===========================
     @Autowired
     public void setAffProgramService(AffProgramService affprogramService) {
 
@@ -405,17 +459,17 @@ public class AdvertManagerController {
         this.affProgramService = affprogramService;
     }
 
-
+//============================= setAffProgramGroupService ======================
     @Autowired
     public void setAffProgramGroupService(AffProgramGroupService pgService) {
         this.apgService = pgService;
     }
-    
+//============================= setBillingProjectService =======================    
     @Autowired
     public void setBillingProjectService(BillingProjectService billingProjectService) {
         this.billingProjectService = billingProjectService;
     }
-
+//============================= setAccessLogService ============================
     @Autowired
     public void setAccessLogService(AccessLogService accessLogService) {
         this.accessLogService = accessLogService;

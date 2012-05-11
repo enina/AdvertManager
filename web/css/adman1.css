@@ -3,26 +3,58 @@ body{
     
 }
 
-.graphicBar { 
-    color:blue;
-    background-color: blue;
+table,td,th,tr{
+    
+
+    border-bottom-color: black;
+    border-style: solid;
+    border-width: 1px;
+  
 }
-.affTable {
-        width:1650px;
+th{
+    height: 30px;
+}
+
+#content{
+        
+    width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+    
+}
+
+
+
+.affProgGroupTable {
+        width: 1200px;
         position: relative;
-	border-width: 0px;
+	border-width: 1px;
 	border-style: solid;
 	border-color: black;
         border-collapse:collapse;
-        margin-left: auto;
-        margin-right: auto;
 }
-.affTable th{
+.affProgGroupTable th{
    text-align: center;
    background-color: #818081;
 }
-.affTable td{
+.affProgGroupTable td{
    text-align: center;
+}
+
+.affProgGroupTable-td-1{
+    width: 148px;
+}
+.affProgGroupTable-td-2{
+    width: 348px;
+}
+.affProgGroupTable-td-3{
+    width: 398px;
+}
+.affProgGroupTable-td-4{
+    width: 149px;
+}
+.affProgGroupTable-td-5{
+    width: 148px;
 }
 
 
@@ -30,46 +62,47 @@ tr:nth-child(even){
     background: #eeedfe
 }
 tr:nth-child(odd){
-    background: #fffefff
+    background: #ffffff
 }
 
-.affTd {
-    min-width: 70px;
-    text-align: center;
-    font-size: 1.2em;
-}
-.affTd a{
-    
-    padding-right: 20px;
-}
-.menu{ /*define <a> that hold menu links (home,loguot)*/
-    height: 100%;
-    display: block;
-    text-decoration: none;
-    color: black;
-}
-.menuetable,.menuetable tr, .menuetable tr td {
-    
-    border-collapse: collapse;
-    border-bottom-style: none;
-}
-.menuetable{
-    
+
+
+#topMenue{
+    list-style: none;
     position: relative;
-    top: 20px;
+    top:20px;
 }
-.menuItem:visited,.menuItem:link {
-    
+
+#topMenue li{
+    float:left;
+    margin-right: 20px;
+    font-size: 1em;
+}
+#topMenue a:visited,#topMenue a:link{
     text-decoration: none;
     color:#cccccc;
-
+    
 }
-.menuItem:hover{
+#topMenue a:hover{
     color:#ffffff;
     text-decoration: underline;
 }
 
-.content{
+
+
+
+.verticalBrake1{
     
+    width: 100%;
+    height: 10px;
+}
+#welcomeUser{
+    position: relative;
+    float:right;
+    font-size: 1em;
+    left: -40px;
+    top: 20px;
+    color: #cccccc;
     
 }
+

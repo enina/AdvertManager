@@ -15,7 +15,7 @@
     and allows to resolve controller view
     -->
 
-    <!-- all controller must be located in the base-package -->
+    <!-- all controllers must be located in the base-package -->
     <context:component-scan base-package="com.mne.advertmanager.web"/>
     
     <!-- bean that defines component which spring uses to handles message localization-->
