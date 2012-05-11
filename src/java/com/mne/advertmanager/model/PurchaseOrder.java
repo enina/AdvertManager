@@ -44,38 +44,38 @@ public class PurchaseOrder implements Serializable {
     @Column(name = "id")
     private Integer id;
     
-    @Size(min = 1, max = 256)
+    @Size(min = 0, max = 256)
     @Column(name = "status")
     private String status;
 
-    @Size(min = 1, max = 256)
+    @Size(min = 0, max = 256)
     @Column(name = "tracking_id")
     private String trackingID;
     
-    @Size(min = 1, max = 256)
+    @Size(min = 0, max = 256)
     @Column(name = "country")    
     private String country;
 
-    @Size(min = 1, max = 256)
+    @Size(min =0, max = 256)
     @Column(name = "city") 
     private String city;
     
     
     @Column(name = "po_sum") 
-    private int sum;
+    private float sum;
     @Column(name = "commision")
-    private int commision;
+    private float commision;
     
-    @Size(min = 1, max = 256)
+    @Size(min = 0, max = 256)
     @Column(name = "ip_address")
     private String ipAddress;    
     
-    @Size(min = 1, max = 256)
+    @Size(min = 0, max = 256)
     @Column(name = "original_order_id")
     private String originalOrderID;
     
 
-    @Size(min = 1, max = 16)
+    @Size(min = 0, max = 16)
     @Column(name = "currency")
     private String currency;    
     
@@ -171,11 +171,11 @@ public class PurchaseOrder implements Serializable {
         city = itemValue;
     }
 
-    public void setPOSum(int itemValue) {
+    public void setPOSum(float itemValue) {
         sum = itemValue;
     }
 
-    public void setCommision(int itemValue) {
+    public void setCommision(float itemValue) {
        commision = itemValue;
     }
 
@@ -199,7 +199,7 @@ public class PurchaseOrder implements Serializable {
         return city;
     }
 
-    public int getCommision() {
+    public float getCommision() {
         return commision;
     }
 
@@ -223,7 +223,7 @@ public class PurchaseOrder implements Serializable {
         return partner;
     }
 
-    public int getSum() {
+    public float getSum() {
         return sum;
     }
 

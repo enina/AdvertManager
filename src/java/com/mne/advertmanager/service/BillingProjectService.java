@@ -105,40 +105,11 @@ public class BillingProjectService {
     @Transactional
     public void importBillingData(AffProgram program) {
 
-
-        //get all domains from progect table, go over domains and find one that
-        //match substring of program url. use project that has this domain to
-        //import data.
-
-
-
-        //find progect by baseUrl
-//        Project project = null;
-//        Collection<Project> projectCollection = projectDao.findByQuery("Project.findAll");
-//        do {
-//
-//            if (projectCollection.iterator().hasNext()) {
-//                project = projectCollection.iterator().next();
-//
-//                if (program.getAffProgramLink().contains(project.getName())) {
-//                    break;
-//                }
-//            } else {
-//                project = null;
-//            }
-//
-//        } while (project != null);
-
-        /*
-         * if no proper import project found then no import can be done (its unusual case because we only approve add new affProgram if thare is ready project to import data).
-         * TODO: if we here we should response with some msg to cliant that he should contact support.
-         */
         //log action
-        
         logger.info("Looking up project data by backoffice link  {}  ", program.getAffProgramLink());
         Project project = projectDao.findSingleItemByQuery("Project.findByBackOfficeURL", program.getAffProgramLink());
         if (project == null) {
-            logger.error("Failed to find project for backoffice link{}  ", program.getAffProgramLink());
+            logger.error("Failed to find project for backoffice link  {}", program.getAffProgramLink());
         }
         else {
             logger.info("Started {} project data import. ", project.getName());
