@@ -71,9 +71,6 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="onEditPurchaseOrder"/>
               </Events>
             </MenuItem>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="onEditPartner"/>
-              </Events>
           </SubComponents>
         </Menu>
         <Menu class="javax.swing.JMenu" name="menuOptions">

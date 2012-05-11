@@ -43,6 +43,7 @@ public class Project implements Serializable {
         dataSpecConfig.put("Access", new String[]{"DateTime","IP","Referer","Target"});
         dataSpecConfig.put("PurchaseOrder", new String[]{"ID","Status","TrackingNumber","Country","City","PurchaseOrder Sum",
                                                         "Commision","Partner","IP","Date"});
+        dataSpecConfig.put("Partner", new String[]{"Name","Email"});
     }
 
     private static final long serialVersionUID = 1L;
