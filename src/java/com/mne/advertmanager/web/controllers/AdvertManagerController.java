@@ -40,6 +40,7 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping("/")
 public class AdvertManagerController {
 
+    //const definitions
     private static final String ADD = "/add";
     private static final String NEW = "/new";
     private static final String LIST = "/list";
@@ -62,13 +63,13 @@ public class AdvertManagerController {
     private static final String AFFPROGRAM_ADD_REQ_MAPPING = AFFPROGRAM + ADD;
     private static final String AFFPROGRAM_LIST_REQ_MAPPING = AFFPROGRAM + LIST;
     private static final String AFFPROGRAM_DETAILS_REQ_MAPPING = AFFPROGRAM + "/details";
-    //private static final String AUTHOR_GET_REQ_MAPPING = AUTHORS+GET;
-    //private static final String PROD_GROUPS_GET_REQ_MAPPING = PROD_GROUPS+GET;
+
     private static final String BLNG_LIST_REQ_MAPPING = BILLING + LIST;
     private static final String BLNG_NEW_REQ_MAPPING = BILLING + NEW;
     private static final String BLNG_ADD_REQ_MAPPING = BILLING + ADD;
     private static final String BLNG_IMPORT_REQ_MAPPING = BILLING + "/import";
     private static final String ACS_LIST_REQ_MAPPING = ACCESS + LIST;
+    //============= variables and objects ======================================
     private static Logger logger = LoggerFactory.getLogger(AdvertManagerController.class);
     private DataGenService dataGenerator;
     private AffiliateService affiliateService;
@@ -79,8 +80,10 @@ public class AdvertManagerController {
     private Gson gson = new Gson();
     private Unmarshaller jaxbUnmarshaller;
 
+    //C-tor
     public AdvertManagerController() {
         try {
+            //preapare XML marshaler
             JAXBContext jaxbCtx = JAXBContext.newInstance(com.mne.advertmanager.parsergen.model.Project.class);
             jaxbUnmarshaller = jaxbCtx.createUnmarshaller();
         } catch (JAXBException ex) {
@@ -390,14 +393,14 @@ public class AdvertManagerController {
         return new BillingSpec();
     }
 
-//============================= viewAccessLog =================================
-    @RequestMapping(value = ACS_LIST_REQ_MAPPING, method = RequestMethod.GET)
+////============================= viewAccessLog =================================
+//    @RequestMapping(value ="/{programId}" + ACS_LIST_REQ_MAPPING , method = RequestMethod.GET)
     public @ModelAttribute("data")
     Collection<AccessLog> viewAccessLog() {
-
-        Collection<AccessLog> result = accessLogService.findAllAccessLog();
-
-        return result;
+//        Collection<AccessLog> result = accessLogService.findAllAccessLog();
+//
+     //   return result;
+         return null;
     }
 
 //============================= handleException ================================
@@ -423,7 +426,7 @@ public class AdvertManagerController {
         logger.info("{} --> {}", requestMapping, viewName);
         return mav;
     }
-
+//================================= SETERS =====================================
 //============================= setDataGenerator ===============================
     @Autowired
     public void setDataGenerator(DataGenService dataGenerator) {
