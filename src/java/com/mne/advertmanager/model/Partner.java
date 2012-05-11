@@ -6,6 +6,7 @@ package com.mne.advertmanager.model;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Set;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -40,6 +41,9 @@ public class Partner implements Serializable {
     @Size(min = 1, max = 256)
     @Column(name = "email")
     private String email;
+    
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "partner")
+    private Set<PurchaseOrder> poSet;
 
     public Partner() {
     }
@@ -78,6 +82,16 @@ public class Partner implements Serializable {
         this.email = email;
     }
 
+    public Set<PurchaseOrder> getPoSet() {
+        return poSet;
+    }
+
+    public void setPoSet(Set<PurchaseOrder> poSet) {
+        this.poSet = poSet;
+    }
+
+    
+    
     @Override
     public int hashCode() {
         int hash = 0;

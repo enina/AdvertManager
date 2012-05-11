@@ -31,5 +31,14 @@ public class PartnerService {
     public Integer creatPartner(Partner partner) {
         return partnerDao.create(partner);
     }
+
+    public Partner findPartnerByName(String itemValue) {
+        Partner result = null;
+        Collection<Partner> data = partnerDao.findByQuery("Partner.findByName");
+        if (data != null && data.size() > 0)
+            result = data.iterator().next();
+        return result;
+        
+    }
     
 }

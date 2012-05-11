@@ -68,7 +68,7 @@ public class DataSpec implements Serializable {
 
     @SuppressWarnings("unused")
     protected DataSpec(){
-        id=-1;
+        id=1;
         subItems.add(new SelectableItem("root"));
         subItems.add(new SelectableItem("listEntry"));
     }
@@ -93,9 +93,6 @@ public class DataSpec implements Serializable {
     public void setId(Integer id) {
         this.id = id;
     }
-    
-    
-    
     
     public String getDataURL() {
         return dataURL;
