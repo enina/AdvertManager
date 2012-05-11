@@ -31,7 +31,7 @@ import javax.xml.bind.annotation.*;
         
 
     @NamedQuery(name = "Project.findByBaseUrl", query = "SELECT p FROM Project p WHERE p.baseURL = ?"),
-    @NamedQuery(name = "Project.findByBackOfficeURL", query = "SELECT p FROM Project p WHERE SUBSTRING(p.name,?)>0")
+    @NamedQuery(name = "Project.findByBackOfficeURL", query = "SELECT p FROM Project p WHERE locate(p.name,?)>0")
         
 //+
 //" left join fetch p.dataSpecList ds"  +

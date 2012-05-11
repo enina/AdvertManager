@@ -133,51 +133,53 @@ public class BillingProjectService {
          * if no proper import project found then no import can be done (its unusual case because we only approve add new affProgram if thare is ready project to import data).
          * TODO: if we here we should response with some msg to cliant that he should contact support.
          */
+        //log action
+        
+        logger.info("Looking up project data by backoffice link  {}  ", program.getAffProgramLink());
         Project project = projectDao.findSingleItemByQuery("Project.findByBackOfficeURL", program.getAffProgramLink());
         if (project == null) {
-            return;
+            logger.error("Failed to find project for backoffice link{}  ", program.getAffProgramLink());
         }
+        else {
+            logger.info("Started {} project data import. ", project.getName());
+            //project baseUrl = programBackOfficeUrl - projectLoginUrl:
+            String programBackOfficeUrl = program.getAffProgramLink();
+            String projectLoginUrl = project.getLoginFormUrl();
 
-        //project baseUrl = programBackOfficeUrl - projectLoginUrl:
-        String programBackOfficeUrl = program.getAffProgramLink();
-        String projectLoginUrl = project.getLoginFormUrl();
+            //inject to project: baseUrl of back office with userName and Password
+            project.setBaseURL(programBackOfficeUrl.replace(projectLoginUrl, ""));
+            project.setUsername(program.getUserName());
+            project.setPassword(program.getPassword());
 
-        //inject to project: baseUrl of back office with userName and Password
-        project.setBaseURL(programBackOfficeUrl.replace(projectLoginUrl, ""));
-        project.setUsername(program.getUserName());
-        project.setPassword(program.getPassword());
+            // project
 
-        // project
+            //get load projec from DB by domain name
+            //Project project = projectDao.read(domainName);
+            //load projec from DB
+            //Project project = projectDao.read(blngProjId);
 
-        //get load projec from DB by domain name
-        //Project project = projectDao.read(domainName);
-        //load projec from DB
-        //Project project = projectDao.read(blngProjId);
+            //get Progects Data spec
+            List<DataSpec> dsList = project.getDataSpecList();
 
-        //get Progects Data spec
-        List<DataSpec> dsList = project.getDataSpecList();
+            //make sure we process partners first
+            DataSpec partnerDataSpec = project.getDataSpec("Partner");
+            if (partnerDataSpec != null) {
+                dsList.remove(partnerDataSpec);
+                dsList.add(0, partnerDataSpec);
+            }
 
-        //make sure we process partners first
-        DataSpec partnerDataSpec = project.getDataSpec("Partner");
-        if (partnerDataSpec != null) {
-            dsList.remove(partnerDataSpec);
-            dsList.add(0, partnerDataSpec);
+            //connect to src web site
+            Connection con = JSoupTransport.login(project);
+
+            //get data of each dataSpec ( include all pages ) of given Project
+            for (DataSpec ds : dsList) {
+                processDataSpec(ds, project, con, program);
+
+            }
+
+            JSoupTransport.logout(con, project);
+            logger.info("Finished {} project data import ", project.getName());
         }
-
-        //log action
-        logger.info("Started {} project data import. ", project.getName());
-
-        //connect to src web site
-        Connection con = JSoupTransport.login(project);
-
-        //get data of each dataSpec ( include all pages ) of given Project
-        for (DataSpec ds : dsList) {
-            processDataSpec(ds, project, con, program);
-
-        }
-
-        JSoupTransport.logout(con, project);
-        logger.info("Finished {} project data import ", project.getName());
     }
 //================================ importPageData ==============================
 
