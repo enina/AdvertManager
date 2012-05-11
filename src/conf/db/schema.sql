@@ -37,21 +37,19 @@ create table affprog_group(
     group_name  varchar(256),
     description varchar(256),
     CONSTRAINT PROGRAM_GROUP_PK PRIMARY KEY (id),
+    CONSTRAINT AFFPRGGROUP_UQ   UNIQUE affProgGroupUqIdx (affiliate_id,group_name(255)),
     CONSTRAINT PROGRAM_GROUP_AFFILIATE_FK FOREIGN KEY (affiliate_id) REFERENCES affiliate(id) ON DELETE CASCADE);
 
 create table aff_program (
     id INT NOT NULL AUTO_INCREMENT,
     program_group_id  int not null,
-    author_id int not null,
     name varchar(256) not null,
     description varchar(256),
-    price int not null ,
-    commision int not null ,
     sync_status  int not null,
-    program_link varchar(256) not null,
+    affprogram_link varchar(256) not null,
     redirect_link varchar(256) null,
     CONSTRAINT PROGRAM_PK PRIMARY KEY (id),
-    CONSTRAINT PRD_LINK_UQ   UNIQUE prdLinkIdx (program_link(255)),
+    CONSTRAINT AFFPRG_UQ   UNIQUE affProgNameUqIdx (program_group_id,name(255)),
     CONSTRAINT PROGRAM_PROGRAM_GROUP_FK FOREIGN KEY (program_group_id)  REFERENCES affprog_group(id) ON DELETE CASCADE);
     
 
