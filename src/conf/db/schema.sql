@@ -7,7 +7,6 @@ SET storage_engine=innodb;
 drop table if exists purchase_order         CASCADE;
 drop table if exists access_log             CASCADE;
 drop table if exists aff_program            CASCADE;
-drop table if exists author                 CASCADE;
 drop table if exists affprog_group         CASCADE;
 drop table if exists affiliate              CASCADE;
 drop table if exists partner                CASCADE;
@@ -21,12 +20,6 @@ drop table if exists group_authorities  CASCADE;
 drop table if exists group_members      CASCADE;
 ---------- spring security tables ------------------
 
-
-create table author (
-    id INT NOT NULL AUTO_INCREMENT,
-    authorName varchar(256) not null ,
-    email      varchar(256) not null ,
-    CONSTRAINT AUTHOR_PK PRIMARY KEY (id));
 
 create table affiliate (
     id INT NOT NULL AUTO_INCREMENT,
@@ -44,21 +37,19 @@ create table affprog_group(
     group_name  varchar(256),
     description varchar(256),
     CONSTRAINT PROGRAM_GROUP_PK PRIMARY KEY (id),
+    CONSTRAINT AFFPRGGROUP_UQ   UNIQUE affProgGroupUqIdx (affiliate_id,group_name(255)),
     CONSTRAINT PROGRAM_GROUP_AFFILIATE_FK FOREIGN KEY (affiliate_id) REFERENCES affiliate(id) ON DELETE CASCADE);
 
 create table aff_program (
     id INT NOT NULL AUTO_INCREMENT,
     program_group_id  int not null,
-    author_id int not null,
     name varchar(256) not null,
     description varchar(256),
-    price int not null ,
-    commision int not null ,
     sync_status  int not null,
-    program_link varchar(256) not null,
+    affprogram_link varchar(256) not null,
     redirect_link varchar(256) null,
     CONSTRAINT PROGRAM_PK PRIMARY KEY (id),
-    CONSTRAINT PRD_LINK_UQ   UNIQUE prdLinkIdx (program_link(255)),
+    CONSTRAINT AFFPRG_UQ   UNIQUE affProgNameUqIdx (program_group_id,name(255)),
     CONSTRAINT PROGRAM_PROGRAM_GROUP_FK FOREIGN KEY (program_group_id)  REFERENCES affprog_group(id) ON DELETE CASCADE);
     
 
@@ -72,35 +63,42 @@ create table access_source (
 
 create table access_log (
     id INT NOT NULL AUTO_INCREMENT,
-    program_id  int not null ,
+    affprogram_id  int not null ,
     access_time TIMESTAMP , --vremya perehoda
     ip_address varchar(256) , --client ip address
     location  varchar(2048)  , --client geo location
     source_domain_id int not null ,
     url varchar(256)  ,
     PRIMARY KEY (id),
-    FOREIGN KEY (program_id) REFERENCES aff_program(id) on delete cascade,
+    FOREIGN KEY (affprogram_id) REFERENCES aff_program(id) on delete cascade,
     FOREIGN KEY (source_domain_id) REFERENCES access_source(id) ON DELETE CASCADE);
 
 
-create table purchase_order (
-    id          int not null auto_increment ,
-    program_id  int not null ,
-    access_id   int not null,--ukazatel tablica perehodov
-    status      int  not null,--order status
-    discount    int not null, --skidka
-    ordertime   TIMESTAMP , --vremya zakaza
-    PRIMARY KEY (id),
-    FOREIGN KEY (program_id) REFERENCES aff_program(id) on delete cascade,
-    FOREIGN KEY (access_id)  REFERENCES access_log(id) on delete cascade);
-
 create table partner (
-    id                      int         not null auto_increment,
-    name        varchar(50)    not null ,
-    email         varchar(256) not null ,
+    id          int          not null auto_increment,
+    name        varchar(64)  not null ,
+    email       varchar(256) not null ,
     PRIMARY KEY (id));
 
-
+create table purchase_order (
+    id          int not null auto_increment ,
+    affprogram_id  int not null ,
+    partner_id  int ,
+    access_id   int ,--ukazatel tablica perehodov
+    status      varchar(256)  ,--order status
+    original_order_id varchar(256),
+    tracking_id varchar(256),
+    ip_address varchar(256),
+    ordertime   TIMESTAMP , --vremya zakaza
+    po_sum     float,
+    currentcy  varchar(16),
+    commision  float,
+    country varchar(256),
+    city varchar(256),
+    PRIMARY KEY (id),
+    FOREIGN KEY (affprogram_id)  REFERENCES aff_program(id) on delete cascade,
+    FOREIGN KEY (access_id)   REFERENCES access_log(id) on delete cascade,
+    FOREIGN KEY (partner_id)  REFERENCES partner(id) on delete cascade);
 
 CREATE TABLE `billing_project_spec` (
   `id` int(11) NOT NULL AUTO_INCREMENT,

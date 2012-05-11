@@ -164,7 +164,7 @@
         </constructor-arg>
     </bean>    
     
-    
+   
 <!--============================================================== user DAO     objects end   ===============================================================-->    
 <!--=============================================================  user service beans start ===============================================================--> 
     <!--
@@ -213,7 +213,11 @@
     
     <bean id="partnerService" class="com.mne.advertmanager.service.PartnerService">
         <property name="partnerDao" ref="partnerDao"/>
-    </bean>   
+    </bean> 
+    
+    <bean id="poService" class="com.mne.advertmanager.service.PurchaseOrderService">
+        <property name="poDao" ref="partnerDao"/>
+    </bean>      
     
     <bean id="billingProjectService" class="com.mne.advertmanager.service.BillingProjectService">
         <property name="projectDao"         ref="projectDao"/>
@@ -222,7 +226,8 @@
         <property name="importers">
             <map>
                 <entry key="Access" value-ref="accessLogImporter"/>
-                <entry key="Partners" value-ref="partnerImporter"/>
+                <entry key="Partner" value-ref="partnerImporter"/>
+                <entry key="PurchaseOrder" value-ref="PurchaseOrderImporter"/>
             </map>
         </property>
     </bean>    
@@ -235,6 +240,12 @@
         <property name="accessLogService"       ref="accessLogService"/>        
         <property name="accessSourceService"    ref="accessSourceService"/>                
         <property name="affProgramService"         ref="affProgramService"/>        
+    </bean>
+    
+    <bean id="PurchaseOrderImporter" class="com.mne.advertmanager.util.PurchaseOrderImporter">
+        <property name="aclService"       ref="accessLogService"/>        
+        <property name="partnerService"    ref="partnerService"/>                
+        <property name="poService"         ref="poService"/>        
     </bean>
     
     

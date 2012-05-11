@@ -30,7 +30,8 @@ import javax.xml.bind.annotation.*;
     query = "SELECT p FROM Project p"),
         
 
-    @NamedQuery(name = "Project.findByBaseUrl", query = "SELECT a FROM Project a WHERE a.baseURL = ?")
+    @NamedQuery(name = "Project.findByBaseUrl", query = "SELECT p FROM Project p WHERE p.baseURL = ?"),
+    @NamedQuery(name = "Project.findByBackOfficeURL", query = "SELECT p FROM Project p WHERE locate(p.name,?)>0")
         
 //+
 //" left join fetch p.dataSpecList ds"  +
@@ -41,7 +42,7 @@ public class Project implements Serializable {
     private static final Map<String, String[]> dataSpecConfig=new HashMap<String,String[]>();    
     static {
         dataSpecConfig.put("Access", new String[]{"DateTime","IP","Referer","Target"});
-        dataSpecConfig.put("PurchaseOrder", new String[]{"ID","Status","TrackingNumber","Country","City","PurchaseOrder Sum",
+        dataSpecConfig.put("PurchaseOrder", new String[]{"ID","Status","TrackingNumber","Country","City","PurchaseOrderSum",
                                                         "Commision","Partner","IP","Date"});
         dataSpecConfig.put("Partner", new String[]{"Name","Email"});
     }

@@ -31,5 +31,9 @@ public class PartnerService {
     public Integer creatPartner(Partner partner) {
         return partnerDao.create(partner);
     }
+
+    public Partner findPartnerByName(String itemValue) {
+        return  partnerDao.findSingleItemByQuery("Partner.findByName",itemValue);
+    }
     
 }

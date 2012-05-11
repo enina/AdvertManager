@@ -112,9 +112,8 @@ public class EntityFactory {
 
         PurchaseOrder result = new PurchaseOrder();
 
-        result.setDiscount((++magicNum % 100)/100);
         result.setOrdertime(Calendar.getInstance().getTime());
-        result.setStatus(++magicNum%2);
+        result.setStatus("Status"+(++magicNum)%2);
 
         return result;
 
