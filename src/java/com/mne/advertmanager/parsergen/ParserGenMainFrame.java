@@ -688,17 +688,11 @@ public class ParserGenMainFrame extends javax.swing.JFrame {
     private void onEditPartner(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onEditPartner
         
         if (project != null && project.isValid()) {
-            
-            //create dataSpec object with name Partners
-            DataSpec dataSpec = new DataSpec("Partners");
-            
-            //add to data spec two data types: name, email
-            dataSpec.addSubItem(new SelectableItem("Name"));
-            dataSpec.addSubItem(new SelectableItem("Email"));
-            
-            //add proper items(according to dataSpec) to mouse contex menu 
-            //and to component panel (right window sede).
+        
+            DataSpec dataSpec = project.getDataSpec("Partner");
+
             fillComponentPanel(dataSpec);
+            
         }
     }//GEN-LAST:event_onEditPartner
 
