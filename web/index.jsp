@@ -4,11 +4,8 @@
     Author     : nina
 --%>
 <%@ include file="WEB-INF/view/common/taglibs.jsp" %>
-<!--
-<%--
-    response.sendRedirect("home.do");
---%>
--->
+
+
 <html>
     <head>
         <title>Login Page</title>

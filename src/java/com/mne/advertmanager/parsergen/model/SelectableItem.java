@@ -59,8 +59,6 @@ public class SelectableItem implements Serializable {
     public void setId(Integer id) {
         this.id = id;
     }
-
-    
     
     public String getName() {
         return name;
@@ -85,8 +83,6 @@ public class SelectableItem implements Serializable {
     public void setDataSpec(DataSpec dataSpec) {
         this.dataSpec = dataSpec;
     }
-    
-    
     
     protected boolean isStringValid(String data) {
         return data!=null && data.length()>0;
