@@ -26,12 +26,10 @@ import javax.xml.bind.annotation.*;
 @Entity
 @Table(name = "billing_project_spec")
 @NamedQueries({
-    @NamedQuery(name = "Project.findAll",
-    query = "SELECT p FROM Project p"),
-        
-
+    @NamedQuery(name = "Project.findAll",  query = "SELECT p FROM Project p"),
     @NamedQuery(name = "Project.findByBaseUrl", query = "SELECT p FROM Project p WHERE p.baseURL = ?"),
-    @NamedQuery(name = "Project.findByBackOfficeURL", query = "SELECT p FROM Project p WHERE locate(p.name,?)>0")
+    @NamedQuery(name = "Project.findByBackOfficeURL", query = "SELECT p FROM Project p WHERE locate(p.name,?)>0"),
+    @NamedQuery(name = "Project.deleteById", query = "delete Project p WHERE p.id = ?")
         
 //+
 //" left join fetch p.dataSpecList ds"  +

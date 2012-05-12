@@ -34,7 +34,7 @@
                     <c:out value="${billingProj.selector}" />
                 </td>
                 <td class="affTd" align="left" >
-                   <a href="${pageContext.request.contextPath}/mvc/billing/import/${billingProj.id}">Import Data</a>
+                   <a href="${pageContext.request.contextPath}/mvc/billing/details/${billingProj.id}">Details</a>
                 </td>                
             </tr>   
         </c:forEach>
