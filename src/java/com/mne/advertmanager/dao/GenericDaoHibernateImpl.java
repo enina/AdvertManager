@@ -6,6 +6,7 @@ package com.mne.advertmanager.dao;
 
 import java.io.Serializable;
 import java.util.Collection;
+import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -55,20 +56,28 @@ public class GenericDaoHibernateImpl<T, PK extends Serializable> implements Gene
     public Collection<T> findByQuery(String queryName, Object... params) {
 
         Collection<T> result = null;
+        
+        Query q = initQueryObject(queryName, params);
+        if (q != null)
+            result = q.list();
+        
+        return result;
+    }
 
+    private Query initQueryObject(String queryName, Object[] params) throws HibernateException {
+        
         Query q = getSession().getNamedQuery(queryName);
-
 
         if (q != null && params != null) {
             for (int i = 0; i < params.length; ++i) {
                 q.setParameter(i, params[i]);
             }
-            result = q.list();
         }
+        return q;
 
-        return result;
     }
 
+    @Override
     public T findSingleItemByQuery(String queryName, Object... params) {
 
         T result = null;
@@ -78,6 +87,14 @@ public class GenericDaoHibernateImpl<T, PK extends Serializable> implements Gene
         }
 
         return result;
+    }
+    
+    @Override
+    public int executeUpdateByQuery(String queryName,Object ...params) {
+        Query q = initQueryObject(queryName, params);
+        int res = q.executeUpdate();
+        return res;
+        
     }
 
     public void setSessionFactory(SessionFactory sessionFactory) {
