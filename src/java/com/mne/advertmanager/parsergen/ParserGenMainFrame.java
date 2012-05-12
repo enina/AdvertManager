@@ -50,6 +50,7 @@ public class ParserGenMainFrame extends javax.swing.JFrame {
     private String curDataSpec = "";
     private Marshaller marshaller = null;
     private Unmarshaller unmarshaller = null;
+    private String directory = null;
 
     public static void main(String args[]) {
 
@@ -135,6 +136,7 @@ public class ParserGenMainFrame extends javax.swing.JFrame {
         }
         return rows;
     }
+    
 
     /**
      * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The content of this method is always
@@ -639,10 +641,21 @@ public class ParserGenMainFrame extends javax.swing.JFrame {
     private void onSave(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onSave
         if (project != null && project.isValid()) {
             try {
-                String filePath = project.getHomeDirectory() + File.separator + project.getName() + ".xml";
-                File result = new File(filePath);   //create new file in system
-                marshaller.marshal(project, result);//save Project obj to file in xml format
-                lblStatus.setText("Status:Project definition saved to file:"+filePath);
+                if (directory == null) {
+                    JFileChooser fc = new JFileChooser();
+                    fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+                    if (fc.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+                        directory  = fc.getSelectedFile().getAbsolutePath(); 
+                   }
+                }
+                if (directory != null) {
+                    String filePath = directory + File.separator + project.getName() + ".xml";
+                    File result = new File(filePath);   //create new file in system
+                    marshaller.marshal(project, result);//save Project obj to file in xml format
+                    lblStatus.setText("Status:Project definition saved to file:"+filePath);
+                }
+                else
+                    lblStatus.setText("Status:Must select directory.");
             } catch (JAXBException ex) {
                 lblStatus.setText("Status:Failed to save project definition :"+ex.toString());
                 System.out.println("marshaling error:" + ex.getMessage());
@@ -651,22 +664,20 @@ public class ParserGenMainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_onSave
 
     private void onEditPurchaseOrder(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onEditPurchaseOrder
-        // TODO add your handling code here:
         if (project != null && project.isValid()) {
-            
             DataSpec dataSpec = project.getDataSpec("PurchaseOrder");
             fillComponentPanel(dataSpec);
         }
     }//GEN-LAST:event_onEditPurchaseOrder
 
     private void onOpen(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onOpen
-        // TODO add your handling code here:
         JFileChooser fc = new JFileChooser();
         fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
         if (fc.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
             File projectFile = fc.getSelectedFile();
             try {
                 project =(Project) unmarshaller.unmarshal(projectFile);
+                project.setValid(true);
                 lblStatus.setText("Status:Project definition successfuly loaded from file:"+projectFile.getAbsolutePath());
                 if (project != null && project.isValid()) 
                     displayTree(project.getBaseURL() + project.getHomePage(), project.getMethod());

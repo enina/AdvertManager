@@ -6,8 +6,6 @@ package com.mne.advertmanager.parsergen;
 
 import com.mne.advertmanager.parsergen.model.Project;
 import com.mne.advertmanager.util.JSoupTransport;
-import java.io.File;
-import javax.swing.JFileChooser;
 import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -31,15 +29,13 @@ public class NewProjectDialog extends javax.swing.JDialog {
     private boolean isUserFieldComplete = true;
     private boolean isPasswordComplete = true;
     private boolean isPasswordFieldComplete = true;
-    private boolean isHomeFolderComplete = false;
     private boolean isCookieComplete = true;
     private boolean isLoginUrlComplete = true;
     private boolean isLogoutUrlComplete = true;
     private boolean isSelectorComplete = true;
     private boolean isHomePageComplete = true;
     private boolean isProjectNameComplete = true;    
-    private boolean isTestabale = false;
-    private boolean isInputComplete = isTestabale & isHomeFolderComplete;
+    private boolean isInputComplete = false;
     private Project project;    //hold parser Specification
     
     
@@ -130,7 +126,6 @@ public class NewProjectDialog extends javax.swing.JDialog {
         btnTestConnection = new javax.swing.JButton();
         jLabel5 = new javax.swing.JLabel();
         btnCreate = new javax.swing.JButton();
-        lblHomeFolder = new javax.swing.JLabel();
         lblUser = new javax.swing.JLabel();
         txtUserName = new javax.swing.JTextField();
         lblPassword = new javax.swing.JLabel();
@@ -141,7 +136,6 @@ public class NewProjectDialog extends javax.swing.JDialog {
         txtPasswordField = new javax.swing.JTextField();
         txtBaseUrl = new javax.swing.JTextField();
         lblBaseUrl = new javax.swing.JLabel();
-        btnSelectHome = new javax.swing.JButton();
         lblSelector = new javax.swing.JLabel();
         txtSelector = new javax.swing.JTextField();
         lblCookie = new javax.swing.JLabel();
@@ -188,13 +182,6 @@ public class NewProjectDialog extends javax.swing.JDialog {
             }
         });
 
-        lblHomeFolder.setToolTipText("select home folder");
-        lblHomeFolder.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
-            public void propertyChange(java.beans.PropertyChangeEvent evt) {
-                onHomeFolderChange(evt);
-            }
-        });
-
         lblUser.setText("User Name");
 
         txtUserName.setText("root");
@@ -220,13 +207,6 @@ public class NewProjectDialog extends javax.swing.JDialog {
 
         lblBaseUrl.setLabelFor(txtBaseUrl);
         lblBaseUrl.setText("Base Url");
-
-        btnSelectHome.setText("Select Home");
-        btnSelectHome.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                onSelect(evt);
-            }
-        });
 
         lblSelector.setLabelFor(txtSelector);
         lblSelector.setText("Target Selector");
@@ -278,6 +258,8 @@ public class NewProjectDialog extends javax.swing.JDialog {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
+                .addComponent(jLabel5)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(panelStatus, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
@@ -303,92 +285,86 @@ public class NewProjectDialog extends javax.swing.JDialog {
                             .addComponent(txtPassword)))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnSelectHome)
                             .addComponent(lblMethod)
                             .addComponent(lblBaseUrl)
                             .addComponent(lblHomePage)
                             .addComponent(lblName))
-                        .addGap(49, 49, 49)
+                        .addGap(86, 86, 86)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblHomeFolder, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(txtBaseUrl, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(cmbMethod, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(lblSelector)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtSelector, javax.swing.GroupLayout.DEFAULT_SIZE, 148, Short.MAX_VALUE))
+                                .addComponent(txtSelector))
                             .addComponent(txtHomePage)
                             .addComponent(txtName, javax.swing.GroupLayout.Alignment.TRAILING)))
-                    .addComponent(jLabel5)
                     .addComponent(btnTestConnection))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(lblHomeFolder, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(5, 5, 5)
+                                .addComponent(lblName)))
+                        .addGap(12, 12, 12)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(cmbMethod, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(lblSelector)
+                                .addComponent(txtSelector, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(lblMethod))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnSelectHome)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblBaseUrl)
+                            .addComponent(txtBaseUrl, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblHomePage)
+                            .addComponent(txtHomePage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(lblName)))
-                .addGap(12, 12, 12)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(cmbMethod, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(lblSelector)
-                        .addComponent(txtSelector, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(lblMethod))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblBaseUrl)
-                    .addComponent(txtBaseUrl, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblHomePage)
-                    .addComponent(txtHomePage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1)
-                    .addComponent(txtLoginFormURL, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblLogout)
-                    .addComponent(txtLogoutURL, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblCookie)
-                    .addComponent(txtCookie, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblUser)
-                    .addComponent(txtUserName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblUserField)
-                    .addComponent(txtUserField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblPassword)
-                    .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblPasswordField)
-                    .addComponent(txtPasswordField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnTestConnection)
-                    .addComponent(btnCreate))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel5)
-                .addGap(7, 7, 7)
-                .addComponent(panelStatus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1)
+                            .addComponent(txtLoginFormURL, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblLogout)
+                            .addComponent(txtLogoutURL, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblCookie)
+                            .addComponent(txtCookie, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblUser)
+                            .addComponent(txtUserName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblUserField)
+                            .addComponent(txtUserField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblPassword)
+                            .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblPasswordField)
+                            .addComponent(txtPasswordField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnTestConnection)
+                            .addComponent(btnCreate))
+                        .addGap(13, 13, 13)
+                        .addComponent(panelStatus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel5))
+                .addGap(36, 36, 36))
         );
 
         layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {txtCookie, txtLogoutURL});
@@ -439,36 +415,6 @@ public class NewProjectDialog extends javax.swing.JDialog {
         setVisible(false);
     }//GEN-LAST:event_onCreate
 
-    private void onSelect(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onSelect
-        JFileChooser fc = new JFileChooser();
-        fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-        if (fc.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
-            File homeFolder = fc.getSelectedFile();
-            lblHomeFolder.setText(homeFolder.getAbsolutePath());
-        }
-    }//GEN-LAST:event_onSelect
-
-    private void onHomeFolderChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_onHomeFolderChange
-        isHomeFolderComplete = lblHomeFolder.getText().length() > 0;
-        if (isHomeFolderComplete)
-            project.setHomeDirectory(lblHomeFolder.getText());
-    }
-
-    public Project getProject() {
-        return project;
-    }
-
-    private void setButtonsState() {
-        isTestabale =   isBaseUrlComplete  & isSelectorComplete  & isUserNameComplete &
-                        isLoginUrlComplete & isLogoutUrlComplete & isCookieComplete   &
-                        isUserNameComplete & isUserFieldComplete & isPasswordComplete &
-                        isPasswordFieldComplete & isHomePageComplete ;
-
-        isInputComplete = isTestabale & isHomeFolderComplete & isProjectNameComplete;
-        btnTestConnection.setEnabled(isTestabale);
-        btnCreate.setEnabled(isInputComplete & project.isValid());
-    }//GEN-LAST:event_onHomeFolderChange
-
     private void onMethodSelected(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_onMethodSelected
         
         if (project != null) 
@@ -501,6 +447,21 @@ public class NewProjectDialog extends javax.swing.JDialog {
 
         protected abstract void doUpdate();
     }
+    
+    public Project getProject() {
+        return project;
+    }
+
+    private void setButtonsState() {
+        isInputComplete =   isBaseUrlComplete  & isSelectorComplete  & isUserNameComplete &
+                        isLoginUrlComplete & isLogoutUrlComplete & isCookieComplete   &
+                        isUserNameComplete & isUserFieldComplete & isPasswordComplete &
+                        isPasswordFieldComplete & isHomePageComplete & isProjectNameComplete;
+
+        btnTestConnection.setEnabled(isInputComplete);
+        btnCreate.setEnabled(isInputComplete & project.isValid());
+    }    
+    
 
     private class BaseURLSelectorDocListener extends BaseDocumentListener {
 
@@ -601,14 +562,12 @@ public class NewProjectDialog extends javax.swing.JDialog {
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCreate;
-    private javax.swing.JButton btnSelectHome;
     private javax.swing.JButton btnTestConnection;
     private javax.swing.JComboBox cmbMethod;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel lblBaseUrl;
     private javax.swing.JLabel lblCookie;
-    private javax.swing.JLabel lblHomeFolder;
     private javax.swing.JLabel lblHomePage;
     private javax.swing.JLabel lblLogout;
     private javax.swing.JLabel lblMethod;
