@@ -91,7 +91,7 @@ create table purchase_order (
     ip_address varchar(256),
     ordertime   TIMESTAMP , --vremya zakaza
     po_sum     float,
-    currentcy  varchar(16),
+    currency  varchar(16),
     commision  float,
     country varchar(256),
     city varchar(256),

@@ -5,6 +5,7 @@
 package com.mne.advertmanager.service;
 
 import com.mne.advertmanager.dao.GenericDao;
+import com.mne.advertmanager.model.AffProgram;
 import com.mne.advertmanager.model.PurchaseOrder;
 import java.util.Collection;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,5 +29,12 @@ public class PurchaseOrderService {
     @Transactional
     public Integer createPurchaseOrder(PurchaseOrder purchaseOrder) {
         return poDao.create(purchaseOrder);
-    }    
+    }
+    
+    @Transactional(readOnly = true)
+    public Collection<PurchaseOrder> findPurchaseOrdersByAffProgamId(AffProgram affProgram) {
+        return poDao.findByQuery("PurchaseOrder.findByAffProgramId",affProgram);
+    }
+    
+
 }
