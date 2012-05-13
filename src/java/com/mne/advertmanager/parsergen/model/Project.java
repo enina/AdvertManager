@@ -21,17 +21,15 @@ import javax.xml.bind.annotation.*;
 
 @XmlSeeAlso({com.mne.advertmanager.parsergen.model.DataSpec.class, com.mne.advertmanager.parsergen.model.SelectableItem.class})
 @XmlRootElement
-@XmlType(propOrder = {"valid", "name", "homeDirectory", "baseURL", "homePage", "username", "userField", "password", "passwordField",
+@XmlType(propOrder = {"name","baseURL", "homePage", "username", "userField", "password", "passwordField",
     "method", "cookieName", "loginFormUrl", "logoutUrl", "selector", "dataSpecList"})
 @Entity
 @Table(name = "billing_project_spec")
 @NamedQueries({
-    @NamedQuery(name = "Project.findAll",
-    query = "SELECT p FROM Project p"),
-        
-
+    @NamedQuery(name = "Project.findAll",  query = "SELECT p FROM Project p"),
     @NamedQuery(name = "Project.findByBaseUrl", query = "SELECT p FROM Project p WHERE p.baseURL = ?"),
-    @NamedQuery(name = "Project.findByBackOfficeURL", query = "SELECT p FROM Project p WHERE locate(p.name,?)>0")
+    @NamedQuery(name = "Project.findByBackOfficeURL", query = "SELECT p FROM Project p WHERE locate(p.name,?)>0"),
+    @NamedQuery(name = "Project.deleteById", query = "delete Project p WHERE p.id = ?")
         
 //+
 //" left join fetch p.dataSpecList ds"  +
@@ -70,9 +68,6 @@ public class Project implements Serializable {
     @Size(min = 1, max = 256)
     @Column(name = "name")
     private String name;
-    
-
-    private String homeDirectory;
     
     @Basic(optional = false)
     @NotNull
@@ -145,10 +140,7 @@ public class Project implements Serializable {
     public Project() {
     }
 
-//    public Project(String baseURL) {
-//        this.baseURL = baseURL;
-//    }
-    
+
     public Project(Integer id) {
         this.id = id;
     }
@@ -160,14 +152,6 @@ public class Project implements Serializable {
     public void setBaseURL(String baseURL) {
         this.baseURL = baseURL;
         normalizeBaseUrl();
-    }
-
-    public String getHomeDirectory() {
-        return homeDirectory;
-    }
-
-    public void setHomeDirectory(String homeDirectory) {
-        this.homeDirectory = homeDirectory;
     }
 
     public String getName() {
@@ -267,7 +251,7 @@ public class Project implements Serializable {
         }
         return result;
     }
-
+    @XmlTransient
     public boolean isValid() {
         return isValid;
     }
@@ -302,7 +286,6 @@ public class Project implements Serializable {
     public String toString() {
         return "name=" + name + "\n"
                 + "baseURL=" + baseURL + "\n"
-                + "homeDirectory=" + homeDirectory + "\n"
                 + "username=" + username + "\n"
                 + "userField=" + userField + "\n"
                 + "password=" + password + "\n"

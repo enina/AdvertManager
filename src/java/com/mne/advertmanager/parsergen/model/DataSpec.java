@@ -19,7 +19,7 @@ import javax.xml.bind.annotation.XmlType;
  *
  * @author nina
  */
-@XmlType(propOrder={"name","dataURL" ,"method","numPages","pageParam","selector","listEntrySelector","subItems"})
+@XmlType(propOrder={"name","dataURL" ,"method","numPages","pageParam","listEntrySelector","subItems"})
 @Entity
 @Table(name = "billing_data_spec")
 public class DataSpec implements Serializable {
@@ -50,7 +50,7 @@ public class DataSpec implements Serializable {
     private String pageParam;
 
     @Column(name = "num_pages")    
-    private int    numPages = 0;
+    private int    numPages = 1;
     
     @XmlElement
     private String name;
@@ -145,7 +145,7 @@ public class DataSpec implements Serializable {
     }
 
     public void setListEntrySelector(String listEntrySelector) {
-        getSubItem("listEntry").setSelector(listEntrySelector);
+            getSubItem("listEntry").setSelector(listEntrySelector);
     }
 
     public int getNumPages() {
@@ -178,7 +178,7 @@ public class DataSpec implements Serializable {
         setMethod("get");
         setListEntrySelector("");
         setPageParam("");
-        numPages=-1;
+        setNumPages(1);
         for (SelectableItem si:subItems)
             si.setSelector("");
     }
@@ -187,6 +187,7 @@ public class DataSpec implements Serializable {
         return name;
     }
 
+    @XmlTransient
     public String getSelector() {
         return getSubItem("root").getSelector();
     }
