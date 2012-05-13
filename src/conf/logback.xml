@@ -36,5 +36,10 @@
   
   <logger name="com.mne.advertmanager.util.JSoupTransport" level="debug"/>
   
+  <logger name="org.hibernate.internal.SessionFactoryImpl" level="debug"/>
+  <logger name="org.hibernate.hql.internal.ast.util.SessionFactoryHelper.findSQLFunction" level="debug"/>
+  
+  <logger name="org.springframework.web.servlet.DispatcherServlet" level="debug"/>
+  
   
 </configuration>

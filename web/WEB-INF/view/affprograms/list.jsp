@@ -21,7 +21,9 @@
                         <c:out value="${affProgram.price}" />
                     </td>
                     <td class="affTd" align="left" >
-                        <c:out value="${affProgram.affProgramLink}" />
+                        
+                            <c:out value="${affProgram.affProgramLink}" />
+                    
                     </td>                
                 </tr>   
             </c:forEach>
