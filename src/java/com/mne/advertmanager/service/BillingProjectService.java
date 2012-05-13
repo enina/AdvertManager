@@ -12,6 +12,7 @@ import com.mne.advertmanager.parsergen.model.SelectableItem;
 import com.mne.advertmanager.util.BillingDataImporter;
 import com.mne.advertmanager.util.JSoupTransport;
 import java.util.*;
+import org.hibernate.Hibernate;
 import org.jsoup.Connection;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -251,5 +252,26 @@ public class BillingProjectService {
         }
 
         return null;
+    }
+
+    @Transactional(readOnly = true)
+    public Project findProjectById(int projectId) {
+        Project res = projectDao.read(projectId);
+        List<DataSpec> dsList = res.getDataSpecList();
+        Hibernate.initialize(dsList);
+        for (DataSpec ds:dsList) {
+            Hibernate.initialize(ds);
+            List<SelectableItem> siList = ds.getAllSubItems();
+            Hibernate.initialize(siList);
+            for (SelectableItem si : siList) {
+                Hibernate.initialize(si);
+            }
+        }
+        return res;
+    }
+
+    @Transactional
+    public void delete(int projectId) {
+        projectDao.executeUpdateByQuery("Project.deleteById", projectId);
     }
 }

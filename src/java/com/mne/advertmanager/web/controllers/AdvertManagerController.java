@@ -69,7 +69,8 @@ public class AdvertManagerController {
     private static final String BLNG_NEW_REQ_MAPPING = BILLING + NEW;
     private static final String BLNG_ADD_REQ_MAPPING = BILLING + ADD;
     private static final String BLNG_IMPORT_REQ_MAPPING = BILLING + "/import";
-//    private static final String ACS_LIST_REQ_MAPPING = ACCESS + LIST;
+    private static final String BLNG_DETAILS_REQ_MAPPING = BILLING + "/details";
+    private static final String BLNG_DELETE_REQ_MAPPING = BILLING + "/delete";
     //============= variables and objects ======================================
     private static Logger logger = LoggerFactory.getLogger(AdvertManagerController.class);
     private DataGenService dataGenerator;
@@ -380,11 +381,33 @@ public class AdvertManagerController {
 //============================= viewUploadSpecForm =============================
 
     @RequestMapping(value = BLNG_NEW_REQ_MAPPING, method = RequestMethod.GET)
-    public @ModelAttribute("billingSpec")
-    BillingSpec viewUploadSpecForm() {
+    public @ModelAttribute("billingSpec") BillingSpec viewUploadSpecForm() {
 
         return new BillingSpec();
     }
+    //================================================== viewBillingProjectDetails ================================
+    @RequestMapping(value = BLNG_DETAILS_REQ_MAPPING+"/{projectId}", method = RequestMethod.GET)
+    public ModelAndView viewBillingProjectDetails(@PathVariable int projectId) {
+        
+        Project proj = billingProjectService.findProjectById(projectId);
+        
+        return forwardToView(BLNG_DETAILS_REQ_MAPPING+"/projectId", BLNG_DETAILS_REQ_MAPPING, "project", proj);
+        
+    }
+    
+    //================================================== deleteBillingProjectDetails ================================
+    @RequestMapping(value = BLNG_DELETE_REQ_MAPPING+"/{projectId}", method = RequestMethod.GET)
+    public ModelAndView deleteBillingProjectDetails(@PathVariable int projectId) {
+        
+        billingProjectService.delete(projectId);
+        
+        ModelAndView result = forwardToView(BLNG_DELETE_REQ_MAPPING+"/projectId", BLNG_LIST_REQ_MAPPING, "status", "Successfully deleted project:"+projectId);
+
+        result.addObject("data", viewBillingProjects());
+        
+        return result;
+        
+    }    
 
 
 

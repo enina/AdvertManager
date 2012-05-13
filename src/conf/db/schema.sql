@@ -128,7 +128,7 @@ CREATE TABLE `billing_data_spec` (
    `project_id` int(11) DEFAULT NULL,
     PRIMARY KEY (`id`),
     KEY `projectIdKey` (`project_id`),
-    CONSTRAINT `BLNGDATASPEC_PROJECT_FK` FOREIGN KEY (`project_id`) REFERENCES `billing_project_spec` (`id`) ) ;
+    CONSTRAINT `BLNGDATASPEC_PROJECT_FK` FOREIGN KEY (`project_id`) REFERENCES `billing_project_spec` (`id`)  ON DELETE CASCADE) ;
 
 CREATE TABLE `selectable_data_item` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -137,7 +137,7 @@ CREATE TABLE `selectable_data_item` (
   `dataspec_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `dataSpecKey` (`dataspec_id`),
-  CONSTRAINT `BLNGDSELECTABLEITEM_DATASPEC_FK` FOREIGN KEY (`dataspec_id`) REFERENCES `billing_data_spec` (`id`));
+  CONSTRAINT `BLNGDSELECTABLEITEM_DATASPEC_FK` FOREIGN KEY (`dataspec_id`) REFERENCES `billing_data_spec` (`id`)  ON DELETE CASCADE);
 
 --------------------------------------------------- Spring Security tables ---------------------------------------------------
 create table authorities (

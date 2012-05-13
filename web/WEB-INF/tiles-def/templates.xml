@@ -82,6 +82,11 @@
        <put-attribute name="content" value="/WEB-INF/view/billing/importstatus.jsp" />
    </definition>
    
+    <definition name="billing/details" extends=".mainTemplate">
+       <put-attribute name="title" value="Billing Site Details" type="string" />
+       <put-attribute name="content" value="/WEB-INF/view/billing/details.jsp" />
+   </definition>   
+   
    <definition name="access/list" extends=".mainTemplate">
        <put-attribute name="title" value="Access Log Viewer" type="string" />
        <put-attribute name="content" value="/WEB-INF/view/access/list.jsp" />
