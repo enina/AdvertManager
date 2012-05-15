@@ -14,6 +14,29 @@
         <put-attribute name="footer" value="/WEB-INF/view/common/footer.jsp" />
     </definition>
     
+
+    <definition name="affprogram.body" template="/WEB-INF/view/common/programbody.jsp">
+        <put-attribute name="overview" value="affprogram.overview" />
+        <put-attribute name="finance" value="/WEB-INF/view/affprograms/finance.jsp" />
+        <put-attribute name="accesses" value="/WEB-INF/view/access/list.jsp" />
+        <put-attribute name="partners" value="/WEB-INF/view/affprograms/partners.jsp" />
+        <put-attribute name="orders" value="/WEB-INF/view/affprograms/orders.jsp" />
+        <put-attribute name="afflinks" value="/WEB-INF/view/affprograms/afflinks.jsp" />
+    </definition>
+    
+    <definition name="affprogram.overview" template="/WEB-INF/view/affprograms/overview.jsp">
+        <put-attribute name="programspec" value="/WEB-INF/view/affprograms/programspec.jsp" />
+    </definition>
+    
+    <definition name="affprograms/details" extends=".mainTemplate">
+       <put-attribute name="title" value="Affiliate Programs" type="string" />
+       <put-attribute name="header" value="/WEB-INF/view/common/header.jsp" />
+       <put-attribute name="content" value="affprogram.body" />
+    </definition>
+      
+    
+
+    
    
    <definition name="home" extends=".mainTemplate">
        <put-attribute name="content" value="/WEB-INF/view/home.jsp" />
@@ -41,11 +64,7 @@
        <put-attribute name="content" value="/WEB-INF/view/affprograms/list.jsp" />
    </definition>
    
-   <definition name="affprograms/details" extends=".mainTemplate">
-       <put-attribute name="title" value="Affiliate Programs" type="string" />
-       <put-attribute name="header" value="/WEB-INF/view/affprograms/header.jsp" />
-       <put-attribute name="content" value="/WEB-INF/view/affprograms/details.jsp" />
-   </definition>
+
    
    
    <definition name="billing/list" extends=".mainTemplate">

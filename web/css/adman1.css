@@ -1,6 +1,7 @@
 body{
-    
-    
+    margin: 0px;
+    background-color: #f5f5f5;
+    position: relative;
 }
 
 table,td,th,tr{
@@ -12,7 +13,7 @@ th{
     height: 30px;
 }
 
-#content{
+#container{
     width: 1200px;
     margin-left: auto;
     margin-right: auto;
@@ -104,3 +105,9 @@ tr:nth-child(odd){
     
 }
 
+
+#programMenu{
+    height: 70px;
+    background-color: #353535;
+    
+}

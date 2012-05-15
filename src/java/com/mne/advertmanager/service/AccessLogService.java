@@ -6,6 +6,7 @@ package com.mne.advertmanager.service;
 
 import com.mne.advertmanager.dao.GenericDao;
 import com.mne.advertmanager.model.AccessLog;
+import com.mne.advertmanager.model.AffProgram;
 import java.util.Collection;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,5 +34,10 @@ public class AccessLogService {
 
     public AccessLog findAccessByIP(String ipAddress) {
         return accessLogDao.findSingleItemByQuery("AccessLog.findByIpAddress", ipAddress);
+    }
+    
+    @Transactional(readOnly = true)
+    public Collection<AccessLog> findAccessByAffProgamId(AffProgram affProgram ) {
+        return accessLogDao.findByQuery("AccessLog.findByAffProgramId", affProgram);
     }
 }
