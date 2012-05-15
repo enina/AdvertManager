@@ -109,11 +109,9 @@ CREATE TABLE `billing_project_spec` (
   `logout_url` varchar(256) NOT NULL,
   `method` varchar(8) NOT NULL,
   `name` varchar(256) NOT NULL,
-  `password` varchar(64) NOT NULL,
   `password_field` varchar(16) NOT NULL,
   `selector` varchar(256) NOT NULL,
-  `user_field` varchar(64) NOT NULL,
-  `username` varchar(64) NOT NULL,
+  `user_field` varchar(64) NOT NULL
   PRIMARY KEY (`id`));
 
 CREATE TABLE `billing_data_spec` (
