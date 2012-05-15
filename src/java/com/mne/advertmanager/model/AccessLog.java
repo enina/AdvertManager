@@ -42,6 +42,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "AccessLog.findByAccessTime", query = "SELECT a FROM AccessLog a WHERE a.accessTime = ?"),
     @NamedQuery(name = "AccessLog.findByIpAddress", query = "SELECT a FROM AccessLog a WHERE a.ipAddress = ?"),
     @NamedQuery(name = "AccessLog.findByLocation", query = "SELECT a FROM AccessLog a WHERE a.location = ?"),
+    @NamedQuery(name = "AccessLog.findByAffProgramId", query = "SELECT a FROM AccessLog a WHERE a.affProgram = ?"),
     @NamedQuery(name = "AccessLog.findByUrl", query = "SELECT a FROM AccessLog a WHERE a.url = ?")})
 public class AccessLog implements Serializable {
     private static final long serialVersionUID = 1L;

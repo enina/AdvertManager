@@ -38,6 +38,7 @@ import org.springframework.web.servlet.ModelAndView;
  */
 @Controller
 @RequestMapping("/")
+
 public class AdvertManagerController {
 
     //const definitions
@@ -53,7 +54,7 @@ public class AdvertManagerController {
     private static final String DATAGEN = "dataGen";
     private static final String APPS = "apps";
     private static final String BILLING = "billing";
-    private static final String ACCESS = "access";
+//    private static final String ACCESS = "access";
     private static final String APPS_PARSERGEN_REQ_MAPPING = APPS + "/parsergen";
     private static final String AFF_LIST_REQ_MAPPING = AFFILIATES + LIST;
     private static final String AFF_NEW_REQ_MAPPING = AFFILIATES + NEW;
@@ -70,7 +71,6 @@ public class AdvertManagerController {
     private static final String BLNG_IMPORT_REQ_MAPPING = BILLING + "/import";
     private static final String BLNG_DETAILS_REQ_MAPPING = BILLING + "/details";
     private static final String BLNG_DELETE_REQ_MAPPING = BILLING + "/delete";
-    private static final String ACS_LIST_REQ_MAPPING = ACCESS + LIST;
     //============= variables and objects ======================================
     private static Logger logger = LoggerFactory.getLogger(AdvertManagerController.class);
     private DataGenService dataGenerator;
@@ -103,7 +103,6 @@ public class AdvertManagerController {
         return "redirect:mvc/home/";
     }
 //======================== generateHome ========================================
-
     /**
      * view resolution works through tiles configuration file WEB-INF/tiles-def/templates.xml tile which defines presentation automatically equals the url for example for url
      * "home" corresponding tile is <definition name="home" extends=".mainTemplate"> <put-attribute name="content" value="/WEB-INF/view/home.jsp" /> </definition>
@@ -183,25 +182,6 @@ public class AdvertManagerController {
 
 
         return affprograms;
-    }
-//=============================== viewProgramDetails() =========================
-
-    /**
-     * This function response when user want see an affProgram detailed information and graphs. the function find all relevant data, then redirect user view to proper window
-     */
-    @RequestMapping(value = AFFPROGRAM_DETAILS_REQ_MAPPING + "/{affProgramId}",  method = RequestMethod.GET)
-    public ModelAndView viewProgramDetails(@PathVariable final int affProgramId) {
-
-
-        AffProgram program = affProgramService.findAffProgramByID(affProgramId);
-        
-        return forwardToView(AFFPROGRAM_DETAILS_REQ_MAPPING + "/"+affProgramId, AFFPROGRAM_DETAILS_REQ_MAPPING, "program", program);
-
-        
-        /*
-         * after return statement, the redirection goes to view with same requestMapping as one that bring control to this function ( it happens automaticly by spring
-         * control-->view resolver )
-         */
     }
 
 //=========================== viewAffiliates ===================================  
@@ -334,7 +314,7 @@ public class AdvertManagerController {
      * This function start importing process of data for specified AffProgramm this function invoked from by web link and has context variable affProgramId
      */
     @RequestMapping(value = BLNG_IMPORT_REQ_MAPPING + "/{affProgramId}", method = RequestMethod.GET)
-    public ModelAndView importBillingData(@PathVariable final int affProgramId, SecurityContextHolderAwareRequestWrapper securityContextWrapper) {
+    public void importBillingData(@PathVariable final int affProgramId, SecurityContextHolderAwareRequestWrapper securityContextWrapper,HttpServletResponse response){
 
         String status = null; // hold msg that will apear to user upon failure/success.
 

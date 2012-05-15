@@ -52,7 +52,7 @@ public class AffProgramService {
         
         return result;
     }    
-//============================= findAffProgramByLink ===========================
+//============================= findAffProgramByID ===========================
     @Transactional(readOnly = true)
     public AffProgram findAffProgramByID(int id) {
         

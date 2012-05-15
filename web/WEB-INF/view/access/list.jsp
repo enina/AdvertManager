@@ -10,9 +10,9 @@
 
 <%@ include file="../common/taglibs.jsp" %>
     
-<table border="1" class="affTable">
+<table >
     
-    <c:if test="${data!=null}">
+    <c:if test="${acessList!=null}">
         
         <thead>
             <tr>
@@ -23,18 +23,20 @@
             </tr>
         </thead>
         
-        <c:forEach items="${data}" var="access">
+        <c:forEach items="${acessList}" var="access">
             <tr>
-                <td class="affTd" style="width:150px" >
+                <td   >
                     <c:out value="${access.timeAsString}" />
                 </td>
-                <td class="affTd" >
+                <td  >
                     <c:out value="${access.ipAddress}"/>
                 </td>
-                <td class="affTd" >
-                    <c:out value="${access.location}" />
+                <td  >
+                    <a href="<c:out value="${access.location}" />">
+                        <c:out value="${access.location}" />
+                    </a>
                 </td>
-                <td class="affTd" >
+                <td  >
                     <c:out value="${access.url}" />
                 </td>
             </tr>   
