@@ -4,25 +4,19 @@ body{
 }
 
 table,td,th,tr{
-    
-
     border-bottom-color: black;
     border-style: solid;
     border-width: 1px;
-  
 }
 th{
     height: 30px;
 }
 
 #content{
-        
     width: 1200px;
     margin-left: auto;
     margin-right: auto;
-    
 }
-
 
 
 .affProgGroupTable {
@@ -36,6 +30,10 @@ th{
 .affProgGroupTable th{
    text-align: center;
    background-color: #818081;
+}
+
+.billingDetailsTd {
+    text-align: left;
 }
 .affProgGroupTable td{
    text-align: center;

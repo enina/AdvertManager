@@ -256,22 +256,23 @@ public class BillingProjectService {
 
     @Transactional(readOnly = true)
     public Project findProjectById(int projectId) {
-        Project res = projectDao.read(projectId);
-        List<DataSpec> dsList = res.getDataSpecList();
-        Hibernate.initialize(dsList);
-        for (DataSpec ds:dsList) {
-            Hibernate.initialize(ds);
-            List<SelectableItem> siList = ds.getAllSubItems();
-            Hibernate.initialize(siList);
-            for (SelectableItem si : siList) {
-                Hibernate.initialize(si);
-            }
-        }
+        
+        Project res = projectDao.findSingleItemByQuery("Project.findProjectWithDataSpecList", projectId);
+
         return res;
     }
 
     @Transactional
     public void delete(int projectId) {
         projectDao.executeUpdateByQuery("Project.deleteById", projectId);
+    }
+    
+    @Transactional(readOnly = true)
+    public DataSpec findProjectDataSpec(int bpId, int dsId) {
+        DataSpec result = null;
+        
+        result = dataSpecDao.findSingleItemByQuery("DataSpec.findDataSpecById", dsId,bpId);
+
+        return result;
     }
 }

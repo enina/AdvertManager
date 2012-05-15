@@ -44,7 +44,8 @@ public class EntityFactory {
         
         result.setName("AffProgramName"+ ++magicNum);
         result.setDescription("AffProgramDescription"+ ++magicNum);
-        
+        result.setUserName("user");
+        result.setPassword("password");
         result.setAffProgramLink("http://site/AffProgramLink/"+ ++magicNum);
         result.setRedirectLink("http://site/redirectLink/"+ ++magicNum);
         result.setSyncStatus(++magicNum%2);
