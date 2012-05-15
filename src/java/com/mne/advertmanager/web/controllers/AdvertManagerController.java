@@ -6,12 +6,12 @@ package com.mne.advertmanager.web.controllers;
 
 import com.google.gson.Gson;
 import com.mne.advertmanager.model.*;
+import com.mne.advertmanager.parsergen.model.DataSpec;
 import com.mne.advertmanager.parsergen.model.Project;
+import com.mne.advertmanager.parsergen.model.SelectableItem;
 import com.mne.advertmanager.service.*;
 import com.mne.advertmanager.web.model.BillingSpec;
 import java.io.IOException;
-import java.net.URL;
-import java.security.Principal;
 import java.util.Collection;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -131,8 +131,7 @@ public class AdvertManagerController {
             }
         }.start();
 
-        return forwardToView(DG_GEN_REQ_MAPPING, "home", "message",
-                "Greetings from AdMan DataGen .Dummy Data is being generated!");
+        return forwardToView(DG_GEN_REQ_MAPPING, "home", "status","Dummy data generation started.");
     }
 
 //========================== viewAffProgDefintionForm ==========================
@@ -153,8 +152,7 @@ public class AdvertManagerController {
 //============================ addAffProgram ===================================
 
     @RequestMapping(value = AFFPROGRAM_ADD_REQ_MAPPING, method = RequestMethod.POST)
-    public ModelAndView addAffProgram(@ModelAttribute("affprogram") AffProgram affprogram,
-            SecurityContextHolderAwareRequestWrapper securityContext) {
+    public ModelAndView addAffProgram(@ModelAttribute("affprogram") AffProgram affprogram, SecurityContextHolderAwareRequestWrapper securityContext) {
 
         String status = "";
         try {
@@ -164,8 +162,7 @@ public class AdvertManagerController {
             status = handleException(e, "create", "Affprogram", affprogram.getName());
         }
 
-        ModelAndView mav = forwardToView(AFFPROGRAM_ADD_REQ_MAPPING, "home",
-                "data", generateHome(securityContext));
+        ModelAndView mav = forwardToView(AFFPROGRAM_ADD_REQ_MAPPING, "home", "data", generateHome(securityContext));
 
         mav.addObject("status", status);
 
@@ -174,9 +171,7 @@ public class AdvertManagerController {
 
 //=============================== viewAffPrograms ==============================
     @RequestMapping(value = AFFPROGRAM_LIST_REQ_MAPPING, method = RequestMethod.GET)
-    public @ModelAttribute("data")
-    Collection<AffProgram> viewAffPrograms() {
-
+    public @ModelAttribute("data") Collection<AffProgram> viewAffPrograms() {
 
         logger.info("getting affprogram data");
 
@@ -211,8 +206,7 @@ public class AdvertManagerController {
 
 //=========================== viewAffiliates ===================================  
     @RequestMapping(value = AFF_LIST_REQ_MAPPING, method = RequestMethod.GET)
-    public @ModelAttribute("data")
-    Collection<Affiliate> viewAffiliates() {
+    public @ModelAttribute("data") Collection<Affiliate> viewAffiliates() {
 
         Collection<Affiliate> affiliates = affiliateService.findAllAffiliates();
 
@@ -221,8 +215,7 @@ public class AdvertManagerController {
 //============================= addUser ========================================
 
     @RequestMapping(value = AFF_ADD_REQ_MAPPING, method = RequestMethod.POST)
-    public ModelAndView addUser(@ModelAttribute("affiliate") Affiliate affiliate,
-            SecurityContextHolderAwareRequestWrapper securityContext) {
+    public ModelAndView addUser(@ModelAttribute("affiliate") Affiliate affiliate,SecurityContextHolderAwareRequestWrapper securityContext) {
 
         String status = null;
         try {
@@ -246,8 +239,7 @@ public class AdvertManagerController {
 //===================================== launchParserGenerator ==================
 
     @RequestMapping(value = APPS_PARSERGEN_REQ_MAPPING, method = RequestMethod.GET)
-    public @ModelAttribute("codebase")
-    String launchParserGenerator(HttpServletRequest request) {
+    public @ModelAttribute("codebase") String launchParserGenerator(HttpServletRequest request) {
 
         String codebase = "http://" + request.getServerName() + ":"
                 + request.getServerPort()
@@ -259,8 +251,7 @@ public class AdvertManagerController {
     }
 
     @RequestMapping(value = AFF_NEW_REQ_MAPPING, method = RequestMethod.GET)
-    public @ModelAttribute("affiliate")
-    Affiliate viewRegistrationForm() {
+    public @ModelAttribute("affiliate") Affiliate viewRegistrationForm() {
 
         return new Affiliate();
     }
@@ -286,11 +277,16 @@ public class AdvertManagerController {
 //============================= viewBillingProjects ============================
 
     @RequestMapping(value = BLNG_LIST_REQ_MAPPING, method = RequestMethod.GET)
-    public @ModelAttribute("data")
-    Collection<Project> viewBillingProjects() {
+    public @ModelAttribute("data") Collection<Project> viewBillingProjects() {
 
         Collection<Project> result = billingProjectService.findAllBillingProjects();
 
+        int nProjects = 0;
+        if (result != null)
+            nProjects = result.size();
+        
+        logger.info("{} ::: Found {} Billing project specifications", BLNG_LIST_REQ_MAPPING, nProjects);
+        
         return result;
     }
 //============================= uploadBillingSpecification =====================
@@ -351,23 +347,17 @@ public class AdvertManagerController {
         //find wanted affProgram
         final AffProgram program = affProgramService.findAffProgramByID(affProgramId);
 
-        /**
-         * TODO verify that current affiliate is owner of subject affProgram and only then proceed to data importing task!!!
-         */
         //run data collection in separate Thread:
         try {
             new Thread() {
                 //prepare new thread function 
-
                 @Override
                 public void run() {
                     //set security context of this Thread
                     SecurityContextHolder.setContext(securityContext);
-                    //set thred name
+                    //set thread name for debug purposes
                     setName(BILLING + "DataImportThread" + " programId " + affProgramId);
-
                     //go collect data:
-                    //old: billingProjectService.importBillingData(aff,blngProjId);
                     billingProjectService.importBillingData(program);
                 }
                 //start thread execution
@@ -380,7 +370,6 @@ public class AdvertManagerController {
         }
 
         //transfer user back to import page(same place he came from)
-
         ModelAndView mav = viewProgramDetails(affProgramId);
         mav.addObject("status", status);
 
@@ -399,9 +388,34 @@ public class AdvertManagerController {
         
         Project proj = billingProjectService.findProjectById(projectId);
         
-        return forwardToView(BLNG_DETAILS_REQ_MAPPING+"/projectId", BLNG_DETAILS_REQ_MAPPING, "project", proj);
+        ModelAndView result = forwardToView(BLNG_DETAILS_REQ_MAPPING+"/"+projectId, BLNG_DETAILS_REQ_MAPPING, "project", proj);
+        result.addObject("selectedDataSpec", 0);
+        
+        return result;
         
     }
+    
+    
+    @RequestMapping(value = BLNG_DETAILS_REQ_MAPPING + "/{bpId}"+"/ds/{dsId}", method = RequestMethod.GET)
+    public void getBillingDataSpec(@PathVariable int bpId,@PathVariable int dsId, HttpServletResponse response) {
+        try {
+            DataSpec ds = billingProjectService.findProjectDataSpec(bpId,dsId);
+            ds.setProject(null);
+            for (SelectableItem si:ds.getAllSubItems()) {
+                si.setDataSpec(null);
+            }
+            String result = gson.toJson(ds);
+            logger.info(result);
+            response.getWriter().write(result);
+        } catch (IOException e) {
+            String errMsg = ",Exception:" + e.getClass().getSimpleName() +
+                    ((e.getMessage() == null) ? "" :
+                    " ,Message:"  + e.getMessage());
+
+            logger.error("failed to retrieve billing project dataspec  (bpId={},dsId={},Exception:{})", new Object[]{bpId,dsId, errMsg});
+        }
+    }
+    
     
     //================================================== deleteBillingProjectDetails ================================
     @RequestMapping(value = BLNG_DELETE_REQ_MAPPING+"/{projectId}", method = RequestMethod.GET)
@@ -409,7 +423,7 @@ public class AdvertManagerController {
         
         billingProjectService.delete(projectId);
         
-        ModelAndView result = forwardToView(BLNG_DELETE_REQ_MAPPING+"/projectId", BLNG_LIST_REQ_MAPPING, "status", "Successfully deleted project:"+projectId);
+        ModelAndView result = forwardToView(BLNG_DELETE_REQ_MAPPING+"/"+projectId, BLNG_LIST_REQ_MAPPING, "status", "Successfully deleted project:"+projectId);
 
         result.addObject("data", viewBillingProjects());
         
@@ -418,25 +432,25 @@ public class AdvertManagerController {
     }    
 
 ////============================= viewAccessLog =================================
-//    @RequestMapping(value ="/{programId}" + ACS_LIST_REQ_MAPPING , method = RequestMethod.GET)
-    public @ModelAttribute("data")
-    Collection<AccessLog> viewAccessLog() {
+    @RequestMapping(value ="/{programId}" + ACS_LIST_REQ_MAPPING , method = RequestMethod.GET)
+    public @ModelAttribute("data") Collection<AccessLog> viewAccessLog() {
 //        Collection<AccessLog> result = accessLogService.findAllAccessLog();
 //
-     //   return result;
+//   return result;
          return null;
     }
 
 //============================= handleException ================================
     private String handleException(Exception e, String opType, String entityType, String entityName) {
+        
         String errMsg = ",Exception:" + e.getClass().getSimpleName()
                 + ((e.getMessage() == null) ? "" : " ,Message:"
                 + e.getMessage());
 
-        String status = "Failed to " + opType + " " + entityType + " : "
-                + entityName + errMsg;
+        String status = "Failed to " + opType + " " + entityType + " : " + entityName + errMsg;
 
         logger.error(status);
+        
         return status;
     }
 //============================= forwardToView ==================================

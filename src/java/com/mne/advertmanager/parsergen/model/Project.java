@@ -29,7 +29,8 @@ import javax.xml.bind.annotation.*;
     @NamedQuery(name = "Project.findAll",  query = "SELECT p FROM Project p"),
     @NamedQuery(name = "Project.findByBaseUrl", query = "SELECT p FROM Project p WHERE p.baseURL = ?"),
     @NamedQuery(name = "Project.findByBackOfficeURL", query = "SELECT p FROM Project p WHERE locate(p.name,?)>0"),
-    @NamedQuery(name = "Project.deleteById", query = "delete Project p WHERE p.id = ?")
+    @NamedQuery(name = "Project.deleteById", query = "delete Project p WHERE p.id = ?"),
+    @NamedQuery(name = "Project.findProjectWithDataSpecList", query = "select p from Project p left join fetch p.dataSpecList ds WHERE p.id = ?")
         
 //+
 //" left join fetch p.dataSpecList ds"  +

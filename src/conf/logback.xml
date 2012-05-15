@@ -15,7 +15,7 @@
   
   <logger name="com.mne" level="debug"/>
   
-  <logger name="org.hibernate.SQL" level="error"/>
+  <logger name="org.hibernate.SQL" level="debug"/>
 
   
   <logger name="org.hibernate" level="error"/>
@@ -26,9 +26,9 @@
   
   <logger name="org.springframework.web" level="info"/>
   
-  <logger name="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping" level="info"/>
+  <logger name="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping" level="error"/>
   
-  <logger name="com.mchange" level="info"/>
+  <logger name="com.mchange" level="error"/>
   
   <logger name="org.springframework.security.core.userdetails.jdbc.JdbcDaoImpl" level="DEBUG"/>
   

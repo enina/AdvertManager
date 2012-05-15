@@ -22,6 +22,13 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(propOrder={"name","dataURL" ,"method","numPages","pageParam","listEntrySelector","subItems"})
 @Entity
 @Table(name = "billing_data_spec")
+@NamedQueries (
+    @NamedQuery(name = "DataSpec.findDataSpecById", 
+        query = "select ds from DataSpec ds " +
+        "left join fetch ds.subItems " +
+        "left join ds.project p " +
+        "WHERE ds.id=? and p.id = ?")
+)
 public class DataSpec implements Serializable {
     
     private static final long serialVersionUID = 1L;
