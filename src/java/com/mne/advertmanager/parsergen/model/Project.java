@@ -21,8 +21,7 @@ import javax.xml.bind.annotation.*;
 
 @XmlSeeAlso({com.mne.advertmanager.parsergen.model.DataSpec.class, com.mne.advertmanager.parsergen.model.SelectableItem.class})
 @XmlRootElement
-@XmlType(propOrder = {"name","baseURL", "homePage", "username", "userField", "password", "passwordField",
-    "method", "cookieName", "loginFormUrl", "logoutUrl", "selector", "dataSpecList"})
+@XmlType(propOrder = {"name","baseURL", "homePage", "username","password","userField", "passwordField","method", "cookieName", "loginFormUrl", "logoutUrl", "selector", "dataSpecList"})
 @Entity
 @Table(name = "billing_project_spec")
 @NamedQueries({
@@ -70,23 +69,19 @@ public class Project implements Serializable {
     @Column(name = "name")
     private String name;
     
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 64)
-    @Column(name = "username")
+    @Transient
     private String username;
+    @Transient
+    private String password;
     
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 64)
     @Column(name = "user_field")
     private String userField;
+
     
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 64)
-    @Column(name = "password")
-    private String password;
+
     
     @Basic(optional = false)
     @NotNull
@@ -163,6 +158,7 @@ public class Project implements Serializable {
         this.name = name;
     }
 
+    
     public String getPassword() {
         return password;
     }
@@ -278,7 +274,6 @@ public class Project implements Serializable {
         this.id = id;
     }
 
-    @XmlTransient
     public List<DataSpec> getDataSpecList() {
         return dataSpecList;
     }
