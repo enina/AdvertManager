@@ -12,7 +12,6 @@
         <ul  id="topMenue" > 
 
             <li class=""> <a class="menuItem" href="${pageContext.request.contextPath}/mvc/home" >Home</a></li>
-        <li class=""> <a class="menuItem" href="${pageContext.request.contextPath}/mvc/access/list"> AccessLog </a></li>
         <li class=""><a class="menuItem" href="${pageContext.request.contextPath}/mvc/affprograms/new">Add Program</a></li>
 
         <sec:authorize access="hasRole('ROLE_ADMIN')">

@@ -21,8 +21,6 @@ import javax.xml.bind.Unmarshaller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestWrapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -41,46 +39,42 @@ import org.springframework.web.servlet.ModelAndView;
 
 public class AdvertManagerController {
 
-    //const definitions
-    private static final String ADD = "/add";
-    private static final String NEW = "/new";
-    private static final String LIST = "/list";
-    @SuppressWarnings("unused")
-    private static final String GET = "/get";
     private static final String AFFILIATES = "affiliates";
     private static final String AFFPROGRAM = "affprograms";
     private static final String AFFPROG_GROUPS = "afprgroups";
-    private static final String AUTHORS = "authors";
+
     private static final String DATAGEN = "dataGen";
     private static final String APPS = "apps";
-    private static final String BILLING = "billing";
-//    private static final String ACCESS = "access";
+    
     private static final String APPS_PARSERGEN_REQ_MAPPING = APPS + "/parsergen";
-    private static final String AFF_LIST_REQ_MAPPING = AFFILIATES + LIST;
-    private static final String AFF_NEW_REQ_MAPPING = AFFILIATES + NEW;
-    private static final String AFF_ADD_REQ_MAPPING = AFFILIATES + ADD;
+    private static final String AFF_LIST_REQ_MAPPING = AFFILIATES + ControllerSupport.LIST;
+    private static final String AFF_NEW_REQ_MAPPING = AFFILIATES + ControllerSupport.NEW;
+    private static final String AFF_ADD_REQ_MAPPING = AFFILIATES + ControllerSupport.ADD;
     private static final String DG_GEN_REQ_MAPPING = DATAGEN + "/generate";
-    private static final String AFFPROGRAM_NEW_REQ_MAPPING = AFFPROGRAM + NEW;
-    private static final String AFFPROGRAM_ADD_REQ_MAPPING = AFFPROGRAM + ADD;
-    private static final String AFFPROGRAM_LIST_REQ_MAPPING = AFFPROGRAM + LIST;
-    private static final String AFFPROGRAM_DETAILS_REQ_MAPPING = AFFPROGRAM + "/details";
+    private static final String AFFPROGRAM_NEW_REQ_MAPPING = AFFPROGRAM + ControllerSupport.NEW;
+    private static final String AFFPROGRAM_ADD_REQ_MAPPING = AFFPROGRAM + ControllerSupport.ADD;
+    private static final String AFFPROGRAM_LIST_REQ_MAPPING = AFFPROGRAM + ControllerSupport.LIST;
 
-    private static final String BLNG_LIST_REQ_MAPPING = BILLING + LIST;
-    private static final String BLNG_NEW_REQ_MAPPING = BILLING + NEW;
-    private static final String BLNG_ADD_REQ_MAPPING = BILLING + ADD;
-    private static final String BLNG_IMPORT_REQ_MAPPING = BILLING + "/import";
-    private static final String BLNG_DETAILS_REQ_MAPPING = BILLING + "/details";
-    private static final String BLNG_DELETE_REQ_MAPPING = BILLING + "/delete";
+
+    private static final String BLNG_LIST_REQ_MAPPING = ControllerSupport.BILLING + ControllerSupport.LIST;
+    private static final String BLNG_NEW_REQ_MAPPING = ControllerSupport.BILLING + ControllerSupport.NEW;
+    private static final String BLNG_ADD_REQ_MAPPING = ControllerSupport.BILLING + ControllerSupport.ADD;
+    private static final String BLNG_DETAILS_REQ_MAPPING = ControllerSupport.BILLING + "/details";
+    private static final String BLNG_DELETE_REQ_MAPPING = ControllerSupport.BILLING + "/delete";
+
     //============= variables and objects ======================================
-    private static Logger logger = LoggerFactory.getLogger(AdvertManagerController.class);
+    
+
     private DataGenService dataGenerator;
     private AffiliateService affiliateService;
     private AffProgramService affProgramService;
     private AffProgramGroupService apgService;
     private BillingProjectService billingProjectService;
-    private AccessLogService accessLogService;
+
     private Gson gson = new Gson();
     private Unmarshaller jaxbUnmarshaller;
+    
+    private static final Logger logger = LoggerFactory.getLogger(AdvertManagerController.class);
 
     //C-tor
     public AdvertManagerController() {
@@ -130,7 +124,7 @@ public class AdvertManagerController {
             }
         }.start();
 
-        return forwardToView(DG_GEN_REQ_MAPPING, "home", "status","Dummy data generation started.");
+        return ControllerSupport.forwardToView(logger,DG_GEN_REQ_MAPPING, "home", "status","Dummy data generation started.");
     }
 
 //========================== viewAffProgDefintionForm ==========================
@@ -158,10 +152,10 @@ public class AdvertManagerController {
             affProgramService.createAffProgram(affprogram);
             status = "Affprogram:" + affprogram.getName() + " created successfully";
         } catch (Exception e) {
-            status = handleException(e, "create", "Affprogram", affprogram.getName());
+            status = ControllerSupport.handleException(logger,e, "create", "Affprogram", affprogram.getName());
         }
 
-        ModelAndView mav = forwardToView(AFFPROGRAM_ADD_REQ_MAPPING, "home", "data", generateHome(securityContext));
+        ModelAndView mav = ControllerSupport.forwardToView(logger,AFFPROGRAM_ADD_REQ_MAPPING, "home", "data", generateHome(securityContext));
 
         mav.addObject("status", status);
 
@@ -202,14 +196,14 @@ public class AdvertManagerController {
             affiliateService.createAffiliate(affiliate);
             status = "User:" + affiliate.getAffiliateName() + " created successfully";
         } catch (Exception e) {
-            status = handleException(e, "create", "affiliate", affiliate.getAffiliateName());
+            status = ControllerSupport.handleException(logger,e, "create", "affiliate", affiliate.getAffiliateName());
         }
 
         ModelAndView mav = null;
         if (securityContext.isUserInRole("ROLE_ADMIN")) {
-            mav = forwardToView(AFF_ADD_REQ_MAPPING, AFF_LIST_REQ_MAPPING, "data", viewAffiliates());
+            mav = ControllerSupport.forwardToView(logger,AFF_ADD_REQ_MAPPING, AFF_LIST_REQ_MAPPING, "data", viewAffiliates());
         } else {
-            mav = forwardToView(AFF_ADD_REQ_MAPPING, "login", null, null);
+            mav = ControllerSupport.forwardToView(logger,AFF_ADD_REQ_MAPPING, "login", null, null);
         }
 
         mav.addObject("status", status);
@@ -299,58 +293,11 @@ public class AdvertManagerController {
             if (specFile != null) {
                 specName += specFile.getName();
             }
-            status = handleException(e, "upload", "billingSpec", specName);
+            status = ControllerSupport.handleException(logger,e, "upload", "billingSpec", specName);
         }
 
         ModelAndView mav = null;
-        mav = forwardToView(BLNG_ADD_REQ_MAPPING, BLNG_LIST_REQ_MAPPING, "data", viewBillingProjects());
-        mav.addObject("status", status);
-
-        return mav;
-    }
-//============================= importBillingData ==============================
-
-    /**
-     * This function start importing process of data for specified AffProgramm this function invoked from by web link and has context variable affProgramId
-     */
-    @RequestMapping(value = BLNG_IMPORT_REQ_MAPPING + "/{affProgramId}", method = RequestMethod.GET)
-    public void importBillingData(@PathVariable final int affProgramId, SecurityContextHolderAwareRequestWrapper securityContextWrapper,HttpServletResponse response){
-
-        String status = null; // hold msg that will apear to user upon failure/success.
-
-        //get current affName
-        String affName = securityContextWrapper.getUserPrincipal().getName();
-        //find curent affiliate by name
-        final Affiliate aff = affiliateService.findAffiliateWithAffPrograms(affName);
-        //get security context data
-        final SecurityContext securityContext = SecurityContextHolder.getContext();
-        //find wanted affProgram
-        final AffProgram program = affProgramService.findAffProgramByID(affProgramId);
-
-        //run data collection in separate Thread:
-        try {
-            new Thread() {
-                //prepare new thread function 
-                @Override
-                public void run() {
-                    //set security context of this Thread
-                    SecurityContextHolder.setContext(securityContext);
-                    //set thread name for debug purposes
-                    setName(BILLING + "DataImportThread" + " programId " + affProgramId);
-                    //go collect data:
-                    billingProjectService.importBillingData(program);
-                }
-                //start thread execution
-            }.start();
-
-                
-            status = "Started importing data for program id=" + affProgramId;
-        } catch (Exception e) {
-            status = handleException(e, "import", "Program Data", "id=" + affProgramId);
-        }
-
-        //transfer user back to import page(same place he came from)
-        ModelAndView mav = viewProgramDetails(affProgramId);
+        mav = ControllerSupport.forwardToView(logger,BLNG_ADD_REQ_MAPPING, BLNG_LIST_REQ_MAPPING, "data", viewBillingProjects());
         mav.addObject("status", status);
 
         return mav;
@@ -368,7 +315,7 @@ public class AdvertManagerController {
         
         Project proj = billingProjectService.findProjectById(projectId);
         
-        ModelAndView result = forwardToView(BLNG_DETAILS_REQ_MAPPING+"/"+projectId, BLNG_DETAILS_REQ_MAPPING, "project", proj);
+        ModelAndView result = ControllerSupport.forwardToView(logger,BLNG_DETAILS_REQ_MAPPING+"/"+projectId, BLNG_DETAILS_REQ_MAPPING, "project", proj);
         result.addObject("selectedDataSpec", 0);
         
         return result;
@@ -403,7 +350,7 @@ public class AdvertManagerController {
         
         billingProjectService.delete(projectId);
         
-        ModelAndView result = forwardToView(BLNG_DELETE_REQ_MAPPING+"/"+projectId, BLNG_LIST_REQ_MAPPING, "status", "Successfully deleted project:"+projectId);
+        ModelAndView result = ControllerSupport.forwardToView(logger,BLNG_DELETE_REQ_MAPPING+"/"+projectId, BLNG_LIST_REQ_MAPPING, "status", "Successfully deleted project:"+projectId);
 
         result.addObject("data", viewBillingProjects());
         
@@ -411,40 +358,9 @@ public class AdvertManagerController {
         
     }    
 
-////============================= viewAccessLog =================================
-    @RequestMapping(value ="/{programId}" + ACS_LIST_REQ_MAPPING , method = RequestMethod.GET)
-    public @ModelAttribute("data") Collection<AccessLog> viewAccessLog() {
-//        Collection<AccessLog> result = accessLogService.findAllAccessLog();
-//
-//   return result;
-         return null;
-    }
 
-//============================= handleException ================================
-    private String handleException(Exception e, String opType, String entityType, String entityName) {
-        
-        String errMsg = ",Exception:" + e.getClass().getSimpleName()
-                + ((e.getMessage() == null) ? "" : " ,Message:"
-                + e.getMessage());
 
-        String status = "Failed to " + opType + " " + entityType + " : " + entityName + errMsg;
-
-        logger.error(status);
-        
-        return status;
-    }
-//============================= forwardToView ==================================
-
-    private ModelAndView forwardToView(String requestMapping, String viewName, String key, Object data) {
-        ModelAndView mav = new ModelAndView();
-        mav.setViewName(viewName);
-        if (key != null && data != null) {
-            mav.addObject(key, data);
-        }
-        logger.info("{} --> {}", requestMapping, viewName);
-        return mav;
-    }
-//================================= SETERS =====================================
+//================================= SETTERS =====================================
 //============================= setDataGenerator ===============================
     @Autowired
     public void setDataGenerator(DataGenService dataGenerator) {
@@ -476,10 +392,5 @@ public class AdvertManagerController {
     public void setBillingProjectService(BillingProjectService billingProjectService) {
         this.billingProjectService = billingProjectService;
     }
-//============================= setAccessLogService ============================
 
-    @Autowired
-    public void setAccessLogService(AccessLogService accessLogService) {
-        this.accessLogService = accessLogService;
-    }
 }
