@@ -13,6 +13,7 @@ import com.mne.advertmanager.service.*;
 import com.mne.advertmanager.web.model.BillingSpec;
 import java.io.IOException;
 import java.util.Collection;
+import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.bind.JAXBContext;
@@ -327,18 +328,28 @@ public class AdvertManagerController {
     public void getBillingDataSpec(@PathVariable int bpId,@PathVariable int dsId, HttpServletResponse response) {
         try {
             DataSpec ds = billingProjectService.findProjectDataSpec(bpId,dsId);
-            ds.setProject(null);
-            for (SelectableItem si:ds.getAllSubItems()) {
-                si.setDataSpec(null);
+            String result = "{}";
+            if (ds == null) {
+                logger.error("Invalid billing project id - {} or dataspec id - {}",bpId,dsId);
+            }else {
+                ds.setProject(null);
+                List<SelectableItem> siList = ds.getAllSubItems();
+                if (siList == null) {
+                    logger.error("Project.Dataspec - {}.{} contains no items",bpId,dsId);
+                }else {
+                    for (SelectableItem si:ds.getAllSubItems()) {
+                        si.setDataSpec(null);
+                    }
+                    result = gson.toJson(ds);
+                }
             }
-            String result = gson.toJson(ds);
             logger.info(result);
             response.getWriter().write(result);
-        } catch (IOException e) {
-            String errMsg = ",Exception:" + e.getClass().getSimpleName() +
-                    ((e.getMessage() == null) ? "" :
-                    " ,Message:"  + e.getMessage());
 
+        }catch (IOException e) {
+            String errMsg = ",Exception:" + e.getClass().getSimpleName() +
+                ((e.getMessage() == null) ? "" :
+                " ,Message:"  + e.getMessage());
             logger.error("failed to retrieve billing project dataspec  (bpId={},dsId={},Exception:{})", new Object[]{bpId,dsId, errMsg});
         }
     }

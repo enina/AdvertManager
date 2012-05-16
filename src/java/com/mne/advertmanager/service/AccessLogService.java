@@ -7,6 +7,8 @@ package com.mne.advertmanager.service;
 import com.mne.advertmanager.dao.GenericDao;
 import com.mne.advertmanager.model.AccessLog;
 import com.mne.advertmanager.model.AffProgram;
+import com.mne.advertmanager.util.Page;
+import com.mne.advertmanager.util.PageCtrl;
 import java.util.Collection;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,8 +25,15 @@ public class AccessLogService {
         this.accessLogDao = accessLogDao;
     }
     @Transactional(readOnly = true)
-    public Collection<AccessLog> findAllAccessLog() {
-        return accessLogDao.findByQuery("AccessLog.findAll");
+    public Page<AccessLog> findAllAccessLog(PageCtrl pageCtrl) {
+        
+        if (pageCtrl.getTotalPages()<=0) {
+            accessLogDao.initPageCtrl(pageCtrl, "AccessLog.countAccessLog");
+        }
+
+        Page<AccessLog> result =  accessLogDao.findPageByQuery("AccessLog.findAll", pageCtrl);
+
+        return result;
     }
 
     @Transactional
@@ -37,7 +46,15 @@ public class AccessLogService {
     }
     
     @Transactional(readOnly = true)
-    public Collection<AccessLog> findAccessByAffProgamId(AffProgram affProgram ) {
-        return accessLogDao.findByQuery("AccessLog.findByAffProgramId", affProgram);
+    public Page<AccessLog> findAccessByAffProgamId(PageCtrl pageCtrl,int affProgramId) {
+        
+        if (pageCtrl.getTotalPages()<=0) {
+            accessLogDao.initPageCtrl(pageCtrl, "AccessLog.countAffProgramAccessLog",affProgramId);
+        }
+
+        Page<AccessLog> result =  accessLogDao.findPageByQuery("AccessLog.findByAffProgramId", pageCtrl,affProgramId);
+
+        return result;        
+
     }
 }

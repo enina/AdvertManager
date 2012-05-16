@@ -12,7 +12,7 @@
     
 <table >
     
-    <c:if test="${acessList!=null}">
+    <c:if test="${accessPage!=null && accessPage.items != null}">
         
         <thead>
             <tr>
@@ -23,7 +23,19 @@
             </tr>
         </thead>
         
-        <c:forEach items="${acessList}" var="access">
+        <div>
+            <c:if test="${accessPage.pageCtrl.currentPage != 1}">
+                <a  href="${pageContext.request.contextPath}/mvc/affprograms/${program.id}/accessPage/1">First</a>
+                <a  href="${pageContext.request.contextPath}/mvc/affprograms/${program.id}/accessPage/${accessPage.pageCtrl.prevPage}">Previous</a>
+            </c:if>
+            Page <c:out value="${accessPage.pageCtrl.currentPage}"/> of <c:out value="${accessPage.pageCtrl.totalPages}"/>
+            <c:if test="${accessPage.pageCtrl.currentPage != accessPage.pageCtrl.totalPages }">
+                <a  href="${pageContext.request.contextPath}/mvc/affprograms/${program.id}/accessPage/${accessPage.pageCtrl.nextPage}">Next </a>
+                <a  href="${pageContext.request.contextPath}/mvc/affprograms/${program.id}/accessPage/${accessPage.pageCtrl.totalPages}">Last</a>
+            </c:if>
+        </div>
+        
+        <c:forEach items="${accessPage.items}" var="access">
             <tr>
                 <td   >
                     <c:out value="${access.timeAsString}" />

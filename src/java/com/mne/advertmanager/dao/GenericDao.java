@@ -4,7 +4,8 @@
  */
 package com.mne.advertmanager.dao;
 
-import com.mne.advertmanager.model.AffProgram;
+import com.mne.advertmanager.util.Page;
+import com.mne.advertmanager.util.PageCtrl;
 import java.io.Serializable;
 import java.util.Collection;
 
@@ -34,8 +35,12 @@ public interface GenericDao <T, PK extends Serializable> {
     
     public int executeUpdateByQuery(String queryName,Object ...params);
     
+    public Page<T> findPageByQuery(String queryName,PageCtrl pageCtrl,Object ...params);
+    
     
     
     public void flush();
+
+    public void initPageCtrl(PageCtrl pageCtrl,String queryName,Object ... params);
 
 }

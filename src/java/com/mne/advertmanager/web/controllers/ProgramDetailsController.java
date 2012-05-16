@@ -9,6 +9,8 @@ import com.mne.advertmanager.model.AffProgram;
 import com.mne.advertmanager.model.Affiliate;
 import com.mne.advertmanager.model.PurchaseOrder;
 import com.mne.advertmanager.service.*;
+import com.mne.advertmanager.util.Page;
+import com.mne.advertmanager.util.PageCtrl;
 import java.util.Collection;
 import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
@@ -38,10 +40,14 @@ public class ProgramDetailsController {
     private static final String ACCESS = "/access";
     private static final String FINANCE = "/finance";
     private static final String AFFPROGRAM_DETAILS_REQ_MAPPING = AFFPROGRAM + DETAILS;
-    private static final String AFFPROGRAM_ACCESS_REQ_MAPPING = AFFPROGRAM + ACCESS;
+    private static final String AFFPROGRAM_ACCESS_REQ_MAPPING = AFFPROGRAM + "/{programId}/accessPage/{pageNumber}";
     private static final String AFFPROGRAM_ORDERS_REQ_MAPPING = AFFPROGRAM + ORDERS;
     private static final String AFFPROGRAM_FINANCE_REQ_MAPPING = AFFPROGRAM + FINANCE;
+    
     private static final String BLNG_IMPORT_REQ_MAPPING = ControllerSupport.BILLING + "/import";
+
+    
+    
     //variables and object declarations
     private AffProgramService affProgramService;
     private AccessLogService accessLogService;
@@ -70,19 +76,23 @@ public class ProgramDetailsController {
 
         //1.find program by id
         AffProgram program = affProgramService.findAffProgramByID(programId);
-
-        //find all accesses related to this program
-        Collection<AccessLog> acessList = accessLogService.findAccessByAffProgamId(program);
-        Collection<PurchaseOrder> orderList = purchaseOrderService.findPurchaseOrdersByAffProgamId(program);
-        // Collection<Partner> partnerList = partnerService.findAllAccessLog();
-        //create model veiw object
+        Page<AccessLog> accessPage = null;
+        Collection<PurchaseOrder> orderList = null;
+        if (program != null) {
+            //only find data for valid programs
+            //find all accesses related to this program
+            accessPage = accessLogService.findAccessByAffProgamId(new PageCtrl(),programId);
+            orderList = purchaseOrderService.findPurchaseOrdersByAffProgamId(program);
+            // Collection<Partner> partnerList = partnerService.findAllAccessLog();
+            //create model veiw object
+        }
 
 
 
 
         ModelAndView mav = new ModelAndView();
         mav.addObject("program", program);
-        mav.addObject("acessList", acessList);
+        mav.addObject("accessPage", accessPage);
         mav.addObject("orderList", orderList);
 //        mav.addObject("partnerList", partnerList);
 
@@ -140,6 +150,20 @@ public class ProgramDetailsController {
         return mav;
     }
 
+    @RequestMapping(value = AFFPROGRAM_ACCESS_REQ_MAPPING , method = RequestMethod.GET)
+    public ModelAndView getAccessPage(@PathVariable int programId, @PathVariable int pageNumber) {    
+        
+        AffProgram program = affProgramService.findAffProgramByID(programId);
+        Page<AccessLog> accessPage =  accessLogService.findAccessByAffProgamId(new PageCtrl(pageNumber),programId);
+
+        String curRequest = AFFPROGRAM_ACCESS_REQ_MAPPING + "/"+programId+"/accessPage/"+pageNumber;
+        
+        ModelAndView mav = ControllerSupport.forwardToView(logger, curRequest , AFFPROGRAM_DETAILS_REQ_MAPPING, "program", program);
+        mav.addObject("accessPage", accessPage);
+
+        return mav;
+    }
+    
 //======================== SETTERS ==============================================    
     @Autowired
     public void setAccessLogService(AccessLogService accessLogService) {
