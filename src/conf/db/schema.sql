@@ -11,6 +11,9 @@ drop table if exists affprog_group         CASCADE;
 drop table if exists affiliate              CASCADE;
 drop table if exists partner                CASCADE;
 drop table if exists access_source          CASCADE;
+drop table if exists selectable_data_item cascade;
+drop table if exists billing_data_spec   cascade;
+drop table if exists billing_project_spec   cascade;
 ------------------ application tables --------------
 
 ---------- spring security tables ------------------
@@ -101,7 +104,7 @@ create table purchase_order (
     FOREIGN KEY (partner_id)  REFERENCES partner(id) on delete cascade);
 
 CREATE TABLE `billing_project_spec` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `base_url` varchar(1024) NOT NULL,
   `cookie_name` varchar(32) NOT NULL,
   `home_page` varchar(256) NOT NULL,
@@ -111,7 +114,7 @@ CREATE TABLE `billing_project_spec` (
   `name` varchar(256) NOT NULL,
   `password_field` varchar(16) NOT NULL,
   `selector` varchar(256) NOT NULL,
-  `user_field` varchar(64) NOT NULL
+  `user_field` varchar(64) NOT NULL,
   PRIMARY KEY (`id`));
 
 CREATE TABLE `billing_data_spec` (

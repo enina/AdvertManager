@@ -10,7 +10,7 @@ package com.mne.advertmanager.util;
  */
 public class PageCtrl {
 
-    private int pageNumber = 1;
+    private int pageIdx = 0;
     private int totalPages = 0;
     private int pageSize = 5;
     
@@ -30,11 +30,11 @@ public class PageCtrl {
     }
     
     public int getCurrentPage() {
-        return pageNumber;
+        return pageIdx+1;
     }
 
     public void setCurrentPage(int pageNumber) {
-        this.pageNumber = pageNumber;
+        this.pageIdx = pageNumber-1;
     }
 
     public int getPageSize() {
@@ -42,11 +42,11 @@ public class PageCtrl {
     }
     
     public int getNextPage() {
-        return Math.min(pageNumber+1, totalPages);
+        return Math.min(getCurrentPage()+1, totalPages);
     }
     
     public int getPrevPage() {
-        return Math.max(pageNumber-1, 1);
+        return Math.max(getCurrentPage()-1, 1);
     }
     
 
@@ -65,7 +65,7 @@ public class PageCtrl {
 
     public int getFirstResult() {
         
-        return pageNumber*pageSize;
+        return pageIdx*pageSize;
         
     }
 }
