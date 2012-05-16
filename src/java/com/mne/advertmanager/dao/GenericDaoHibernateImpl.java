@@ -4,8 +4,11 @@
  */
 package com.mne.advertmanager.dao;
 
+import com.mne.advertmanager.util.Page;
+import com.mne.advertmanager.util.PageCtrl;
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.List;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -56,16 +59,17 @@ public class GenericDaoHibernateImpl<T, PK extends Serializable> implements Gene
     public Collection<T> findByQuery(String queryName, Object... params) {
 
         Collection<T> result = null;
-        
+
         Query q = initQueryObject(queryName, params);
-        if (q != null)
+        if (q != null) {
             result = q.list();
-        
+        }
+
         return result;
     }
 
     private Query initQueryObject(String queryName, Object[] params) throws HibernateException {
-        
+
         Query q = getSession().getNamedQuery(queryName);
 
         if (q != null && params != null) {
@@ -88,13 +92,13 @@ public class GenericDaoHibernateImpl<T, PK extends Serializable> implements Gene
 
         return result;
     }
-    
+
     @Override
-    public int executeUpdateByQuery(String queryName,Object ...params) {
+    public int executeUpdateByQuery(String queryName, Object... params) {
         Query q = initQueryObject(queryName, params);
         int res = q.executeUpdate();
         return res;
-        
+
     }
 
     public void setSessionFactory(SessionFactory sessionFactory) {
@@ -110,4 +114,25 @@ public class GenericDaoHibernateImpl<T, PK extends Serializable> implements Gene
     public Collection<T> findByExample(T example) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
+
+    @Override
+    public Page<T> findPageByQuery(String queryName, PageCtrl pageCtrl, Object... params) {
+
+        Query q = initQueryObject(queryName, params);
+        q.setMaxResults(pageCtrl.getPageSize());
+        q.setFirstResult(pageCtrl.getFirstResult());
+        List data =  q.list();
+        Page <T> result = new Page<T>(data,pageCtrl);
+        
+        return result;
+    }
+
+    @Override
+    public void initPageCtrl(PageCtrl pageCtrl, String queryName, Object... params) {
+        Query q = initQueryObject(queryName, params);
+        int count = ((Long)q.uniqueResult()).intValue();
+        pageCtrl.setTotalPages(count/pageCtrl.getPageSize()-((count%pageCtrl.getPageSize()==0)?1:0));
+    }
+    
+    
 }
