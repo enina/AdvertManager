@@ -116,6 +116,7 @@ public class GenericDaoHibernateImpl<T, PK extends Serializable> implements Gene
     }
 
     @Override
+    @SuppressWarnings(value = "unchecked")
     public Page<T> findPageByQuery(String queryName, PageCtrl pageCtrl, Object... params) {
 
         Query q = initQueryObject(queryName, params);
@@ -131,7 +132,7 @@ public class GenericDaoHibernateImpl<T, PK extends Serializable> implements Gene
     public void initPageCtrl(PageCtrl pageCtrl, String queryName, Object... params) {
         Query q = initQueryObject(queryName, params);
         int count = ((Long)q.uniqueResult()).intValue();
-        pageCtrl.setTotalPages(count/pageCtrl.getPageSize()-((count%pageCtrl.getPageSize()==0)?1:0));
+        pageCtrl.setTotalPages(count/pageCtrl.getPageSize() +((count%pageCtrl.getPageSize()==0)?0:1));
     }
     
     
