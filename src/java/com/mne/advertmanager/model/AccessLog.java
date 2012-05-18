@@ -80,9 +80,6 @@ public class AccessLog implements Serializable {
     @JoinColumn(name = "affprogram_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private AffProgram affProgram;
-    
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "access")
-    private Collection<PurchaseOrder> purchaseOrderCollection;
 
     public AccessLog() {
     }
@@ -156,14 +153,8 @@ public class AccessLog implements Serializable {
         this.affProgram = affProgram;
     }
 
-    @XmlTransient
-    public Collection<PurchaseOrder> getPurchaseOrderCollection() {
-        return purchaseOrderCollection;
-    }
 
-    public void setPurchaseOrderCollection(Collection<PurchaseOrder> purchaseOrderCollection) {
-        this.purchaseOrderCollection = purchaseOrderCollection;
-    }
+
 
     @Override
     public int hashCode() {

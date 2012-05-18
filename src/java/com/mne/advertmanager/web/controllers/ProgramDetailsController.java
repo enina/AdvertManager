@@ -4,6 +4,7 @@
  */
 package com.mne.advertmanager.web.controllers;
 
+import com.google.gson.Gson;
 import com.mne.advertmanager.model.AccessLog;
 import com.mne.advertmanager.model.AffProgram;
 import com.mne.advertmanager.model.Affiliate;
@@ -11,6 +12,7 @@ import com.mne.advertmanager.model.PurchaseOrder;
 import com.mne.advertmanager.service.*;
 import com.mne.advertmanager.util.Page;
 import com.mne.advertmanager.util.PageCtrl;
+import java.io.IOException;
 import java.util.Collection;
 import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
@@ -40,15 +42,16 @@ public class ProgramDetailsController {
     private static final String ACCESS = "/access";
     private static final String FINANCE = "/finance";
     private static final String AFFPROGRAM_DETAILS_REQ_MAPPING = AFFPROGRAM + DETAILS;
-    private static final String AFFPROGRAM_ACCESS_REQ_MAPPING = AFFPROGRAM + "/{programId}/accessPage/{pageNumber}";
+    private static final String AFFPROGRAM_ACCESS_REQ_MAPPING = AFFPROGRAM + "/{programId}/items/{items}/accessPage/{pageNumber}";
     private static final String AFFPROGRAM_ORDERS_REQ_MAPPING = AFFPROGRAM + ORDERS;
     private static final String AFFPROGRAM_FINANCE_REQ_MAPPING = AFFPROGRAM + FINANCE;
     
     private static final String BLNG_IMPORT_REQ_MAPPING = ControllerSupport.BILLING + "/import";
-
+    
     
     
     //variables and object declarations
+    private Gson gson = new Gson();
     private AffProgramService affProgramService;
     private AccessLogService accessLogService;
     private PurchaseOrderService purchaseOrderService;
@@ -149,22 +152,30 @@ public class ProgramDetailsController {
 
         return mav;
     }
-
+    
+//=============================== getAccessPage ================================
     @RequestMapping(value = AFFPROGRAM_ACCESS_REQ_MAPPING , method = RequestMethod.GET)
-    public ModelAndView getAccessPage(@PathVariable int programId, @PathVariable int pageNumber) {    
+    void getAccessPage(@PathVariable int items,@PathVariable int programId, @PathVariable int pageNumber,HttpServletResponse response) {    
         
-        AffProgram program = affProgramService.findAffProgramByID(programId);
-        Page<AccessLog> accessPage =  accessLogService.findAccessByAffProgamId(new PageCtrl(pageNumber),programId);
-
-        String curRequest = AFFPROGRAM_ACCESS_REQ_MAPPING + "/"+programId+"/accessPage/"+pageNumber;
         
-        ModelAndView mav = ControllerSupport.forwardToView(logger, curRequest , AFFPROGRAM_DETAILS_REQ_MAPPING, "program", program);
-        mav.addObject("accessPage", accessPage);
+        try {
+            AffProgram program = affProgramService.findAffProgramByID(programId);
+            Page<AccessLog> accessPage =  accessLogService.findAccessByAffProgamId(new PageCtrl(pageNumber,0,items),programId);
+            String curRequest = AFFPROGRAM_ACCESS_REQ_MAPPING + "/"+programId+"/items/" +items + "/accessPage/"+pageNumber;
+            logger.info(curRequest);
+            String result = gson.toJson(accessPage);
+            logger.info(result);
+            response.getWriter().write(result);
+        } catch (IOException e) {
+            String errMsg = ",Exception:" + e.getClass().getSimpleName()
+                    + ((e.getMessage() == null) ? "" : " ,Message:"
+                    + e.getMessage());
 
-        return mav;
+            logger.error("failed to retrieve accessee of affprogram (id={},Exception:{})", programId, errMsg);
+        }
     }
     
-//======================== SETTERS ==============================================    
+//=============================== SETTERS ======================================
     @Autowired
     public void setAccessLogService(AccessLogService accessLogService) {
         this.accessLogService = accessLogService;

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<project>
+    <valid>true</valid>
+    <name>Partners_e-autopay</name>
+    <homeDirectory>C:\Users\Misha\Desktop\FinalProject\AdvertManager\parser gen generated xml</homeDirectory>
+    <baseURL>http://mediakursy.e-autopay.com/aff/</baseURL>
+    <homePage>main.php</homePage>
+    <username>info</username>
+    <userField>form_refid</userField>
+    <password>of58ypc82v27</password>
+    <passwordField>form_pwd</passwordField>
+    <method>get</method>
+    <cookieName>partnersaccaunt</cookieName>
+    <loginFormUrl>login.php</loginFormUrl>
+    <logoutUrl>exit.php</logoutUrl>
+    <selector>html&gt;body</selector>
+    <dataSpecList>
+        <dataSpec>
+            <name>Partner</name>
+            <dataURL>partners.php</dataURL>
+            <method>get</method>
+            <numPages>1</numPages>
+            <pageParam></pageParam>
+            <selector>html body:eq(1)&gt;div  div:eq(4)&gt;div &gt;div  table:eq(2)&gt;tbody </selector>
+            <listEntrySelector> tr:gt(0)</listEntrySelector>
+            <subItemList>
+                <selectableItem>
+                    <name>root</name>
+                    <selector>html body:eq(1)&gt;div  div:eq(4)&gt;div &gt;div  table:eq(2)&gt;tbody </selector>
+                </selectableItem>
+                <selectableItem>
+                    <name>listEntry</name>
+                    <selector> tr:gt(0)</selector>
+                </selectableItem>
+                <selectableItem>
+                    <name>Name</name>
+                    <selector>td </selector>
+                </selectableItem>
+                <selectableItem>
+                    <name>Email</name>
+                    <selector> td:eq(1)</selector>
+                </selectableItem>
+            </subItemList>
+        </dataSpec>
+    </dataSpecList>
+</project>

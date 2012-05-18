@@ -87,7 +87,6 @@ create table purchase_order (
     id          int not null auto_increment ,
     affprogram_id  int not null ,
     partner_id  int ,
-    access_id   int ,--ukazatel tablica perehodov
     status      varchar(256)  ,--order status
     original_order_id varchar(256),
     tracking_id varchar(256),
@@ -100,7 +99,6 @@ create table purchase_order (
     city varchar(256),
     PRIMARY KEY (id),
     FOREIGN KEY (affprogram_id)  REFERENCES aff_program(id) on delete cascade,
-    FOREIGN KEY (access_id)   REFERENCES access_log(id) on delete cascade,
     FOREIGN KEY (partner_id)  REFERENCES partner(id) on delete cascade);
 
 CREATE TABLE `billing_project_spec` (

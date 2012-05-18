@@ -1,5 +1,12 @@
 <configuration scan="true"> 
 
+<!-- known debug levels:
+     
+     error
+     info
+     debug
+-->
+
   <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender"> 
     <!-- encoders are  by default assigned the type
          ch.qos.logback.classic.encoder.PatternLayoutEncoder -->
@@ -26,20 +33,22 @@
   
   <logger name="org.springframework.web" level="info"/>
   
-  <logger name="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping" level="error"/>
+  <logger name="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping" level="debug"/>
   
   <logger name="com.mchange" level="error"/>
   
-  <logger name="org.springframework.security.core.userdetails.jdbc.JdbcDaoImpl" level="DEBUG"/>
+  <logger name="org.springframework.security.core.userdetails.jdbc.JdbcDaoImpl" level="debug"/>
   
   <logger name="ch.qos.logback.classic.LoggerContext" level="debug"/>
   
   <logger name="com.mne.advertmanager.util.JSoupTransport" level="debug"/>
   
   <logger name="org.hibernate.internal.SessionFactoryImpl" level="error"/>
-  <logger name="org.hibernate.hql.internal.ast.util.SessionFactoryHelper.findSQLFunction" level="error"/>
+  <logger name="org.hibernate.hql.internal.ast.util.SessionFactoryHelper.findSQLFunction" level="debug"/>
   
-  <logger name="org.springframework.web.servlet.DispatcherServlet" level="info"/>
+
+  
+  
   
   
 </configuration>

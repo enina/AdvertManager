@@ -120,7 +120,6 @@ public class DataGenService {
             rowCounter++;
             if ((i % 1000)==0) {
                 PurchaseOrder curOrder = entityFactory.makePurchaseOrder();
-                curOrder.setAccess(curAccessLog);
                 curOrder.setAffProgram(curAffProgram);
                 orderList.add(curOrder);
                 purchaseOrderDao.create(curOrder);

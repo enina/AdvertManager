@@ -5,7 +5,9 @@
 package com.mne.advertmanager.web.controllers;
 
 import com.google.gson.Gson;
-import com.mne.advertmanager.model.*;
+import com.mne.advertmanager.model.AffProgram;
+import com.mne.advertmanager.model.AffProgramGroup;
+import com.mne.advertmanager.model.Affiliate;
 import com.mne.advertmanager.parsergen.model.DataSpec;
 import com.mne.advertmanager.parsergen.model.Project;
 import com.mne.advertmanager.parsergen.model.SelectableItem;
@@ -211,7 +213,7 @@ public class AdvertManagerController {
 
         return mav;
     }
-//===================================== launchParserGenerator ==================
+//============================ launchParserGenerator ===========================
 
     @RequestMapping(value = APPS_PARSERGEN_REQ_MAPPING, method = RequestMethod.GET)
     public @ModelAttribute("codebase") String launchParserGenerator(HttpServletRequest request) {
@@ -323,7 +325,7 @@ public class AdvertManagerController {
         
     }
     
-    
+    //========================= getBillingDataSpec ==============================
     @RequestMapping(value = BLNG_DETAILS_REQ_MAPPING + "/{bpId}"+"/ds/{dsId}", method = RequestMethod.GET)
     public void getBillingDataSpec(@PathVariable int bpId,@PathVariable int dsId, HttpServletResponse response) {
         try {
