@@ -70,7 +70,7 @@ create table access_log (
     access_time TIMESTAMP , --vremya perehoda
     ip_address varchar(256) , --client ip address
     location  varchar(2048)  , --client geo location
-    source_domain_id int not null ,
+    source_domain_id int ,
     url varchar(256)  ,
     query varchar(256),
     PRIMARY KEY (id),

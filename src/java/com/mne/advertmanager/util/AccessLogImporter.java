@@ -95,11 +95,13 @@ public class AccessLogImporter implements BillingDataImporter {
                 String term = query.substring(queryTextFirstIdx, queryTextLastIdx);
 
                 result = URLDecoder.decode(term, charSet);
-                String tester = URLEncoder.encode(term, "US-ASCII");
-
-                if (!tester.equals(result)) {
+                String encoded = URLEncoder.encode(result, charSet);
+                encoded = encoded.replaceAll("\\+", "%20");
+                
+                if (!term.equals(encoded)) {
                     charSet = "windows-1251";
                     result = URLDecoder.decode(term, charSet);
+                    logger.debug("Term={}:::Encoded={}",term,encoded);
                 }
                 logger.debug("detectedCharset:{}, result:{}", charSet, result);
             } catch (UnsupportedEncodingException ex) {
@@ -147,12 +149,13 @@ public class AccessLogImporter implements BillingDataImporter {
     private URL buildURL(String itemValue) {
         URL result = null;
         try {
-            try {
-                result = new URL(itemValue);
-            } catch (Exception ex) {
-                logger.debug("Failed build URL from {} .Exception {}.Defaulting to google.com", itemValue, ex);
-                result = new URL("http", "google.com", "/q=" + itemValue);
-            }
+            result = new URL(itemValue);
+//            try {
+//                result = new URL(itemValue);
+//            } catch (Exception ex) {
+//                logger.debug("Failed build URL from {} .Exception {}.Defaulting to google.com", itemValue, ex);
+//                result = new URL("http", "google.com", "/q=" + itemValue);
+//            }
         } catch (Exception e) {
             logger.error(e.toString());
         }
