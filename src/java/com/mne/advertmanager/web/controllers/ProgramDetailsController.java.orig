@@ -155,12 +155,17 @@ public class ProgramDetailsController {
     @RequestMapping(value = AFFPROGRAM_ACCESS_REQ_MAPPING , method = RequestMethod.GET)
     void getAccessPage(@PathVariable int items,@PathVariable int programId, @PathVariable int pageNumber,HttpServletResponse response) {    
         
+<<<<<<< HEAD
+=======
+        AffProgram program = affProgramService.findAffProgramByID(programId);
+        Page<AccessLog> accessPage =  accessLogService.findAccessByAffProgamId(new PageCtrl(pageNumber),programId);
+
+        String curRequest = AFFPROGRAM + "/"+programId+"/accessPage/"+pageNumber;
+>>>>>>> 7da7d2a56c809561ec2a2207ae6a1023bd18b1b5
         
         try {
-           
             AffProgram program = affProgramService.findAffProgramByID(programId);
             Page<AccessLog> accessPage =  accessLogService.findAccessByAffProgamId(new PageCtrl(pageNumber,0,items),programId);
-           
             String curRequest = AFFPROGRAM_ACCESS_REQ_MAPPING + "/"+programId+"/items/" +items + "/accessPage/"+pageNumber;
             logger.info(curRequest);
             String result = gson.toJson(accessPage);
