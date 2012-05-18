@@ -54,6 +54,10 @@ public class AccessLogService {
 
         Page<AccessLog> result =  accessLogDao.findPageByQuery("AccessLog.findByAffProgramId", pageCtrl,affProgramId);
 
+        for(AccessLog a:result.getItems()) {
+            a.setAffProgram(null);
+        }
+        
         return result;        
 
     }

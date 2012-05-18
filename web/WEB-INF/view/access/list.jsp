@@ -9,10 +9,17 @@
 
 
 <%@ include file="../common/taglibs.jsp" %>
+<script>
+    var accessCtxPath = "${pageContext.request.contextPath}/mvc/affprograms/${program.id}";
+</script>
+
+<c:set var="ctxPath" scope="request"  value="${pageContext.request.contextPath}/mvc/affprograms/${program.id}/items/5/accessPage" />
+<c:choose >
     
+<c:when test="${accessPage!=null && accessPage.items != null && accessPage.pageCtrl.totalPages > 0 }">
 <table >
     
-    <c:if test="${accessPage!=null && accessPage.items != null}">
+   
         
         <thead>
             <tr>
@@ -23,18 +30,20 @@
             </tr>
         </thead>
         
+        <%-- prepare links for priv/next page --%>
         <div>
             <c:if test="${accessPage.pageCtrl.currentPage != 1}">
-                <a  href="${pageContext.request.contextPath}/mvc/affprograms/${program.id}/accessPage/1">First</a>
-                <a  href="${pageContext.request.contextPath}/mvc/affprograms/${program.id}/accessPage/${accessPage.pageCtrl.prevPage}">Previous</a>
+                <a   onclick="return getPageData('${ctxPath}/1')">First</a>
+                <a   onclick="return getPageData('${ctxPath}/${accessPage.pageCtrl.prevPage}')">Previous</a>
             </c:if>
             Page <c:out value="${accessPage.pageCtrl.currentPage}"/> of <c:out value="${accessPage.pageCtrl.totalPages}"/>
             <c:if test="${accessPage.pageCtrl.currentPage != accessPage.pageCtrl.totalPages }">
-                <a  href="${pageContext.request.contextPath}/mvc/affprograms/${program.id}/accessPage/${accessPage.pageCtrl.nextPage}">Next </a>
-                <a  href="${pageContext.request.contextPath}/mvc/affprograms/${program.id}/accessPage/${accessPage.pageCtrl.totalPages}">Last</a>
+                <a  onclick="return getPageData('${ctxPath}/${accessPage.pageCtrl.nextPage}')">Next </a>
+                <a   onclick="return getPageData('${ctxPath}/${accessPage.pageCtrl.totalPages}')">Last</a>
             </c:if>
         </div>
         
+        <%-- print all items of current page --%>
         <c:forEach items="${accessPage.items}" var="access">
             <tr>
                 <td   >
@@ -53,6 +62,13 @@
                 </td>
             </tr>   
         </c:forEach>
-    </c:if>        
+         
 </table>
+        
+</c:when>
+<c:otherwise>
+    No data yet
+</c:otherwise>
+    
+</c:choose>
 

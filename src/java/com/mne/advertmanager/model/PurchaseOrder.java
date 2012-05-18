@@ -85,10 +85,6 @@ public class PurchaseOrder implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date ordertime;
     
-    @JoinColumn(name = "access_id", referencedColumnName = "id")
-    @ManyToOne(optional = true)
-    private AccessLog access;
-    
     @JoinColumn(name = "affprogram_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private AffProgram affProgram;
@@ -136,13 +132,8 @@ public class PurchaseOrder implements Serializable {
         this.ordertime = ordertime;
     }
 
-    public AccessLog getAccessId() {
-        return access;
-    }
 
-    public void setAccess(AccessLog accessId) {
-        this.access = accessId;
-    }
+
 
     public AffProgram getAffProgram() {
         return affProgram;
@@ -192,9 +183,7 @@ public class PurchaseOrder implements Serializable {
         this.currency = currency;
     }
 
-    public AccessLog getAccess() {
-        return access;
-    }
+
 
     public String getCity() {
         return city;

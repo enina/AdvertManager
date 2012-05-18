@@ -64,7 +64,6 @@ public class PurchaseOrderImporter implements BillingDataImporter {
     public void saveDataItem(AffProgram program, Object dataItem) {
         PurchaseOrder po = (PurchaseOrder) dataItem;
         po.setAffProgram(program);
-        po.setAccess(aclService.findAccessByIP(po.getIpAddress()));
         
         poService.createPurchaseOrder(po);
     }
