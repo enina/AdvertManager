@@ -93,10 +93,11 @@ public class AccessLogImporter implements BillingDataImporter {
                     queryTextLastIdx = query.length();
                 
                 String term = query.substring(queryTextFirstIdx, queryTextLastIdx);
-
+                
                 result = URLDecoder.decode(term, charSet);
                 String encoded = URLEncoder.encode(result, charSet);
                 encoded = encoded.replaceAll("\\+", "%20");
+                term = term.replaceAll("\\+", "%20");
                 
                 if (!term.equals(encoded)) {
                     charSet = "windows-1251";
