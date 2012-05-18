@@ -32,8 +32,8 @@ public class PurchaseOrderService {
     }
     
     @Transactional(readOnly = true)
-    public Collection<PurchaseOrder> findPurchaseOrdersByAffProgamId(AffProgram affProgram) {
-        return poDao.findByQuery("PurchaseOrder.findByAffProgramId",affProgram);
+    public Collection<PurchaseOrder> findPurchaseOrdersByAffProgamId(int affProgramId) {
+        return poDao.findByQuery("PurchaseOrder.findByAffProgramId",affProgramId);
     }
     
 
