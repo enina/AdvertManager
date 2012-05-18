@@ -43,7 +43,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "AccessLog.findByAccessTime", query = "SELECT a FROM AccessLog a WHERE a.accessTime = ?"),
     @NamedQuery(name = "AccessLog.findByIpAddress", query = "SELECT a FROM AccessLog a WHERE a.ipAddress = ?"),
     @NamedQuery(name = "AccessLog.findByLocation", query = "SELECT a FROM AccessLog a WHERE a.location = ?"),
-    @NamedQuery(name = "AccessLog.findByAffProgramId", query = "SELECT a FROM AccessLog a WHERE a.affProgram.id = ?"),
+    @NamedQuery(name = "AccessLog.findByAffProgramId", query = "SELECT a FROM AccessLog a WHERE a.affProgram.id = ? "),
     @NamedQuery(name = "AccessLog.countAffProgramAccessLog", query = "SELECT count (*) FROM AccessLog a WHERE a.affProgram.id = ?"),
     @NamedQuery(name = "AccessLog.findByUrl", query = "SELECT a FROM AccessLog a WHERE a.url = ?")})
 public class AccessLog implements Serializable {
@@ -72,6 +72,11 @@ public class AccessLog implements Serializable {
     @Size(max = 256)
     @Column(name = "url")
     private String url;
+    
+    @Size(max = 256)
+    @Column(name = "query")
+    private String query;
+    
     
     @JoinColumn(name = "source_domain_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
@@ -138,6 +143,14 @@ public class AccessLog implements Serializable {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public String getQuery() {
+        return query;
+    }
+
+    public void setQuery(String query) {
+        this.query = query;
     }
 
     public AccessSource getSourceDomain() {
