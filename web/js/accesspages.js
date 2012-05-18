@@ -39,7 +39,7 @@ function getPageAccess(path){
         if( accessPage.getCurentPage() > 1 ){
             
             var first = $("<a>First</a>").click(function(){getPageAccess(basePath + "1")});
-            var previous = $("<a>Previous</a>").click(function(){ getPageAccess( basePath +  accessPage.getPrevPage() )});
+            var previous = $("<a>Previous</a>").click(function(){getPageAccess( basePath +  accessPage.getPrevPage() )});
             first.attr("class","navlink");
             previous.attr("class","navlink");
             
@@ -81,8 +81,13 @@ function getPageAccess(path){
             tr = $("<tr>");
             tr.append( $("<td>").append(item.accessTime) );
             tr.append( $("<td>").append(item.ipAddress) );
-            tr.append( $("<td>").append(item.location) );
-            tr.append( $("<td>") ); //Query accessPage
+            
+            var a=$("<a>");
+            a.attr("href",item.location);
+            if (item.sourceDomain)
+                a.append(item.sourceDomain.accessSourceDomain);
+            tr.append( $("<td>").append(a) );
+            tr.append( $("<td>").append(item.query) ); 
             tr.append( $("<td>").append(item.url) );
             
             table.append(tr);
