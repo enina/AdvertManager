@@ -19,6 +19,7 @@
                 <th> Time </th>
                 <th> IP </th>
                 <th> Referrer </th>
+                <th> Query </th>                
                 <th> Target </th>
             </tr>
         </thead>
@@ -37,18 +38,19 @@
         
         <c:forEach items="${accessPage.items}" var="access">
             <tr>
-                <td   >
+                <td>
                     <c:out value="${access.timeAsString}" />
                 </td>
-                <td  >
+                <td>
                     <c:out value="${access.ipAddress}"/>
                 </td>
-                <td  >
-                    <a href="<c:out value="${access.location}" />">
-                        <c:out value="${access.location}" />
-                    </a>
-                </td>
-                <td  >
+                <td>
+                    <a href="${access.location}"><c:out value="${access.sourceDomain.accessSourceDomain}" /></a>
+                </td>                
+                <td>
+                    <c:out value="${access.query}" />
+                </td>                
+                <td>
                     <c:out value="${access.url}" />
                 </td>
             </tr>   

@@ -51,7 +51,7 @@ public class AccessLogService {
         if (pageCtrl.getTotalPages()<=0) {
             accessLogDao.initPageCtrl(pageCtrl, "AccessLog.countAffProgramAccessLog",affProgramId);
         }
-
+        
         Page<AccessLog> result =  accessLogDao.findPageByQuery("AccessLog.findByAffProgramId", pageCtrl,affProgramId);
 
         return result;        
