@@ -147,7 +147,12 @@ public class AccessLogImporter implements BillingDataImporter {
     private URL buildURL(String itemValue) {
         URL result = null;
         try {
-           result = new URL(itemValue);
+            try {
+                result = new URL(itemValue);
+            } catch (Exception ex) {
+                logger.debug("Failed build URL from {} .Exception {}.Defaulting to google.com", itemValue, ex);
+                result = new URL("http", "google.com", "/q=" + itemValue);
+            }
         } catch (Exception e) {
             logger.error(e.toString());
         }
