@@ -14,6 +14,7 @@ import com.mne.advertmanager.util.Page;
 import com.mne.advertmanager.util.PageCtrl;
 import java.io.IOException;
 import java.util.Collection;
+import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -79,13 +80,14 @@ public class ProgramDetailsController {
 
         //1.find program by id
         AffProgram program = affProgramService.findAffProgramByID(programId);
+   
         Page<AccessLog> accessPage = null;
         Collection<PurchaseOrder> orderList = null;
         if (program != null) {
             //only find data for valid programs
             //find all accesses related to this program
             accessPage = accessLogService.findAccessByAffProgamId(new PageCtrl(),programId);
-            orderList = purchaseOrderService.findPurchaseOrdersByAffProgamId(program);
+            orderList = purchaseOrderService.findPurchaseOrdersByAffProgamId(programId);
             // Collection<Partner> partnerList = partnerService.findAllAccessLog();
             //create model veiw object
         }
@@ -93,13 +95,9 @@ public class ProgramDetailsController {
 
 
 
-        ModelAndView mav = new ModelAndView();
-        mav.addObject("program", program);
+        ModelAndView mav = ControllerSupport.forwardToView(logger, AFFPROGRAM_DETAILS_REQ_MAPPING+"/"+programId, AFFPROGRAM_DETAILS_REQ_MAPPING, "program", program); 
         mav.addObject("accessPage", accessPage);
         mav.addObject("orderList", orderList);
-//        mav.addObject("partnerList", partnerList);
-
-        mav.setViewName(AFFPROGRAM_DETAILS_REQ_MAPPING);
 
         return mav;
 
