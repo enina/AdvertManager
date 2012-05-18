@@ -3,60 +3,94 @@
  * and open the template in the editor.
  */
 
-//this file hold javascript functionality responsible to bring silently bring 
+//this file hold javascript functionality responsible to bring silently 
 //portions of access pages
 
 
-//var accessCtxPath = "${pageContext.request.contextPath}/mvc/affprograms/${program.id}";
 
-function getPageData(path){
+function getPageAccess(path){
     
 
-    //get data thru ajax
-    $.getJSON(path,function(data){
+    //get accessPage thru ajax
+    $.getJSON(path,function(accessPage){
         
         
         var container = $('#accesses');
         
-        if(data == null || data.pageCtrl.totalPages < 1){
-            $('#acesses').append("No data found");
+        accessPage.getCurentPage = getCurentPage;
+        accessPage.getNextPage = getNextPage;
+        accessPage.getPrevPage = getPrevPage;
+        accessPage.getTotalPages = getTotalPages;
+        
+        container.empty();
+        
+        if(accessPage == null || accessPage.getTotalPages() < 1){
+            container.append("No access page found");
             return;
         }
         
-        var items = 5;
-        var rv = "";
-        var pageCtrl = data.pageCtrl;
-        accessCtxPath += "/items/" + items +"/accessPage/";
+        var items = 10;
         
-        if( pageCtrl.currentPage != 1 ){
+        var basePath = accessCtxPath;
+        basePath += "/items/" + items +"/accessPage/";
+        
+        var navDiv = $("<div>");
+        
+        if( accessPage.getCurentPage() > 1 ){
             
-            container.append( $("<a>").click(getPageData(accessCtxPath + "/1")).text("First") );
-            container.append( $("<a>").click(getPageData(accessCtxPath + pageCtrl.prevPage)).text("Previous") );
+            var first = $("<a>First</a>").click(function(){getPageAccess(basePath + "1")});
+            var previous = $("<a>Previous</a>").click(function(){ getPageAccess( basePath +  accessPage.getPrevPage() )});
+            first.attr("class","navlink");
+            previous.attr("class","navlink");
+            
+            navDiv.append( first );
+            navDiv.append(" ");
+            navDiv.append( previous );
+        }
+        
+        navDiv.append( " Page " + accessPage.getCurentPage() + " of " + accessPage.getTotalPages() + " ");
+        
+
+        if (accessPage.getCurentPage() < accessPage.getTotalPages()){
+            
+            var next = $("<a>Next</a>").click(function(){getPageAccess(basePath + accessPage.getNextPage() )});
+            var lasst = $("<a>Last</a>").click( function(){getPageAccess(basePath + accessPage.getTotalPages())});
+            next.attr("class","navlink");
+            lasst.attr("class","navlink");
+            navDiv.append( next );
+            navDiv.append(" ");
+            navDiv.append( lasst );
+            
         }
         
         
         var table = $("<table>");
         var tr = $("<tr>");
     
-        tr.append($("<th>").text("Time"));
-        tr.append($("<th>").text("IP"));  
-        tr.append($("<th>").text("Referrer"));  
-        tr.append($("<th>").text("Target"));  
+        tr.append($("<th>").append("Time"));
+        tr.append($("<th>").append("IP"));  
+        tr.append($("<th>").append("Referrer"));
+        tr.append($("<th>").append("Query"));  
+        tr.append($("<th>").append("Target"));  
    
         table.append(tr);
         
-        var td;
-        for(var i in pageCtrl.items){
+        for(var i =0; i < accessPage.items.length ;i++){
             
+            var item = accessPage.items[i];
             tr = $("<tr>");
-            tr.append( $("<td>").text(pageCtrl.items[i].accessTime) );
-            tr.append( $("<td>").text(pageCtrl.items[i].ipAddress) );
-            tr.append( $("<td>").text(pageCtrl.items[i].location) );
-            tr.append( $("<td>").text(pageCtrl.items[i].accessTime) );
+            tr.append( $("<td>").append(item.accessTime) );
+            tr.append( $("<td>").append(item.ipAddress) );
+            tr.append( $("<td>").append(item.location) );
+            tr.append( $("<td>") ); //Query accessPage
+            tr.append( $("<td>").append(item.url) );
             
+            table.append(tr);
             
         }
         
+        container.append(navDiv);
+        container.append(table);
         
         
     });
@@ -64,61 +98,37 @@ function getPageData(path){
     return false;  
 }
 
-
-//<c:when test="${accessPage!=null && accessPage.items != null && accessPage.pageCtrl.totalPages > 0 }">
-//
-//        <div>
-//            <c:if test="${accessPage.pageCtrl.currentPage != 1}">
-//                <a  href="" onclick="getPageData('${ctxPath}/1')">First</a>
-//                <a  href="" onclick="getPageData('${ctxPath}/${accessPage.pageCtrl.prevPage}')">Previous</a>
-//            </c:if>
-//            Page <c:out value="${accessPage.pageCtrl.currentPage}"/> of <c:out value="${accessPage.pageCtrl.totalPages}"/>
-//            <c:if test="${accessPage.pageCtrl.currentPage != accessPage.pageCtrl.totalPages }">
-//                <a  href="" onclick="getPageData('${ctxPath}/${accessPage.pageCtrl.nextPage}')">Next </a>
-//                <a  href="" onclick="getPageData('${ctxPath}/${accessPage.pageCtrl.totalPages}')">Last</a>
-//            </c:if>
-//        </div>
-//<table >
-//    
-//   
-//        
-//        <thead>
-//            <tr>
-//                <th> Time </th>
-//                <th> IP </th>
-//                <th> Referrer </th>
-//                <th> Target </th>
-//            </tr>
-//        </thead>
-//        
-//        <%-- prepare links for priv/next page --%>
-
-//        
-//        <%-- print all items of current page --%>
-//        <c:forEach items="${accessPage.items}" var="access">
-//            <tr>
-//                <td   >
-//                    <c:out value="${access.timeAsString}" />
-//                </td>
-//                <td  >
-//                    <c:out value="${access.ipAddress}"/>
-//                </td>
-//                <td  >
-//                    <a href="<c:out value="${access.location}" />">
-//                        <c:out value="${access.location}" />
-//                    </a>
-//                </td>
-//                <td  >
-//                    <c:out value="${access.url}" />
-//                </td>
-//            </tr>   
-//        </c:forEach>
-//         
-//</table>
-//        
-//</c:when>
-//<c:otherwise>
-//    No data yet
-//</c:otherwise>
-//    
-//</c:choose>
+//================= getCurentPage ======================
+function getCurentPage(){
+    
+    return this.pageCtrl.pageIdx +1;
+    
+}
+//================= getPrevPage ======================
+function getPrevPage(){
+    
+    
+    
+    var prevPage = this.pageCtrl.pageIdx;
+    
+    if ( ( prevPage) > 1){
+         return prevPage;
+    }
+    return 1;
+}
+//================= getNextPage ======================
+function getNextPage(){
+   
+    var nextPage = this.getCurentPage() +1;
+    
+    if(this.pageCtrl.totalPages < nextPage ){
+        return this.pageCtrl.totalPages;
+    }
+    return nextPage;
+}
+//================= getTotalPages() =====================
+function getTotalPages(){
+    
+    return this.pageCtrl.totalPages;
+    
+}
