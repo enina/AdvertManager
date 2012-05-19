@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<project>
+    <name>e-autopay</name>
+    <baseURL>http://mediakursy.e-autopay.com/aff/</baseURL>
+    <homePage>main.php</homePage>
+    <username>info</username>
+    <userField>form_refid</userField>
+    <password>of58ypc82v27</password>
+    <passwordField>form_pwd</passwordField>
+    <method>get</method>
+    <cookieName>partnersaccaunt</cookieName>
+    <loginFormUrl>login.php</loginFormUrl>
+    <logoutUrl>exit.php</logoutUrl>
+    <selector>html&gt;body</selector>
+    <dataSpecList>
+        <dataSpec>
+            <name>Access</name>
+            <dataURL>clicks.php?start_date=01-01-2010&amp;end_date=01-01-2035</dataURL>
+            <method>get</method>
+            <numPages>10</numPages>
+            <pageParam>page</pageParam>
+            <selector>html body:eq(1)&gt;div  div:eq(4)&gt;div &gt;div  table:eq(3)&gt;tbody </selector>
+            <listEntrySelector>tr:gt(0)</listEntrySelector>
+            <subItemList>
+                <selectableItem>
+                    <name>root</name>
+                    <selector>html body:eq(1)&gt;div  div:eq(4)&gt;div &gt;div  table:eq(3)&gt;tbody </selector>
+                </selectableItem>
+                <selectableItem>
+                    <name>listEntry</name>
+                    <selector>tr:gt(0)</selector>
+                </selectableItem>
+                <selectableItem>
+                    <name>DateTime</name>
+                    <selector>td </selector>
+                </selectableItem>
+                <selectableItem>
+                    <name>IP</name>
+                    <selector> td:eq(1)</selector>
+                </selectableItem>
+                <selectableItem>
+                    <name>Referer</name>
+                    <selector> td:eq(2)</selector>
+                </selectableItem>
+                <selectableItem>
+                    <name>Target</name>
+                    <selector> td:eq(3)</selector>
+                </selectableItem>
+            </subItemList>
+        </dataSpec>
+        <dataSpec>
+            <name>Partner</name>
+            <dataURL>partners.php</dataURL>
+            <method>get</method>
+            <numPages>1</numPages>
+            <pageParam></pageParam>
+            <selector>html body:eq(1)&gt;div  div:eq(4)&gt;div &gt;div  table:eq(2)&gt;tbody </selector>
+            <listEntrySelector> tr:gt(0)</listEntrySelector>
+            <subItemList>
+                <selectableItem>
+                    <name>root</name>
+                    <selector>html body:eq(1)&gt;div  div:eq(4)&gt;div &gt;div  table:eq(2)&gt;tbody </selector>
+                </selectableItem>
+                <selectableItem>
+                    <name>listEntry</name>
+                    <selector> tr:gt(0)</selector>
+                </selectableItem>
+                <selectableItem>
+                    <name>Name</name>
+                    <selector>td </selector>
+                </selectableItem>
+                <selectableItem>
+                    <name>Email</name>
+                    <selector> td:eq(1)</selector>
+                </selectableItem>
+            </subItemList>
+        </dataSpec>
+        <dataSpec>
+            <name>PurchaseOrder</name>
+            <dataURL>orders.php</dataURL>
+            <method>get</method>
+            <numPages>1</numPages>
+            <pageParam></pageParam>
+            <selector>html body:eq(1)&gt;div  div:eq(4)&gt;div &gt;div  table:eq(7)&gt;tbody </selector>
+            <listEntrySelector>tr:gt(0)</listEntrySelector>
+            <subItemList>
+                <selectableItem>
+                    <name>root</name>
+                    <selector>html body:eq(1)&gt;div  div:eq(4)&gt;div &gt;div  table:eq(7)&gt;tbody </selector>
+                </selectableItem>
+                <selectableItem>
+                    <name>listEntry</name>
+                    <selector>tr:gt(0)</selector>
+                </selectableItem>
+                <selectableItem>
+                    <name>ID</name>
+                    <selector>td </selector>
+                </selectableItem>
+                <selectableItem>
+                    <name>Status</name>
+                    <selector> td:eq(1)</selector>
+                </selectableItem>
+                <selectableItem>
+                    <name>TrackingNumber</name>
+                    <selector> td:eq(2)</selector>
+                </selectableItem>
+                <selectableItem>
+                    <name>Country</name>
+                    <selector> td:eq(3)</selector>
+                </selectableItem>
+                <selectableItem>
+                    <name>City</name>
+                    <selector> td:eq(4)</selector>
+                </selectableItem>
+                <selectableItem>
+                    <name>PurchaseOrderSum</name>
+                    <selector> td:eq(6)</selector>
+                </selectableItem>
+                <selectableItem>
+                    <name>Commision</name>
+                    <selector> td:eq(7)</selector>
+                </selectableItem>
+                <selectableItem>
+                    <name>Partner</name>
+                    <selector> td:eq(8)</selector>
+                </selectableItem>
+                <selectableItem>
+                    <name>IP</name>
+                    <selector> td:eq(9)</selector>
+                </selectableItem>
+                <selectableItem>
+                    <name>Date</name>
+                    <selector> td:eq(10)</selector>
+                </selectableItem>
+            </subItemList>
+        </dataSpec>
+    </dataSpecList>
+</project>
