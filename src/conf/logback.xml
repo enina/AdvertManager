@@ -33,7 +33,7 @@
   
   <logger name="org.springframework.web" level="info"/>
   
-  <logger name="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping" level="debug"/>
+  <logger name="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping" level="error"/>
   
   <logger name="com.mchange" level="error"/>
   
