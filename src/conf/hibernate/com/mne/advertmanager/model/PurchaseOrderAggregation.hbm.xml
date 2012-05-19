@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class dynamic-insert="false" dynamic-update="false"  
+            mutable="true" optimistic-lock="version" 
+            polymorphism="implicit" select-before-update="false" 
+            name="com.mne.advertmanager.model.PurchaseOrderAggregation"
+            table="purchase_order_total_aggr"
+            entity-name="PurchaseOrderTotalAggregation">
+
+            <id name="id" column="id">
+                <generator class="native"/>
+            </id>
+            <property name="accessAmount"/>        
+            <property name="totalSum"/>
+            <property name="purchaseAmount"/>
+            <property name="conversionRate"/>
+            <many-to-one unique="true" column="affprogram_id"
+                         name="affProgram" class="com.mne.advertmanager.model.AffProgram"
+                         foreign-key="PO_TOTAL_AGGR_AFFPROGRAM_FK"/>  
+    </class>
+  
+    <class dynamic-insert="false" dynamic-update="false"  
+        mutable="true" optimistic-lock="version" 
+        polymorphism="implicit" select-before-update="false" 
+        name="com.mne.advertmanager.model.PurchaseOrderAggregation"
+        table="purchase_order_prevmonth_aggr"
+        entity-name="PurchaseOrderPrevMonthAggregation">
+        
+        <id name="id" column="id">
+            <generator class="native"/>
+        </id>
+        <property name="accessAmount"/>        
+        <property name="totalSum"/>
+        <property name="purchaseAmount"/>
+        <property name="conversionRate"/>
+        <many-to-one unique="true" column="affprogram_id"
+                    name="affProgram" class="com.mne.advertmanager.model.AffProgram"
+                    foreign-key="PO_PREVMONTH_AGGR_AFFPROGRAM_FK"/>  
+    </class>
+  
+    <class dynamic-insert="false" dynamic-update="false"  
+            mutable="true" optimistic-lock="version" 
+            polymorphism="implicit" select-before-update="false" 
+            name="com.mne.advertmanager.model.PurchaseOrderAggregation"
+            table="purchase_order_curmonth_aggr"
+            entity-name="PurchaseOrderCurMonthAggregation">
+
+            <id name="id" column="id">
+                <generator class="native"/>
+            </id>
+            <property name="accessAmount"/>        
+            <property name="totalSum"/>
+            <property name="purchaseAmount"/>
+            <property name="conversionRate"/>
+            <many-to-one unique="true" column="affprogram_id"
+                        name="affProgram" class="com.mne.advertmanager.model.AffProgram"
+                        foreign-key="PO_CURMONTH_AGGR_AFFPROGRAM_FK"/>
+    </class>  
+
+    <class dynamic-insert="false" dynamic-update="false"  
+            mutable="true" optimistic-lock="version" 
+            polymorphism="implicit" select-before-update="false" 
+            name="com.mne.advertmanager.model.PurchaseOrderAggregation"
+            table="purchase_order_today_aggr"
+            entity-name="PurchaseOrderCurTodayAggregation">
+
+            <id name="id" column="id">
+                <generator class="native"/>
+            </id>
+            <property name="accessAmount"/>        
+            <property name="totalSum"/>
+            <property name="purchaseAmount"/>
+            <property name="conversionRate"/>
+            <many-to-one unique="true" column="affprogram_id"
+                        name="affProgram" class="com.mne.advertmanager.model.AffProgram"
+                        foreign-key="PO_TODAY_AGGR_AFFPROGRAM_FK"/>
+    </class>  
+
+  
+</hibernate-mapping>

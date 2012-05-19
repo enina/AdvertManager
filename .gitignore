@@ -12,4 +12,4 @@ web/js/adman/app.js
 web/js/adman/controller/productGroup.js
 web/js/adman/view/productGroup/tree.js
 nbproject/*
-build.xml
+

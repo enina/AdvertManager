@@ -61,7 +61,7 @@ create table access_source (
     id INT NOT NULL AUTO_INCREMENT,
     access_source_domain varchar(256) not null ,
     description  varchar(256) not null ,
-    PRIMARY KEY (id));
+    CONSTRAINT ACCESSSOURCE_PK PRIMARY KEY (id));
 
 
 create table access_log (
@@ -73,16 +73,16 @@ create table access_log (
     source_domain_id int ,
     url varchar(256)  ,
     query varchar(256),
-    PRIMARY KEY (id),
-    FOREIGN KEY (affprogram_id) REFERENCES aff_program(id) on delete cascade,
-    FOREIGN KEY (source_domain_id) REFERENCES access_source(id) ON DELETE CASCADE);
+    CONSTRAINT ACCESSLOG_PK PRIMARY KEY (id),
+    CONSTRAINT ACCESSLOG_AFFPROGRAM_FK FOREIGN KEY (affprogram_id) REFERENCES aff_program(id) on delete cascade,
+    CONSTRAINT ACCESSLOG_SOURCEDOMAIN_FK FOREIGN KEY (source_domain_id) REFERENCES access_source(id) ON DELETE CASCADE);
 
 
 create table partner (
     id          int          not null auto_increment,
     name        varchar(64)  not null ,
     email       varchar(256) not null ,
-    PRIMARY KEY (id));
+    CONSTRAINT PARTNER_PK PRIMARY KEY (id));
 
 create table purchase_order (
     id          int not null auto_increment ,
@@ -98,9 +98,9 @@ create table purchase_order (
     commision  float,
     country varchar(256),
     city varchar(256),
-    PRIMARY KEY (id),
-    FOREIGN KEY (affprogram_id)  REFERENCES aff_program(id) on delete cascade,
-    FOREIGN KEY (partner_id)  REFERENCES partner(id) on delete cascade);
+    CONSTRAINT PURCHASEORDER_PK PRIMARY KEY (id),
+    CONSTRAINT PURCHASEORDER_AFFPROGRAM_FK FOREIGN KEY (affprogram_id)  REFERENCES aff_program(id) on delete cascade,
+    CONSTRAINT PURCHASEORDER_PARTNER_FK FOREIGN KEY (partner_id)  REFERENCES partner(id) on delete cascade);
 
 CREATE TABLE `billing_project_spec` (
   `id` int NOT NULL AUTO_INCREMENT,
@@ -114,7 +114,7 @@ CREATE TABLE `billing_project_spec` (
   `password_field` varchar(16) NOT NULL,
   `selector` varchar(256) NOT NULL,
   `user_field` varchar(64) NOT NULL,
-  PRIMARY KEY (`id`));
+  CONSTRAINT BLNGPROJECTDS_PK PRIMARY KEY (`id`));
 
 CREATE TABLE `billing_data_spec` (
    `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -124,7 +124,7 @@ CREATE TABLE `billing_data_spec` (
    `num_pages` int(11) DEFAULT NULL,
    `page_param` varchar(512) DEFAULT NULL,
    `project_id` int(11) DEFAULT NULL,
-    PRIMARY KEY (`id`),
+    CONSTRAINT BLNGDATASPEC_PK PRIMARY KEY (`id`),
     KEY `projectIdKey` (`project_id`),
     CONSTRAINT `BLNGDATASPEC_PROJECT_FK` FOREIGN KEY (`project_id`) REFERENCES `billing_project_spec` (`id`)  ON DELETE CASCADE) ;
 
@@ -133,7 +133,7 @@ CREATE TABLE `selectable_data_item` (
   `name` varchar(256) NOT NULL,
   `selector` varchar(256) NOT NULL,
   `dataspec_id` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`),
+  CONSTRAINT BLNGDSELECTABLEITEM_PK PRIMARY KEY (`id`),
   KEY `dataSpecKey` (`dataspec_id`),
   CONSTRAINT `BLNGDSELECTABLEITEM_DATASPEC_FK` FOREIGN KEY (`dataspec_id`) REFERENCES `billing_data_spec` (`id`)  ON DELETE CASCADE);
 
@@ -182,7 +182,5 @@ insert into affprog_group(affiliate_id,group_name,description) select id,'Defaul
 insert into affprog_group(affiliate_id,group_name,description) select id,'Default','Default Group' from affiliate where affiliateName='misha' ;
 insert into affprog_group(affiliate_id,group_name,description) select id,'Default','Default Group' from affiliate where affiliateName='root' ;
 insert into affprog_group(affiliate_id,group_name,description) select id,'Default','Default Group' from affiliate where affiliateName='vasya' ;
-
-
-commit;
 -----------------------------------default data-------------------------------------------------------------------------------
+commit;
