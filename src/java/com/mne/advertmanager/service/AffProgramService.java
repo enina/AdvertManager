@@ -78,5 +78,10 @@ public class AffProgramService {
         AffProgram.setAffProgramGroup(pg);
         affProgramDao.create(AffProgram);
     }
+
+    @Transactional
+    public void save(AffProgram program) {
+        affProgramDao.update(program);
+    }
     
 }

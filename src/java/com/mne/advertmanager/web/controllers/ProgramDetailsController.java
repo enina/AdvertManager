@@ -139,6 +139,8 @@ public class ProgramDetailsController {
                     setName(ControllerSupport.BILLING + "DataImportThread" + " programId " + affProgramId);
                     //go collect data:
                     billingProjectService.importBillingData(program);
+                    
+                    affProgramService.save(program);
                 }
                 //start thread execution
             }.start();

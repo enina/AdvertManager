@@ -16,54 +16,67 @@ function getPageAccess(path){
         
         
         var container = $('#accesses');
+        container.empty();
         
+        //prepare page object ( add methods )
         accessPage.getCurentPage = getCurentPage;
         accessPage.getNextPage = getNextPage;
         accessPage.getPrevPage = getPrevPage;
         accessPage.getTotalPages = getTotalPages;
         
-        container.empty();
         
+        //test for emptiness
         if(accessPage == null || accessPage.getTotalPages() < 1){
             container.append("No access page found");
             return;
         }
         
+        //items per page
         var items = 10;
         
+        //hod path
         var basePath = accessCtxPath;
         basePath += "/items/" + items +"/accessPage/";
         
+        //hold page navigation div
         var navDiv = $("<div>");
+        navDiv.attr("id","accessNavBar");
         
-        if( accessPage.getCurentPage() > 1 ){
-            
-            var first = $("<a>First</a>").click(function(){getPageAccess(basePath + "1")});
-            var previous = $("<a>Previous</a>").click(function(){getPageAccess( basePath +  accessPage.getPrevPage() )});
-            first.attr("class","navlink");
-            previous.attr("class","navlink");
-            
-            navDiv.append( first );
-            navDiv.append(" ");
-            navDiv.append( previous );
-        }
-        
-        navDiv.append( " Page " + accessPage.getCurentPage() + " of " + accessPage.getTotalPages() + " ");
-        
+        //prepare text inside the div text that describe curent page position
+        var text = $("<span>").append( "Page " + accessPage.getCurentPage() + " of " + accessPage.getTotalPages()); 
 
-        if (accessPage.getCurentPage() < accessPage.getTotalPages()){
+        //create ul with navigation items
+        var navUl = $("<ul>");
+        //create list items
+        var first = $("<li>First</li>").click(function(){getPageAccess(basePath + "1")});
+        var previous = $("<li>Previous</li>").click(function(){getPageAccess( basePath +  accessPage.getPrevPage() )});
+        var next = $("<li>Next</li>").click(function(){getPageAccess(basePath + accessPage.getNextPage() )});
+        var last = $("<li>Last</li>").click( function(){getPageAccess(basePath + accessPage.getTotalPages())});
+        
+        first.addClass("navlink").attr({id:"accesNavFirst"});
+        previous.addClass("navlink").attr({id:"accesNavPrev"});
+        next.addClass("navlink").attr({id:"accesNavNext"});
+        last.addClass("navlink").attr({id:"accesNavLast"});
+        
+        //add created items to nav ul
+        navUl.append( first );
+        navUl.append( previous );
+        navUl.append( next );
+        navUl.append( last ); 
+        
+        //set what nav links hiden now
+        if( accessPage.getCurentPage() <= 1 ){
             
-            var next = $("<a>Next</a>").click(function(){getPageAccess(basePath + accessPage.getNextPage() )});
-            var lasst = $("<a>Last</a>").click( function(){getPageAccess(basePath + accessPage.getTotalPages())});
-            next.attr("class","navlink");
-            lasst.attr("class","navlink");
-            navDiv.append( next );
-            navDiv.append(" ");
-            navDiv.append( lasst );
-            
+            first.addClass( "hidden" );
+            previous.addClass( "hidden" );
+        }
+        if (accessPage.getCurentPage() >= accessPage.getTotalPages()){
+
+            next.addClass( "hidden" );
+            last.addClass( "hidden" );
         }
         
-        
+        //prepare table of content
         var table = $("<table>");
         var tr = $("<tr>");
     
@@ -75,6 +88,7 @@ function getPageAccess(path){
    
         table.append(tr);
         
+        //insert data to table
         for(var i =0; i < accessPage.items.length ;i++){
             
             var item = accessPage.items[i];
@@ -94,6 +108,8 @@ function getPageAccess(path){
             
         }
         
+        navDiv.append( text );
+        navDiv.append( navUl );
         container.append(navDiv);
         container.append(table);
         

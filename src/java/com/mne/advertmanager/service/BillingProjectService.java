@@ -124,11 +124,6 @@ public class BillingProjectService {
 
             // project
 
-            //get load projec from DB by domain name
-            //Project project = projectDao.read(domainName);
-            //load projec from DB
-            //Project project = projectDao.read(blngProjId);
-
             //get Progects Data spec
             List<DataSpec> dsList = project.getDataSpecList();
 
