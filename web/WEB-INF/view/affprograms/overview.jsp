@@ -27,12 +27,68 @@
 --%>
 <%@ include file="../common/taglibs.jsp" %>
 
+<c:if test="${status!=null}">
+    <div style="color:red"><c:out value="${status}"/></div>
+</c:if>
+
 <div id="" >
     
     <tiles:insertAttribute name="programspec" />
-    
-    
     <table>
+        <tr>
+            <td>
+                <a href="${pageContext.request.contextPath}/mvc/affprograms/${program.id}/calculateAggregationData">Calculate Aggregation Data</a>
+            </td>    
+        </tr>    
+    </table>    
+    <c:if test="${poTAD!=null}">
+        <table>
+            <tr>
+                <td>Period</td>
+                <td>Access Amount</td>
+                <td>Purchase Amount</td>
+                <td>Purchase Sum</td>
+                <td>Rate</td>
+            </tr>
+            <tr>
+                <td>Total</td>
+                <td><c:out value="${poTAD.accessAmount}"/></td>
+                <td><c:out value="${poTAD.purchaseAmount}"/></td>
+                <td><c:out value="${poTAD.totalSum}"/></td>
+                <td><c:out value="${poTAD.conversionRate}"/></td>
+            </tr>
+            <c:if test="${poPMAD!=null}">
+                <tr>
+                    <td>Previous Month</td>
+                    <td><c:out value="${poPMAD.accessAmount}"/></td>
+                    <td><c:out value="${poPMAD.purchaseAmount}"/></td>
+                    <td><c:out value="${poPMAD.totalSum}"/></td>
+                    <td><c:out value="${poPMAD.conversionRate}"/></td>
+                </tr>
+            </c:if>
+            <c:if test="${poCMAD!=null}">
+                <tr>
+                    <td>Current Month</td>
+                    <td><c:out value="${poCMAD.accessAmount}"/></td>
+                    <td><c:out value="${poCMAD.purchaseAmount}"/></td>
+                    <td><c:out value="${poCMAD.totalSum}"/></td>
+                    <td><c:out value="${poCMAD.conversionRate}"/></td>
+                </tr>
+            </c:if>
+            <c:if test="${poDAD!=null}">
+                <tr>
+                    <td>Today</td>
+                    <td><c:out value="${poDAD.accessAmount}"/></td>
+                    <td><c:out value="${poDAD.purchaseAmount}"/></td>
+                    <td><c:out value="${poDAD.totalSum}"/></td>
+                    <td><c:out value="${poDAD.conversionRate}"/></td>
+                </tr>
+            </c:if>
+        </table>
+    </c:if>
+
+    <table>
+        
         <thead id="analiticsAgregationTable" class="dataTable">
         <tr>
             <th> description </th><th>partners</th><th>accesses</th><th>payed orders</th><th>access convert rate</th><th>order convert rate</th>

@@ -8,6 +8,7 @@ import com.mne.advertmanager.util.Page;
 import com.mne.advertmanager.util.PageCtrl;
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.Date;
 
 /**
  *
@@ -30,7 +31,9 @@ public interface GenericDao <T, PK extends Serializable> {
     void delete(T persistentObject);
     
     public Collection<T> findByQuery(String queryName,Object ...params);
-    public T findSingleItemByQuery(String queryName, Object... params);
+    
+    public Object findSingleItemByQuery(String queryName, Object... params);
+    
     public Collection<T> findByExample(T example);
     
     public int executeUpdateByQuery(String queryName,Object ...params);
@@ -42,5 +45,7 @@ public interface GenericDao <T, PK extends Serializable> {
     public void flush();
 
     public void initPageCtrl(PageCtrl pageCtrl,String queryName,Object ... params);
+
+    public int findQueryResultSetSize( String queryName, Object ... params);
 
 }

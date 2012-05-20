@@ -33,7 +33,7 @@ public class PartnerService {
     }
 
     public Partner findPartnerByName(String itemValue) {
-        return  partnerDao.findSingleItemByQuery("Partner.findByName",itemValue);
+        return  (Partner)partnerDao.findSingleItemByQuery("Partner.findByName",itemValue);
     }
     
 }
