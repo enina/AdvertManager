@@ -75,13 +75,14 @@
         <ivy:retrieve pattern="${var.EXT_LIB}/../[type]/[artifact]-[revision].[ext]"/>
     </target>
     
-<!--    <target name="-pre-init">
+    <target name="-pre-init">
         <delete file="z:/AdvertManager.war"/>
-    </target>-->
+    </target>
 
     <target name="-post-compile">
         <copy todir="${build.dir}/web/WEB-INF/classes">
             <fileset dir="${conf.dir}" includes="logback.xml" />
+            <fileset dir="${conf.dir}" includes="quartz.properties" />
         </copy>
         
         <jar destfile="${build.dir}/web/apps/parsergen.jar">
@@ -114,11 +115,11 @@
         </signjar>
     </target>
     
-<!--    <target name="-post-dist">
+    <target name="-post-dist">
         <copy todir="z:/">
             <fileset dir="${dist.dir}" includes="*.war" />
         </copy>
-    </target>-->
+    </target>
     
     
 </project>
