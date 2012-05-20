@@ -14,7 +14,7 @@
     
     $(function(){
        
-        getPageAccess("${pageContext.request.contextPath}/mvc/affprograms/${program.id}/items/10/accessPage/1")
+        getPageAccess("${pageContext.request.contextPath}/mvc/affprograms/${program.id}/items/5/accessPage/1")
     });
 </script>
 

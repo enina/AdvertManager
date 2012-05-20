@@ -6,10 +6,10 @@ package com.mne.advertmanager.service;
 
 import com.mne.advertmanager.dao.GenericDao;
 import com.mne.advertmanager.model.AccessLog;
-import com.mne.advertmanager.model.AffProgram;
 import com.mne.advertmanager.util.Page;
 import com.mne.advertmanager.util.PageCtrl;
-import java.util.Collection;
+import java.util.Date;
+import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 
 
@@ -19,6 +19,8 @@ import org.springframework.transaction.annotation.Transactional;
  */
 public class AccessLogService {
  
+    private static org.slf4j.Logger logger = LoggerFactory.getLogger(AccessLogService.class);
+    
     private GenericDao<AccessLog,Integer> accessLogDao;
 
     public void setAccessLogDao(GenericDao<AccessLog,Integer> accessLogDao) {
@@ -42,7 +44,7 @@ public class AccessLogService {
     }
 
     public AccessLog findAccessByIP(String ipAddress) {
-        return accessLogDao.findSingleItemByQuery("AccessLog.findByIpAddress", ipAddress);
+        return (AccessLog)accessLogDao.findSingleItemByQuery("AccessLog.findByIpAddress", ipAddress);
     }
     
     @Transactional(readOnly = true)
@@ -60,5 +62,15 @@ public class AccessLogService {
         
         return result;        
 
+    }
+
+    @Transactional(readOnly=true)
+    int findDailyAffProgramAccessAmount(int affProgramId, Date refTime) {
+        
+        int result = accessLogDao.findQueryResultSetSize("AccessLog.countAffProgramAccessByDate",affProgramId,refTime);
+        
+        logger.debug("Found {} access for program {} after {}",new Object[]{result,affProgramId,refTime});
+        
+        return result;
     }
 }

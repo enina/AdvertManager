@@ -12,7 +12,6 @@ import com.mne.advertmanager.parsergen.model.SelectableItem;
 import com.mne.advertmanager.util.BillingDataImporter;
 import com.mne.advertmanager.util.JSoupTransport;
 import java.util.*;
-import org.hibernate.Hibernate;
 import org.jsoup.Connection;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -108,7 +107,7 @@ public class BillingProjectService {
 
         //log action
         logger.info("Looking up project data by backoffice link  {}  ", program.getAffProgramLink());
-        Project project = projectDao.findSingleItemByQuery("Project.findByBackOfficeURL", program.getAffProgramLink());
+        Project project = (Project)projectDao.findSingleItemByQuery("Project.findByBackOfficeURL", program.getAffProgramLink());
         if (project == null) {
             logger.error("Failed to find project for backoffice link  {}", program.getAffProgramLink());
         }
@@ -146,7 +145,6 @@ public class BillingProjectService {
             //get data of each dataSpec ( include all pages ) of given Project
             for (DataSpec ds : dsList) {
                 processDataSpec(ds, project, con, program);
-
             }
 
             JSoupTransport.logout(con, project);
@@ -257,7 +255,7 @@ public class BillingProjectService {
     @Transactional(readOnly = true)
     public Project findProjectById(int projectId) {
         
-        Project res = projectDao.findSingleItemByQuery("Project.findProjectWithDataSpecList", projectId);
+        Project res = (Project)projectDao.findSingleItemByQuery("Project.findProjectWithDataSpecList", projectId);
 
         return res;
     }
@@ -271,7 +269,7 @@ public class BillingProjectService {
     public DataSpec findProjectDataSpec(int bpId, int dsId) {
         DataSpec result = null;
         
-        result = dataSpecDao.findSingleItemByQuery("DataSpec.findDataSpecById", dsId,bpId);
+        result = (DataSpec)dataSpecDao.findSingleItemByQuery("DataSpec.findDataSpecById", dsId,bpId);
 
         return result;
     }

@@ -163,7 +163,43 @@
             <value type="java.lang.Class">com.mne.advertmanager.parsergen.model.SelectableItem</value>
         </constructor-arg>
     </bean>    
+
+    <bean id="poTotalAggrDao"  parent="adManGenericDao" class="com.mne.advertmanager.dao.GenericDaoHibernateImpl" >
+        <constructor-arg>
+            <value type="java.lang.Class">com.mne.advertmanager.model.PurchaseOrderAggregation</value>
+        </constructor-arg>
+        <constructor-arg>
+            <value type="java.lang.String">PurchaseOrderTotalAggregation</value>
+        </constructor-arg>        
+    </bean>        
     
+    <bean id="poPrevMonthAggrDao"  parent="adManGenericDao" class="com.mne.advertmanager.dao.GenericDaoHibernateImpl" >
+        <constructor-arg>
+            <value type="java.lang.Class">com.mne.advertmanager.model.PurchaseOrderAggregation</value>
+        </constructor-arg>
+        <constructor-arg>
+            <value type="java.lang.String">PurchaseOrderPrevMonthAggregation</value>
+        </constructor-arg>        
+    </bean>        
+
+    <bean id="poCurMonthAggrDao"  parent="adManGenericDao" class="com.mne.advertmanager.dao.GenericDaoHibernateImpl" >
+        <constructor-arg>
+            <value type="java.lang.Class">com.mne.advertmanager.model.PurchaseOrderAggregation</value>
+        </constructor-arg>
+        <constructor-arg>
+            <value type="java.lang.String">PurchaseOrderCurMonthAggregation</value>
+        </constructor-arg>        
+    </bean>            
+
+    <bean id="poDailyAggrDao"  parent="adManGenericDao" class="com.mne.advertmanager.dao.GenericDaoHibernateImpl" >
+        <constructor-arg>
+            <value type="java.lang.Class">com.mne.advertmanager.model.PurchaseOrderAggregation</value>
+        </constructor-arg>
+        <constructor-arg>
+            <value type="java.lang.String">PurchaseOrderDailyAggregation</value>
+        </constructor-arg>        
+    </bean>            
+
    
 <!--============================================================== user DAO     objects end   ===============================================================-->    
 <!--=============================================================  user service beans start ===============================================================--> 
@@ -217,7 +253,7 @@
     
     <bean id="poService" class="com.mne.advertmanager.service.PurchaseOrderService">
         <property name="poDao" ref="partnerDao"/>
-    </bean>      
+    </bean>
     
     <bean id="billingProjectService" class="com.mne.advertmanager.service.BillingProjectService">
         <property name="projectDao"         ref="projectDao"/>
@@ -225,11 +261,21 @@
         <property name="dataSpecDao"        ref="dataSpecDao"/>
         <property name="importers">
             <map>
-                <entry key="Access" value-ref="accessLogImporter"/>
-                <entry key="Partner" value-ref="partnerImporter"/>
-                <entry key="PurchaseOrder" value-ref="PurchaseOrderImporter"/>
+                <entry key="Access"         value-ref="accessLogImporter"/>
+                <entry key="Partner"        value-ref="partnerImporter"/>
+                <entry key="PurchaseOrder"  value-ref="purchaseOrderImporter"/>
             </map>
         </property>
+    </bean>
+    
+    <bean id="poAggrService" class="com.mne.advertmanager.service.PurchaseOrderAggregationService">
+        <property name="totalAggr" ref="poTotalAggrDao"/>
+        <property name="prevMonthPoAggrDao" ref="poPrevMonthAggrDao"/>
+        <property name="curMonthPoAggrDao"  ref="poPrevMonthAggrDao"/>
+        <property name="dailyPoAggrDao"     ref="poDailyAggrDao"/>
+        <property name="accessService"      ref="accessLogService"/>
+        <property name="poService"          ref="poService"/>
+        <property name="affProgramService"  ref="affProgramService"/>
     </bean>    
     
 <!--=============================================================  user service beans end ===============================================================--> 
@@ -239,13 +285,13 @@
     <bean id="accessLogImporter" class="com.mne.advertmanager.util.AccessLogImporter">
         <property name="accessLogService"       ref="accessLogService"/>        
         <property name="accessSourceService"    ref="accessSourceService"/>                
-        <property name="affProgramService"         ref="affProgramService"/>        
+        <property name="affProgramService"      ref="affProgramService"/>        
     </bean>
     
-    <bean id="PurchaseOrderImporter" class="com.mne.advertmanager.util.PurchaseOrderImporter">
-        <property name="aclService"       ref="accessLogService"/>        
-        <property name="partnerService"    ref="partnerService"/>                
-        <property name="poService"         ref="poService"/>        
+    <bean id="purchaseOrderImporter" class="com.mne.advertmanager.util.PurchaseOrderImporter">
+        <property name="aclService"         ref="accessLogService"/>        
+        <property name="partnerService"     ref="partnerService"/>                
+        <property name="poService"          ref="poService"/>        
     </bean>
     
     
