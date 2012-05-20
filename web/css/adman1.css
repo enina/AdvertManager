@@ -1,3 +1,8 @@
+
+html {
+	overflow-y: scroll;
+}
+
 body{
     margin: 0px;
     background-color: #f5f5f5;
@@ -63,8 +68,6 @@ tr:nth-child(even){
 tr:nth-child(odd){
     background: #ffffff
 }
-
-
 
 #topMenue{
     list-style: none;
@@ -133,4 +136,29 @@ table{
 table th{
     
     background-color: #26c516;
+}
+
+.hidden{
+    
+    visibility: hidden;
+}
+
+#accessNavBar{
+    width: 960px;
+    margin-left: auto;
+    margin-right: auto;
+}
+#accessNavBar ul{
+    display: inline;
+    float: left;
+    list-style: none;     
+}
+#accessNavBar li{
+    
+    float: left;
+    margin-left: 10px;
+}
+#accessNavBar span{
+    float: right;
+    display: inline;
 }

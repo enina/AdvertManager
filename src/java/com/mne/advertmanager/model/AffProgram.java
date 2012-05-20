@@ -34,6 +34,7 @@ import javax.xml.bind.annotation.XmlTransient;
         query = "SELECT p FROM AffProgram p "
                 + "left join fetch p.apg apg "
                 + "left join fetch apg.affiliateId aff "
+                + "left join fetch p.partners "
                 + "WHERE p.id = ? and aff.affiliateName=?"),
     @NamedQuery(name = "AffProgram.findByDescription", query = "SELECT p FROM AffProgram p WHERE p.description = :description"),
     @NamedQuery(name = "AffProgram.findBySyncStatus", query = "SELECT p FROM AffProgram p WHERE p.syncStatus = :syncStatus"),
@@ -98,7 +99,10 @@ public class AffProgram implements Serializable {
     @Column(name = "name")          //
     private String name;            //
     
-    
+    @ManyToMany(cascade = CascadeType.ALL)    
+    @JoinTable(name = "affprogram_partner", joinColumns =
+    { @JoinColumn(name = "program_id") }, inverseJoinColumns = { @JoinColumn(name = "partner_id") }) 
+    private Set<Partner> partners = new HashSet<Partner>(0);
     
     /**C-tor: empty*/
     public AffProgram() {
@@ -119,10 +123,6 @@ public class AffProgram implements Serializable {
         this.apg = apg;
     }    
     
-    @ManyToMany(cascade = CascadeType.ALL)    
-    @JoinTable(name = "affprogram_partner", joinColumns =
-    { @JoinColumn(name = "program_id") }, inverseJoinColumns = { @JoinColumn(name = "partner_id") }) 
-    private Set<Partner> partners = new HashSet<Partner>(0);
 
     public Set<Partner> getPartners() {
         return partners;
