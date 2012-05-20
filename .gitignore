@@ -18,3 +18,4 @@ parser gen generated xml/e-autopay.xml
 parser gen generated xml/Partners_e-autopay.xml
 web/WEB-INF/glassfish-web.xml
 src/conf/parsergen/e-autopay.xml
+/.git-rewrite/
