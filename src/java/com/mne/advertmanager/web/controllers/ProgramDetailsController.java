@@ -88,7 +88,7 @@ public class ProgramDetailsController {
             //find all accesses related to this program
             accessPage = accessLogService.findAccessByAffProgamId(new PageCtrl(),programId);
             orderList = purchaseOrderService.findPurchaseOrdersByAffProgamId(programId);
-            // Collection<Partner> partnerList = partnerService.findAllAccessLog();
+            
             //create model veiw object
         }
 
@@ -98,6 +98,7 @@ public class ProgramDetailsController {
         ModelAndView mav = ControllerSupport.forwardToView(logger, AFFPROGRAM_DETAILS_REQ_MAPPING+"/"+programId, AFFPROGRAM_DETAILS_REQ_MAPPING, "program", program); 
         mav.addObject("accessPage", accessPage);
         mav.addObject("orderList", orderList);
+        mav.addObject("partnerList", program.getPartners());
 
         return mav;
 
@@ -134,6 +135,8 @@ public class ProgramDetailsController {
                     setName(ControllerSupport.BILLING + "DataImportThread" + " programId " + affProgramId);
                     //go collect data:
                     billingProjectService.importBillingData(program);
+                    
+                    affProgramService.save(program);
                 }
                 //start thread execution
             }.start();

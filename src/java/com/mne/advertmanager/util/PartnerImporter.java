@@ -52,6 +52,7 @@ public class PartnerImporter  implements BillingDataImporter{
     public void saveDataItem(AffProgram program,Object dataItem) {
         Partner partner = (Partner)dataItem;
         
+        program.getPartners().add(partner);
         //persist partner to db
         partnerService.creatPartner(partner);
 
