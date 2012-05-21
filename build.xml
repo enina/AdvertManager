@@ -76,7 +76,7 @@
     </target>
     
     <target name="-pre-init">
-        <delete file="z:/AdvertManager.war"/>
+        <delete file="${var.DEP_DIR}/AdvertManager.war"/>
     </target>
 
     <target name="-post-compile">
@@ -116,7 +116,7 @@
     </target>
     
     <target name="-post-dist">
-        <copy todir="z:/">
+        <copy todir="${var.DEP_DIR}">
             <fileset dir="${dist.dir}" includes="*.war" />
         </copy>
     </target>

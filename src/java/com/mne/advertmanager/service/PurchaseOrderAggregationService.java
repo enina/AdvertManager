@@ -7,7 +7,6 @@ package com.mne.advertmanager.service;
 import com.mne.advertmanager.dao.GenericDao;
 import com.mne.advertmanager.model.AffProgram;
 import com.mne.advertmanager.model.PurchaseOrderAggregation;
-import com.mne.advertmanager.util.POAggrData;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
@@ -65,7 +64,7 @@ public class PurchaseOrderAggregationService {
     
     
     
-    @Transactional(readOnly = true)
+    @Transactional
     public PurchaseOrderAggregation findAffProgramTotalAggrData(int affProgramId) {
 
         PurchaseOrderAggregation result = findAffProgramAggrData(totalPoAggrDao,"PurchaseOrderTotalAggregation.findByAffProgId", affProgramId);
@@ -75,7 +74,7 @@ public class PurchaseOrderAggregationService {
         return result;
     }
     
-    @Transactional(readOnly = true)
+    @Transactional
     public PurchaseOrderAggregation findAffProgramCurMonthAggrData(int affProgramId) {
 
         PurchaseOrderAggregation result = findAffProgramAggrData(curMonthPoAggrDao,"PurchaseOrderCurMonthAggregation.findByAffProgId", affProgramId);
@@ -86,7 +85,7 @@ public class PurchaseOrderAggregationService {
         return result;
     }
     
-    @Transactional(readOnly = true)
+    @Transactional
     public PurchaseOrderAggregation findAffProgramPrevMonthAggrData(int affProgramId) {
 
         PurchaseOrderAggregation result = findAffProgramAggrData(prevMonthPoAggrDao,"PurchaseOrderPrevMonthAggregation.findByAffProgId", affProgramId);
@@ -96,7 +95,7 @@ public class PurchaseOrderAggregationService {
         return result;
     }
     
-    @Transactional(readOnly = true)
+    @Transactional
     public PurchaseOrderAggregation findAffProgramDailyAggrData(int affProgramId) {
 
         PurchaseOrderAggregation result = findAffProgramAggrData(dailyPoAggrDao,"PurchaseOrderDailyAggregation.findByAffProgId", affProgramId);
@@ -114,6 +113,17 @@ public class PurchaseOrderAggregationService {
             calculateAffProgramAggrData(affProgIter.next().getId());
     }
 
+    
+    private PurchaseOrderAggregation findDailyAffProgramAggrData(int affProgramId, Date refTime) {
+        
+        PurchaseOrderAggregation result = dailyPoAggrDao.findSingleItemByQuery("PurchaseOrderAggregation.calculateAffProgDataByIdAndTime",affProgramId,refTime);
+        
+        logger.debug("Found {} purchase orders of total={} for program {} after {}",
+                        new Object[]{result.getPurchaseAmount(),result.getTotalSum(),affProgramId,refTime});
+        
+        return result;
+    }
+    
 
     @Transactional
     public void calculateAffProgramAggrData(int affProgramId) {
@@ -124,9 +134,9 @@ public class PurchaseOrderAggregationService {
         Date refTime = cal.getTime();
         
         int accessCount = accessService.findDailyAffProgramAccessAmount(affProgramId,refTime);
-        POAggrData poAggrData = poService.findDailyAffProgramAggrData(affProgramId, refTime);
-        
-        PurchaseOrderAggregation dailyPOData = new PurchaseOrderAggregation(accessCount,poAggrData.getPoAmount(),poAggrData.getTotalPoSum(),new AffProgram(affProgramId));
+        PurchaseOrderAggregation dailyPOData = findDailyAffProgramAggrData(affProgramId, refTime);
+        dailyPOData.setAccessAmount(accessCount);
+         
         
         PurchaseOrderAggregation totalAggrData = findAffProgramTotalAggrData(affProgramId);
         totalAggrData.addData(dailyPOData);
@@ -159,7 +169,7 @@ public class PurchaseOrderAggregationService {
     
     private PurchaseOrderAggregation findAffProgramAggrData(GenericDao<PurchaseOrderAggregation,Integer> aggrPODao,String query,int affProgramId) {
 
-        PurchaseOrderAggregation result = (PurchaseOrderAggregation)aggrPODao.findSingleItemByQuery(query, affProgramId);
+        PurchaseOrderAggregation result = aggrPODao.findSingleItemByQuery(query, affProgramId);
         
         if (result==null) {
             result = new PurchaseOrderAggregation();

@@ -16,9 +16,9 @@ public class PurchaseOrderAggregation {
     
     private double totalSum;
     
-    private int accessAmount;
+    private long accessAmount;
     
-    private int purchaseAmount;
+    private long purchaseAmount;
     
     public PurchaseOrderAggregation() {
 
@@ -28,22 +28,28 @@ public class PurchaseOrderAggregation {
         this.id = id;
     }
 
-    public PurchaseOrderAggregation(int accessAmount, int purchaseAmount,double totalSum,AffProgram affProgram) {
+    @SuppressWarnings("OverridableMethodCallInConstructor")
+    public PurchaseOrderAggregation(long accessAmount, int purchaseAmount,double totalSum,AffProgram affProgram) {
         setAffProgram(affProgram);
         setTotalSum(totalSum);
         setAccessAmount(accessAmount);
         setPurchaseAmount(purchaseAmount);
     }
 
+    @SuppressWarnings("OverridableMethodCallInConstructor")
+    public PurchaseOrderAggregation(long purchaseAmount,double totalSum,AffProgram affProgram) {
+        setAffProgram(affProgram);
+        setTotalSum(totalSum);
+        setPurchaseAmount(purchaseAmount);
+    }    
     
     
     
-    
-    public int getAccessAmount() {
+    public long getAccessAmount() {
         return accessAmount;
     }
 
-    public final void setAccessAmount(int accessAmount) {
+    public void setAccessAmount(long accessAmount) {
         this.accessAmount = accessAmount;
     }
 
@@ -51,7 +57,7 @@ public class PurchaseOrderAggregation {
         return affProgram;
     }
 
-    public final void setAffProgram(AffProgram affProgram) {
+    public  void setAffProgram(AffProgram affProgram) {
         this.affProgram = affProgram;
     }
 
@@ -69,11 +75,11 @@ public class PurchaseOrderAggregation {
         this.id = id;
     }
 
-    public int getPurchaseAmount() {
+    public long getPurchaseAmount() {
         return purchaseAmount;
     }
 
-    public final void setPurchaseAmount(int purchaseAmount) {
+    public  void setPurchaseAmount(long purchaseAmount) {
         this.purchaseAmount = purchaseAmount;
     }
 
@@ -81,7 +87,7 @@ public class PurchaseOrderAggregation {
         return totalSum;
     }
 
-    public final void setTotalSum(double totalSum) {
+    public  void setTotalSum(double totalSum) {
         this.totalSum = totalSum;
     }
     

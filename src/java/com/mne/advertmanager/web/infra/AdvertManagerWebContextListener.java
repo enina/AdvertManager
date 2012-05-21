@@ -8,11 +8,11 @@ import com.mne.advertmanager.util.AggregationDataCalculationJob;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletContextEvent;
-import org.quartz.*;
-import org.quartz.impl.StdSchedulerFactory;
-import static org.quartz.JobBuilder.newJob;
-import static org.quartz.TriggerBuilder.newTrigger;
-import static org.quartz.CronScheduleBuilder.dailyAtHourAndMinute;
+//import org.quartz.*;
+//import org.quartz.impl.StdSchedulerFactory;
+//import static org.quartz.JobBuilder.newJob;
+//import static org.quartz.TriggerBuilder.newTrigger;
+//import static org.quartz.CronScheduleBuilder.dailyAtHourAndMinute;
 import org.springframework.web.context.ContextLoaderListener;
 
 /**
@@ -23,7 +23,7 @@ import org.springframework.web.context.ContextLoaderListener;
 public class AdvertManagerWebContextListener  extends ContextLoaderListener {
     private static final Logger logger = Logger.getLogger(AdvertManagerWebContextListener.class.getName());
     
-    private Scheduler scheduler;
+    //private Scheduler scheduler;
 
     /**
      * called by the container upon context destruction.Used to cleanup resources
@@ -33,8 +33,8 @@ public class AdvertManagerWebContextListener  extends ContextLoaderListener {
     public void contextDestroyed(ServletContextEvent event) {
         try {
             super.contextDestroyed(event);
-            scheduler.shutdown(false);
-        } catch (SchedulerException ex) {
+            //scheduler.shutdown(false);
+        } catch (Exception ex) {
             logger.log(Level.SEVERE, "Context shutdown failed with exception {0}", ex.getClass().getSimpleName());
         }
     }

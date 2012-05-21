@@ -16,6 +16,7 @@ import org.jsoup.Connection;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.slf4j.LoggerFactory;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -102,16 +103,14 @@ public class BillingProjectService {
 
     /**
      */
-    @Transactional
     public void importBillingData(AffProgram program) {
 
         //log action
         logger.info("Looking up project data by backoffice link  {}  ", program.getAffProgramLink());
-        Project project = (Project)projectDao.findSingleItemByQuery("Project.findByBackOfficeURL", program.getAffProgramLink());
+        Project project = findProjectByAffProgram(program);
         if (project == null) {
             logger.error("Failed to find project for backoffice link  {}", program.getAffProgramLink());
-        }
-        else {
+        } else {
             logger.info("Started {} project data import. ", project.getName());
             //project baseUrl = programBackOfficeUrl - projectLoginUrl:
             String programBackOfficeUrl = program.getAffProgramLink();
@@ -136,17 +135,24 @@ public class BillingProjectService {
 
             //connect to src web site
             Connection con = JSoupTransport.login(project);
-
-            //get data of each dataSpec ( include all pages ) of given Project
-            for (DataSpec ds : dsList) {
-                processDataSpec(ds, project, con, program);
+            if (con == null) {
+                logger.error("Failed to obtain connection for url:{}",project.getBaseURL()+project.getHomePage());
+            } else {
+                //get data of each dataSpec ( include all pages ) of given Project
+                for (DataSpec ds : dsList) {
+                    processDataSpec(ds, project, con, program);
+                }
             }
 
             JSoupTransport.logout(con, project);
             logger.info("Finished {} project data import ", project.getName());
         }
     }
-//================================ importPageData ==============================
+    @Transactional(readOnly=true)
+    private Project findProjectByAffProgram(AffProgram program) {
+        Project project = projectDao.findSingleItemByQuery("Project.findByBackOfficeURL", program.getAffProgramLink());
+        return project;
+    }
 
     private void processDataSpec(DataSpec ds, Project project, Connection con, AffProgram program) {
         int i = 1;
@@ -191,6 +197,7 @@ public class BillingProjectService {
      * this function extract data from one page( given document ) to DB params:affiliate obj, preloaded document with wanted data, dataSpec that identify data location in document.
      * return:none
      */
+    @Transactional(propagation= Propagation.REQUIRES_NEW)
     private void importPageData(AffProgram program, org.jsoup.nodes.Document doc, DataSpec dataSpec) {
 
         Element dataElem = null;    //hold data root element (used as relative start path to other elements)
@@ -249,8 +256,8 @@ public class BillingProjectService {
 
     @Transactional(readOnly = true)
     public Project findProjectById(int projectId) {
-        
-        Project res = (Project)projectDao.findSingleItemByQuery("Project.findProjectWithDataSpecList", projectId);
+
+        Project res = projectDao.findSingleItemByQuery("Project.findProjectWithDataSpecList", projectId);
 
         return res;
     }
@@ -259,12 +266,12 @@ public class BillingProjectService {
     public void delete(int projectId) {
         projectDao.executeUpdateByQuery("Project.deleteById", projectId);
     }
-    
+
     @Transactional(readOnly = true)
     public DataSpec findProjectDataSpec(int bpId, int dsId) {
         DataSpec result = null;
-        
-        result = (DataSpec)dataSpecDao.findSingleItemByQuery("DataSpec.findDataSpecById", dsId,bpId);
+
+        result = dataSpecDao.findSingleItemByQuery("DataSpec.findDataSpecById", dsId, bpId);
 
         return result;
     }

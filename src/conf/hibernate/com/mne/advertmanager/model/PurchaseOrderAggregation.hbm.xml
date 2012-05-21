@@ -97,5 +97,13 @@
         from PurchaseOrderDailyAggregation where affProgram.id=?
     ]]>
     </query>
+    
+    <query name="PurchaseOrderAggregation.calculateAffProgDataByIdAndTime"><![CDATA[
+        SELECT new com.mne.advertmanager.model.PurchaseOrderAggregation(count (po),sum(po_sum),po.affProgram) FROM PurchaseOrder po WHERE po.affProgram.id = ? and ordertime > ?
+    ]]>
+    </query>
+    
+    
+        
   
 </hibernate-mapping>

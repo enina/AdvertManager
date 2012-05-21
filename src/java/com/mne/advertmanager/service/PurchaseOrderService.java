@@ -6,9 +6,7 @@ package com.mne.advertmanager.service;
 
 import com.mne.advertmanager.dao.GenericDao;
 import com.mne.advertmanager.model.PurchaseOrder;
-import com.mne.advertmanager.util.POAggrData;
 import java.util.Collection;
-import java.util.Date;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,17 +39,5 @@ public class PurchaseOrderService {
     public Collection<PurchaseOrder> findPurchaseOrdersByAffProgamId(int affProgramId) {
         return poDao.findByQuery("PurchaseOrder.findByAffProgramId",affProgramId);
     }
-    
-    @Transactional(readOnly=true)
-    POAggrData findDailyAffProgramAggrData(int affProgramId, Date refTime) {
-        
-        POAggrData result = (POAggrData)poDao.findSingleItemByQuery("PurchaseOrder.findAffProgramPOAggrDataByDate",affProgramId,refTime);
-        
-        logger.debug("Found {} purchase orders of total={} for program {} after {}",
-                        new Object[]{result.getPoAmount(),result.getTotalPoSum(),affProgramId,refTime});
-        
-        return result;
-    }
-    
 
 }

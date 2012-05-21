@@ -102,7 +102,7 @@ public class GenericDaoHibernateImpl<T, PK extends Serializable> implements Gene
     }
 
     @Override
-    public Object findSingleItemByQuery(String queryName, Object... params) {
+    public T findSingleItemByQuery(String queryName, Object... params) {
 
         T result = null;
         Collection<T> data = findByQuery(queryName, params);
