@@ -44,7 +44,7 @@ public class AccessLogService {
     }
 
     public AccessLog findAccessByIP(String ipAddress) {
-        return (AccessLog)accessLogDao.findSingleItemByQuery("AccessLog.findByIpAddress", ipAddress);
+        return accessLogDao.findSingleItemByQuery("AccessLog.findByIpAddress", ipAddress);
     }
     
     @Transactional(readOnly = true)

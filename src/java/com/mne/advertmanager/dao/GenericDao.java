@@ -32,7 +32,7 @@ public interface GenericDao <T, PK extends Serializable> {
     
     public Collection<T> findByQuery(String queryName,Object ...params);
     
-    public Object findSingleItemByQuery(String queryName, Object... params);
+    public T findSingleItemByQuery(String queryName, Object... params);
     
     public Collection<T> findByExample(T example);
     
