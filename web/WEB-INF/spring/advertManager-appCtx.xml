@@ -87,11 +87,10 @@
     </bean>        
 
 
-<!--    <bean id="annotationTransactionAspect" factory-method="aspectOf" 
-        class="org.springframework.transaction.aspectj.AnnotationTransactionAspect">
-        <property name="transactionManager" ref="transactionManager"></property>
-    </bean>-->
-    <context:load-time-weaver/>
+    <bean id="annotationTransactionAspect" factory-method="aspectOf" class="org.springframework.transaction.aspectj.AnnotationTransactionAspect">
+        <property name="transactionManager" ref="transactionManager"/>
+    </bean>
+<!--    <context:load-time-weaver/>-->
     <aop:aspectj-autoproxy/>
     <tx:annotation-driven mode="aspectj"/>
 
@@ -279,12 +278,11 @@
     </bean>
     
     <bean id="poAggrService" class="com.mne.advertmanager.service.PurchaseOrderAggregationService">
-        <property name="totalAggr" ref="poTotalAggrDao"/>
+        <property name="totalAggr"          ref="poTotalAggrDao"/>
         <property name="prevMonthPoAggrDao" ref="poPrevMonthAggrDao"/>
-        <property name="curMonthPoAggrDao"  ref="poPrevMonthAggrDao"/>
+        <property name="curMonthPoAggrDao"  ref="poCurMonthAggrDao"/>
         <property name="dailyPoAggrDao"     ref="poDailyAggrDao"/>
         <property name="accessService"      ref="accessLogService"/>
-        <property name="poService"          ref="poService"/>
         <property name="affProgramService"  ref="affProgramService"/>
     </bean>    
     

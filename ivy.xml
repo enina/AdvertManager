@@ -76,7 +76,7 @@
         <dependency org="commons-io" name="commons-io" rev="2.2"/>
         <dependency org="com.googlecode.juniversalchardet" name="juniversalchardet" rev="1.0.3"/>
         <dependency org="org.quartz-scheduler" name="quartz" rev="2.1.5"/>
-
+        <dependency org="org.aspectj" name="aspectjtools" rev="1.6.10"/>
             
             		
             		

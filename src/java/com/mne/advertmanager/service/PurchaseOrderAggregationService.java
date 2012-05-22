@@ -27,7 +27,6 @@ public class PurchaseOrderAggregationService {
     private GenericDao<PurchaseOrderAggregation,Integer> curMonthPoAggrDao;
     private GenericDao<PurchaseOrderAggregation,Integer> dailyPoAggrDao;
     private AccessLogService accessService;
-    private PurchaseOrderService poService;
     private AffProgramService    affProgramService;
 
     public void setTotalAggr(GenericDao<PurchaseOrderAggregation,Integer> totalPoAggrDao) {
@@ -44,10 +43,6 @@ public class PurchaseOrderAggregationService {
 
     public void setDailyPoAggrDao(GenericDao<PurchaseOrderAggregation, Integer> dailyPoAggrDao) {
         this.dailyPoAggrDao = dailyPoAggrDao;
-    }
-
-    public void setPoService(PurchaseOrderService poService) {
-        this.poService = poService;
     }
 
     public void setPrevMonthPoAggrDao(GenericDao<PurchaseOrderAggregation, Integer> prevMonthPoAggrDao) {
@@ -130,8 +125,11 @@ public class PurchaseOrderAggregationService {
 
         logger.info("Aggregation data calculation , Program {}",affProgramId);
         Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.DATE, -1);
+        //cal.add(Calendar.DATE, -1);
+        cal.clear();
+        cal.set(2012,Calendar.APRIL, 1,1,0);
         Date refTime = cal.getTime();
+        
         
         int accessCount = accessService.findDailyAffProgramAccessAmount(affProgramId,refTime);
         PurchaseOrderAggregation dailyPOData = findDailyAffProgramAggrData(affProgramId, refTime);
@@ -172,7 +170,7 @@ public class PurchaseOrderAggregationService {
         PurchaseOrderAggregation result = aggrPODao.findSingleItemByQuery(query, affProgramId);
         
         if (result==null) {
-            result = new PurchaseOrderAggregation();
+            result = new PurchaseOrderAggregation(0,0,0,new AffProgram(affProgramId));
             aggrPODao.create(result);
         }
         

@@ -7,7 +7,7 @@
 <!-- the Compile on Save feature is turned off for the project. -->
 <!-- You can turn off the Compile on Save (or Deploy on Save) setting -->
 <!-- in the project's Project Properties dialog box.-->
-<project xmlns:ivy="antlib:org.apache.ivy.ant" name="AdvertManager" default="default" basedir=".">
+<project xmlns:ivy="antlib:org.apache.ivy.ant" xmlns:aspectj="antlib:org.aspectj" name="AdvertManager" default="default" basedir=".">
 <!--<project name="AdvertManager" default="default" basedir=".">-->
     <description>Builds, tests, and runs the project AdvertManager.</description>
     <import file="nbproject/build-impl.xml"/>
@@ -80,6 +80,10 @@
     </target>
 
     <target name="-post-compile">
+        
+       <aspectj:iajc inpath="${build.dir}/web/WEB-INF/classes" destdir="${build.dir}/web/WEB-INF/classes" 
+                     classpath="${javac.classpath}:${j2ee.platform.classpath}" aspectpath="${var.EXT_LIB}/spring-aspects-3.1.0.RELEASE.jar" />
+        
         <copy todir="${build.dir}/web/WEB-INF/classes">
             <fileset dir="${conf.dir}" includes="logback.xml" />
             <fileset dir="${conf.dir}" includes="quartz.properties" />
