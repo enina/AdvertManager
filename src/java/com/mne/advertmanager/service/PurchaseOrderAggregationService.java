@@ -109,6 +109,8 @@ public class PurchaseOrderAggregationService {
     @Scheduled(cron="0 0 4 * * ?")
     public void calculateAggrData() {
         
+        logger.info("Started aggregation data calculation");
+        
         HashSet<AffProgram> affProgs = new HashSet<AffProgram>(affProgramService.findAllAffPrograms());
         Iterator<AffProgram> affProgIter = affProgs.iterator();
         AffProgram curAffProgram = null;
@@ -119,6 +121,8 @@ public class PurchaseOrderAggregationService {
                 calculateAffProgramAggrData(curAffProgram.getId());
             }
         }
+        
+        logger.info("Finished aggregation data calculation");
     }
 
     
@@ -136,11 +140,12 @@ public class PurchaseOrderAggregationService {
     @Transactional
     public void calculateAffProgramAggrData(int affProgramId) {
 
-        logger.info("Aggregation data calculation , Program {}",affProgramId);
+        logger.info("Started aggregation data calculation , Program {}",affProgramId);
         Calendar cal = Calendar.getInstance();
         //cal.add(Calendar.DATE, -1);
         cal.clear();
-        cal.set(2012,Calendar.APRIL, 1,1,0);
+        //just for testing should be removed
+        cal.set(2012,Calendar.FEBRUARY, 1,1,0);
         Date refTime = cal.getTime();
         
         
@@ -162,6 +167,7 @@ public class PurchaseOrderAggregationService {
         }
         
         updateDailyAggrData(affProgramId,dailyPOData);
+        logger.info("Finished aggregation data calculation , Program {}",affProgramId);
     }
 
 
