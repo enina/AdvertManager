@@ -4,6 +4,7 @@
      xmlns:aop="http://www.springframework.org/schema/aop"
      xmlns:context="http://www.springframework.org/schema/context"
      xmlns:tx="http://www.springframework.org/schema/tx"
+     xmlns:task="http://www.springframework.org/schema/task"
      xsi:schemaLocation="
      http://www.springframework.org/schema/beans 
      http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
@@ -12,7 +13,9 @@
      http://www.springframework.org/schema/aop 
      http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
      http://www.springframework.org/schema/context 
-     http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+     http://www.springframework.org/schema/context/spring-context-3.0.xsd
+     http://www.springframework.org/schema/task 
+     http://www.springframework.org/schema/task/spring-task-3.0.xsd">
               
               
 
@@ -310,11 +313,8 @@
    
 <!-- Scheduling related beans-->    
     <task:annotation-driven executor="admanExecutor" scheduler="admanScheduler"/>
-    <task:executor id="admanExecutor" pool-size="5"/>
-    <task:scheduler id="admanScheduler" pool-size="10"/>
-    
-    <bean name="dailyAggrCalculationJob" class="com.mne.advertmanager.util.AggregationDataCalculationJob">
-    </bean>
+    <task:executor          id="admanExecutor"  pool-size="5"/>
+    <task:scheduler         id="admanScheduler" pool-size="10"/>
 <!-- Scheduling related beans-->    
 
 

@@ -81,7 +81,7 @@
 
     <target name="-post-compile">
         
-       <aspectj:iajc inpath="${build.dir}/web/WEB-INF/classes" destdir="${build.dir}/web/WEB-INF/classes" 
+        <aspectj:iajc inpath="${build.dir}/web/WEB-INF/classes" destdir="${build.dir}/web/WEB-INF/classes" 
                      classpath="${javac.classpath}:${j2ee.platform.classpath}" aspectpath="${var.EXT_LIB}/spring-aspects-3.1.0.RELEASE.jar" />
         
         <copy todir="${build.dir}/web/WEB-INF/classes">

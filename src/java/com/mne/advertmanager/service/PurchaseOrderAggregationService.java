@@ -12,6 +12,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import org.slf4j.LoggerFactory;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -105,6 +106,7 @@ public class PurchaseOrderAggregationService {
         return result;
     }    
 
+    @Scheduled(cron="0 0 4 * * ?")
     public void calculateAggrData() {
         
         HashSet<AffProgram> affProgs = new HashSet<AffProgram>(affProgramService.findAllAffPrograms());
