@@ -26,8 +26,9 @@ public class PurchaseOrderAggregationService {
     private GenericDao<PurchaseOrderAggregation,Integer> prevMonthPoAggrDao;
     private GenericDao<PurchaseOrderAggregation,Integer> curMonthPoAggrDao;
     private GenericDao<PurchaseOrderAggregation,Integer> dailyPoAggrDao;
-    private AccessLogService accessService;
-    private AffProgramService    affProgramService;
+    private AccessLogService                             accessService;
+    private AffProgramService                            affProgramService;
+    private BillingProjectService                        blngService;
 
     public void setTotalAggr(GenericDao<PurchaseOrderAggregation,Integer> totalPoAggrDao) {
         this.totalPoAggrDao = totalPoAggrDao;
@@ -55,6 +56,10 @@ public class PurchaseOrderAggregationService {
 
     public void setAffProgramService(AffProgramService affProgramService) {
         this.affProgramService = affProgramService;
+    }
+
+    public void setBlngService(BillingProjectService blngService) {
+        this.blngService = blngService;
     }
     
     
@@ -104,8 +109,14 @@ public class PurchaseOrderAggregationService {
         
         HashSet<AffProgram> affProgs = new HashSet<AffProgram>(affProgramService.findAllAffPrograms());
         Iterator<AffProgram> affProgIter = affProgs.iterator();
-        while (affProgIter.hasNext())
-            calculateAffProgramAggrData(affProgIter.next().getId());
+        AffProgram curAffProgram = null;
+        while (affProgIter.hasNext()) {
+            curAffProgram = affProgIter.next();
+            if (curAffProgram != null) {
+                blngService.importBillingData(curAffProgram);
+                calculateAffProgramAggrData(curAffProgram.getId());
+            }
+        }
     }
 
     

@@ -4,24 +4,37 @@
  */
 package com.mne.advertmanager.util;
 
+import com.mne.advertmanager.service.BillingProjectService;
 import com.mne.advertmanager.service.PurchaseOrderAggregationService;
-//import org.quartz.Job;
-//import org.quartz.JobExecutionContext;
-//import org.quartz.JobExecutionException;
+import org.springframework.scheduling.annotation.Scheduled;
+
 
 /**
  *
  * @author Nina Eidelshtein and Misha Lebedev
  */
-public abstract class AggregationDataCalculationJob {
+public class AggregationDataCalculationJob {
+    
+    private PurchaseOrderAggregationService poAggrService;
+    private BillingProjectService blngService;
 
-//implements Job{
-//
-//    @Override
-//    public void execute(JobExecutionContext jec) throws JobExecutionException {
-//        PurchaseOrderAggregationService poAggrService = (PurchaseOrderAggregationService)jec.getMergedJobDataMap().get("service");
-//        poAggrService.calculateAggrData();
-//    }
+    public void setBlngService(BillingProjectService blngService) {
+        this.blngService = blngService;
+    }
+
+    public void setPoAggrService(PurchaseOrderAggregationService poAggrService) {
+        this.poAggrService = poAggrService;
+    }
+
+    
+    
+    @Scheduled(cron="0 4 * * *")
+    public void execute() {
+        blngService.importBillingData(null);
+        poAggrService.calculateAggrData();
+    }
+
+
     
     
 }

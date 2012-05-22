@@ -284,6 +284,7 @@
         <property name="dailyPoAggrDao"     ref="poDailyAggrDao"/>
         <property name="accessService"      ref="accessLogService"/>
         <property name="affProgramService"  ref="affProgramService"/>
+        <property name="blngService"        ref="billingProjectService"/>
     </bean>    
     
 <!--=============================================================  user service beans end ===============================================================--> 
@@ -307,6 +308,14 @@
         <property name="partnerService"    ref="partnerService"/>                       
     </bean>    
    
+<!-- Scheduling related beans-->    
+    <task:annotation-driven executor="admanExecutor" scheduler="admanScheduler"/>
+    <task:executor id="admanExecutor" pool-size="5"/>
+    <task:scheduler id="admanScheduler" pool-size="10"/>
     
+    <bean name="dailyAggrCalculationJob" class="com.mne.advertmanager.util.AggregationDataCalculationJob">
+    </bean>
+<!-- Scheduling related beans-->    
+
 
 </beans>
