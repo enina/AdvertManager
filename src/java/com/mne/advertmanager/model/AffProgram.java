@@ -29,17 +29,18 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "AffProgram.findAll",
         query = "SELECT p FROM AffProgram p "
                 + "left join fetch p.apg apg "
-                + "left join fetch apg.affiliateId "),
+                + "left join fetch apg.affiliateId "
+                + "left join fetch p.partners"),
     @NamedQuery(name = "AffProgram.findByIdAndAffiliate",
         query = "SELECT p FROM AffProgram p "
                 + "left join fetch p.apg apg "
                 + "left join fetch apg.affiliateId aff "
                 + "left join fetch p.partners "
                 + "WHERE p.id = ? and aff.affiliateName=?"),
-    @NamedQuery(name = "AffProgram.findByDescription", query = "SELECT p FROM AffProgram p WHERE p.description = :description"),
-    @NamedQuery(name = "AffProgram.findBySyncStatus", query = "SELECT p FROM AffProgram p WHERE p.syncStatus = :syncStatus"),
+    @NamedQuery(name = "AffProgram.findByDescription", query = "SELECT p FROM AffProgram p WHERE p.description = ?"),
+    @NamedQuery(name = "AffProgram.findBySyncStatus", query = "SELECT p FROM AffProgram p WHERE p.syncStatus = ?"),
     @NamedQuery(name = "AffProgram.findByAffProgramLink", query = "SELECT p FROM AffProgram p WHERE p.affProgramLink = ?"),
-    @NamedQuery(name = "AffProgram.findByRedirectLink", query = "SELECT p FROM AffProgram p WHERE p.redirectLink = :redirectLink")})
+    @NamedQuery(name = "AffProgram.findByRedirectLink", query = "SELECT p FROM AffProgram p WHERE p.redirectLink = ?")})
 public class AffProgram implements Serializable {
     
     private static final long serialVersionUID = 1L;    
