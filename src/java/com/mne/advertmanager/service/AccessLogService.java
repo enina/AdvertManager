@@ -8,8 +8,13 @@ import com.mne.advertmanager.dao.GenericDao;
 import com.mne.advertmanager.model.AccessLog;
 import com.mne.advertmanager.util.Page;
 import com.mne.advertmanager.util.PageCtrl;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.Date;
 import org.slf4j.LoggerFactory;
+import org.springframework.dao.DataAccessException;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementCallback;
 import org.springframework.transaction.annotation.Transactional;
 
 
@@ -22,10 +27,18 @@ public class AccessLogService {
     private static org.slf4j.Logger logger = LoggerFactory.getLogger(AccessLogService.class);
     
     private GenericDao<AccessLog,Integer> accessLogDao;
+    private JdbcTemplate jdbcTemplate;
 
     public void setAccessLogDao(GenericDao<AccessLog,Integer> accessLogDao) {
         this.accessLogDao = accessLogDao;
     }
+
+    public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
+    
+    
+    
     @Transactional(readOnly = true)
     public Page<AccessLog> findAllAccessLog(PageCtrl pageCtrl) {
         
@@ -72,5 +85,30 @@ public class AccessLogService {
         logger.debug("Found {} access for program {} after {}",new Object[]{result,affProgramId,refTime});
         
         return result;
+    }
+
+    public String findCountryByIP(String itemValue) {
+        long ip = ip2long(itemValue);
+        
+        String country = (String)jdbcTemplate.queryForObject("SELECT cn FROM geoip.ip natural join geoip.cc where ? BETWEEN start and end", String.class, ip);
+        
+        return country;
+    }
+    
+    private long ip2long(String addr) {
+
+        String[] addrArray = addr.split("\\.");
+
+        long num = 0;
+
+        for (int i=0;i<addrArray.length;i++) {
+
+            int power = 3-i;
+
+            num += ((Integer.parseInt(addrArray[i])%256 * Math.pow(256,power)));
+
+        }
+
+        return num;
     }
 }

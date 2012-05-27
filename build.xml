@@ -70,10 +70,30 @@
 
     -->
 
-    <target name="ivy.retrieve.lib" depends="-init-project">
+    <target name="ivy.retrieve_lib" depends="-init-project">
         <property name="ivy.default.ivy.user.dir" value="${var.IVY_REP_DIR}"/>
         <ivy:retrieve pattern="${var.EXT_LIB}/../[type]/[artifact]-[revision].[ext]"/>
     </target>
+    
+    <target name="geoip.load_data" depends="-init-project">
+        <exec executable="mysqlimport">
+             <!-- -fields-terminated-by="," 
+                 -fields-optionally-enclosed-by="\""  
+                 -lines-terminated-by="\n" 
+                 -host localhost 
+                 -user=root 
+                 -password=admin 
+                 geoip d:\dl\geoipcountrycsv\csv.csv   
+             -->
+            <arg value="--fields-terminated-by=&quot;,&quot;"/>
+            <arg value="--fields-optionally-enclosed-by=&quot;\&quot;&quot;"/>
+            <arg value="--lines-terminated-by=&quot;\n&quot;"/>
+            <arg value="--host ${var.mysqlhost}"/>
+            <arg value="--user ${var.mysqluser}"/>
+            <arg value="--password ${var.mysqlpassword}"/> 
+            <arg value="geoip      ${var.geoipCSV}"/> 
+        </exec>
+    </target>    
     
     <target name="-pre-init">
         <delete file="${var.DEP_DIR}/AdvertManager.war"/>
