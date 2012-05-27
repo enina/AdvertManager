@@ -257,6 +257,7 @@
     
     <bean id="accessLogService" class="com.mne.advertmanager.service.AccessLogService">
         <property name="accessLogDao" ref="accessLogDao"/>
+        <property name="jdbcTemplate" ref="adManJdbcTemplate"/>
     </bean>   
     
     <bean id="partnerService" class="com.mne.advertmanager.service.PartnerService">
@@ -297,7 +298,6 @@
     <bean id="accessLogImporter" class="com.mne.advertmanager.util.AccessLogImporter">
         <property name="accessLogService"       ref="accessLogService"/>        
         <property name="accessSourceService"    ref="accessSourceService"/>                
-        <property name="affProgramService"      ref="affProgramService"/>        
     </bean>
     
     <bean id="purchaseOrderImporter" class="com.mne.advertmanager.util.PurchaseOrderImporter">

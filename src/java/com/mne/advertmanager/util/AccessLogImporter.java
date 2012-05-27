@@ -4,12 +4,12 @@
  */
 package com.mne.advertmanager.util;
 
-import com.mne.advertmanager.model.*;
+import com.mne.advertmanager.model.AccessLog;
+import com.mne.advertmanager.model.AccessSource;
+import com.mne.advertmanager.model.AffProgram;
 import com.mne.advertmanager.service.AccessLogService;
 import com.mne.advertmanager.service.AccessSourceService;
-import com.mne.advertmanager.service.AffProgramService;
 import java.io.UnsupportedEncodingException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
@@ -17,8 +17,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.logging.Level;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,7 +30,7 @@ public class AccessLogImporter implements BillingDataImporter {
     private static final Logger logger = LoggerFactory.getLogger(BillingDataImporter.class);
     private AccessLogService accessLogService;
     private AccessSourceService accessSourceService;
-    private AffProgramService affProgramService;
+    
     private DateFormat df = null;
 
     /**
@@ -47,12 +45,6 @@ public class AccessLogImporter implements BillingDataImporter {
         this.accessLogService = accessLogService;
     }
     //seter used by Spring context injection
-
-    public void setAffProgramService(AffProgramService AffProgramService) {
-        this.affProgramService = AffProgramService;
-    }
-    //seter used by Spring context injection
-
     public void setAccessSourceService(AccessSourceService accessSourceService) {
         this.accessSourceService = accessSourceService;
     }
@@ -67,11 +59,11 @@ public class AccessLogImporter implements BillingDataImporter {
         if (("DateTime").equals(itemName)) {
             access.setAccessTime(processDate(itemValue));
         } else if (("IP").equals(itemName)) {
-            access.setIpAddress(itemValue);
+            processIPAddress(access,itemValue);
         } else if (("Referer").equals(itemName)) {
             processReferer(access, itemValue);
         } else if (("Target").equals(itemName)) {
-            access.setUrl(itemValue);
+            access.setTargetURL(itemValue);
         }
 
         return target;
@@ -127,7 +119,7 @@ public class AccessLogImporter implements BillingDataImporter {
             //set update access sourceDomainId property with one of referer.
             access.setSourceDomainId(referer);
             access.setQuery(query);
-            access.setLocation(url.toString());
+            access.setRefererURL(url.toString());
         }
     }
 
@@ -151,12 +143,6 @@ public class AccessLogImporter implements BillingDataImporter {
         URL result = null;
         try {
             result = new URL(itemValue);
-//            try {
-//                result = new URL(itemValue);
-//            } catch (Exception ex) {
-//                logger.debug("Failed build URL from {} .Exception {}.Defaulting to google.com", itemValue, ex);
-//                result = new URL("http", "google.com", "/q=" + itemValue);
-//            }
         } catch (Exception e) {
             logger.error(e.toString());
         }
@@ -182,4 +168,11 @@ public class AccessLogImporter implements BillingDataImporter {
         }
         return result;
     }
+    
+    private void processIPAddress(AccessLog access,String itemValue) {
+        access.setIpAddress(itemValue);
+        String country = accessLogService.findCountryByIP(itemValue);
+        access.setLocation(country);
+    }
+    
 }

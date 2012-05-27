@@ -81,7 +81,7 @@ function getPageAccess(path){
         var tr = $("<tr>");
     
         tr.append($("<th>").append("Time"));
-        tr.append($("<th>").append("IP"));  
+        tr.append($("<th>").append("Location"));  
         tr.append($("<th>").append("Referrer"));
         tr.append($("<th>").append("Query"));  
         tr.append($("<th>").append("Target"));  
@@ -94,15 +94,15 @@ function getPageAccess(path){
             var item = accessPage.items[i];
             tr = $("<tr>");
             tr.append( $("<td>").append(item.accessTime) );
-            tr.append( $("<td>").append(item.ipAddress) );
+            tr.append( $("<td>").append(item.location) );
             
             var a=$("<a>");
-            a.attr("href",item.location);
+            a.attr("href",item.refererURL);
             if (item.sourceDomain)
                 a.append(item.sourceDomain.accessSourceDomain);
             tr.append( $("<td>").append(a) );
             tr.append( $("<td>").append(item.query) ); 
-            tr.append( $("<td>").append(item.url) );
+            tr.append( $("<td>").append(item.targetURL) );
             
             table.append(tr);
             

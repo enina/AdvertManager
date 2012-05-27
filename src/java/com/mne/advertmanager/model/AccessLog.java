@@ -7,10 +7,8 @@ package com.mne.advertmanager.model;
 import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Collection;
 import java.util.Date;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -18,16 +16,16 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedNativeQueries;
+import javax.persistence.NamedNativeQuery;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -46,7 +44,9 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "AccessLog.findByAffProgramId", query = "SELECT a FROM AccessLog a left join fetch a.sourceDomain WHERE a.affProgram.id = ? "),
     @NamedQuery(name = "AccessLog.countAffProgramAccessLog", query = "SELECT count (*) FROM AccessLog a WHERE a.affProgram.id = ?"),
     @NamedQuery(name = "AccessLog.countAffProgramAccessByDate", query = "SELECT count (*) FROM AccessLog a WHERE a.affProgram.id = ? and accessTime > ?"),
-    @NamedQuery(name = "AccessLog.findByUrl", query = "SELECT a FROM AccessLog a WHERE a.url = ?")})
+    @NamedQuery(name = "AccessLog.findByUrl", query = "SELECT a FROM AccessLog a WHERE a.targetURL = ?")
+})
+
 public class AccessLog implements Serializable {
     private static final long serialVersionUID = 1L;
     private static DateFormat df = new SimpleDateFormat("dd.MM.yyyy HH:mm");
@@ -71,13 +71,18 @@ public class AccessLog implements Serializable {
     private String location;
     
     @Size(max = 256)
-    @Column(name = "url")
-    private String url;
+    @Column(name = "target_url")
+    private String targetURL;
     
+   
+    @Size(max = 384)
+    @Column(name = "referer_url")
+    private String refererURL;
+
     @Size(max = 256)
     @Column(name = "query")
     private String query;
-    
+
     
     @JoinColumn(name = "source_domain_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
@@ -135,12 +140,12 @@ public class AccessLog implements Serializable {
         this.location = location;
     }
 
-    public String getUrl() {
-        return url;
+    public String getTargetURL() {
+        return targetURL;
     }
 
-    public void setUrl(String url) {
-        this.url = url;
+    public void setTargetURL(String url) {
+        this.targetURL = url;
     }
 
     public String getQuery() {
@@ -150,6 +155,17 @@ public class AccessLog implements Serializable {
     public void setQuery(String query) {
         this.query = query;
     }
+
+    public String getRefererURL() {
+        return refererURL;
+    }
+
+    public void setRefererURL(String refererURL) {
+        this.refererURL = refererURL;
+    }
+    
+    
+    
 
     public AccessSource getSourceDomain() {
         return sourceDomain;
