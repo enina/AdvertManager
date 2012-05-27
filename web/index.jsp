@@ -19,6 +19,7 @@
     
     
     <body onload='document.f.j_username.focus();' >
+        
         <div id="menuBg"></div>
         
         <div id="container">
@@ -30,26 +31,26 @@
             
             <!-- logo -->
             <h1 id="logo"><a href="${pageContext.request.contextPath}/"><img src="images/logo.png"/><span>Advert Manager</span></a></h1>
-            
+            <!-- login form -->
             <form id="loginForm" name='f' action='${pageContext.request.contextPath}/j_spring_security_check' method='post' >
                 <span>Login form </span>
                 <ul >                 
                     <li id="emailInput" ><span>User Name</span><input  type='text' name='j_username' value='' ></li>
                     <li id="passwordInput"><span>Password</span><input  type='password' name='j_password' /></li>       
                     <li id="loginButton" ><button type="submit"  value="login" accesskey=""><span>Login</span></button></li>
-                    <li id="registerButton"><button type="submit" value="register"  href="${pageContext.request.contextPath}/mvc/affiliates/new"><span>Register</span></button></li>
-                    <li id="rememberMe" ><span>Remember me</span><input type='checkbox' name='_spring_security_remember_me'/></li> 
-
+                    <li id="registerButton"><a href="${pageContext.request.contextPath}/mvc/affiliates/new" ><button type="button" value="register"><span>Register</span></button></a></li>
+                    <li id="rememberMe" ><span>Remember me</span><input type='checkbox' name='_spring_security_remember_me'/></li>
                 </ul>
-
             </form>   
-     
+             
+            <!-- nav bar -->
             <ul id="menu">
                 <li>Home</li>
                 <li>Learn</li>
                 <li>About</li>
             </ul>
-                    
+            
+            <!-- advertisement -->
             <div id="advert1" class="advert currentAdvert">
                 <div class="bulletinBoard">
                     <span class="bulletinHeader">
@@ -57,15 +58,15 @@
                     </span>
                     <span class="bulletinBody">
                         With the Geolocation tool you<br/>
-                        can know whear your clients<br/>
-                        came from. Better undestand<br/>
+                        can know where your clients<br/>
+                        came from. Better understand<br/>
                         your niche and come up with<br/>
-                        better advertisment to the target.<br/>
+                        better advertisement to the target.<br/>
                     </span>
                     
                 </div>
                 <img src="images/world-map.png"/>
-            </div>
+            </div>     
             <div id="advert2" class="advert hidden">
                 <div class="bulletinBoard">
                     <span class="bulletinHeader">
@@ -102,8 +103,7 @@
                     
                 </div>
                 <img src="images/traffic-graph.png"/>
-            </div>
-                         
+            </div>    
         </div><!-- end of container -->
     </body>
 </html>

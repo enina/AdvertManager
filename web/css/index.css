@@ -110,7 +110,9 @@ ul#menu {
     
     list-style: none; 
     width:400px;
+    
 }
+
 #rememberMe input{
     display:none;
 }
@@ -123,15 +125,16 @@ ul#menu {
     padding: 0px 1px;
     height:27px;
     width: 132px;
+    
 
 }
 #emailInput input{
-    padding: 0 0;
+    padding: 0px 5px;
     background-image: url('../images/loginForm.png');
     background-repeat: no-repeat;
     background-position:0px 0px;
     height:27px;
-    width: 132px;
+    width: 122px;
     border: none;
 }
 #emailInput input:focus{
@@ -145,12 +148,12 @@ ul#menu {
     width: 102px;
 }
 #passwordInput input{
-    padding: 0 0;
+    padding: 0px 5px;
     background-image: url('../images/loginForm.png');
     background-repeat: no-repeat;
     background-position:0px -54px;
     height:27px;
-    width: 102px;
+    width: 92px;
     border: none;
 }
 #passwordInput input:focus{
