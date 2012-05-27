@@ -2,17 +2,17 @@
 <%@ include file="taglibs.jsp" %>
 
 
-<div style="height: 70px; background-color: #353535;">
-    <span id="welcomeUser">
-        Hello <!---->
-        <sec:authorize access="hasRole('ROLE_USER')">
-            <sec:authentication property="principal.username"/>
-        </sec:authorize>
-   </span>
+<div id="subHeader" >
+        <span id="welcomeUser">
+            Hello <!---->
+            <sec:authorize access="hasRole('ROLE_USER')">
+                <sec:authentication property="principal.username"/>
+            </sec:authorize>
+        </span>
         <ul  id="topMenue" > 
 
             <li class=""> <a class="menuItem" href="${pageContext.request.contextPath}/mvc/home" >Home</a></li>
-        <li class=""><a class="menuItem" href="${pageContext.request.contextPath}/mvc/affprograms/new">Add Program</a></li>
+            <li class=""><a class="menuItem" href="${pageContext.request.contextPath}/mvc/affprograms/new">Add Program</a></li>
 
         <sec:authorize access="hasRole('ROLE_ADMIN')">
             <li class=""> <a class="menuItem" href="${pageContext.request.contextPath}/mvc/dataGen/generate">Generate Data</a></li>

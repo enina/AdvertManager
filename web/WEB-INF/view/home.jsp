@@ -15,8 +15,8 @@
     <c:forEach items="${data.apgCollection}" var="apg">
 
 
-            <div class="verticalBrake1"></div>
-            <div>
+
+            <div class="programGroupDev">
 
                 <% //display program group name (apg = "affiliate program group") %>
                 <span class="groupName">Program Group:<c:out value="${apg.groupName}" /></span>

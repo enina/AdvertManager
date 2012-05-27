@@ -1,6 +1,7 @@
 
 html {
-	overflow-y: scroll;
+    overflow-y: scroll;
+    margin: 0px;
 }
 
 body{
@@ -8,15 +9,10 @@ body{
     background-color: #f5f5f5;
     position: relative;
 }
+ul{
+    margin: 0px;
+}
 
-table,td,th,tr{
-    border-bottom-color: black;
-    border-style: solid;
-    border-width: 1px;
-}
-th{
-    height: 30px;
-}
 
 #container{
     width: 1200px;
@@ -24,7 +20,11 @@ th{
     margin-right: auto;
 }
 
-
+#subHeader{
+    height: 30px;
+    background-color: #353535;
+    padding: 20px 0;
+}
 .affProgGroupTable {
         width: 1200px;
         position: relative;
@@ -61,7 +61,14 @@ th{
     width: 148px;
 }
 
-
+table,td,th,tr{
+    border-bottom-color: black;
+    border-style: solid;
+    border-width: 1px;
+}
+th{
+    height: 30px;
+}
 tr:nth-child(even){
     background: #eeedfe
 }
@@ -72,7 +79,9 @@ tr:nth-child(odd){
 #topMenue{
     list-style: none;
     position: relative;
-    top:20px;
+    height: 30px;
+    width:900px;
+  
 }
 
 #topMenue li{
@@ -91,19 +100,19 @@ tr:nth-child(odd){
 }
 
 
-
-
-.verticalBrake1{
+.programGroupDev{
     
-    width: 100%;
-    height: 10px;
+    margin: 20px 0;
+    background-color: #e6e6e6;
 }
+
+
 #welcomeUser{
     position: relative;
     float:right;
     font-size: 1em;
     left: -40px;
-    top: 20px;
+    height: 30px;
     color: #cccccc;
     
 }

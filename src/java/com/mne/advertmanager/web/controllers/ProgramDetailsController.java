@@ -99,6 +99,7 @@ public class ProgramDetailsController {
         ModelAndView mav = ControllerSupport.forwardToView(logger, AFFPROGRAM_DETAILS_REQ_MAPPING + "/" + programId, AFFPROGRAM_DETAILS_REQ_MAPPING, "program", program);
         mav.addObject("accessPage", accessPage);
         mav.addObject("orderList", orderList);
+        mav.addObject("partnerList", program.getPartners());
         mav.addObject("poTAD", poTotalAggrData);
         mav.addObject("poPMAD", poPrevMonthAggrData);
         mav.addObject("poCMAD", poCurMonthAggrData);

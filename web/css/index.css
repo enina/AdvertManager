@@ -10,53 +10,249 @@ root {
     display: block;
 }
 
+body{
+    margin: 0px;
+    background-color: #bebebe;
+    
+}
+button{
+    border: none;
+    padding: 0px;
+    
+}
+ul{
+    padding: 0px;
+    margin: 0px;
+}
+#logo{
 
-a:hover{
+    overflow: hidden;
+    width: 364px;
+    height: 54px;
+    position: relative;
+    display: inline;
+    float: left;
+    top: 10px;
+    left: 42px;
+    margin: 0px 0px;
+    padding: 0px 0px;
+
+}
+img{
+    border: 0px;
+}
+#logo a:hover,#logo a:visited,#logo a:link{
+
+    text-decoration: none;
+        
+}
+#logo img{
+    
+    width: 364px;
+    height: 54px;
+    margin: 0px 0px;
+    padding: 0px 0px;
+}
+#container{
+    width: 1160px;
+    margin: 0 auto;
+    height: 700px;;
+}
+#menuBg{
+    background-image: url("../images/menuLineBg.png");
+    background-repeat: repeat-x;
+    position: absolute;
+    top:66px;
+    height: 40px;
+    width:100%;
+    
+}
+ul#menu {
+    clear: both;
+    position: relative;
+    height: 40px;
+    top: 12px;
+    list-style: none;
+    width: 1160px;
+    margin: auto 0px;
+    
+}
+#menu li{
+    position: relative;
+    padding: 0 10px;
+    font-family: arial, sans-serif;
+    font-size: 25pt;
+    color: #c9cfdf;
+    float: left;
+    height: 40px;
+    margin: 0 50px 0 10px;
+}
+#menu li:hover{
+    background-image: url("../images/menuLineBgBright.png");
+    background-repeat: repeat-x;
     cursor: pointer;
 }
-
-body{
-    
-    position: relative;
-    background: #9fccf4;
-}
-
-#login{
-    position: relative;
-    
-    margin-left: auto;
-    margin-right: auto;
-    background-image: url('../images/loginbg.jpg');
-    width:300px; 
-    height:300px;
-    
-}
 #loginForm{
+    
+    position:relative;
+    float: right;
+    top:32px;
+    left: -25px;
+    width:400px;
+}
+#loginForm span{
+    margin: 0px;
     position: absolute;
-    top: 100px;
-    left: 20px;
+    left: -9999px;
 }
 
-#loginButton ,#registerButton{
+#loginForm ul{
     
-    text-decoration: none;
-    color: black;
- 
-}
-
-#formButtons ,#formInput{
     list-style: none; 
+    width:400px;
+}
+#rememberMe input{
+    display:none;
+}
+#loginForm ul li{
+    
+    float:left;
+}
+#emailInput{
+
+    padding: 0px 1px;
+    height:27px;
+    width: 132px;
+
+}
+#emailInput input{
+    padding: 0 0;
+    background-image: url('../images/loginForm.png');
+    background-repeat: no-repeat;
+    background-position:0px 0px;
+    height:27px;
+    width: 132px;
+    border: none;
+}
+#emailInput input:focus{
+
+    background-position:0px -27px;
+
+}
+#passwordInput{
+    padding: 0px 1px;
+    height:27px;
+    width: 102px;
+}
+#passwordInput input{
+    padding: 0 0;
+    background-image: url('../images/loginForm.png');
+    background-repeat: no-repeat;
+    background-position:0px -54px;
+    height:27px;
+    width: 102px;
+    border: none;
+}
+#passwordInput input:focus{
+    background-position:0px -81px;
 }
 
-#formButtons li{
-    display:block;
+#loginButton{
+    padding-left: 9px;
+    height:27px;
+    width: 58px;
+}
+#loginButton button{
+    background-image: url('../images/loginForm.png');
+    background-repeat: no-repeat;
+    background-position:0px -108px;
+    background-color: transparent;
+    height:27px;
+    width: 58px;
+}
+#loginButton button:hover{
+
+    background-position:0px -135px;
+}
+#registerButton{
+    padding-left: 3px;
+    height:27px;
+    width: 83px;
+    
+}
+#registerButton button{
+    background-image: url('../images/loginForm.png');
+    background-repeat: no-repeat;
+    background-position:0px -162px;
+    background-color: transparent;
+    height:27px;
+    width: 83px;
+    
+}
+#registerButton button:hover{
+
+    background-position:0px -189px;
+}
+
+.advert{
+    padding: 29px 25px 0px 25px;
+    width: 1110px;
+    height: 460px;
+    background-color: #c4c4c4;
+    margin: 35px 0px 0px 0px;
+}
+.advert .bulletinBoard{
+
     float: left;
-    margin-right: 50px;
+    
+    background-image: url('../images/bulletinBoardBG.png');
+    width: 390px;
+    height: 419px;
+    padding: 10px 5px 0px 5px ;
+}
+.advert img{
+    float: right;
+}
+#advert2 img{
+    position: relative;
+    left: -200px;
+    top:50px;
+}
+#advert3 img{
+    position: relative;
+    top:50px;
+}
+.bulletinHeader{
+    
+    color: #30324c;
+    font-size: 1.6em;
+    font-family: arial, sans-serif; 
 }
 
-span.clear{
+.bulletinBody{
     
-    clear:both;
+    color: #30324c;
+    font-size: 1.1em;
+    line-height: 1.5em;
+    font-family: arial, sans-serif; 
+    font-style: italic;
+    position: relative;
+    top: 30px;
     
- 
+}
+.hidden{
+    display: none
+}
+.visible{
+    display: block
+}
+
+.currentAdvert{
+    
+}
+.advertFadeAvay{
+    
+  position: absolute;
+  left: -800px;
+  display: none;
 }
