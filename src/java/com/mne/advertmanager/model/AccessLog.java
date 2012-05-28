@@ -8,21 +8,7 @@ import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.NamedNativeQueries;
-import javax.persistence.NamedNativeQuery;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -47,7 +33,9 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "AccessLog.findByUrl", query = "SELECT a FROM AccessLog a WHERE a.targetURL = ?")
 })
 
-public class AccessLog implements Serializable {
+ public class AccessLog implements Serializable {
+    public static final String ACCESSLOG_FINDGEODATABYIP_QUERY = "SELECT DISTINCT cc as countryCode,cn as countryName FROM geoip.ip " +
+                                                                 " natural join geoip.cc where ? BETWEEN start and end";
     private static final long serialVersionUID = 1L;
     private static DateFormat df = new SimpleDateFormat("dd.MM.yyyy HH:mm");
     @Id
@@ -66,9 +54,13 @@ public class AccessLog implements Serializable {
     @Column(name = "ip_address")
     private String ipAddress;
     
-    @Size(max = 2048)
+    @Size(max = 256)
     @Column(name = "location")
     private String location;
+    
+    @Size(max = 2)
+    @Column(name = "cc")
+    private String countryCode;
     
     @Size(max = 256)
     @Column(name = "target_url")
@@ -162,6 +154,14 @@ public class AccessLog implements Serializable {
 
     public void setRefererURL(String refererURL) {
         this.refererURL = refererURL;
+    }
+
+    public String getCountryCode() {
+        return countryCode;
+    }
+
+    public void setCountryCode(String countryCode) {
+        this.countryCode = countryCode;
     }
     
     

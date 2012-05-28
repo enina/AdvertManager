@@ -6,15 +6,12 @@ package com.mne.advertmanager.service;
 
 import com.mne.advertmanager.dao.GenericDao;
 import com.mne.advertmanager.model.AccessLog;
+import com.mne.advertmanager.util.GeoData;
 import com.mne.advertmanager.util.Page;
 import com.mne.advertmanager.util.PageCtrl;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.util.Date;
 import org.slf4j.LoggerFactory;
-import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.PreparedStatementCallback;
 import org.springframework.transaction.annotation.Transactional;
 
 
@@ -27,18 +24,11 @@ public class AccessLogService {
     private static org.slf4j.Logger logger = LoggerFactory.getLogger(AccessLogService.class);
     
     private GenericDao<AccessLog,Integer> accessLogDao;
-    private JdbcTemplate jdbcTemplate;
 
     public void setAccessLogDao(GenericDao<AccessLog,Integer> accessLogDao) {
         this.accessLogDao = accessLogDao;
     }
 
-    public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
-    }
-    
-    
-    
     @Transactional(readOnly = true)
     public Page<AccessLog> findAllAccessLog(PageCtrl pageCtrl) {
         
@@ -87,12 +77,18 @@ public class AccessLogService {
         return result;
     }
 
-    public String findCountryByIP(String itemValue) {
-        long ip = ip2long(itemValue);
+    public GeoData findCountryDataByIP(String ipAddess) {
+
+        long ip = ip2long(ipAddess);
         
-        String country = (String)jdbcTemplate.queryForObject("SELECT cn FROM geoip.ip natural join geoip.cc where ? BETWEEN start and end", String.class, ip);
-        
-        return country;
+        GeoData result = null;
+        try {
+          
+            result = accessLogDao.findSingleItemByQueryString(AccessLog.ACCESSLOG_FINDGEODATABYIP_QUERY,new GeoData(), ip);
+        }catch(Exception e) {
+            logger.error("Failed to retrieve country by IP.Exception {}",e);
+        }
+        return result;
     }
     
     private long ip2long(String addr) {

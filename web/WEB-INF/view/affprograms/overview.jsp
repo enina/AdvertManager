@@ -47,14 +47,14 @@
                 <td>Period</td>
                 <td>Access Amount</td>
                 <td>Purchase Amount</td>
-                <td>Purchase Sum</td>
+                <td>Commision Sum</td>
                 <td>Rate</td>
             </tr>
             <tr>
                 <td>Total</td>
                 <td><c:out value="${poTAD.accessAmount}"/></td>
                 <td><c:out value="${poTAD.purchaseAmount}"/></td>
-                <td><c:out value="${poTAD.totalSum}"/></td>
+                <td><c:out value="${poTAD.totalCommision}"/></td>
                 <td><c:out value="${poTAD.conversionRate}"/></td>
             </tr>
             <c:if test="${poPMAD!=null}">
@@ -62,7 +62,7 @@
                     <td>Previous Month</td>
                     <td><c:out value="${poPMAD.accessAmount}"/></td>
                     <td><c:out value="${poPMAD.purchaseAmount}"/></td>
-                    <td><c:out value="${poPMAD.totalSum}"/></td>
+                    <td><c:out value="${poPMAD.totalCommision}"/></td>
                     <td><c:out value="${poPMAD.conversionRate}"/></td>
                 </tr>
             </c:if>
@@ -71,7 +71,7 @@
                     <td>Current Month</td>
                     <td><c:out value="${poCMAD.accessAmount}"/></td>
                     <td><c:out value="${poCMAD.purchaseAmount}"/></td>
-                    <td><c:out value="${poCMAD.totalSum}"/></td>
+                    <td><c:out value="${poCMAD.totalCommision}"/></td>
                     <td><c:out value="${poCMAD.conversionRate}"/></td>
                 </tr>
             </c:if>
@@ -80,7 +80,7 @@
                     <td>Today</td>
                     <td><c:out value="${poDAD.accessAmount}"/></td>
                     <td><c:out value="${poDAD.purchaseAmount}"/></td>
-                    <td><c:out value="${poDAD.totalSum}"/></td>
+                    <td><c:out value="${poDAD.totalCommision}"/></td>
                     <td><c:out value="${poDAD.conversionRate}"/></td>
                 </tr>
             </c:if>

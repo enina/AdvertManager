@@ -13,7 +13,7 @@
                 <generator class="native"/>
             </id>
             <property name="accessAmount"/>        
-            <property name="totalSum"/>
+            <property name="totalCommision"/>
             <property name="purchaseAmount"/>
             <property name="conversionRate"/>
             <many-to-one unique="true" column="affprogram_id"
@@ -32,7 +32,7 @@
             <generator class="native"/>
         </id>
         <property name="accessAmount"/>        
-        <property name="totalSum"/>
+        <property name="totalCommision"/>
         <property name="purchaseAmount"/>
         <property name="conversionRate"/>
         <many-to-one unique="true" column="affprogram_id"
@@ -51,7 +51,7 @@
                 <generator class="native"/>
             </id>
             <property name="accessAmount"/>        
-            <property name="totalSum"/>
+            <property name="totalCommision"/>
             <property name="purchaseAmount"/>
             <property name="conversionRate"/>
             <many-to-one unique="true" column="affprogram_id"
@@ -70,7 +70,7 @@
                 <generator class="native"/>
             </id>
             <property name="accessAmount"/>        
-            <property name="totalSum"/>
+            <property name="totalCommision"/>
             <property name="purchaseAmount"/>
             <property name="conversionRate"/>
             <many-to-one unique="true" column="affprogram_id"
@@ -99,7 +99,7 @@
     </query>
     
     <query name="PurchaseOrderAggregation.calculateAffProgDataByIdAndTime"><![CDATA[
-        SELECT new com.mne.advertmanager.model.PurchaseOrderAggregation(count (po),sum(po_sum),po.affProgram) FROM PurchaseOrder po WHERE po.affProgram.id = ? and ordertime > ?
+        SELECT new com.mne.advertmanager.model.PurchaseOrderAggregation(count (po),sum(commision),po.affProgram) FROM PurchaseOrder po WHERE po.affProgram.id = ? and ordertime > ?
     ]]>
     </query>
     

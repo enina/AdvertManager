@@ -7,12 +7,12 @@ SET storage_engine=innodb;
 drop table if exists purchase_order         CASCADE;
 drop table if exists access_log             CASCADE;
 drop table if exists aff_program            CASCADE;
-drop table if exists affprog_group         CASCADE;
+drop table if exists affprog_group          CASCADE;
 drop table if exists affiliate              CASCADE;
 drop table if exists partner                CASCADE;
 drop table if exists access_source          CASCADE;
-drop table if exists selectable_data_item cascade;
-drop table if exists billing_data_spec   cascade;
+drop table if exists selectable_data_item   cascade;
+drop table if exists billing_data_spec      cascade;
 drop table if exists billing_project_spec   cascade;
 ------------------ application tables --------------
 

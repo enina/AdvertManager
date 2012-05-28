@@ -1,4 +1,6 @@
-CREATE DATABASE geoip;
+DROP SCHEMA IF EXISTS geoip;
+create SCHEMA IF NOT EXISTS geoip DEFAULT CHARACTER SET 'utf8' COLLATE default;
+
 USE geoip;
 CREATE TABLE csv (
   start_ip CHAR(15) NOT NULL,

@@ -131,7 +131,7 @@ public class PurchaseOrderAggregationService {
         PurchaseOrderAggregation result = dailyPoAggrDao.findSingleItemByQuery("PurchaseOrderAggregation.calculateAffProgDataByIdAndTime",affProgramId,refTime);
         
         logger.debug("Found {} purchase orders of total={} for program {} after {}",
-                        new Object[]{result.getPurchaseAmount(),result.getTotalSum(),affProgramId,refTime});
+                        new Object[]{result.getPurchaseAmount(),result.getTotalCommision(),affProgramId,refTime});
         
         return result;
     }

@@ -257,7 +257,6 @@
     
     <bean id="accessLogService" class="com.mne.advertmanager.service.AccessLogService">
         <property name="accessLogDao" ref="accessLogDao"/>
-        <property name="jdbcTemplate" ref="adManJdbcTemplate"/>
     </bean>   
     
     <bean id="partnerService" class="com.mne.advertmanager.service.PartnerService">

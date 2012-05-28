@@ -13,6 +13,7 @@ import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.transform.Transformers;
 
 /**
  *
@@ -93,7 +94,7 @@ public class GenericDaoHibernateImpl<T, PK extends Serializable> implements Gene
 
         Collection<T> result = null;
 
-        Query q = initQueryObject(queryName, params);
+        Query q = getNamedQuery(queryName, params);
         if (q != null) {
             result = q.list();
         }
@@ -102,20 +103,38 @@ public class GenericDaoHibernateImpl<T, PK extends Serializable> implements Gene
     }
 
     @Override
+    @SuppressWarnings(value = "unchecked")
     public T findSingleItemByQuery(String queryName, Object... params) {
 
         T result = null;
-        Collection<T> data = findByQuery(queryName, params);
-        if (data != null && data.size() > 0) {
-            result = data.iterator().next();
+        Query q = getNamedQuery(queryName, params);
+        
+        if (q != null) {
+            result = (T) q.uniqueResult();
         }
 
         return result;
     }
 
     @Override
+    @SuppressWarnings(value = "unchecked")
+    public <X> X findSingleItemByQueryString(String queryString, X target , Object... params) {
+        
+        X result = null;
+       
+        Query q = createQuery(queryString, params);
+
+        if (q != null) {
+            q.setResultTransformer(Transformers.aliasToBean(target.getClass()));
+            result = (X) q.uniqueResult();
+        }
+        
+        return result;
+    }   
+    
+    @Override
     public int executeUpdateByQuery(String queryName, Object... params) {
-        Query q = initQueryObject(queryName, params);
+        Query q = getNamedQuery(queryName, params);
         int res = q.executeUpdate();
         return res;
 
@@ -130,7 +149,7 @@ public class GenericDaoHibernateImpl<T, PK extends Serializable> implements Gene
     @SuppressWarnings(value = "unchecked")
     public Page<T> findPageByQuery(String queryName, PageCtrl pageCtrl, Object... params) {
 
-        Query q = initQueryObject(queryName, params);
+        Query q = getNamedQuery(queryName, params);
         q.setMaxResults(pageCtrl.getPageSize());
         q.setFirstResult(pageCtrl.getFirstResult());
         List data = q.list();
@@ -148,7 +167,7 @@ public class GenericDaoHibernateImpl<T, PK extends Serializable> implements Gene
 
     @Override
     public int findQueryResultSetSize( String queryName, Object... params) {
-        Query q = initQueryObject(queryName, params);
+        Query q = getNamedQuery(queryName, params);
         int result = ((Long) q.uniqueResult()).intValue();
         return result;
     }
@@ -164,16 +183,28 @@ public class GenericDaoHibernateImpl<T, PK extends Serializable> implements Gene
         return sessionFactory.getCurrentSession();
     }
 
-    private Query initQueryObject(String queryName, Object[] params) throws HibernateException {
+    private Query getNamedQuery(String queryName, Object[] params) throws HibernateException {
 
         Query q = getSession().getNamedQuery(queryName);
+        return setQueryParameters(q, params);
 
+    }
+    
+    private Query createQuery(String query, Object[] params) throws HibernateException {
+
+        Query q = getSession().createSQLQuery(query);
+        return setQueryParameters(q, params);
+
+    }
+
+    private Query setQueryParameters(Query q, Object[] params) throws HibernateException {
         if (q != null && params != null) {
             for (int i = 0; i < params.length; ++i) {
                 q.setParameter(i, params[i]);
             }
         }
         return q;
-
     }
+
+    
 }

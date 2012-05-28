@@ -171,8 +171,11 @@ public class AccessLogImporter implements BillingDataImporter {
     
     private void processIPAddress(AccessLog access,String itemValue) {
         access.setIpAddress(itemValue);
-        String country = accessLogService.findCountryByIP(itemValue);
-        access.setLocation(country);
+        GeoData geoData = accessLogService.findCountryDataByIP(itemValue);
+        if (geoData != null) {
+            access.setLocation(geoData.getCountryName());
+            access.setCountryCode(geoData.getCountryCode());
+        }
     }
     
 }

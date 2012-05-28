@@ -76,7 +76,7 @@
     </target>
     
     <target name="geoip.load_data" depends="-init-project">
-        <exec executable="mysqlimport">
+        <exec executable="${mysql.bin}/mysqlimport.exe">
              <!-- -fields-terminated-by="," 
                  -fields-optionally-enclosed-by="\""  
                  -lines-terminated-by="\n" 
@@ -88,10 +88,10 @@
             <arg value="--fields-terminated-by=&quot;,&quot;"/>
             <arg value="--fields-optionally-enclosed-by=&quot;\&quot;&quot;"/>
             <arg value="--lines-terminated-by=&quot;\n&quot;"/>
-            <arg value="--host ${var.mysqlhost}"/>
-            <arg value="--user ${var.mysqluser}"/>
-            <arg value="--password ${var.mysqlpassword}"/> 
-            <arg value="geoip      ${var.geoipCSV}"/> 
+            <arg value="--host=${mysql.host}"/>
+            <arg value="--user=${mysql.user}"/>
+            <arg value="--password=${mysql.password}"/> 
+            <arg value="geoip      ${geoip.csv.location}"/> 
         </exec>
     </target>    
     

@@ -14,7 +14,7 @@ public class PurchaseOrderAggregation {
 
     private AffProgram affProgram;
     
-    private double totalSum;
+    private double totalCommision;
     
     private long accessAmount;
     
@@ -31,7 +31,7 @@ public class PurchaseOrderAggregation {
     @SuppressWarnings("OverridableMethodCallInConstructor")
     public PurchaseOrderAggregation(long accessAmount, int purchaseAmount,double totalSum,AffProgram affProgram) {
         setAffProgram(affProgram);
-        setTotalSum(totalSum);
+        setTotalCommision(totalSum);
         setAccessAmount(accessAmount);
         setPurchaseAmount(purchaseAmount);
     }
@@ -39,7 +39,7 @@ public class PurchaseOrderAggregation {
     @SuppressWarnings("OverridableMethodCallInConstructor")
     public PurchaseOrderAggregation(long purchaseAmount,double totalSum,AffProgram affProgram) {
         setAffProgram(affProgram);
-        setTotalSum(totalSum);
+        setTotalCommision(totalSum);
         setPurchaseAmount(purchaseAmount);
     }    
     
@@ -83,12 +83,12 @@ public class PurchaseOrderAggregation {
         this.purchaseAmount = purchaseAmount;
     }
 
-    public double getTotalSum() {
-        return totalSum;
+    public double getTotalCommision() {
+        return totalCommision;
     }
 
-    public  void setTotalSum(double totalSum) {
-        this.totalSum = totalSum;
+    public  void setTotalCommision(double totalCommision) {
+        this.totalCommision = totalCommision;
     }
     
     public void setConversionRate (double rate) {
@@ -98,13 +98,13 @@ public class PurchaseOrderAggregation {
     public void addData(PurchaseOrderAggregation curAggrData) {
         setAccessAmount(accessAmount+curAggrData.getAccessAmount());
         setPurchaseAmount(purchaseAmount+curAggrData.getPurchaseAmount());
-        setTotalSum(totalSum+curAggrData.getTotalSum());
+        setTotalCommision(totalCommision+curAggrData.getTotalCommision());
     }
     
     public void copyFrom(PurchaseOrderAggregation curAggrData) {
         setAccessAmount(curAggrData.getAccessAmount());
         setPurchaseAmount(curAggrData.getPurchaseAmount());
-        setTotalSum(curAggrData.getTotalSum());
+        setTotalCommision(curAggrData.getTotalCommision());
     }
     
     
