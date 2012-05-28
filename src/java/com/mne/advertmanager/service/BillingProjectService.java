@@ -5,7 +5,10 @@
 package com.mne.advertmanager.service;
 
 import com.mne.advertmanager.dao.GenericDao;
-import com.mne.advertmanager.model.*;
+import com.mne.advertmanager.model.AccessLog;
+import com.mne.advertmanager.model.AffProgram;
+import com.mne.advertmanager.model.Partner;
+import com.mne.advertmanager.model.PurchaseOrder;
 import com.mne.advertmanager.parsergen.model.DataSpec;
 import com.mne.advertmanager.parsergen.model.Project;
 import com.mne.advertmanager.parsergen.model.SelectableItem;
@@ -84,8 +87,8 @@ public class BillingProjectService {
 
     /**
      * this function persist given Project obj to DB by calling respective DAO objects
-     *     
-* @param project
+     *
+     * @param project
      */
     @Transactional
     public void createProject(Project project) {
@@ -137,7 +140,7 @@ public class BillingProjectService {
             //connect to src web site
             Connection con = JSoupTransport.login(project);
             if (con == null) {
-                logger.error("Failed to obtain connection for url:{}",project.getBaseURL()+project.getHomePage());
+                logger.error("Failed to obtain connection for url:{}", project.getBaseURL() + project.getHomePage());
             } else {
                 //get data of each dataSpec ( include all pages ) of given Project
                 for (DataSpec ds : dsList) {
@@ -149,15 +152,23 @@ public class BillingProjectService {
             logger.info("Finished {} project data import ", project.getName());
         }
     }
-    @Transactional(readOnly=true)
+
+    @Transactional(readOnly = true)
     private Project findProjectByAffProgram(AffProgram program) {
+
         Project project = projectDao.findSingleItemByQuery("Project.findByBackOfficeURL", program.getAffProgramLink());
-        
-        for (DataSpec ds : project.getDataSpecList()) {
-            List<SelectableItem> siList = ds.getAllSubItems();
-            Hibernate.initialize(siList);
-            for (SelectableItem si : siList) {
-                Hibernate.initialize(si);
+        if (project != null) {
+            List<DataSpec> dsList = project.getDataSpecList();
+            if (dsList != null) {
+                for (DataSpec ds : dsList) {
+                    List<SelectableItem> siList = ds.getAllSubItems();
+                    if (siList != null) {
+                        Hibernate.initialize(siList);
+                        for (SelectableItem si : siList) {
+                            Hibernate.initialize(si);
+                        }
+                    }
+                }
             }
         }
         return project;
@@ -206,7 +217,7 @@ public class BillingProjectService {
      * this function extract data from one page( given document ) to DB params:affiliate obj, preloaded document with wanted data, dataSpec that identify data location in document.
      * return:none
      */
-    @Transactional(propagation= Propagation.REQUIRES_NEW)
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     private void importPageData(AffProgram program, org.jsoup.nodes.Document doc, DataSpec dataSpec) {
 
         Element dataElem = null;    //hold data root element (used as relative start path to other elements)

@@ -11,7 +11,6 @@ import com.mne.advertmanager.util.Page;
 import com.mne.advertmanager.util.PageCtrl;
 import java.util.Date;
 import org.slf4j.LoggerFactory;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.transaction.annotation.Transactional;
 
 
