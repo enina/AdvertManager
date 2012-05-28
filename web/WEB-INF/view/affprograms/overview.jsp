@@ -44,11 +44,11 @@
     <c:if test="${poTAD!=null}">
         <table>
             <tr>
-                <td>Period</td>
-                <td>Access Amount</td>
-                <td>Purchase Amount</td>
-                <td>Commision Sum</td>
-                <td>Rate</td>
+                <th>Period</th>
+                <th>Access Amount</th>
+                <th>Purchase Amount</th>
+                <th>Commision Sum</th>
+                <th>Rate</th>
             </tr>
             <tr>
                 <td>Total</td>
@@ -87,57 +87,4 @@
         </table>
     </c:if>
 
-    <table>
-        
-        <thead id="analiticsAgregationTable" class="dataTable">
-        <tr>
-            <th> description </th><th>partners</th><th>accesses</th><th>payed orders</th><th>access convert rate</th><th>order convert rate</th>
-        </tr>
-        </thead>
-
-        <tbody>
-        <tr>
-            <td>today</td><td>data</td><td>data</td><td>data</td><td>data</td><td>data</td>
-        </tr> 
-        <tr>
-            <td>past week</td><td>data</td><td>data</td><td>data</td><td>data</td><td>data</td>
-        </tr> 
-        <tr>
-            <td>past month</td><td>data</td><td>data</td><td>data</td><td>data</td><td>data</td>
-        </tr> 
-        <tr>
-            <td>all times</td><td>data</td><td>data</td><td>data</td><td>data</td><td>data</td>
-        </tr> 
-        
-        </tbody>
-             
-    </table>
-    
-    
-    <table>
-        <thead id="prograBbackOfficeData" class="dataTable">
-        <tr>                                                                                 
-            <th> description </th><th>income from partners</th><th>total income</th><th>costs</th><th>net income</th><th>paid</th><th>remains to be paid</th>
-        </tr>
-        </thead>
-
-        <tbody>
-        <tr>
-            <td>today</td><td>data</td><td>data</td><td>data</td><td>data</td><td>data</td><td>data</td>
-        </tr> 
-        <tr>
-            <td>past week</td><td>data</td><td>data</td><td>data</td><td>data</td><td>data</td><td>data</td>
-        </tr> 
-        <tr>
-            <td>past month</td><td>data</td><td>data</td><td>data</td><td>data</td><td>data</td><td>data</td>
-        </tr> 
-        <tr>
-            <td>all times</td><td>data</td><td>data</td><td>data</td><td>data</td><td>data</td><td>data</td>
-        </tr> 
-        
-        </tbody>
-             
-    </table>
-    
-        
 </div>

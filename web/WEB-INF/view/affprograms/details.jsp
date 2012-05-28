@@ -1,7 +1,7 @@
 <%@ include file="../common/taglibs.jsp" %>
 
 
-
+<%//this file show details box of affiliate program %>
 <c:if test="${status!=null}">
     <div style="color:red"><c:out value="${status}"/></div>
 </c:if>
@@ -52,11 +52,6 @@
     </c:otherwise>
 </c:choose>        
 
-<!--
-<div id="ext">
-    
-</div>
--->
 
 
 
