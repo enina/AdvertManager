@@ -52,7 +52,7 @@ public class ProgramDetailsController {
     private PartnerService partnerService;
     private AffiliateService affiliateService;
     private BillingProjectService billingProjectService;
-    private PurchaseOrderAggregationService poAggrService;
+    private BehaviorStatisticsService poAggrService;
     //logger
     private static Logger logger = LoggerFactory.getLogger(ProgramDetailsController.class);
 
@@ -77,19 +77,19 @@ public class ProgramDetailsController {
 
         Page<AccessLog> accessPage = null;
         Collection<PurchaseOrder> orderList = null;
-        PurchaseOrderAggregation poTotalAggrData = null;
-        PurchaseOrderAggregation poPrevMonthAggrData = null;
-        PurchaseOrderAggregation poCurMonthAggrData = null;
-        PurchaseOrderAggregation poDailyAggrData = null;
+        FilterableBehaviorStatistics poTotalAggrData = null;
+        FilterableBehaviorStatistics poPrevMonthAggrData = null;
+        FilterableBehaviorStatistics poCurMonthAggrData = null;
+        FilterableBehaviorStatistics poDailyAggrData = null;
         if (program != null) {
             //only find data for valid programs
             //find all accesses related to this program
             accessPage = accessLogService.findAccessByAffProgamId(new PageCtrl(), programId);
             orderList  = purchaseOrderService.findPurchaseOrdersByAffProgamId(programId);
-            poTotalAggrData = poAggrService.findAffProgramTotalAggrData(programId);
-            poPrevMonthAggrData = poAggrService.findAffProgramPrevMonthAggrData(programId);
-            poCurMonthAggrData = poAggrService.findAffProgramCurMonthAggrData(programId);
-            poDailyAggrData = poAggrService.findAffProgramDailyAggrData(programId);
+            poTotalAggrData = poAggrService.findTotalAffProgramStatistics(programId);
+            poPrevMonthAggrData = poAggrService.findPrevMonthAffProgramStatistics(programId);
+            poCurMonthAggrData = poAggrService.findCurMonthAffProgramStatistics(programId);
+            poDailyAggrData = poAggrService.findDailyAffProgramStatistics(programId);
             
         }
 
@@ -180,7 +180,7 @@ public class ProgramDetailsController {
                     //set thread name for debug purposes
                     setName(AFFPROGRAM + "AggrDataCalculationThread" + " programId " + programId);
                     //calculate aggregation data:
-                    poAggrService.calculateAffProgramAggrData(programId);
+                    poAggrService.calculateAffProgramStatistics(programId);
                 }
                 //start thread execution
             }.start();
@@ -252,7 +252,7 @@ public class ProgramDetailsController {
 
     //============================= setPoAggrService =======================    
     @Autowired
-    public void setPoAggrService(PurchaseOrderAggregationService poAggrService) {
+    public void setPoAggrService(BehaviorStatisticsService poAggrService) {
         this.poAggrService = poAggrService;
     }
 }

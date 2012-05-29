@@ -95,10 +95,6 @@
         </exec>
     </target>    
     
-<!--    <target name="-pre-init">
-        <delete file="${var.DEP_DIR}/AdvertManager.war"/>
-    </target>-->
-
     <target name="-post-compile">
         
         <aspectj:iajc inpath="${build.dir}/web/WEB-INF/classes" destdir="${build.dir}/web/WEB-INF/classes" 
@@ -141,9 +137,6 @@
     
     <target name="-post-dist">
         <touch file="${build.dir}/web/WEB-INF/web.xml"/>
-<!--        <copy todir="${var.DEP_DIR}">
-            <fileset dir="${dist.dir}" includes="*.war" />
-        </copy>-->
     </target>
     
     

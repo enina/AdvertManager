@@ -8,7 +8,7 @@ package com.mne.advertmanager.model;
  *
  * @author Nina Eidelshtein and Misha Lebedev
  */
-public class PurchaseOrderAggregation {
+public class _FilterableBehaviorStatistics {
     
     private Integer id;
 
@@ -20,16 +20,16 @@ public class PurchaseOrderAggregation {
     
     private long purchaseAmount;
     
-    public PurchaseOrderAggregation() {
+    public _FilterableBehaviorStatistics() {
 
     }    
     
-    public PurchaseOrderAggregation(Integer id) {
+    public _FilterableBehaviorStatistics(Integer id) {
         this.id = id;
     }
 
     @SuppressWarnings("OverridableMethodCallInConstructor")
-    public PurchaseOrderAggregation(long accessAmount, int purchaseAmount,double totalSum,AffProgram affProgram) {
+    public _FilterableBehaviorStatistics(long accessAmount, int purchaseAmount,double totalSum,AffProgram affProgram) {
         setAffProgram(affProgram);
         setTotalCommision(totalSum);
         setAccessAmount(accessAmount);
@@ -37,7 +37,7 @@ public class PurchaseOrderAggregation {
     }
 
     @SuppressWarnings("OverridableMethodCallInConstructor")
-    public PurchaseOrderAggregation(long purchaseAmount,double totalSum,AffProgram affProgram) {
+    public _FilterableBehaviorStatistics(long purchaseAmount,double totalSum,AffProgram affProgram) {
         setAffProgram(affProgram);
         setTotalCommision(totalSum);
         setPurchaseAmount(purchaseAmount);
@@ -95,13 +95,13 @@ public class PurchaseOrderAggregation {
 
     }
 
-    public void addData(PurchaseOrderAggregation curAggrData) {
+    public void addData(FilterableBehaviorStatistics curAggrData) {
         setAccessAmount(accessAmount+curAggrData.getAccessAmount());
         setPurchaseAmount(purchaseAmount+curAggrData.getPurchaseAmount());
         setTotalCommision(totalCommision+curAggrData.getTotalCommision());
     }
     
-    public void copyFrom(PurchaseOrderAggregation curAggrData) {
+    public void copyFrom(FilterableBehaviorStatistics curAggrData) {
         setAccessAmount(curAggrData.getAccessAmount());
         setPurchaseAmount(curAggrData.getPurchaseAmount());
         setTotalCommision(curAggrData.getTotalCommision());
