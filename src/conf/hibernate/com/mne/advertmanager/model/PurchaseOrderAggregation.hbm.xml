@@ -127,7 +127,39 @@
     ]]>
     </query>
     
+    <!--
+select count(*) as accessAmount,source_domain_id,affprogram_id
+    from 
+(SELECT * FROM access_log group by ip_address) access_log 
+    where
+source_domain_id is not null
+    group by 
+source_domain_id    
+    -->
     
+    <query name="GeoClassifiedPOStat.countAccessByDomain"><![CDATA[
+        SELECT 
+            new com.mne.advertmanager.model.GeoClassifiedPOStatistics (count (acl),acl.sourceDomain,acl.affProgram)
+         FROM 
+            (from AccessLog group by ip_address) acl
+         WHERE 
+            acl.sourceDomain is not null 
+         GROUP BY 
+            acl.sourceDomain
+    ]]>
+    </query>
+    
+    <query name="GeoClassifiedPOStat.countPurchaseByDomain"><![CDATA[
+        SELECT 
+            new com.mne.advertmanager.model.GeoClassifiedPOStatistics (count (acl),acl.sourceDomain,acl.affProgram)
+         FROM 
+            (from AccessLog group by ip_address) acl
+         WHERE 
+            acl.sourceDomain is not null 
+         GROUP BY 
+            acl.sourceDomain
+    ]]>
+    </query>
         
   
 </hibernate-mapping>
