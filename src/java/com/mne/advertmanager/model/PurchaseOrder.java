@@ -72,6 +72,15 @@ public class PurchaseOrder implements Serializable {
     @Column(name = "ip_address")
     private String ipAddress;    
     
+    @Size(max = 256)
+    @Column(name = "cn")
+    private String countryName;
+    
+    @Size(max = 2)
+    @Column(name = "cc")
+    private String countryCode;
+    
+    
     @Size(min = 0, max = 256)
     @Column(name = "original_order_id")
     private String originalOrderID;
@@ -220,6 +229,22 @@ public class PurchaseOrder implements Serializable {
 
     public String getTrackingID() {
         return trackingID;
+    }
+
+    public String getCountryCode() {
+        return countryCode;
+    }
+
+    public void setCountryCode(String countryCode) {
+        this.countryCode = countryCode;
+    }
+
+    public String getCountryName() {
+        return countryName;
+    }
+
+    public void setCountryName(String countryName) {
+        this.countryName = countryName;
     }
 
     

@@ -1,3 +1,5 @@
+--download geoipcsv from http://geolite.maxmind.com/download/geoip/database/GeoIPCountryCSV.zip
+--mysqlimport csv into db
 DROP SCHEMA IF EXISTS geoip;
 create SCHEMA IF NOT EXISTS geoip DEFAULT CHARACTER SET 'utf8' COLLATE default;
 
@@ -20,9 +22,7 @@ CREATE TABLE ip (
   end INT UNSIGNED NOT NULL,
   ci TINYINT UNSIGNED NOT NULL
 );
---download geoipcsv from http://geolite.maxmind.com/download/geoip/database/GeoIPCountryCSV.zip
---mysqlimport csv into db
---execute only after sql import
+
 --INSERT INTO cc SELECT DISTINCT NULL,cc,cn FROM csv;
 --INSERT INTO ip SELECT start,end,ci FROM csv NATURAL JOIN cc;
 --DROP TABLE csv;

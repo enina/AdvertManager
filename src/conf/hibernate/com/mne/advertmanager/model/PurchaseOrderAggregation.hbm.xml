@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-
     <class dynamic-insert="false" dynamic-update="false"  
             mutable="true" optimistic-lock="version" 
             polymorphism="implicit" select-before-update="false" 
@@ -77,6 +76,31 @@
                         name="affProgram" class="com.mne.advertmanager.model.AffProgram"
                         foreign-key="PO_TODAY_AGGR_AFFPROGRAM_FK"/>
     </class>  
+    
+    <!-- Geo Classified Statistics Start -->
+    <class dynamic-insert="false" dynamic-update="false"  mutable="true" optimistic-lock="version" 
+           polymorphism="implicit" select-before-update="false"  
+           name="com.mne.advertmanager.model.GeoClassifiedPOStatistics"
+           table="geoclassified_po_today_statistics" entity-name="GeoClassifiedPODailyStatistics">
+
+        <id name="id" column="id">
+            <generator class="native"/>
+        </id>
+        
+        <many-to-one unique="true" column="affprogram_id"
+                         name="affProgram" class="com.mne.advertmanager.model.AffProgram"
+                         foreign-key="GEO_PO_TODAY_STAT_AFFPROGRAM_FK"/>
+                         
+        <many-to-one unique="true" column="domain_id"
+                         name="source" class="com.mne.advertmanager.model.AccessSource"
+                         foreign-key="GEO_PO_TODAY_STAT_ACCESSSOURCE_FK"/>
+
+        <property name="countryName"/>
+        <property name="accessAmount"/>
+        <property name="purchaseAmount"/>
+    </class>  
+
+    <!-- Geo Classified Statistics Finish -->
 
     <query name="PurchaseOrderTotalAggregation.findByAffProgId"><![CDATA[
         from PurchaseOrderTotalAggregation where affProgram.id=?

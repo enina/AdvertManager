@@ -312,7 +312,7 @@ public class AdvertManagerController {
 
         return new BillingSpec();
     }
-    //================================================== viewBillingProjectDetails ================================
+//============================ viewBillingProjectDetails ================================
     @RequestMapping(value = BLNG_DETAILS_REQ_MAPPING+"/{projectId}", method = RequestMethod.GET)
     public ModelAndView viewBillingProjectDetails(@PathVariable int projectId) {
         
@@ -357,7 +357,7 @@ public class AdvertManagerController {
     }
     
     
-    //================================================== deleteBillingProjectDetails ================================
+    //========================== deleteBillingProjectDetails ================================
     @RequestMapping(value = BLNG_DELETE_REQ_MAPPING+"/{projectId}", method = RequestMethod.GET)
     public ModelAndView deleteBillingProjectDetails(@PathVariable int projectId) {
         

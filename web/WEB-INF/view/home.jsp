@@ -10,7 +10,7 @@
 </c:if>
     
 <c:if test="${data!=null}">
-
+    
     <% //go over all programm groups and show thems %>
     <c:forEach items="${data.apgCollection}" var="apg">
 

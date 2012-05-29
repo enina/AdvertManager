@@ -14,6 +14,8 @@
             <tr>
                 <th> ID </th>
                 <th> IP </th>
+                <th> Country Name </th>
+                <th> Country Code </th>
                 <th> Date & Time </th>
                 <th> Order sum </th>
                 <th> Commission </th>
@@ -23,22 +25,28 @@
         
         <c:forEach items="${orderList}" var="order">
             <tr>
-                <td   >
+                <td>
                     <c:out value="${order.originalOrderID}" />
                 </td>
-                <td  >
+                <td>
                     <c:out value="${order.ipAddress}"/>
                 </td>
-                <td  >
+                <td>
+                    <c:out value="${order.countryName}" />
+                </td>
+                <td>
+                    <c:out value="${order.countryCode}" />
+                </td>                
+                <td>
                     <c:out value="${order.ordertime}" />
                 </td>
-                <td  >
+                <td>
                     <c:out value="${order.sum}" />
                 </td>
-                <td  >
+                <td>
                     <c:out value="${order.commision}" />
                 </td>
-                <td  >
+                <td>
                     <c:out value="${order.currency}" />
                 </td>
             </tr>   

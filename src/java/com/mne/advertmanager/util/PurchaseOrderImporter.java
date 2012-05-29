@@ -49,7 +49,7 @@ public class PurchaseOrderImporter implements BillingDataImporter {
         } else if (("Commision").equals(itemName)) {
             po.setCommision(processCommision(itemValue));
         } else if (("IP").equals(itemName)) {
-            po.setIPAddress(itemValue);
+            processIPAddress(po, itemValue);
         } else if (("Date").equals(itemName)) {
             po.setOrdertime(processTime(itemValue));
         }else if (("Partner").equals(itemName)) {
@@ -58,6 +58,15 @@ public class PurchaseOrderImporter implements BillingDataImporter {
         
         
         return target;
+    }
+
+    private void processIPAddress(PurchaseOrder po, String ipAddress) {
+        po.setIPAddress(ipAddress);
+        GeoData geoData = aclService.findCountryDataByIP(ipAddress);
+        if (geoData != null) {
+            po.setCountryName(geoData.getCountryName());
+            po.setCountryCode(geoData.getCountryCode());
+        }        
     }
     
     @Override
