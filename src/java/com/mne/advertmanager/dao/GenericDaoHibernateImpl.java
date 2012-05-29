@@ -44,12 +44,15 @@ public class GenericDaoHibernateImpl<T, PK extends Serializable> implements Gene
 
         PK result = null;
 
-        if (entityName == null) {
-            result = (PK) getSession().save(o);
-        } else {
-            result = (PK) getSession().save(entityName, o);
+        try {
+            if (entityName == null) {
+                result = (PK) getSession().save(o);
+            } else {
+                result = (PK) getSession().save(entityName, o);
+            }
+        } catch (HibernateException e) {
+            logger.error("create ::: Entity:{}, Exception:{},Message:{}",new Object[]{o.getClass().getSimpleName(),e.getClass().getSimpleName(),e.getMessage()});
         }
-
         return result;
     }
 
@@ -59,31 +62,42 @@ public class GenericDaoHibernateImpl<T, PK extends Serializable> implements Gene
 
         T result = null;
 
-        if (entityName == null) {
-            result = (T) getSession().get(type, id);
-        } else {
-            result = (T) getSession().get(entityName, id);
+        try {
+            if (entityName == null) {
+                result = (T) getSession().get(type, id);
+            } else {
+                result = (T) getSession().get(entityName, id);
+            }
+        } catch (HibernateException e) {
+            logger.error("read ::: ID:{}, Exception:{},Message:{}",new Object[]{id,e.getClass().getSimpleName(),e.getMessage()});
         }
-
         return result;
 
     }
 
     @Override
     public void update(T o) {
-        if (entityName == null) {
-            getSession().update(o);
-        } else {
-            getSession().update(entityName, o);
+        try {
+            if (entityName == null) {
+                getSession().update(o);
+            } else {
+                getSession().update(entityName, o);
+            }
+        } catch (HibernateException e) {
+            logger.error("Update Entity:{}, Exception:{},Message:{}",new Object[]{o.getClass().getSimpleName(),e.getClass().getSimpleName(),e.getMessage()});
         }
     }
 
     @Override
     public void delete(T o) {
-        if (entityName == null) {
-            getSession().delete(o);
-        } else {
-            getSession().delete(entityName, o);
+        try {
+            if (entityName == null) {
+                getSession().delete(o);
+            } else {
+                getSession().delete(entityName, o);
+            }
+        }  catch (HibernateException e) {
+            logger.error("Delete Entity:{}, Exception:{},Message:{}",new Object[]{o,e.getClass().getSimpleName(),e.getMessage()});
         }
     }
 
@@ -238,6 +252,4 @@ public class GenericDaoHibernateImpl<T, PK extends Serializable> implements Gene
         }
         return q;
     }
-
-    
 }

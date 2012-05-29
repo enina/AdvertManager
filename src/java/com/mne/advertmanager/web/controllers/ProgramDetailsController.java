@@ -32,6 +32,10 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping("/")
 public class ProgramDetailsController {
 
+    //logger
+    private static Logger logger = LoggerFactory.getLogger(ProgramDetailsController.class);
+
+    
     //constant declaration
     private static final String AFFPROGRAM = "affprograms";
     private static final String DETAILS = "/details";
@@ -44,17 +48,16 @@ public class ProgramDetailsController {
     private static final String AFFPROGRAM_ORDERS_REQ_MAPPING = AFFPROGRAM + ORDERS;
     private static final String AFFPROGRAM_FINANCE_REQ_MAPPING = AFFPROGRAM + FINANCE;
     private static final String BLNG_IMPORT_REQ_MAPPING = ControllerSupport.BILLING + "/import";
+
     //variables and object declarations
     private Gson gson = new Gson();
+    
     private AffProgramService affProgramService;
     private AccessLogService accessLogService;
     private PurchaseOrderService purchaseOrderService;
-    private PartnerService partnerService;
     private AffiliateService affiliateService;
     private BillingProjectService billingProjectService;
-    private BehaviorStatisticsService poAggrService;
-    //logger
-    private static Logger logger = LoggerFactory.getLogger(ProgramDetailsController.class);
+    private BehaviorStatisticsService fbsService;
 
 //functions
 //==============================================================================
@@ -77,33 +80,31 @@ public class ProgramDetailsController {
 
         Page<AccessLog> accessPage = null;
         Collection<PurchaseOrder> orderList = null;
-        FilterableBehaviorStatistics poTotalAggrData = null;
-        FilterableBehaviorStatistics poPrevMonthAggrData = null;
-        FilterableBehaviorStatistics poCurMonthAggrData = null;
-        FilterableBehaviorStatistics poDailyAggrData = null;
+        FilterableBehaviorStatistics totalStats = null;
+        FilterableBehaviorStatistics pmStats = null;
+        FilterableBehaviorStatistics cmStats = null;
+        FilterableBehaviorStatistics dailyStats = null;
         if (program != null) {
             //only find data for valid programs
             //find all accesses related to this program
             accessPage = accessLogService.findAccessByAffProgamId(new PageCtrl(), programId);
             orderList  = purchaseOrderService.findPurchaseOrdersByAffProgamId(programId);
-            poTotalAggrData = poAggrService.findTotalAffProgramStatistics(programId);
-            poPrevMonthAggrData = poAggrService.findPrevMonthAffProgramStatistics(programId);
-            poCurMonthAggrData = poAggrService.findCurMonthAffProgramStatistics(programId);
-            poDailyAggrData = poAggrService.findDailyAffProgramStatistics(programId);
+            totalStats = fbsService.findTotalAffProgramStatistics(programId);
+            pmStats = fbsService.findPrevMonthAffProgramStatistics(programId);
+            cmStats = fbsService.findCurMonthAffProgramStatistics(programId);
+            dailyStats = fbsService.findDailyAffProgramGeneralStats(programId);
             
         }
-
-
 
 
         ModelAndView mav = ControllerSupport.forwardToView(logger, AFFPROGRAM_DETAILS_REQ_MAPPING + "/" + programId, AFFPROGRAM_DETAILS_REQ_MAPPING, "program", program);
         mav.addObject("accessPage", accessPage);
         mav.addObject("orderList", orderList);
         mav.addObject("partnerList", program.getPartners());
-        mav.addObject("poTAD", poTotalAggrData);
-        mav.addObject("poPMAD", poPrevMonthAggrData);
-        mav.addObject("poCMAD", poCurMonthAggrData);
-        mav.addObject("poDAD", poDailyAggrData);
+        mav.addObject("totalStats", totalStats);
+        mav.addObject("pmStats", pmStats);
+        mav.addObject("cmStats", cmStats);
+        mav.addObject("dailyStats", dailyStats);
 
         return mav;
 
@@ -180,7 +181,7 @@ public class ProgramDetailsController {
                     //set thread name for debug purposes
                     setName(AFFPROGRAM + "AggrDataCalculationThread" + " programId " + programId);
                     //calculate aggregation data:
-                    poAggrService.calculateAffProgramStatistics(programId);
+                    fbsService.calculateAffProgramStatistics(programId);
                 }
                 //start thread execution
             }.start();
@@ -229,11 +230,6 @@ public class ProgramDetailsController {
     }
 
     @Autowired
-    public void setPartnerService(PartnerService partnerService) {
-        this.partnerService = partnerService;
-    }
-
-    @Autowired
     public void setPurchaseOrderService(PurchaseOrderService purchaseOrderService) {
         this.purchaseOrderService = purchaseOrderService;
     }
@@ -252,7 +248,7 @@ public class ProgramDetailsController {
 
     //============================= setPoAggrService =======================    
     @Autowired
-    public void setPoAggrService(BehaviorStatisticsService poAggrService) {
-        this.poAggrService = poAggrService;
+    public void setFbsService(BehaviorStatisticsService fbsService) {
+        this.fbsService = fbsService;
     }
 }

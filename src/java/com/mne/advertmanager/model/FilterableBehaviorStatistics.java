@@ -127,12 +127,6 @@ public class FilterableBehaviorStatistics {
         setTotalCommision(totalCommision+curStat.getTotalCommision());
     }
     
-    public void copyFrom(FilterableBehaviorStatistics curStat) {
-        setAccessAmount(curStat.getAccessAmount());
-        setPurchaseAmount(curStat.getPurchaseAmount());
-        setTotalCommision(curStat.getTotalCommision());
-    }
-
     @Override
     public boolean equals(Object obj) {
         if (obj == null) {
@@ -143,7 +137,7 @@ public class FilterableBehaviorStatistics {
         }
         final FilterableBehaviorStatistics other = (FilterableBehaviorStatistics) obj;
         if (this.id != other.id && (this.id == null || !this.id.equals(other.id))) {
-            return false;
+            return getKey().equals(other.getKey());
         }
         return true;
     }
@@ -153,6 +147,14 @@ public class FilterableBehaviorStatistics {
         int hash = 5;
         hash = 13 * hash + (this.id != null ? this.id.hashCode() : 0);
         return hash;
+    }
+
+    public String getKey() {
+
+        if (source!=null)
+            return source.getId().toString();
+        else
+            return countryName;
     }
 
     

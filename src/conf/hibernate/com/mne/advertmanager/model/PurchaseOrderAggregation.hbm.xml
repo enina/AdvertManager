@@ -91,25 +91,47 @@
     </class>    
 
 
-    <query name="TotalBehaviorStats.findByAffProgId"><![CDATA[
-        from TotalBehaviorStats where countryName='TOTAL' and affProgram.id=? 
+    <query name="TotalBehaviorStats.findAffProgCountryStats"><![CDATA[
+        from TotalBehaviorStats where affProgram.id=? and countryName=? 
     ]]>
     </query>
     
-    <query name="PrevMonthBehaviorStats.findByAffProgId"><![CDATA[
-        from PrevMonthBehaviorStats where countryName='TOTAL' and affProgram.id=?
+    <query name="TotalBehaviorStats.findAffProgStats"><![CDATA[
+        from TotalBehaviorStats where  affProgram.id=? 
+    ]]>
+    </query>    
+    
+    <query name="PrevMonthBehaviorStats.findAffProgStats"><![CDATA[
+        from PrevMonthBehaviorStats where affProgram.id=?
+    ]]>
+    </query>
+
+    <query name="PrevMonthBehaviorStats.deleteAffProgStats"><![CDATA[
+        delete from PrevMonthBehaviorStats where affProgram.id=?
+    ]]>
+    </query>    
+    
+    
+    <query name="CurMonthBehaviorStats.findAffProgStats"><![CDATA[
+        from CurMonthBehaviorStats where affProgram.id=?
     ]]>
     </query>
     
-    <query name="CurMonthBehaviorStats.findByAffProgId"><![CDATA[
-        from CurMonthBehaviorStats where countryName='TOTAL' and affProgram.id=?
+    <query name="CurMonthBehaviorStats.deleteAffProgStats"><![CDATA[
+        delete from CurMonthBehaviorStats where affProgram.id=?
     ]]>
-    </query>
+    </query>    
+    
     
     <query name="DailyBehaviorStats.findByAffProgId"><![CDATA[
-        from DailyBehaviorStats where countryName='TOTAL' and  affProgram.id=?
+        from DailyBehaviorStats where countryName='Filter.ALL' and  affProgram.id=?
     ]]>
     </query>
+    
+    <query name="DailyBehaviorStats.deleteAffProgStats"><![CDATA[
+        delete from DailyBehaviorStats where affProgram.id=?
+    ]]>
+    </query>    
     
     <query name="BehaviorStats.calculateAffProgStatsByIdAndTime"><![CDATA[
         SELECT

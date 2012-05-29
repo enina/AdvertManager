@@ -163,9 +163,6 @@ import javax.xml.bind.annotation.XmlRootElement;
     public void setCountryCode(String countryCode) {
         this.countryCode = countryCode;
     }
-    
-    
-    
 
     public AccessSource getSourceDomain() {
         return sourceDomain;
@@ -182,9 +179,6 @@ import javax.xml.bind.annotation.XmlRootElement;
     public void setAffProgram(AffProgram affProgram) {
         this.affProgram = affProgram;
     }
-
-
-
 
     @Override
     public int hashCode() {

@@ -7,13 +7,10 @@ package com.mne.advertmanager.service;
 import com.mne.advertmanager.dao.GenericDao;
 import com.mne.advertmanager.model.AffProgram;
 import com.mne.advertmanager.model.FilterableBehaviorStatistics;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
+import java.util.*;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -64,11 +61,11 @@ public class BehaviorStatisticsService {
     
     
     @Transactional
-    public Set<FilterableBehaviorStatistics> findTotalAffProgramStatistics(int affProgramId) {
+    public FilterableBehaviorStatistics findTotalAffProgramStatistics(int affProgramId) {
 
-        FilterableBehaviorStatistics result = findAffProgramStatistics(totalBehaviorStatsDao,"TotalBehaviorStats.findByAffProgId", affProgramId);
+        FilterableBehaviorStatistics result = findAffProgramStatistics(totalBehaviorStatsDao,"TotalBehaviorStats.findAffProgCountryStats", affProgramId,"Filter.All");
         
-        logger.info("Retrieved total ,aggregation data ,Program {}",affProgramId);
+        logger.info("ProgramId={},Retrieved total statistics for all filters",affProgramId);
         
         return result;
     }
@@ -76,9 +73,9 @@ public class BehaviorStatisticsService {
     @Transactional
     public FilterableBehaviorStatistics findCurMonthAffProgramStatistics(int affProgramId) {
 
-        FilterableBehaviorStatistics result = findAffProgramStatistics(curMonthBehaviorStatsDao,"CurMonthBehaviorStats.findByAffProgId", affProgramId);
+        FilterableBehaviorStatistics result = findAffProgramStatistics(curMonthBehaviorStatsDao,"CurMonthBehaviorStats.findByAffProgId", affProgramId,"Filter.All");
         
-        logger.info("Retrieved current month aggregation data ,Program {}",affProgramId);
+        logger.info("ProgramId={}.Retrieved current month stats ",affProgramId);
         
         
         return result;
@@ -95,11 +92,11 @@ public class BehaviorStatisticsService {
     }
     
     @Transactional
-    public FilterableBehaviorStatistics findDailyAffProgramStatistics(int affProgramId) {
+    public FilterableBehaviorStatistics findDailyAffProgramGeneralStats(int affProgramId) {
 
         FilterableBehaviorStatistics result = findAffProgramStatistics(dailyBehaviorStatsDao,"DailyBehaviorStats.findByAffProgId", affProgramId);
         
-        logger.info("Retrieved daily aggregation data ,Program {}",affProgramId);
+        logger.info("ProgramId={}:::Retrieved daily statistics",affProgramId);
         
         return result;
     }    
@@ -126,28 +123,57 @@ public class BehaviorStatisticsService {
         logger.info("Finished behavior statistics calculation");
     }
 
-    
-    private Set<FilterableBehaviorStatistics> createDailyAffProgramStatistics(int affProgramId, Date refTime) {
+    /*
+     * 
+    <query name="TotalBehaviorStats.findAffProgrCountryStats"><![CDATA[
+        from TotalBehaviorStats where countryName=? and affProgram.id=? 
+    ]]>
+    </query>     * 
+     */
+    private Set<FilterableBehaviorStatistics> findDailyAffProgramStatsSet(int affProgramId, Date refTime) {
         
-        FilterableBehaviorStatistics total = dailyBehaviorStatsDao.findSingleItemByQuery("BehaviorStats.calculateAffProgDataByIdAndTime",affProgramId,refTime);
+        FilterableBehaviorStatistics total = dailyBehaviorStatsDao.findSingleItemByQuery("BehaviorStats.calculateAffProgStatsByIdAndTime",affProgramId,refTime);
         
         int accessCount = accessService.findDailyAffProgramAccessAmount(affProgramId,refTime);
         
         logger.debug("Program={} , Period=After {} ::Access={}, PO={} , Commision={}",
                       new Object[]{affProgramId,refTime,accessCount , total.getPurchaseAmount(),total.getTotalCommision()});
         
-        total.setCountryName("TOTAL");
+        total.setCountryName("Filter.ALL");
         total.setAccessAmount(accessCount);
         
         HashSet<FilterableBehaviorStatistics> result = new HashSet<FilterableBehaviorStatistics>();
         result.addAll(dailyBehaviorStatsDao.findByQuery("BehaviorStats.countAffProgramPeriodicAccessByDomain", affProgramId,refTime));
         result.add(total);
                 
-        
         return result;
     }
     
+    private TreeMap<String,FilterableBehaviorStatistics> builFBSTree(Collection<FilterableBehaviorStatistics> data) {
+        
+        TreeMap<String,FilterableBehaviorStatistics> result = new TreeMap<String,FilterableBehaviorStatistics>();
+        if (data != null) {
+            for(FilterableBehaviorStatistics fbs:data)
+                result.put(fbs.getKey(), fbs);
+        }
+                
+        return result;
+    }
+    
+    private TreeMap<String,FilterableBehaviorStatistics> findTotalAffProgramStatsSet(int affProgramId) {    
+        
+        Collection<FilterableBehaviorStatistics> data = totalBehaviorStatsDao.findByQuery("TotalBehaviorStats.findAffProgStats", affProgramId);
+                
+        return builFBSTree(data);
+    }    
+    
+    private TreeMap<String,FilterableBehaviorStatistics> findCurMonthAffProgramStatsSet(int affProgramId) {    
 
+        Collection<FilterableBehaviorStatistics> data = curMonthBehaviorStatsDao.findByQuery("CurMonthBehaviorStats.findAffProgStats", affProgramId);
+               
+        return builFBSTree(data);
+    }
+    
     @Transactional
     public void calculateAffProgramStatistics(int affProgramId) {
 
@@ -161,42 +187,72 @@ public class BehaviorStatisticsService {
         
         
         
-        Set<FilterableBehaviorStatistics> dailyStatSet = createDailyAffProgramStatistics(affProgramId, refTime);
+        Set<FilterableBehaviorStatistics> todayStatSet = findDailyAffProgramStatsSet(affProgramId, refTime);
         
-        Set<FilterableBehaviorStatistics> totalStatSet = findTotalAffProgramStatistics(affProgramId);
-        //totalStats.add(dailyStatSet);
+        TreeMap<String,FilterableBehaviorStatistics> totalTree = findTotalAffProgramStatsSet(affProgramId);
         
-        FilterableBehaviorStatistics curMonthAggrData = findCurMonthAffProgramStatistics(affProgramId);
+        updateTotalStatistics(totalTree, todayStatSet);
+        
+        TreeMap<String,FilterableBehaviorStatistics> cmTree = findCurMonthAffProgramStatsSet(affProgramId);
+        
         if (cal.get(Calendar.DAY_OF_MONTH)==1) {
-            updatePrevMonthStatistics(affProgramId,curMonthAggrData,dailyPOData);
-            logger.info("Shifting monthly statistics");
+            updatePrevMonthStatistics(affProgramId,cmTree,todayStatSet);
         }else {
-            curMonthAggrData.add(dailyStatSet);
-            logger.info("Update current month statistics");
+            updateCurMonthStatistics(cmTree,todayStatSet);
         }
         
-        updateDailyStatistics(affProgramId,dailyStatSet);
+        updateDailyStatistics(affProgramId,todayStatSet);
         
         logger.info("Finished behavior statistics calculation , Program {}",affProgramId);
     }
 
 
-    private void updatePrevMonthStatistics(int affProgramId,FilterableBehaviorStatistics curMonthStats,FilterableBehaviorStatistics dailyStats) {
+    private void updatePrevMonthStatistics(int affProgramId,TreeMap<String,FilterableBehaviorStatistics> curMonthStatsSet,Set<FilterableBehaviorStatistics> todayStatsSet) {
         
-        FilterableBehaviorStatistics prevMonthAggrData = findPrevMonthAffProgramStatistics(affProgramId);
+        cleanAffProgPrevMonthStatistics(affProgramId);
         
-        if (prevMonthAggrData != null)
-            prevMonthAggrData.copyFrom(curMonthStats);
+        for (FilterableBehaviorStatistics fbs:curMonthStatsSet.values()) {
+            fbs.setId(-1);
+            prevMonthBehaviorStatsDao.create(fbs);
+        }
+        cleanAffProgCurMonthStatistics(affProgramId);
 
-        if (curMonthStats != null)
-            curMonthStats.copyFrom(dailyStats);
+        for (FilterableBehaviorStatistics fbs:todayStatsSet) {
+            fbs.setId(-1);
+            curMonthBehaviorStatsDao.create(fbs);
+        }
+        
+        logger.info("Shifted monthly statistics");
         
     }
     
-    
-    private FilterableBehaviorStatistics findAffProgramStatistics(GenericDao<FilterableBehaviorStatistics,Integer> statsDao,String query,int affProgramId) {
+    private void updateCurMonthStatistics(TreeMap<String,FilterableBehaviorStatistics> cmTree,Set<FilterableBehaviorStatistics> todayStatsSet) {
+        for (FilterableBehaviorStatistics todayFbs:todayStatsSet) {
+            FilterableBehaviorStatistics cmFbs =  cmTree.get(todayFbs.getKey());
+            if (cmFbs!= null)
+                cmFbs.add(todayFbs);
+            else
+                curMonthBehaviorStatsDao.create(todayFbs);
+        }
 
-        FilterableBehaviorStatistics result = statsDao.findSingleItemByQuery(query, affProgramId);
+        logger.info("Updated current month statistics");
+    }
+    
+    private void updateTotalStatistics(TreeMap<String,FilterableBehaviorStatistics> totalTree,Set<FilterableBehaviorStatistics> todayStatsSet) {
+        for (FilterableBehaviorStatistics todayFbs:todayStatsSet) {
+            FilterableBehaviorStatistics cmFbs =  totalTree.get(todayFbs.getKey());
+            if (cmFbs!= null)
+                cmFbs.add(todayFbs);
+            totalBehaviorStatsDao.create(todayFbs);
+        }
+
+        logger.info("Updated total statistics");
+    }
+    
+    
+    private FilterableBehaviorStatistics findAffProgramStatistics(GenericDao<FilterableBehaviorStatistics,Integer> statsDao,String query,int affProgramId,Object... params) {
+
+        FilterableBehaviorStatistics result = statsDao.findSingleItemByQuery(query, affProgramId,params);
         
         if (result==null) {
             result = new FilterableBehaviorStatistics(0,0,0,new AffProgram(affProgramId));
@@ -205,14 +261,28 @@ public class BehaviorStatisticsService {
         
         return result;
     }
+    @Transactional(propagation= Propagation.REQUIRES_NEW)
+    private void cleanAffProgDailyStatistics(int affProgramId) {
+        dailyBehaviorStatsDao.executeUpdateByQuery("DailyBehaviorStats.deleteAffProgStats", affProgramId);
+    }
     
+    @Transactional(propagation= Propagation.REQUIRES_NEW)
+    private void cleanAffProgPrevMonthStatistics(int affProgramId) {
+        prevMonthBehaviorStatsDao.executeUpdateByQuery("PrevMonthBehaviorStats.deleteAffProgStats", affProgramId);
+    }    
     
-    private void updateDailyStatistics(int affProgramId,FilterableBehaviorStatistics curDailyStats) {
+    @Transactional(propagation= Propagation.REQUIRES_NEW)
+    private void cleanAffProgCurMonthStatistics(int affProgramId) {
+        prevMonthBehaviorStatsDao.executeUpdateByQuery("CurMonthBehaviorStats.deleteAffProgStats", affProgramId);
+    }        
+    
+    private void updateDailyStatistics(int affProgramId,Set<FilterableBehaviorStatistics> curDailyStats) {
+
+        cleanAffProgDailyStatistics(affProgramId);
         
-        FilterableBehaviorStatistics prevDailyStats = findDailyAffProgramStatistics(affProgramId);
+        for (FilterableBehaviorStatistics fbs:curDailyStats)
+            dailyBehaviorStatsDao.create(fbs);
         
-        if (prevDailyStats != null)
-            prevDailyStats.copyFrom(curDailyStats);
     }
     
 }
