@@ -52,36 +52,36 @@
             </tr>
             <tr>
                 <td>Total</td>
-                <td><c:out value="${poTAD.accessAmount}"/></td>
-                <td><c:out value="${poTAD.purchaseAmount}"/></td>
-                <td><c:out value="${poTAD.totalCommision}"/></td>
-                <td><c:out value="${poTAD.conversionRate}"/></td>
+                <td><c:out value="${totalStats.accessAmount}"/></td>
+                <td><c:out value="${totalStats.purchaseAmount}"/></td>
+                <td><c:out value="${totalStats.totalCommision}"/></td>
+                <td><c:out value="${totalStats.conversionRate}"/></td>
             </tr>
-            <c:if test="${poPMAD!=null}">
+            <c:if test="${pmStats!=null}">
                 <tr>
                     <td>Previous Month</td>
-                    <td><c:out value="${poPMAD.accessAmount}"/></td>
-                    <td><c:out value="${poPMAD.purchaseAmount}"/></td>
-                    <td><c:out value="${poPMAD.totalCommision}"/></td>
-                    <td><c:out value="${poPMAD.conversionRate}"/></td>
+                    <td><c:out value="${pmStats.accessAmount}"/></td>
+                    <td><c:out value="${pmStats.purchaseAmount}"/></td>
+                    <td><c:out value="${pmStats.totalCommision}"/></td>
+                    <td><c:out value="${pmStats.conversionRate}"/></td>
                 </tr>
             </c:if>
-            <c:if test="${poCMAD!=null}">
+            <c:if test="${cmStats!=null}">
                 <tr>
                     <td>Current Month</td>
-                    <td><c:out value="${poCMAD.accessAmount}"/></td>
-                    <td><c:out value="${poCMAD.purchaseAmount}"/></td>
-                    <td><c:out value="${poCMAD.totalCommision}"/></td>
-                    <td><c:out value="${poCMAD.conversionRate}"/></td>
+                    <td><c:out value="${cmStats.accessAmount}"/></td>
+                    <td><c:out value="${cmStats.purchaseAmount}"/></td>
+                    <td><c:out value="${cmStats.totalCommision}"/></td>
+                    <td><c:out value="${cmStats.conversionRate}"/></td>
                 </tr>
             </c:if>
-            <c:if test="${poDAD!=null}">
+            <c:if test="${dailyStats!=null}">
                 <tr>
                     <td>Today</td>
-                    <td><c:out value="${poDAD.accessAmount}"/></td>
-                    <td><c:out value="${poDAD.purchaseAmount}"/></td>
-                    <td><c:out value="${poDAD.totalCommision}"/></td>
-                    <td><c:out value="${poDAD.conversionRate}"/></td>
+                    <td><c:out value="${dailyStats.accessAmount}"/></td>
+                    <td><c:out value="${dailyStats.purchaseAmount}"/></td>
+                    <td><c:out value="${dailyStats.totalCommision}"/></td>
+                    <td><c:out value="${dailyStats.conversionRate}"/></td>
                 </tr>
             </c:if>
         </table>

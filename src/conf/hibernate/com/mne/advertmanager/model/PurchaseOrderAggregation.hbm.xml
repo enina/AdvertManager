@@ -1,109 +1,193 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
+    <!-- Filterable behavior statistics start -->
+    <class name="com.mne.advertmanager.model.FilterableBehaviorStatistics"
+           table="daily_behavior_stats" 
+           entity-name="DailyBehaviorStats">
 
-    <class dynamic-insert="false" dynamic-update="false"  
-            mutable="true" optimistic-lock="version" 
-            polymorphism="implicit" select-before-update="false" 
-            name="com.mne.advertmanager.model.PurchaseOrderAggregation"
-            table="purchase_order_total_aggr"
-            entity-name="PurchaseOrderTotalAggregation">
-
-            <id name="id" column="id">
-                <generator class="native"/>
-            </id>
-            <property name="accessAmount"/>        
-            <property name="totalCommision"/>
-            <property name="purchaseAmount"/>
-            <property name="conversionRate"/>
-            <many-to-one unique="true" column="affprogram_id"
-                         name="affProgram" class="com.mne.advertmanager.model.AffProgram"
-                         foreign-key="PO_TOTAL_AGGR_AFFPROGRAM_FK"/>  
-    </class>
-  
-    <class dynamic-insert="false" dynamic-update="false"  
-        mutable="true" optimistic-lock="version" 
-        polymorphism="implicit" select-before-update="false" 
-        name="com.mne.advertmanager.model.PurchaseOrderAggregation"
-        table="purchase_order_prevmonth_aggr"
-        entity-name="PurchaseOrderPrevMonthAggregation">
-        
         <id name="id" column="id">
             <generator class="native"/>
         </id>
-        <property name="accessAmount"/>        
-        <property name="totalCommision"/>
-        <property name="purchaseAmount"/>
-        <property name="conversionRate"/>
+        
         <many-to-one unique="true" column="affprogram_id"
-                    name="affProgram" class="com.mne.advertmanager.model.AffProgram"
-                    foreign-key="PO_PREVMONTH_AGGR_AFFPROGRAM_FK"/>  
-    </class>
-  
-    <class dynamic-insert="false" dynamic-update="false"  
-            mutable="true" optimistic-lock="version" 
-            polymorphism="implicit" select-before-update="false" 
-            name="com.mne.advertmanager.model.PurchaseOrderAggregation"
-            table="purchase_order_curmonth_aggr"
-            entity-name="PurchaseOrderCurMonthAggregation">
+                         name="affProgram" class="com.mne.advertmanager.model.AffProgram"
+                         foreign-key="DAILY_BEHAVIOR_STAT_AFFPROGRAM_FK"/>
+                         
+        <many-to-one unique="true" column="domain_id"
+                         name="source" class="com.mne.advertmanager.model.AccessSource"
+                         foreign-key="DAILY_BEHAVIOR_STAT_ACCESSSOURCE_FK"/>
 
-            <id name="id" column="id">
-                <generator class="native"/>
-            </id>
-            <property name="accessAmount"/>        
-            <property name="totalCommision"/>
-            <property name="purchaseAmount"/>
-            <property name="conversionRate"/>
-            <many-to-one unique="true" column="affprogram_id"
-                        name="affProgram" class="com.mne.advertmanager.model.AffProgram"
-                        foreign-key="PO_CURMONTH_AGGR_AFFPROGRAM_FK"/>
+        <property name="countryName"/>
+        <property name="accessAmount"/>
+        <property name="purchaseAmount"/>
+        <property name="totalCommision"/>
     </class>  
 
-    <class dynamic-insert="false" dynamic-update="false"  
-            mutable="true" optimistic-lock="version" 
-            polymorphism="implicit" select-before-update="false" 
-            name="com.mne.advertmanager.model.PurchaseOrderAggregation"
-            table="purchase_order_today_aggr"
-            entity-name="PurchaseOrderDailyAggregation">
+    <class name="com.mne.advertmanager.model.FilterableBehaviorStatistics"
+           table="curmonth_behavior_stats" 
+           entity-name="CurMonthBehaviorStats">
 
-            <id name="id" column="id">
-                <generator class="native"/>
-            </id>
-            <property name="accessAmount"/>        
-            <property name="totalCommision"/>
-            <property name="purchaseAmount"/>
-            <property name="conversionRate"/>
-            <many-to-one unique="true" column="affprogram_id"
-                        name="affProgram" class="com.mne.advertmanager.model.AffProgram"
-                        foreign-key="PO_TODAY_AGGR_AFFPROGRAM_FK"/>
+        <id name="id" column="id">
+            <generator class="native"/>
+        </id>
+        
+        <many-to-one unique="true" column="affprogram_id"
+                         name="affProgram" class="com.mne.advertmanager.model.AffProgram"
+                         foreign-key="CURMONTH_BEHAVIOR_STAT_AFFPROGRAM_FK"/>
+                         
+        <many-to-one unique="true" column="domain_id"
+                         name="source" class="com.mne.advertmanager.model.AccessSource"
+                         foreign-key="CURMONTH_BEHAVIOR_STAT_ACCESSSOURCE_FK"/>
+
+        <property name="countryName"/>
+        <property name="accessAmount"/>
+        <property name="purchaseAmount"/>
+        <property name="totalCommision"/>
     </class>  
+    
+    <class name="com.mne.advertmanager.model.FilterableBehaviorStatistics"
+           table="prevmonth_behavior_stats" 
+           entity-name="PrevMonthBehaviorStats">
 
-    <query name="PurchaseOrderTotalAggregation.findByAffProgId"><![CDATA[
-        from PurchaseOrderTotalAggregation where affProgram.id=?
+        <id name="id" column="id">
+            <generator class="native"/>
+        </id>
+        
+        <many-to-one unique="true" column="affprogram_id"
+                         name="affProgram" class="com.mne.advertmanager.model.AffProgram"
+                         foreign-key="PREVMONTH_BEHAVIOR_STAT_AFFPROGRAM_FK"/>
+                         
+        <many-to-one unique="true" column="domain_id"
+                         name="source" class="com.mne.advertmanager.model.AccessSource"
+                         foreign-key="PREVMONTH_BEHAVIOR_STAT_ACCESSSOURCE_FK"/>
+
+        <property name="countryName"/>
+        <property name="accessAmount"/>
+        <property name="purchaseAmount"/>
+        <property name="totalCommision"/>
+    </class>  
+    
+    <class name="com.mne.advertmanager.model.FilterableBehaviorStatistics"
+           table="total_behavior_stats" 
+           entity-name="TotalBehaviorStats">
+
+        <id name="id" column="id">
+            <generator class="native"/>
+        </id>
+        
+        <many-to-one unique="true" column="affprogram_id"
+                         name="affProgram" class="com.mne.advertmanager.model.AffProgram"
+                         foreign-key="TOTAL_BEHAVIOR_STAT_AFFPROGRAM_FK"/>
+                         
+        <many-to-one unique="true" column="domain_id"
+                         name="source" class="com.mne.advertmanager.model.AccessSource"
+                         foreign-key="TOTAL_BEHAVIOR_STAT_ACCESSSOURCE_FK"/>
+
+        <property name="countryName"/>
+        <property name="accessAmount"/>
+        <property name="purchaseAmount"/>
+        <property name="totalCommision"/>
+    </class>    
+
+
+    <query name="TotalBehaviorStats.findAffProgCountryStats"><![CDATA[
+        from TotalBehaviorStats where affProgram.id=? and countryName=? 
     ]]>
     </query>
     
-    <query name="PurchaseOrderPrevMonthAggregation.findByAffProgId"><![CDATA[
-        from PurchaseOrderPrevMonthAggregation where affProgram.id=?
+    <query name="TotalBehaviorStats.findAffProgStats"><![CDATA[
+        from TotalBehaviorStats where  affProgram.id=? 
+    ]]>
+    </query>    
+    
+    <query name="PrevMonthBehaviorStats.findAffProgStats"><![CDATA[
+        from PrevMonthBehaviorStats where affProgram.id=?
+    ]]>
+    </query>
+
+    <query name="PrevMonthBehaviorStats.deleteAffProgStats"><![CDATA[
+        delete from PrevMonthBehaviorStats where affProgram.id=?
+    ]]>
+    </query>    
+    
+    
+    <query name="CurMonthBehaviorStats.findAffProgStats"><![CDATA[
+        from CurMonthBehaviorStats where affProgram.id=?
     ]]>
     </query>
     
-    <query name="PurchaseOrderCurMonthAggregation.findByAffProgId"><![CDATA[
-        from PurchaseOrderCurMonthAggregation where affProgram.id=?
+    <query name="CurMonthBehaviorStats.deleteAffProgStats"><![CDATA[
+        delete from CurMonthBehaviorStats where affProgram.id=?
+    ]]>
+    </query>    
+    
+    
+    <query name="DailyBehaviorStats.findByAffProgId"><![CDATA[
+        from DailyBehaviorStats where countryName='Filter.ALL' and  affProgram.id=?
     ]]>
     </query>
     
-    <query name="PurchaseOrderDailyAggregation.findByAffProgId"><![CDATA[
-        from PurchaseOrderDailyAggregation where affProgram.id=?
+    <query name="DailyBehaviorStats.deleteAffProgStats"><![CDATA[
+        delete from DailyBehaviorStats where affProgram.id=?
+    ]]>
+    </query>    
+    
+    <query name="BehaviorStats.calculateAffProgStatsByIdAndTime"><![CDATA[
+        SELECT
+            new com.mne.advertmanager.model.FilterableBehaviorStatistics(count (po),sum(commision),po.affProgram)
+        FROM
+            PurchaseOrder po
+        WHERE 
+            po.affProgram.id = ? and ordertime > ?
     ]]>
     </query>
     
-    <query name="PurchaseOrderAggregation.calculateAffProgDataByIdAndTime"><![CDATA[
-        SELECT new com.mne.advertmanager.model.PurchaseOrderAggregation(count (po),sum(commision),po.affProgram) FROM PurchaseOrder po WHERE po.affProgram.id = ? and ordertime > ?
+    <!--
+select count(*) as accessAmount,source_domain_id,affprogram_id
+    from 
+(SELECT * FROM access_log group by ip_address) access_log 
+    where
+source_domain_id is not null
+    group by 
+source_domain_id    
+    -->
+    
+    <query name="BehaviorStats.countAffProgramPeriodicAccessByDomain"><![CDATA[
+        SELECT 
+            new com.mne.advertmanager.model.FilterableBehaviorStatistics (count (acl),acl.sourceDomain,acl.affProgram)
+         FROM  AccessLog acl 
+         WHERE
+            acl in (select acl from AccessLog acl where acl.affProgram.id = ? and acl.accessTime > ? group by ip_address) and
+            acl.sourceDomain is not null 
+         GROUP BY 
+            acl.sourceDomain
     ]]>
     </query>
     
+<!--    <query name="GeoClassifiedPOStat.countAccessByCountry"><![CDATA[
+        SELECT 
+            new com.mne.advertmanager.model.GeoClassifiedPOStatistics (count (acl),acl.sourceDomain,acl.affProgram)
+         FROM 
+            (select acl from AccessLog acl group by ip_address) acl
+         WHERE 
+            acl.countryName is not null 
+         GROUP BY 
+            acl.countryName
+    ]]>
+    </query>    
     
+    <query name="GeoClassifiedPOStat.countPurchaseByDomain"><![CDATA[
+        SELECT 
+            new com.mne.advertmanager.model.GeoClassifiedPOStatistics (count (po),po.affProgram)
+         FROM 
+            (select po from PurchaseOrder po group by ip_address) po
+         WHERE 
+            po.ip_address is not null 
+         GROUP BY 
+            po.countryName
+    ]]>
+    </query>-->
         
   
 </hibernate-mapping>

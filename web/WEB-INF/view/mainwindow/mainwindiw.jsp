@@ -30,9 +30,12 @@
              <h1 id="logo"><a href="${pageContext.request.contextPath}/"><img src="images/logo.png"/><span>Advert Manager</span></a></h1>
 
              <!-- user menue -->
+             <div id="userMenu">
             <sec:authorize access="hasRole('ROLE_USER')">
                 <sec:authentication property="principal.username"/>
             </sec:authorize>
+            <a href="${pageContext.request.contextPath}/j_spring_security_logout" ><button type="button" value="register"><span>Logout</span></button></a>
+            </div>
              
             <!-- nav bar -->
             <ul id="menu">
@@ -46,6 +49,14 @@
                 //<li class=""> <a class="menuItem" href="${pageContext.request.contextPath}/mvc/dataGen/generate">Generate Data</a></li> %>
                 </sec:authorize> 
             </ul>
+                
+                <%// affiliate programs agregation %>
+                <div id="content">
+                    
+                    
+                </div>
+                
+                
             
         </div><!-- end of container -->
     </body>

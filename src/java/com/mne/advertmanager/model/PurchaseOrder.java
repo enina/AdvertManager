@@ -6,19 +6,7 @@ package com.mne.advertmanager.model;
 
 import java.io.Serializable;
 import java.util.Date;
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.*;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -71,6 +59,15 @@ public class PurchaseOrder implements Serializable {
     @Size(min = 0, max = 256)
     @Column(name = "ip_address")
     private String ipAddress;    
+    
+    @Size(max = 256)
+    @Column(name = "cn")
+    private String countryName;
+    
+    @Size(max = 2)
+    @Column(name = "cc")
+    private String countryCode;
+    
     
     @Size(min = 0, max = 256)
     @Column(name = "original_order_id")
@@ -220,6 +217,22 @@ public class PurchaseOrder implements Serializable {
 
     public String getTrackingID() {
         return trackingID;
+    }
+
+    public String getCountryCode() {
+        return countryCode;
+    }
+
+    public void setCountryCode(String countryCode) {
+        this.countryCode = countryCode;
+    }
+
+    public String getCountryName() {
+        return countryName;
+    }
+
+    public void setCountryName(String countryName) {
+        this.countryName = countryName;
     }
 
     

@@ -14,6 +14,7 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.transform.Transformers;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -21,9 +22,12 @@ import org.hibernate.transform.Transformers;
  */
 public class GenericDaoHibernateImpl<T, PK extends Serializable> implements GenericDao<T, PK> {
 
+    private static org.slf4j.Logger logger = LoggerFactory.getLogger(GenericDaoHibernateImpl.class);
+    
     private Class<T> type;
     private SessionFactory sessionFactory;
     private String entityName = null;
+    
 
     public GenericDaoHibernateImpl(Class<T> type) {
         this.type = type;
@@ -40,12 +44,15 @@ public class GenericDaoHibernateImpl<T, PK extends Serializable> implements Gene
 
         PK result = null;
 
-        if (entityName == null) {
-            result = (PK) getSession().save(o);
-        } else {
-            result = (PK) getSession().save(entityName, o);
+        try {
+            if (entityName == null) {
+                result = (PK) getSession().save(o);
+            } else {
+                result = (PK) getSession().save(entityName, o);
+            }
+        } catch (HibernateException e) {
+            logger.error("create ::: Entity:{}, Exception:{},Message:{}",new Object[]{o.getClass().getSimpleName(),e.getClass().getSimpleName(),e.getMessage()});
         }
-
         return result;
     }
 
@@ -55,31 +62,42 @@ public class GenericDaoHibernateImpl<T, PK extends Serializable> implements Gene
 
         T result = null;
 
-        if (entityName == null) {
-            result = (T) getSession().get(type, id);
-        } else {
-            result = (T) getSession().get(entityName, id);
+        try {
+            if (entityName == null) {
+                result = (T) getSession().get(type, id);
+            } else {
+                result = (T) getSession().get(entityName, id);
+            }
+        } catch (HibernateException e) {
+            logger.error("read ::: ID:{}, Exception:{},Message:{}",new Object[]{id,e.getClass().getSimpleName(),e.getMessage()});
         }
-
         return result;
 
     }
 
     @Override
     public void update(T o) {
-        if (entityName == null) {
-            getSession().update(o);
-        } else {
-            getSession().update(entityName, o);
+        try {
+            if (entityName == null) {
+                getSession().update(o);
+            } else {
+                getSession().update(entityName, o);
+            }
+        } catch (HibernateException e) {
+            logger.error("Update Entity:{}, Exception:{},Message:{}",new Object[]{o.getClass().getSimpleName(),e.getClass().getSimpleName(),e.getMessage()});
         }
     }
 
     @Override
     public void delete(T o) {
-        if (entityName == null) {
-            getSession().delete(o);
-        } else {
-            getSession().delete(entityName, o);
+        try {
+            if (entityName == null) {
+                getSession().delete(o);
+            } else {
+                getSession().delete(entityName, o);
+            }
+        }  catch (HibernateException e) {
+            logger.error("Delete Entity:{}, Exception:{},Message:{}",new Object[]{o,e.getClass().getSimpleName(),e.getMessage()});
         }
     }
 
@@ -94,9 +112,13 @@ public class GenericDaoHibernateImpl<T, PK extends Serializable> implements Gene
 
         Collection<T> result = null;
 
-        Query q = getNamedQuery(queryName, params);
-        if (q != null) {
-            result = q.list();
+        try {
+            Query q = getNamedQuery(queryName, params);
+            if (q != null) {
+                result = q.list();
+            }
+        } catch (HibernateException e) {
+            logger.error("findByQuery ::: query:{}, Exception:{},Message:{}",new Object[]{queryName,e.getClass().getSimpleName(),e.getMessage()});
         }
 
         return result;
@@ -107,10 +129,15 @@ public class GenericDaoHibernateImpl<T, PK extends Serializable> implements Gene
     public T findSingleItemByQuery(String queryName, Object... params) {
 
         T result = null;
-        Query q = getNamedQuery(queryName, params);
-        
-        if (q != null) {
-            result = (T) q.uniqueResult();
+        try {
+            result = null;
+            Query q = getNamedQuery(queryName, params);
+            
+            if (q != null) {
+                result = (T) q.uniqueResult();
+            }
+        } catch (HibernateException e) {
+            logger.error("findSingleItemByQuery ::: query:{}, Exception:{},Message:{}",new Object[]{queryName,e.getClass().getSimpleName(),e.getMessage()});
         }
 
         return result;
@@ -122,11 +149,15 @@ public class GenericDaoHibernateImpl<T, PK extends Serializable> implements Gene
         
         X result = null;
        
-        Query q = createQuery(queryString, params);
-
-        if (q != null) {
-            q.setResultTransformer(Transformers.aliasToBean(target.getClass()));
-            result = (X) q.uniqueResult();
+        try {
+            Query q = createQuery(queryString, params);
+            
+            if (q != null) {
+                q.setResultTransformer(Transformers.aliasToBean(target.getClass()));
+                result = (X) q.uniqueResult();
+            }
+        } catch (HibernateException e) {
+            logger.error("findSingleItemByQueryString ::: query:{}, Exception:{},Message:{}",new Object[]{queryString,e.getClass().getSimpleName(),e.getMessage()});
         }
         
         return result;
@@ -134,8 +165,15 @@ public class GenericDaoHibernateImpl<T, PK extends Serializable> implements Gene
     
     @Override
     public int executeUpdateByQuery(String queryName, Object... params) {
-        Query q = getNamedQuery(queryName, params);
-        int res = q.executeUpdate();
+        int res  = -1;
+        
+        try {
+            Query q = getNamedQuery(queryName, params);
+            res = q.executeUpdate();
+        } catch (HibernateException e) {
+            logger.error("executeUpdateByQuery ::: query:{}, Exception:{},Message:{}",new Object[]{queryName,e.getClass().getSimpleName(),e.getMessage()});
+        }
+     
         return res;
 
     }
@@ -149,12 +187,17 @@ public class GenericDaoHibernateImpl<T, PK extends Serializable> implements Gene
     @SuppressWarnings(value = "unchecked")
     public Page<T> findPageByQuery(String queryName, PageCtrl pageCtrl, Object... params) {
 
-        Query q = getNamedQuery(queryName, params);
-        q.setMaxResults(pageCtrl.getPageSize());
-        q.setFirstResult(pageCtrl.getFirstResult());
-        List data = q.list();
-        Page<T> result = new Page<T>(data, pageCtrl);
-
+        Page<T> result = null;
+        
+        try {
+            Query q = getNamedQuery(queryName, params);
+            q.setMaxResults(pageCtrl.getPageSize());
+            q.setFirstResult(pageCtrl.getFirstResult());
+            List data = q.list();
+            result = new Page<T>(data, pageCtrl);
+        } catch (HibernateException e) {
+            logger.error("findPageByQuery ::: query:{}, Exception:{},Message:{}",new Object[]{queryName,e.getClass().getSimpleName(),e.getMessage()});
+        }
         return result;
     }
 
@@ -167,8 +210,13 @@ public class GenericDaoHibernateImpl<T, PK extends Serializable> implements Gene
 
     @Override
     public int findQueryResultSetSize( String queryName, Object... params) {
-        Query q = getNamedQuery(queryName, params);
-        int result = ((Long) q.uniqueResult()).intValue();
+        int result = 0;
+        try {
+            Query q = getNamedQuery(queryName, params);
+            result = ((Long) q.uniqueResult()).intValue();
+        } catch (HibernateException e) {
+            logger.error("findQueryResultSetSize ::: query:{}, Exception:{},Message:{}",new Object[]{queryName,e.getClass().getSimpleName(),e.getMessage()});
+        }
         return result;
     }
 
@@ -178,7 +226,6 @@ public class GenericDaoHibernateImpl<T, PK extends Serializable> implements Gene
         this.sessionFactory = sessionFactory;
     }
 
-    // Not showing implementations of getSession() and setSessionFactory()
     private Session getSession() {
         return sessionFactory.getCurrentSession();
     }
@@ -205,6 +252,4 @@ public class GenericDaoHibernateImpl<T, PK extends Serializable> implements Gene
         }
         return q;
     }
-
-    
 }

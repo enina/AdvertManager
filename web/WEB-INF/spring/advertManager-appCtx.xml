@@ -176,41 +176,43 @@
         </constructor-arg>
     </bean>    
 
-    <bean id="poTotalAggrDao"  parent="adManGenericDao" class="com.mne.advertmanager.dao.GenericDaoHibernateImpl" >
+    <bean id="totalBehaviorStatsDao"  parent="adManGenericDao" class="com.mne.advertmanager.dao.GenericDaoHibernateImpl" >
         <constructor-arg>
-            <value type="java.lang.Class">com.mne.advertmanager.model.PurchaseOrderAggregation</value>
+            <value type="java.lang.Class">com.mne.advertmanager.model.FilterableBehaviorStatistics</value>
         </constructor-arg>
         <constructor-arg>
-            <value type="java.lang.String">PurchaseOrderTotalAggregation</value>
+            <value type="java.lang.String">TotalBehaviorStats</value>
         </constructor-arg>        
     </bean>        
     
-    <bean id="poPrevMonthAggrDao"  parent="adManGenericDao" class="com.mne.advertmanager.dao.GenericDaoHibernateImpl" >
+    <bean id="prevMonthBehaviorStatsDao"  parent="adManGenericDao" class="com.mne.advertmanager.dao.GenericDaoHibernateImpl" >
         <constructor-arg>
-            <value type="java.lang.Class">com.mne.advertmanager.model.PurchaseOrderAggregation</value>
+            <value type="java.lang.Class">com.mne.advertmanager.model.FilterableBehaviorStatistics</value>
         </constructor-arg>
         <constructor-arg>
-            <value type="java.lang.String">PurchaseOrderPrevMonthAggregation</value>
+            <value type="java.lang.String">PrevMonthBehaviorStats</value>
         </constructor-arg>        
     </bean>        
 
-    <bean id="poCurMonthAggrDao"  parent="adManGenericDao" class="com.mne.advertmanager.dao.GenericDaoHibernateImpl" >
+    <bean id="curMonthBehaviorStatsDao"  parent="adManGenericDao" class="com.mne.advertmanager.dao.GenericDaoHibernateImpl" >
         <constructor-arg>
-            <value type="java.lang.Class">com.mne.advertmanager.model.PurchaseOrderAggregation</value>
+            <value type="java.lang.Class">com.mne.advertmanager.model.FilterableBehaviorStatistics</value>
         </constructor-arg>
         <constructor-arg>
-            <value type="java.lang.String">PurchaseOrderCurMonthAggregation</value>
+            <value type="java.lang.String">CurMonthBehaviorStats</value>
         </constructor-arg>        
     </bean>            
+   
+    <bean id="dailyBehaviorStatsDao"  parent="adManGenericDao" class="com.mne.advertmanager.dao.GenericDaoHibernateImpl" >
+        <constructor-arg>
+            <value type="java.lang.Class">com.mne.advertmanager.model.FilterableBehaviorStatistics</value>
+        </constructor-arg>
+        <constructor-arg>
+            <value type="java.lang.String">DailyBehaviorStats</value>
+        </constructor-arg>        
+    </bean>    
+    
 
-    <bean id="poDailyAggrDao"  parent="adManGenericDao" class="com.mne.advertmanager.dao.GenericDaoHibernateImpl" >
-        <constructor-arg>
-            <value type="java.lang.Class">com.mne.advertmanager.model.PurchaseOrderAggregation</value>
-        </constructor-arg>
-        <constructor-arg>
-            <value type="java.lang.String">PurchaseOrderDailyAggregation</value>
-        </constructor-arg>        
-    </bean>            
 
    
 <!--============================================================== user DAO     objects end   ===============================================================-->    
@@ -280,14 +282,14 @@
         </property>
     </bean>
     
-    <bean id="poAggrService" class="com.mne.advertmanager.service.PurchaseOrderAggregationService">
-        <property name="totalAggr"          ref="poTotalAggrDao"/>
-        <property name="prevMonthPoAggrDao" ref="poPrevMonthAggrDao"/>
-        <property name="curMonthPoAggrDao"  ref="poCurMonthAggrDao"/>
-        <property name="dailyPoAggrDao"     ref="poDailyAggrDao"/>
-        <property name="accessService"      ref="accessLogService"/>
-        <property name="affProgramService"  ref="affProgramService"/>
-        <property name="blngService"        ref="billingProjectService"/>
+    <bean id="behaviorStatService"              class="com.mne.advertmanager.service.BehaviorStatisticsService">
+        <property name="totalBehaviorStatsDao"      ref="totalBehaviorStatsDao"/>
+        <property name="prevMonthBehaviorStatsDao"  ref="prevMonthBehaviorStatsDao"/>
+        <property name="curMonthBehaviorStatsDao"   ref="curMonthBehaviorStatsDao"/>
+        <property name="dailyBehaviorStatsDao"      ref="dailyBehaviorStatsDao"/>
+        <property name="accessService"          ref="accessLogService"/>
+        <property name="affProgramService"      ref="affProgramService"/>
+        <property name="blngService"            ref="billingProjectService"/>
     </bean>    
     
 <!--=============================================================  user service beans end ===============================================================--> 
