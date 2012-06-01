@@ -41,7 +41,7 @@
             </td>    
         </tr>    
     </table>    
-    <c:if test="${poTAD!=null}">
+    <c:if test="${totalStats!=null}">
         <table>
             <tr>
                 <th>Period</th>
