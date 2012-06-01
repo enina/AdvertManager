@@ -8,6 +8,7 @@ import com.mne.advertmanager.util.Page;
 import com.mne.advertmanager.util.PageCtrl;
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.List;
 
 /**
  *
@@ -48,5 +49,7 @@ public interface GenericDao <T, PK extends Serializable> {
     public void initPageCtrl(PageCtrl pageCtrl,String queryName,Object ... params);
 
     public int findQueryResultSetSize( String queryName, Object ... params);
-
+    
+    public void saveDataSet(Collection<T> dataSet);
+    
 }

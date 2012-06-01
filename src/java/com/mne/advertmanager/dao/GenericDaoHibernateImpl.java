@@ -9,6 +9,7 @@ import com.mne.advertmanager.util.PageCtrl;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -252,4 +253,25 @@ public class GenericDaoHibernateImpl<T, PK extends Serializable> implements Gene
         }
         return q;
     }
+
+    @Override
+    public void saveDataSet(Collection<T> dataSet) {
+        
+        if (dataSet == null)
+            return;
+
+        try {
+            for (T item : dataSet) {
+                if (item != null) {
+                    getSession().saveOrUpdate(item);
+                }
+            }
+        } catch (HibernateException e) {
+            logger.error("saveDataSet ::: Exception:{},Message:{}",e.getClass().getSimpleName(),e.getMessage());
+        }
+    }
+    
+   
+
+    
 }
