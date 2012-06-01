@@ -1,9 +1,10 @@
+<%@ include file="WEB-INF/view/common/taglibs.jsp" %>
 <%-- 
     Document   : index
     Created on : Jan 13, 2012, 7:58:38 PM
     Author     : nina
 --%>
-<%@ include file="WEB-INF/view/common/taglibs.jsp" %>
+
 
 <!DOCTYPE html>
 <html>
@@ -42,7 +43,7 @@
                     <li id="rememberMe" ><span>Remember me</span><input type='checkbox' name='_spring_security_remember_me'/></li>
                 </ul>
             </form>   
-             
+
             <!-- nav bar -->
             <ul id="menu">
                 <li>Home</li>

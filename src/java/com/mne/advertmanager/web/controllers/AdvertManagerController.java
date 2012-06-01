@@ -94,10 +94,17 @@ public class AdvertManagerController {
     /**
      * this ctrl function redirect users from root URL to home page URL
      */
+//    @RequestMapping("/")
+//    public String redirect() {
+//        logger.info("redirecting to home page");
+//        return "redirect:/index";//mvc/home/";
+//    }
+    
+    
     @RequestMapping("/")
-    public String redirect() {
-        logger.info("redirecting to home page");
-        return "redirect:mvc/home/";
+    public void loginPage() {
+        logger.info("go to view / "); 
+      
     }
 //======================== generateHome ========================================
     /**

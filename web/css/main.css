@@ -1,0 +1,158 @@
+#loginForm{
+    
+    position:relative;
+    float: right;
+    top:32px;
+    left: -25px;
+    width:400px;
+}
+#loginForm span{
+    margin: 0px;
+    position: absolute;
+    left: -9999px;
+}
+
+#loginForm ul{
+    
+    list-style: none; 
+    width:400px;
+    
+}
+
+#rememberMe input{
+    display:none;
+}
+#loginForm ul li{
+    
+    float:left;
+}
+#emailInput{
+
+    padding: 0px 1px;
+    height:27px;
+    width: 132px;
+}
+#emailInput input{
+    padding: 0px 5px;
+    background-image: url('../images/loginForm.png');
+    background-repeat: no-repeat;
+    background-position:0px 0px;
+    height:27px;
+    width: 122px;
+    border: none;
+}
+#emailInput input:focus{
+
+    background-position:0px -27px;
+
+}
+#passwordInput{
+    padding: 0px 1px;
+    height:27px;
+    width: 102px;
+}
+#passwordInput input{
+    padding: 0px 5px;
+    background-image: url('../images/loginForm.png');
+    background-repeat: no-repeat;
+    background-position:0px -54px;
+    height:27px;
+    width: 92px;
+    border: none;
+}
+#passwordInput input:focus{
+    background-position:0px -81px;
+}
+
+#loginButton{
+    padding-left: 9px;
+    height:27px;
+    width: 58px;
+}
+#loginButton button{
+    background-image: url('../images/loginForm.png');
+    background-repeat: no-repeat;
+    background-position:0px -108px;
+    background-color: transparent;
+    height:27px;
+    width: 58px;
+}
+#loginButton button:hover{
+
+    background-position:0px -135px;
+}
+#registerButton{
+    padding-left: 3px;
+    height:27px;
+    width: 83px;
+    
+}
+#registerButton button{
+    background-image: url('../images/loginForm.png');
+    background-repeat: no-repeat;
+    background-position:0px -162px;
+    background-color: transparent;
+    height:27px;
+    width: 83px;
+    
+}
+#registerButton button:hover{
+
+    background-position:0px -189px;
+}
+
+.advert{
+    padding: 29px 25px 0px 25px;
+    width: 1110px;
+    height: 460px;
+    background-color: #c4c4c4;
+    margin: 35px 0px 0px 0px;
+}
+.advert .bulletinBoard{
+
+    float: left;
+    
+    background-image: url('../images/bulletinBoardBG.png');
+    width: 390px;
+    height: 419px;
+    padding: 10px 5px 0px 5px ;
+}
+.advert img{
+    float: right;
+}
+#advert2 img{
+    position: relative;
+    left: -200px;
+    top:50px;
+}
+#advert3 img{
+    position: relative;
+    top:50px;
+}
+.bulletinHeader{
+    
+    color: #30324c;
+    font-size: 1.6em;
+    font-family: arial, sans-serif; 
+}
+
+.bulletinBody{
+    
+    color: #30324c;
+    font-size: 1.1em;
+    line-height: 1.5em;
+    font-family: arial, sans-serif; 
+    font-style: italic;
+    position: relative;
+    top: 30px;
+    
+}
+.currentAdvert{
+    
+}
+.advertFadeAvay{
+    
+  position: absolute;
+  left: -800px;
+  display: none;
+}

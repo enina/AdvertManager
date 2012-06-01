@@ -3,12 +3,7 @@
 
 
 <div id="subHeader" >
-        <span id="welcomeUser">
-            Hello <!---->
-            <sec:authorize access="hasRole('ROLE_USER')">
-                <sec:authentication property="principal.username"/>
-            </sec:authorize>
-        </span>
+
         <ul  id="topMenue" > 
 
             <li class=""> <a class="menuItem" href="${pageContext.request.contextPath}/mvc/home" >Home</a></li>

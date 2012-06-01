@@ -1,0 +1,33 @@
+/* 
+    Document   : home
+    Created on : 01-Jun-2012, 19:17:59
+    Author     : Misha
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+root { 
+    display: block;
+}
+
+
+
+#userControl{
+    position:relative;
+    float: right;
+    top:32px;
+    left: -25px;
+    width: 225px;
+    height: 27px;
+    background-image: url("../images/userMenuBg.jpg");
+    padding: 0px 5px;
+}
+#userControl:hover{
+    
+    background-position: 0px -140px;
+}
+#userControl:focus{
+    background-position: 0px 0px;
+    height: 140px;
+    
+}

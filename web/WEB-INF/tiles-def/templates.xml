@@ -6,15 +6,15 @@
 <tiles-definitions>
 
     <!-- Default Main Template -->
-    <definition name=".mainTemplate" template="/WEB-INF/view/common/main.jsp">
-        <put-attribute name="title" value="AdMan" type="string" />
-        <put-attribute name="header" value="/WEB-INF/view/common/header.jsp" />
+    <definition name=".mainTemplate" template="/WEB-INF/view/common/mainVeiwTemplate.jsp">
+        <put-attribute name="title" value="AdvertiseManager" type="string" />
+        <put-attribute name="htmlInclude" value="/WEB-INF/view/common/blank.jspp" />
+        <put-attribute name="userControl" value="/WEB-INF/view/common/blank.jsp" />
         <put-attribute name="menu" value="/WEB-INF/view/common/blank.jsp" />
         <put-attribute name="content" value="/WEB-INF/view/common/blank.jsp" />        
-        <put-attribute name="footer" value="/WEB-INF/view/common/footer.jsp" />
+        <put-attribute name="footer" value="/WEB-INF/view/common/blank.jsp" />
     </definition>
     
-
     <definition name="affprogram.body" template="/WEB-INF/view/common/programbody.jsp">
         <put-attribute name="overview" value="affprogram.overview" />
         <put-attribute name="finance" value="/WEB-INF/view/affprograms/finance.jsp" />
@@ -28,19 +28,31 @@
         <put-attribute name="programspec" value="/WEB-INF/view/affprograms/programspec.jsp" />
     </definition>
     
+    <definition name=""  extends=".mainTemplate">
+        <put-attribute name="title" value="Advert Manager Login" type="string" />
+        <put-attribute name="htmlInclude" value="/WEB-INF/view/mainwindow/htmlInclude.jsp" />
+        <put-attribute name="userControl" value="/WEB-INF/view/common/userLoginForm.jsp" />
+        <put-attribute name="menu" value="/WEB-INF/view/mainwindow/navMenu.jsp" />
+        <put-attribute name="content" value="/WEB-INF/view/mainwindow/content.jsp" />
+    </definition>
+   
     <definition name="affprograms/details" extends=".mainTemplate">
        <put-attribute name="title" value="Affiliate Programs" type="string" />
        <put-attribute name="header" value="/WEB-INF/view/common/header.jsp" />
        <put-attribute name="content" value="affprogram.body" />
     </definition>
       
-    
-
-    
-   
    <definition name="home" extends=".mainTemplate">
-       <put-attribute name="content" value="/WEB-INF/view/home.jsp" />
+        <put-attribute name="title" value="Activity Overview" type="string" />
+        <put-attribute name="htmlInclude" value="/WEB-INF/view/home/htmlInclude.jsp" />
+        <put-attribute name="userControl" value="/WEB-INF/view/common/userMenu.jsp" />
+        <put-attribute name="menu" value="/WEB-INF/view/home/navMenu.jsp" />
+        <put-attribute name="content" value="/WEB-INF/view/common/blank.jsp" />        
+        <put-attribute name="footer" value="/WEB-INF/view/common/blank.jsp" />
    </definition>
+   
+
+   
    
    <definition name="affiliates/list" extends=".mainTemplate">
        <put-attribute name="title" value="Affiliates" type="string" />
@@ -65,8 +77,6 @@
    </definition>
    
 
-   
-   
    <definition name="billing/list" extends=".mainTemplate">
        <put-attribute name="title" value="Billing Sites" type="string" />
        <put-attribute name="content" value="/WEB-INF/view/billing/list.jsp" />

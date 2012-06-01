@@ -1,0 +1,101 @@
+
+root { 
+    display: block;
+}
+
+body{
+    margin: 0px;
+    background-color: #bebebe;
+    
+}
+button{
+    border: none;
+    padding: 0px;
+    
+}
+ul{
+    padding: 0px;
+    margin: 0px;
+}
+
+a{
+    text-decoration: none;
+}
+.hidden{
+    display: none
+}
+.visible{
+    display: block
+}
+#logo{
+
+    overflow: hidden;
+    width: 364px;
+    height: 54px;
+    position: relative;
+    display: inline;
+    float: left;
+    top: 10px;
+    left: 42px;
+    margin: 0px 0px;
+    padding: 0px 0px;
+
+}
+img{
+    border: 0px;
+}
+#logo a:hover,#logo a:visited,#logo a:link{
+
+    text-decoration: none;
+        
+}
+#logo img{
+    
+    width: 364px;
+    height: 54px;
+    margin: 0px 0px;
+    padding: 0px 0px;
+}
+#container{
+    width: 1160px;
+    margin: 0 auto;
+    height: 700px;;
+}
+#menuBg{
+    background-image: url("../images/menuLineBg.png");
+    background-repeat: repeat-x;
+    position: absolute;
+    top:66px;
+    height: 40px;
+    width:100%;
+    
+}
+ul#menu {
+    clear: both;
+    position: relative;
+    height: 40px;
+    top: 12px;
+    list-style: none;
+    width: 1160px;
+    margin: auto 0px;
+    
+}
+#menu li {
+    position: relative;
+    padding: 0 5px;
+
+    float: left;
+    height: 40px;
+    margin: 0 50px 0 10px;
+}
+#menu li:hover{
+    background-image: url("../images/menuLineBgBright.png");
+    background-repeat: repeat-x;
+    cursor: pointer;
+}
+#menu li a {
+    
+    font-family: arial, sans-serif;
+    font-size: 1.7em;
+    color: #c9cfdf;
+}
