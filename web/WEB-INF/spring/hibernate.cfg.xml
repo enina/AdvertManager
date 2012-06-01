@@ -23,6 +23,6 @@ Contains list of classes which comprise our model and cache provider definition
         <mapping class="com.mne.advertmanager.parsergen.model.Project"/>
         <mapping class="com.mne.advertmanager.parsergen.model.DataSpec"/>
         <mapping class="com.mne.advertmanager.parsergen.model.SelectableItem"/><!--  -->
-        <mapping resource="com/mne/advertmanager/model/PurchaseOrderAggregation.hbm.xml"/>
+        <mapping resource="com/mne/advertmanager/model/FilterableBehaviorStatistics.hbm.xml"/>
     </session-factory>
 </hibernate-configuration>

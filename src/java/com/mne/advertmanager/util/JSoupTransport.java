@@ -26,17 +26,19 @@ public class JSoupTransport {
     public static Document retrieveDocument(Connection con, String docUrl, String method) {
         Document result = null;
         try {
-            logger.log(Level.FINE,"Retrieve Document::: URL:{0} ,Method:{1}",new Object[]{docUrl,method});
-            System.out.println(String.format("Retrieve Document::: URL:{%s} ,Method:{%s}", docUrl, method));            
+            logger.log(Level.FINE,"Start:Retrieve Document::: URL:{0} ,Method:{1}",new Object[]{docUrl,method});
+            System.out.println(String.format("Start:Retrieve Document::: URL:{%s} ,Method:{%s}", docUrl, method));            
             con.url(docUrl).timeout(0);
             if ("post".equals(method)) {
                 result = con.post();
             } else {
                 result = con.get();
             }
+            logger.log(Level.FINE,"Document retrieved successfully ::: URL:{0} ,Method:{1}",new Object[]{docUrl,method});
+            System.out.println(String.format("Document retrieved successfully  ::: URL:{%s} ,Method:{%s}", docUrl, method));            
         } catch (IOException ex) {
-            logger.log(Level.SEVERE,"failed to retrieved url {0}:::Exception {1}:::Message {2}" ,new Object[]{ docUrl, ex.getClass().getSimpleName(),ex.getMessage()});
-            System.out.println(String.format("failed to retrieved url {%s}:::Exception {%s}:::Message {%s}", docUrl, ex.getClass().getSimpleName(),ex.getMessage()));
+            logger.log(Level.SEVERE,"failed to retrieve url {0}:::Exception {1}:::Message {2}" ,new Object[]{ docUrl, ex.getClass().getSimpleName(),ex.getMessage()});
+            System.out.println(String.format("failed to retrieve url {%s}:::Exception {%s}:::Message {%s}", docUrl, ex.getClass().getSimpleName(),ex.getMessage()));
         }
         return result;
     }

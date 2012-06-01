@@ -3,20 +3,20 @@
 <hibernate-mapping>
     <!-- Filterable behavior statistics start -->
     <class name="com.mne.advertmanager.model.FilterableBehaviorStatistics"
-           table="daily_behavior_stats" 
+           table="behavior_stats_daily" 
            entity-name="DailyBehaviorStats">
 
         <id name="id" column="id">
             <generator class="native"/>
         </id>
         
-        <many-to-one unique="true" column="affprogram_id"
-                         name="affProgram" class="com.mne.advertmanager.model.AffProgram"
-                         foreign-key="DAILY_BEHAVIOR_STAT_AFFPROGRAM_FK"/>
+        <many-to-one	column="affprogram_id"
+                        name="affProgram" class="com.mne.advertmanager.model.AffProgram"
+                        foreign-key="DAILY_BEHAVIOR_STAT_AFFPROGRAM_FK"/>
                          
-        <many-to-one unique="true" column="domain_id"
-                         name="source" class="com.mne.advertmanager.model.AccessSource"
-                         foreign-key="DAILY_BEHAVIOR_STAT_ACCESSSOURCE_FK"/>
+        <many-to-one	column="domain_id"
+                        name="source" class="com.mne.advertmanager.model.AccessSource"
+                        foreign-key="DAILY_BEHAVIOR_STAT_ACCESSSOURCE_FK"/>
 
         <property name="countryName"/>
         <property name="accessAmount"/>
@@ -25,20 +25,20 @@
     </class>  
 
     <class name="com.mne.advertmanager.model.FilterableBehaviorStatistics"
-           table="curmonth_behavior_stats" 
+           table="behavior_stats_curmonth" 
            entity-name="CurMonthBehaviorStats">
 
         <id name="id" column="id">
             <generator class="native"/>
         </id>
         
-        <many-to-one unique="true" column="affprogram_id"
-                         name="affProgram" class="com.mne.advertmanager.model.AffProgram"
-                         foreign-key="CURMONTH_BEHAVIOR_STAT_AFFPROGRAM_FK"/>
+        <many-to-one	column="affprogram_id"
+                        name="affProgram" class="com.mne.advertmanager.model.AffProgram"
+                        foreign-key="CURMONTH_BEHAVIOR_STAT_AFFPROGRAM_FK"/>
                          
-        <many-to-one unique="true" column="domain_id"
-                         name="source" class="com.mne.advertmanager.model.AccessSource"
-                         foreign-key="CURMONTH_BEHAVIOR_STAT_ACCESSSOURCE_FK"/>
+        <many-to-one	column="domain_id"
+                        name="source" class="com.mne.advertmanager.model.AccessSource"
+                        foreign-key="CURMONTH_BEHAVIOR_STAT_ACCESSSOURCE_FK"/>
 
         <property name="countryName"/>
         <property name="accessAmount"/>
@@ -47,18 +47,18 @@
     </class>  
     
     <class name="com.mne.advertmanager.model.FilterableBehaviorStatistics"
-           table="prevmonth_behavior_stats" 
+           table="behavior_stats_prevmonth" 
            entity-name="PrevMonthBehaviorStats">
 
         <id name="id" column="id">
             <generator class="native"/>
         </id>
         
-        <many-to-one unique="true" column="affprogram_id"
+        <many-to-one     column="affprogram_id"
                          name="affProgram" class="com.mne.advertmanager.model.AffProgram"
                          foreign-key="PREVMONTH_BEHAVIOR_STAT_AFFPROGRAM_FK"/>
                          
-        <many-to-one unique="true" column="domain_id"
+        <many-to-one     column="domain_id"
                          name="source" class="com.mne.advertmanager.model.AccessSource"
                          foreign-key="PREVMONTH_BEHAVIOR_STAT_ACCESSSOURCE_FK"/>
 
@@ -69,20 +69,20 @@
     </class>  
     
     <class name="com.mne.advertmanager.model.FilterableBehaviorStatistics"
-           table="total_behavior_stats" 
+           table="behavior_stats_total" 
            entity-name="TotalBehaviorStats">
 
         <id name="id" column="id">
             <generator class="native"/>
         </id>
         
-        <many-to-one unique="true" column="affprogram_id"
-                         name="affProgram" class="com.mne.advertmanager.model.AffProgram"
-                         foreign-key="TOTAL_BEHAVIOR_STAT_AFFPROGRAM_FK"/>
+        <many-to-one column="affprogram_id" lazy="false"
+                     name="affProgram" class="com.mne.advertmanager.model.AffProgram"
+                     foreign-key="TOTAL_BEHAVIOR_STAT_AFFPROGRAM_FK"/>
                          
-        <many-to-one unique="true" column="domain_id"
-                         name="source" class="com.mne.advertmanager.model.AccessSource"
-                         foreign-key="TOTAL_BEHAVIOR_STAT_ACCESSSOURCE_FK"/>
+        <many-to-one column="domain_id" lazy="false"
+                     name="source" class="com.mne.advertmanager.model.AccessSource"
+                     foreign-key="TOTAL_BEHAVIOR_STAT_ACCESSSOURCE_FK"/>
 
         <property name="countryName"/>
         <property name="accessAmount"/>
@@ -101,6 +101,11 @@
     ]]>
     </query>    
     
+    <query name="PrevMonthBehaviorStats.findAffProgCountryStats"><![CDATA[
+        from PrevMonthBehaviorStats where affProgram.id=? and countryName=?
+    ]]>
+    </query>
+
     <query name="PrevMonthBehaviorStats.findAffProgStats"><![CDATA[
         from PrevMonthBehaviorStats where affProgram.id=?
     ]]>
@@ -112,6 +117,11 @@
     </query>    
     
     
+    <query name="CurMonthBehaviorStats.findAffProgCountryStats"><![CDATA[
+        from CurMonthBehaviorStats where affProgram.id=? and countryName=?
+    ]]>
+    </query>
+
     <query name="CurMonthBehaviorStats.findAffProgStats"><![CDATA[
         from CurMonthBehaviorStats where affProgram.id=?
     ]]>
@@ -123,25 +133,49 @@
     </query>    
     
     
-    <query name="DailyBehaviorStats.findByAffProgId"><![CDATA[
-        from DailyBehaviorStats where countryName='Filter.ALL' and  affProgram.id=?
+    <query name="DailyBehaviorStats.findAffProgCountryStats"><![CDATA[
+        from DailyBehaviorStats where affProgram.id=? and countryName=?
     ]]>
     </query>
+    
+    <query name="DailyBehaviorStats.findAffProgStats"><![CDATA[
+        from DailyBehaviorStats where  affProgram.id=? 
+    ]]>
+    </query>    
+    
     
     <query name="DailyBehaviorStats.deleteAffProgStats"><![CDATA[
         delete from DailyBehaviorStats where affProgram.id=?
     ]]>
     </query>    
     
-    <query name="BehaviorStats.calculateAffProgStatsByIdAndTime"><![CDATA[
+    <query name="BehaviorStats.calcAffProgPeriodTotalFinancialStats"><![CDATA[
         SELECT
-            new com.mne.advertmanager.model.FilterableBehaviorStatistics(count (po),sum(commision),po.affProgram)
+            new com.mne.advertmanager.model.FilterableBehaviorStatistics(count (po),sum(po.commision),po.affProgram)
         FROM
-            PurchaseOrder po
+            PurchaseOrder po 
         WHERE 
             po.affProgram.id = ? and ordertime > ?
     ]]>
     </query>
+    
+    <!--
+SELECT count(affprogram_id) as poAmount,sum(commision) ,cn,affprogram_id FROM 
+(select * from purchase_order group by ip_address) t1
+group by cn
+-->
+    
+    <query name="BehaviorStats.calcAffProgPeriodFinancialStatsByCountry"><![CDATA[
+        SELECT
+            new com.mne.advertmanager.model.FilterableBehaviorStatistics(count(po),sum(po.commision),po.countryName,po.affProgram)
+        FROM
+            PurchaseOrder po
+	WHERE
+	    po in (select po from PurchaseOrder po  where po.affProgram.id = ? and ordertime > ?  group by ip_address)
+        GROUP BY
+	    po.countryName
+    ]]>
+    </query>  
     
     <!--
 select count(*) as accessAmount,source_domain_id,affprogram_id
@@ -153,15 +187,25 @@ source_domain_id is not null
 source_domain_id    
     -->
     
-    <query name="BehaviorStats.countAffProgramPeriodicAccessByDomain"><![CDATA[
+    <query name="BehaviorStats.calcAffProgPeriodDomainStats"><![CDATA[
         SELECT 
-            new com.mne.advertmanager.model.FilterableBehaviorStatistics (count (acl),acl.sourceDomain,acl.affProgram)
+            new com.mne.advertmanager.model.FilterableBehaviorStatistics (count (acl),acl.sourceDomain,acl.affProgram) 
          FROM  AccessLog acl 
          WHERE
-            acl in (select acl from AccessLog acl where acl.affProgram.id = ? and acl.accessTime > ? group by ip_address) and
-            acl.sourceDomain is not null 
+            acl in (select acl from AccessLog acl  where acl.affProgram.id = ? and acl.accessTime > ?  group by ip_address)
          GROUP BY 
             acl.sourceDomain
+    ]]>
+    </query>
+    
+    <query name="BehaviorStats.calcAffProgPeriodCountryStats"><![CDATA[
+        SELECT 
+            new com.mne.advertmanager.model.FilterableBehaviorStatistics (count (acl),acl.location,acl.affProgram) 
+         FROM  AccessLog acl 
+         WHERE
+            acl in (select acl from AccessLog acl  where acl.affProgram.id = ? and acl.accessTime > ?  group by ip_address)
+         GROUP BY 
+            acl.location
     ]]>
     </query>
     
@@ -189,5 +233,10 @@ source_domain_id
     ]]>
     </query>-->
         
+  
+  <!--
+  select sum(t1.count) from (select ip_address as ip, sum(affprogram_id)/affprogram_id as count from access_Log group by ip_address) t1
+where t1.count > 1
+  -->
   
 </hibernate-mapping>

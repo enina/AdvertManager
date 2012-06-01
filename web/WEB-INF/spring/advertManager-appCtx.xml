@@ -316,11 +316,11 @@
     <task:annotation-driven executor="admanExecutor" scheduler="admanScheduler"/>
     <task:executor          id="admanExecutor"  pool-size="5"/>
     <task:scheduler         id="admanScheduler" pool-size="10"/>
-    <!--
+    
     <task:scheduled-tasks scheduler="admanScheduler">
-        <task:scheduled ref="poAggrService" method="calculateAggrData" cron="0 0 4 * * ?"/>
+        <task:scheduled ref="behaviorStatService" method="calculate" cron="0 0 4 * * ?"/>
     </task:scheduled-tasks>
-    -->
+    
 <!-- Scheduling related beans-->    
 
 

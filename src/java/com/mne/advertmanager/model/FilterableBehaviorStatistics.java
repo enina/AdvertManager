@@ -26,11 +26,11 @@ public class FilterableBehaviorStatistics {
         this.id = id;
     }
     
-    
-    public FilterableBehaviorStatistics(long accessAmount, AccessSource source, AffProgram affProgram ) {
-        this.accessAmount = accessAmount;
-        this.source = source;
-        this.affProgram = affProgram;
+    @SuppressWarnings("OverridableMethodCallInConstructor")
+    public FilterableBehaviorStatistics(long accessAmount, AccessSource sourceDomain,AffProgram affProgram ) {
+        setAccessAmount(accessAmount);
+	setSource(sourceDomain);
+        setAffProgram( affProgram);
     }    
     
     @SuppressWarnings("OverridableMethodCallInConstructor")
@@ -47,6 +47,21 @@ public class FilterableBehaviorStatistics {
         setAccessAmount(accessAmount);
         setPurchaseAmount(purchaseAmount);
     }    
+
+    @SuppressWarnings("OverridableMethodCallInConstructor")
+    public FilterableBehaviorStatistics(long accessAmount,String countryName,AffProgram affProgram) {
+        setAffProgram(affProgram);
+        setAccessAmount(accessAmount);
+        setCountryName(countryName);
+    }
+    
+    @SuppressWarnings("OverridableMethodCallInConstructor")
+    public FilterableBehaviorStatistics(long purchaseAmount,double totalSum,String countryName,AffProgram affProgram) {
+        setAffProgram(affProgram);
+        setPurchaseAmount(purchaseAmount);
+	setTotalCommision(totalSum);
+        setCountryName(countryName);
+    }     
     
     public FilterableBehaviorStatistics(Integer id, AffProgram affProgram, AccessSource source, String countryName, long accessAmount, long purchaseAmount) {
         this.id = id;
@@ -55,6 +70,16 @@ public class FilterableBehaviorStatistics {
         this.countryName = countryName;
         this.accessAmount = accessAmount;
         this.purchaseAmount = purchaseAmount;
+    }
+    
+    @SuppressWarnings("OverridableMethodCallInConstructor")
+    public FilterableBehaviorStatistics(FilterableBehaviorStatistics source) {
+	setAffProgram(source.getAffProgram());
+	setAccessAmount(source.getAccessAmount());
+	setCountryName(source.getCountryName());
+	setPurchaseAmount(source.getPurchaseAmount());
+	setSource(source.getSource());
+	setTotalCommision(source.getTotalCommision());
     }
 
     public long getAccessAmount() {
@@ -153,8 +178,12 @@ public class FilterableBehaviorStatistics {
 
         if (source!=null)
             return source.getId().toString();
-        else
-            return countryName;
+	else {
+	    String result="";
+            if (countryName != null) 
+		result = countryName;
+	    return result;
+	}
     }
 
     
