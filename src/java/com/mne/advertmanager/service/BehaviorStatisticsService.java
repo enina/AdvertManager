@@ -179,7 +179,7 @@ public class BehaviorStatisticsService {
     @Transactional
     public void calculateAffProgramStatistics(int affProgramId) {
 
-	logger.info("Started behavior statistics calculation , for program {}", affProgramId);
+	logger.info("Program={}:::Started behavior statistics calculation", affProgramId);
 	Calendar cal = Calendar.getInstance();
 	//cal.add(Calendar.DATE, -1);
 	cal.clear();
@@ -203,14 +203,16 @@ public class BehaviorStatisticsService {
 	    logger.info("Shifted monthly statistics");
 	} else {
 	    updateStats(curMonthBehaviorStatsDao, cmStats, todayStats);
+	    logger.info("Updated current month statistics");
 	}
 
 	//delete outdate statistics from the daily table
 	cleanAffProgStats(dailyBehaviorStatsDao, "DailyBehaviorStats.deleteAffProgStats", affProgramId);
 	//save today statistics
 	processFBSList(dailyBehaviorStatsDao, todayStats);
+	logger.info("Updated daily statistics");
 
-	logger.info("Finished behavior statistics calculation , Program {}", affProgramId);
+	logger.info("Program={}::Finished behavior statistics calculation .", affProgramId);
     }
 
     private void shiftStats(GenericDao<FilterableBehaviorStatistics, Integer> statsDao, String queryName, int affProgramId, Collection<FilterableBehaviorStatistics> stats) {
