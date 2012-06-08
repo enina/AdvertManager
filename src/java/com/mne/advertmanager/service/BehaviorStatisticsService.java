@@ -7,9 +7,10 @@ package com.mne.advertmanager.service;
 import com.mne.advertmanager.dao.GenericDao;
 import com.mne.advertmanager.model.AffProgram;
 import com.mne.advertmanager.model.FilterableBehaviorStatistics;
+import com.mne.advertmanager.util.Page;
+import com.mne.advertmanager.util.PageCtrl;
 import java.util.*;
 import org.slf4j.LoggerFactory;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,7 +30,8 @@ public class BehaviorStatisticsService {
     private BillingProjectService blngService;
 
     public void setAccessService(AccessLogService accessService) {
-	this.accessService = accessService;
+
+        this.accessService = accessService;
     }
 
     public void setAffProgramService(AffProgramService affProgramService) {
@@ -65,6 +67,29 @@ public class BehaviorStatisticsService {
 
 	return result;
     }
+    
+    
+    @Transactional
+    public Set<FilterableBehaviorStatistics> findTotalAffiliateStatistics(int affiliateId) {
+
+	Set<FilterableBehaviorStatistics> result = findAffiliateStatistics(totalBehaviorStatsDao, "TotalBehaviorStats.findAffiliateCountryStats", affiliateId, "Filter.All");
+
+	logger.info("AffiliateId={},Retrieved total statistics for all programs", affiliateId);
+
+	return result;
+    }
+    
+    //in progres
+    @Transactional (readOnly = true)
+    public Set<FilterableBehaviorStatistics> findTotalAccesAmounByDomain(int affProgId) {
+
+	Set<FilterableBehaviorStatistics> result = findAccessByDomain(totalBehaviorStatsDao, "TotalBehaviorStats.findTotalAccesAmounByDomain", affProgId);
+                    //    
+	logger.info("affProgId={},Retrieved total assecces by domain", affProgId);
+
+	return result;
+    }
+
 
     @Transactional
     public FilterableBehaviorStatistics findCurMonthAffProgramStatistics(int affProgramId) {
@@ -96,6 +121,7 @@ public class BehaviorStatisticsService {
 
 	return result;
     }
+    
 
     //@Scheduled(cron="0 0 4 * * ?")
     public void calculate() {
@@ -123,7 +149,7 @@ public class BehaviorStatisticsService {
      *
      * <query name="TotalBehaviorStats.findAffProgrCountryStats"><![CDATA[ from TotalBehaviorStats where countryName=? and affProgram.id=? ]]> </query> *
      */
-    private List<FilterableBehaviorStatistics> calcDailyAffProgramStatsSet(int affProgramId, Date refTime) {
+        private List<FilterableBehaviorStatistics> calcDailyAffProgramStatsSet(int affProgramId, Date refTime) {
 
 	FilterableBehaviorStatistics total = dailyBehaviorStatsDao.findSingleItemByQuery("BehaviorStats.calcAffProgPeriodTotalFinancialStats", affProgramId, refTime);
 
@@ -239,6 +265,9 @@ public class BehaviorStatisticsService {
 		curFbs.add(todayFbs);
 		updatedStats.add(curFbs);
 	    }
+            else{
+                updatedStats.add(todayFbs);
+            }
 	}
 
 	processFBSList(statsDao, updatedStats);
@@ -258,6 +287,37 @@ public class BehaviorStatisticsService {
 	    result.setCountryName("Filter.ALL");
 	    statsDao.create(result);
 	}
+
+	return result;
+    }
+  
+    @SuppressWarnings("unchecked")
+    private Set<FilterableBehaviorStatistics> findAffiliateStatistics(GenericDao<FilterableBehaviorStatistics, Integer> statsDao, String query, int affProgramId, Object... params) {
+
+
+	ArrayList allParams = new ArrayList(Arrays.asList(params));
+	allParams.add(0, affProgramId);
+
+        Collection<FilterableBehaviorStatistics> data= null;
+        data = statsDao.findByQuery(query, allParams.toArray());
+	HashSet<FilterableBehaviorStatistics> result = new HashSet<FilterableBehaviorStatistics>(data);
+
+	return result;
+    }
+ 
+    @SuppressWarnings("unchecked")
+    private Set<FilterableBehaviorStatistics> findAccessByDomain(GenericDao<FilterableBehaviorStatistics, Integer> statsDao, String query, int affProgramId, Object... params) {
+
+
+	ArrayList allParams = new ArrayList(Arrays.asList(params));
+	allParams.add(0, affProgramId);
+
+        Collection<FilterableBehaviorStatistics> data= null;
+        //data = statsDao.findByQuery(query, allParams.toArray());
+        Page<FilterableBehaviorStatistics> page = null;
+        page = statsDao.findPageByQuery(query, new PageCtrl(1,0,10), allParams.toArray());
+        data = page.getItems();
+	HashSet<FilterableBehaviorStatistics> result = new HashSet<FilterableBehaviorStatistics>(data);
 
 	return result;
     }

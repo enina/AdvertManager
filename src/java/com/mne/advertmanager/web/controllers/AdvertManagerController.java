@@ -8,6 +8,7 @@ import com.google.gson.Gson;
 import com.mne.advertmanager.model.AffProgram;
 import com.mne.advertmanager.model.AffProgramGroup;
 import com.mne.advertmanager.model.Affiliate;
+import com.mne.advertmanager.model.FilterableBehaviorStatistics;
 import com.mne.advertmanager.parsergen.model.DataSpec;
 import com.mne.advertmanager.parsergen.model.Project;
 import com.mne.advertmanager.parsergen.model.SelectableItem;
@@ -15,7 +16,9 @@ import com.mne.advertmanager.service.*;
 import com.mne.advertmanager.web.model.BillingSpec;
 import java.io.IOException;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.bind.JAXBContext;
@@ -71,6 +74,7 @@ public class AdvertManagerController {
     private AffProgramService affProgramService;
     private AffProgramGroupService apgService;
     private BillingProjectService billingProjectService;
+    private BehaviorStatisticsService fbsService;
 
     private Gson gson = new Gson();
     private Unmarshaller jaxbUnmarshaller;
@@ -113,14 +117,28 @@ public class AdvertManagerController {
      * @return
      */
     @RequestMapping(value = "home", method = RequestMethod.GET)
-    public @ModelAttribute("data")
-    Affiliate generateHome(SecurityContextHolderAwareRequestWrapper securityContext) {
+    public ModelAndView generateHome(SecurityContextHolderAwareRequestWrapper securityContext) {
         String affName = securityContext.getUserPrincipal().getName();
         Affiliate aff = affiliateService.findAffiliateWithAffPrograms(affName);
         
+        Set<FilterableBehaviorStatistics> statsSet = fbsService.findTotalAffiliateStatistics(aff.getId());
+       
         //get total staistics of all programs
-        return aff;
+        ModelAndView mav = ControllerSupport.forwardToView(logger, "home", "home", "data", aff);
+        
+        
+        HashMap<AffProgram,FilterableBehaviorStatistics> statMap = new HashMap<AffProgram,FilterableBehaviorStatistics>();
+        
+        for( FilterableBehaviorStatistics fbs:statsSet ){
+            statMap.put(fbs.getAffProgram(), fbs);
+        }
+        
+        mav.addObject("affStatisticsMap", statMap); 
+        
+        return mav;
+        
     }
+   
 //========================== generateData ======================================
 
     @RequestMapping(value = DG_GEN_REQ_MAPPING, method = RequestMethod.GET)
@@ -412,5 +430,12 @@ public class AdvertManagerController {
     public void setBillingProjectService(BillingProjectService billingProjectService) {
         this.billingProjectService = billingProjectService;
     }
+    
+    @Autowired
+    public void setFbsService(BehaviorStatisticsService fbsService) {
+        this.fbsService = fbsService;
+    }
 
+    
+    
 }

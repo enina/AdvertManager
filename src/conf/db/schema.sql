@@ -48,6 +48,8 @@ create table aff_program (
     program_group_id	int not null,
     name varchar(256)	not null,
     description		varchar(256),
+    userName            varchar(256),
+    password            varchar(256),
     sync_status		int not null,
     affprogram_link	varchar(256) not null,
     redirect_link	varchar(256) null,
@@ -61,7 +63,7 @@ create table access_source (
     id			 int not null auto_increment,
     access_source_domain varchar(256) not null ,
     description		 varchar(256) not null ,
-    INDEX		 accSourceDomainIdx(access_source_domain)
+    INDEX		 accSourceDomainIdx(access_source_domain),
     CONSTRAINT ACCESSSOURCE_DOMAIN_UQ   UNIQUE accessSourceDomainUqIdx (access_source_domain(255)),
     CONSTRAINT ACCESSSOURCE_PK PRIMARY KEY (id));
 
@@ -90,7 +92,7 @@ create table partner (
     name        varchar(64)  not null ,
     email       varchar(256) not null ,
     CONSTRAINT PARTNER_PK PRIMARY KEY (id),
-    CONSTRAINT PARTNER_EMAIL_UQ   UNIQUE partnerEmailUqIdx (email(255)),);
+    CONSTRAINT PARTNER_EMAIL_UQ   UNIQUE partnerEmailUqIdx (email(255)));
 
 create table purchase_order (
     id			    int not null auto_increment ,

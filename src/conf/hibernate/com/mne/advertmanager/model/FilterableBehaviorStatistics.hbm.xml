@@ -91,6 +91,31 @@
     </class>    
 
 
+    <query name="TotalBehaviorStats.findAffiliateCountryStats"><![CDATA[
+        from
+            TotalBehaviorStats tbs
+            left join fetch tbs.affProgram prog
+            left join fetch prog.apg apg
+            left join fetch apg.affiliateId affiliate
+        where
+            affiliate.id=? and tbs.countryName=? 
+    ]]>
+    </query>
+    
+     <query name="TotalBehaviorStats.findTotalAccesAmounByDomain"><![CDATA[
+        from
+            TotalBehaviorStats tbs
+            left join fetch tbs.source src
+            left join fetch tbs.affProgram prog
+        where
+            src is not null and prog.id=? 
+         order by 
+            tbs.accessAmount desc
+    ]]>
+    </query>
+
+
+    
     <query name="TotalBehaviorStats.findAffProgCountryStats"><![CDATA[
         from TotalBehaviorStats where affProgram.id=? and countryName=? 
     ]]>

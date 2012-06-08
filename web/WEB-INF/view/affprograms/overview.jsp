@@ -86,5 +86,19 @@
             </c:if>
         </table>
     </c:if>
+            
+    <c:if test="${domainStats!=null}">
+        <table>
+            <c:forEach items="${domainStats}" var="domainItem"  >
+                
+                <tr>
+                    <td><c:out value="${domainItem.source.accessSourceDomain}"/></td> <td><c:out value="${domainItem.accessAmount}"/></td>
+                </tr>
+                
+            </c:forEach>
+            
+        </table>
+
+    </c:if>
 
 </div>
