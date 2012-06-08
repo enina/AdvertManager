@@ -39,7 +39,6 @@ import org.springframework.web.servlet.ModelAndView;
  */
 @Controller
 @RequestMapping("/")
-
 public class AdvertManagerController {
 
     private static final String AFFILIATES = "affiliates";
@@ -111,7 +110,7 @@ public class AdvertManagerController {
     /**
      * this ctrl function redirect users from root URL to home page URL
      */
-    @RequestMapping("main")
+    @RequestMapping(value="main",method = RequestMethod.GET)
     public void goToMain() {
         logger.info("go to main page");
     }

@@ -5,8 +5,7 @@
 
 <tiles-definitions>
 
-    <!-- Default Main Template -->
-    <definition name=".mainTemplate" template="/WEB-INF/view/common/mainVeiwTemplate.jsp">
+    <definition name=".mainTemplate" template="/WEB-INF/view/common/main.jsp">
         <put-attribute name="title" value="Advertise Manager" type="string" />
         <put-attribute name="commonInclude" value="/WEB-INF/view/common/commonInclude.jsp" />
         <put-attribute name="customInclude" value="/WEB-INF/view/common/blank.jsp" />
@@ -45,12 +44,10 @@
     </definition>
       
    <definition name="home" extends=".mainTemplate">
-        <put-attribute name="title" value="Activity Overview" type="string" />
-        <put-attribute name="htmlInclude" value="/WEB-INF/view/home/htmlInclude.jsp" />
-        <put-attribute name="userControl" value="/WEB-INF/view/common/userMenu.jsp" />
-        <put-attribute name="menu" value="/WEB-INF/view/home/navMenu.jsp" />
-        <put-attribute name="content" value="/WEB-INF/view/common/blank.jsp" />        
-        <put-attribute name="footer" value="/WEB-INF/view/common/blank.jsp" />
+       <put-attribute name="title" value="Activity Overview" type="string" />
+       <put-attribute name="customInclude" value="/WEB-INF/view/home/customInclude.jsp" />
+       <put-attribute name="navBar" value="/WEB-INF/view/home/navBar.jsp" />  
+       <put-attribute name="content" value="/WEB-INF/view/home/content.jsp" />
    </definition>
    
 
@@ -60,9 +57,8 @@
         <put-attribute name="content" value="/WEB-INF/view/main/content.jsp" />       
    </definition>
    
-       <put-attribute name="customInclude" value="/WEB-INF/view/home/customInclude.jsp" />
-       <put-attribute name="navBar" value="/WEB-INF/view/home/navBar.jsp" />  
-       <put-attribute name="content" value="/WEB-INF/view/home/content.jsp" />
+ 
+       
    <definition name="affiliates/list" extends=".mainTemplate">
        <put-attribute name="title" value="Affiliates" type="string" />
        <put-attribute name="content" value="/WEB-INF/view/affiliates/list.jsp" />
@@ -78,13 +74,7 @@
        <put-attribute name="content" value="/WEB-INF/view/affprograms/new.jsp" />
    </definition>
    
- 
-   <!--
-   <definition name="affprograms/list" extends=".mainTemplate">
-       <put-attribute name="title" value="Affiliate Programs" type="string" />
-       <put-attribute name="content" value="/WEB-INF/view/affprograms/list.jsp" />
-   </definition>
-   -->
+
 
    <definition name="billing/list" extends=".mainTemplate">
        <put-attribute name="title" value="Billing Sites" type="string" />
@@ -106,16 +96,7 @@
        <put-attribute name="content" value="/WEB-INF/view/billing/details.jsp" />
    </definition>   
    
-   <!--
-   <definition name="access/list" extends=".mainTemplate">
-       <put-attribute name="title" value="Access Log Viewer" type="string" />
-       <put-attribute name="content" value="/WEB-INF/view/access/list.jsp" />
-   </definition>   
-   -->
 
-   
- 
-   <!--for gui we defined template that not extends main, means that it just go to the jsp page -->
    <definition name="apps/parsergen" template="/WEB-INF/view/apps/parsergen.jsp"/>
 
 </tiles-definitions>

@@ -78,7 +78,7 @@
 
     <servlet-mapping>
         <servlet-name>Dispatcher</servlet-name>
-        <url-pattern>/</url-pattern><!-- /mvc/* -->
+        <url-pattern>/mvc/*</url-pattern>
     </servlet-mapping>
        
 
