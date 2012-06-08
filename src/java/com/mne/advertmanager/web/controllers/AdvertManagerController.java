@@ -99,6 +99,16 @@ public class AdvertManagerController {
         logger.info("redirecting to home page");
         return "redirect:mvc/home/";
     }
+    
+//=========================== goToMain =========================================
+    /**
+     * this ctrl function redirect users from root URL to home page URL
+     */
+    @RequestMapping("main")
+    public void goToMain() {
+        logger.info("go to main page");
+    }
+    
 //======================== generateHome ========================================
     /**
      * view resolution works through tiles configuration file WEB-INF/tiles-def/templates.xml tile which defines presentation automatically equals the url for example for url

@@ -1,0 +1,280 @@
+
+
+html {
+    overflow-y: scroll;
+    margin: 0px;
+}
+
+
+body{
+    margin: 0px;
+    background-color: #bebebe;
+    
+}
+button{
+    border: none;
+    padding: 0px;
+    
+}
+ul{
+    padding: 0px;
+    margin: 0px;
+}
+.hidden{
+    display: none
+}
+.visible{
+    display: block
+}
+img{
+    border: 0px;
+}
+
+#container{
+    width: 1160px;
+    margin: 0 auto;
+    height: 700px;;
+}
+#menuBg{
+    background-image: url("../images/menuLineBg.png");
+    background-repeat: repeat-x;
+    position: absolute;
+    top:66px;
+    height: 40px;
+    width:100%;
+    
+}
+#logo{
+
+    overflow: hidden;
+    width: 364px;
+    height: 54px;
+    position: relative;
+    display: inline;
+    float: left;
+    top: 10px;
+    left: 42px;
+    margin: 0px 0px;
+    padding: 0px 0px;
+
+}
+#logo a:hover,#logo a:visited,#logo a:link{
+
+    text-decoration: none;
+        
+}
+#logo img{
+    
+    width: 364px;
+    height: 54px;
+    margin: 0px 0px;
+    padding: 0px 0px;
+}
+ul#menu {
+    clear: both;
+    position: relative;
+    height: 40px;
+    top: 12px;
+    list-style: none;
+    width: 1160px;
+    margin: auto 0px;
+    
+}
+#menu li{
+    position: relative;
+    padding:  5px;
+
+    float: left;
+    height: 30px;
+    margin: 0 30px 0 10px;
+}
+#menu li:hover{
+    background-image: url("../images/menuLineBgBright.png");
+    background-repeat: repeat-x;
+    cursor: pointer;
+}
+#menu li a{
+    font-family: arial, sans-serif;
+    font-size: 18pt;
+    color: #c9cfdf;
+    text-decoration: none;
+
+}
+div#content{
+
+    margin: 35px 0px;
+
+}
+
+
+table,td,th,tr{
+    border-color: black;
+    border-style: solid;
+    border-width: 1px;
+}
+th{
+    height: 30px;
+}
+td{
+    height: 25px;
+    text-indent: 5px;
+}
+
+.dataTable tr:nth-child(even){
+    background: #eeedfe
+}
+.dataTable tr:nth-child(odd){
+    background: #ffffff
+}
+table{
+    
+    border-collapse: collapse;
+    border-width: 1px;
+    border-top-style: solid;
+    margin-top: 20px;
+    width:100%;
+    margin-right:auto;
+    margin-left: auto;
+}
+
+table th{ 
+    background-color: #38aa21;
+/*    background-color:  #26c516;*/
+}
+
+#loginForm{
+    
+    position:relative;
+    float: right;
+    top:32px;
+    left: -25px;
+    width:400px;
+}
+#loginForm span{
+    margin: 0px;
+    position: absolute;
+    left: -9999px;
+}
+
+#loginForm ul{
+    
+    list-style: none; 
+    width:400px;
+    
+}
+
+#rememberMe input{
+    display:none;
+}
+#loginForm ul li{
+    
+    float:left;
+}
+#emailInput{
+
+    padding: 0px 1px;
+    height:27px;
+    width: 132px;
+    
+
+}
+#emailInput input{
+    padding: 0px 5px;
+    background-image: url('../images/loginForm.png');
+    background-repeat: no-repeat;
+    background-position:0px 0px;
+    height:27px;
+    width: 122px;
+    border: none;
+}
+#emailInput input:focus{
+
+    background-position:0px -27px;
+
+}
+#passwordInput{
+    padding: 0px 1px;
+    height:27px;
+    width: 102px;
+}
+#passwordInput input{
+    padding: 0px 5px;
+    background-image: url('../images/loginForm.png');
+    background-repeat: no-repeat;
+    background-position:0px -54px;
+    height:27px;
+    width: 92px;
+    border: none;
+}
+#passwordInput input:focus{
+    background-position:0px -81px;
+}
+
+#loginButton{
+    padding-left: 9px;
+    height:27px;
+    width: 58px;
+}
+#loginButton button{
+    background-image: url('../images/loginForm.png');
+    background-repeat: no-repeat;
+    background-position:0px -108px;
+    background-color: transparent;
+    height:27px;
+    width: 58px;
+}
+#loginButton button:hover{
+
+    background-position:0px -135px;
+}
+#registerButton{
+    padding-left: 3px;
+    height:27px;
+    width: 83px;
+    
+}
+#registerButton button{
+    background-image: url('../images/loginForm.png');
+    background-repeat: no-repeat;
+    background-position:0px -162px;
+    background-color: transparent;
+    height:27px;
+    width: 83px;
+    
+}
+#registerButton button:hover{
+
+    background-position:0px -189px;
+}
+
+#userMenu{
+    
+    background-image: url("../images/userMenuBg.jpg");
+    position:relative;
+    height: 19px;
+    float: right;
+    top:32px;
+    left: -25px;
+    width:235px;
+    padding:4px 0px;
+    text-indent: 5px;
+}
+#userMenu:hover{
+    background-position:0px -140px;
+}
+
+
+#userMenuInner{
+    background-image: url("../images/userMenuBg.jpg");
+    background-position: 0px -27px;
+    position:absolute;
+    top: 100%;
+    
+    width: 235px;
+    height: 103px;
+   
+}
+
+#userMenuInner{
+    
+}

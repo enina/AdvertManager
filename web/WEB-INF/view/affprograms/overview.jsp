@@ -33,7 +33,7 @@
 
 <div id="" >
     
-    <tiles:insertAttribute name="programspec" />
+    
     <table>
         <tr>
             <td>
@@ -42,7 +42,7 @@
         </tr>    
     </table>    
     <c:if test="${totalStats!=null}">
-        <table>
+        <table class="dataTable">
             <tr>
                 <th>Period</th>
                 <th>Access Amount</th>

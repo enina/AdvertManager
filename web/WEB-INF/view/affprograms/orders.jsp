@@ -6,7 +6,7 @@
 
 <%@ include file="../common/taglibs.jsp" %>
     
-<table >
+<table class="dataTable">
     
     <c:if test="${orderList!=null}">
         
