@@ -86,7 +86,7 @@ function siSelected() {
     if (selBox != null) {
         var selector=selBox.options[selBox.selectedIndex].value;
         if (selector != null)
-            document.getElementById("si.selector").innerText=selector;
+            document.getElementById("si.selector").innerHTML=selector;
     }
 }
 
@@ -103,9 +103,9 @@ var dsDataHandler = function (ds)  {
     selBox.options.length = 1;
     selBox.selectedIndex = 0;
     selBox.disabled=true;
-    document.getElementById("ds.url").innerText=ds.dataURL;
-    document.getElementById("ds.numPages").innerText=ds.numPages;
-    document.getElementById("si.selector").innerText="";
+    document.getElementById("ds.url").innerHTML=ds.dataURL;
+    document.getElementById("ds.numPages").innerHTML=ds.numPages;
+    document.getElementById("si.selector").innerHTML="";
     
     
     var siList =  ds.subItems;

@@ -28,7 +28,9 @@
     </definition>
  
     <definition name="affprograms/new" extends=".mainTemplate">
-	<put-attribute name="title" value="Program Definition" type="string" />
+	<put-attribute name="title" value="Add Program" type="string" />
+        <put-attribute name="navBar" value="/WEB-INF/view/home/navBar.jsp" />
+        <put-attribute name="customInclude" value="/WEB-INF/view/affprograms/customInclude.jsp" />
 	<put-attribute name="content" value="/WEB-INF/view/affprograms/new.jsp" />
     </definition> 
    
@@ -53,7 +55,10 @@
  
     <definition name="affiliates/new" extends=".mainTemplate">
 	<put-attribute name="title" value="Affiliate Registration" type="string" />
+        <put-attribute name="customInclude" value="/WEB-INF/view/billing/customInclude.jsp" />
+        <put-attribute name="navBar" value="/WEB-INF/view/home/navBar.jsp" />  
 	<put-attribute name="content" value="/WEB-INF/view/affiliates/new.jsp" />
+        
     </definition>
 
 
@@ -75,11 +80,15 @@
 
     <definition name="billing/list" extends=".mainTemplate">
 	<put-attribute name="title" value="Billing Sites" type="string" />
+        <put-attribute name="customInclude" value="/WEB-INF/view/billing/customInclude.jsp" />
+        <put-attribute name="navBar" value="/WEB-INF/view/home/navBar.jsp" />  
 	<put-attribute name="content" value="/WEB-INF/view/billing/list.jsp" />
     </definition>
    
     <definition name="billing/details" extends=".mainTemplate">
 	<put-attribute name="title" value="Billing Site Details" type="string" />
+        <put-attribute name="customInclude" value="/WEB-INF/view/billing/customInclude.jsp" />
+        <put-attribute name="navBar" value="/WEB-INF/view/home/navBar.jsp" />  
 	<put-attribute name="content" value="/WEB-INF/view/billing/details.jsp" />
     </definition>   
    
