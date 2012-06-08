@@ -89,21 +89,11 @@ public class AdvertManagerController {
         }
     }
 
-//=========================== redirect =========================================
-    /**
-     * this ctrl function redirect users from root URL to home page URL
-     */
-//    @RequestMapping("/")
-//    public String redirect() {
-//        logger.info("redirecting to home page");
-//        return "redirect:/index";//mvc/home/";
-//    }
-    
-    
+//=========================== loginPage ========================================
     @RequestMapping("/")
-    public void loginPage() {
-        logger.info("go to view / "); 
-      
+    public String redirect() {
+        logger.info("redirecting to home page");
+        return "redirect:mvc/home";
     }
     
 //=========================== goToMain =========================================
@@ -128,6 +118,8 @@ public class AdvertManagerController {
     Affiliate generateHome(SecurityContextHolderAwareRequestWrapper securityContext) {
         String affName = securityContext.getUserPrincipal().getName();
         Affiliate aff = affiliateService.findAffiliateWithAffPrograms(affName);
+        
+        //get total staistics of all programs
         return aff;
     }
 //========================== generateData ======================================
