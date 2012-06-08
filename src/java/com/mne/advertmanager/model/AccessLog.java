@@ -55,8 +55,8 @@ import javax.xml.bind.annotation.XmlRootElement;
     private String ipAddress;
     
     @Size(max = 256)
-    @Column(name = "location")
-    private String location;
+    @Column(name = "country_name")
+    private String countryName;
     
     @Size(max = 2)
     @Column(name = "cc")
@@ -124,12 +124,12 @@ import javax.xml.bind.annotation.XmlRootElement;
         this.ipAddress = ipAddress;
     }
 
-    public String getLocation() {
-        return location;
+    public String getCountryName() {
+        return countryName;
     }
 
-    public void setLocation(String location) {
-        this.location = location;
+    public void setCountryName(String cn) {
+        this.countryName = cn;
     }
 
     public String getTargetURL() {
