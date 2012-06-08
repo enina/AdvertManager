@@ -24,9 +24,11 @@ import org.slf4j.LoggerFactory;
 public class GenericDaoHibernateImpl<T, PK extends Serializable> implements GenericDao<T, PK> {
 
     private static org.slf4j.Logger logger = LoggerFactory.getLogger(GenericDaoHibernateImpl.class);
+    
     private Class<T> type;
     private SessionFactory sessionFactory;
     private String entityName = null;
+    
 
     public GenericDaoHibernateImpl(Class<T> type) {
 	this.type = type;
@@ -150,7 +152,7 @@ public class GenericDaoHibernateImpl<T, PK extends Serializable> implements Gene
 
 	try {
 	    Query q = createQuery(queryString, params);
-
+            
 	    if (q != null) {
 		q.setResultTransformer(Transformers.aliasToBean(target.getClass()));
 		result = (X) q.uniqueResult();
@@ -249,7 +251,6 @@ public class GenericDaoHibernateImpl<T, PK extends Serializable> implements Gene
 	}
 	return q;
     }
-
     @Override
     public void saveDataSet(Collection<T> dataSet) {
 

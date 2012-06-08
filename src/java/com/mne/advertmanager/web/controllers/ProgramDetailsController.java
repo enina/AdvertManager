@@ -69,13 +69,6 @@ public class ProgramDetailsController {
         //ATTENTION BE CAREFUL WITH "programId" PARAMETER THAT YOU RECEIVE BECAUSE EVE MAY INCLUDE
         //SQL INJECTION HERE SO YOU MUST CHECK IT BEFORE QUERY IT!!
 
-        //prepare all data :
-        //0.check recieved parameter
-
-        //2.get all data requiered to calculate overview ( LOT OF DATA )bu now for simplicity dont do that
-        //3.desplay program specification; 
-
-        //1.find program by id
         AffProgram program = affProgramService.findAffProgramByID(programId);
 
         Page<AccessLog> accessPage = null;
