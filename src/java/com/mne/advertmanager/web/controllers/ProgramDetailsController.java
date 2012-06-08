@@ -29,7 +29,6 @@ import org.springframework.web.servlet.ModelAndView;
  * @author Misha
  */
 @Controller
-@RequestMapping("/")
 public class ProgramDetailsController {
 
     //logger

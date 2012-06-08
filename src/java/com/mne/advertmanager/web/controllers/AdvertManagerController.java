@@ -38,7 +38,6 @@ import org.springframework.web.servlet.ModelAndView;
  * @author Nina Eidelshtein and Misha Lebedev
  */
 @Controller
-@RequestMapping("/")
 public class AdvertManagerController {
 
     private static final String AFFILIATES = "affiliates";
