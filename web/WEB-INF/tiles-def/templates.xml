@@ -6,97 +6,86 @@
 <tiles-definitions>
 
     <definition name=".mainTemplate" template="/WEB-INF/view/common/main.jsp">
-        <put-attribute name="title" value="Advertise Manager" type="string" />
-        <put-attribute name="commonInclude" value="/WEB-INF/view/common/commonInclude.jsp" />
-        <put-attribute name="customInclude" value="/WEB-INF/view/common/blank.jsp" />
-        <put-attribute name="userControl" value="/WEB-INF/view/common/userMenu.jsp" />
-        <put-attribute name="navBar" value="/WEB-INF/view/common/blank.jsp" />       
-        <put-attribute name="content" value="/WEB-INF/view/common/blank.jsp" />
+	<put-attribute name="title" value="Advertise Manager" type="string" />
+	<put-attribute name="commonInclude" value="/WEB-INF/view/common/commonInclude.jsp" />
+	<put-attribute name="customInclude" value="/WEB-INF/view/common/blank.jsp" />
+	<put-attribute name="userControl" value="/WEB-INF/view/common/userMenu.jsp" />
+	<put-attribute name="navBar" value="/WEB-INF/view/common/blank.jsp" />       
+	<put-attribute name="content" value="/WEB-INF/view/common/blank.jsp" />
     </definition>
     
-    <definition name="affprogram.body" template="/WEB-INF/view/affprograms/programbody.jsp">
-        <put-attribute name="programspec" value="/WEB-INF/view/affprograms/programspec.jsp" />
-        <put-attribute name="overview" value="affprogram.overview" />
-        <put-attribute name="finance" value="/WEB-INF/view/affprograms/finance.jsp" />
-        <put-attribute name="accesses" value="/WEB-INF/view/access/list.jsp" />
-        <put-attribute name="partners" value="/WEB-INF/view/affprograms/partners.jsp" />
-        <put-attribute name="orders" value="/WEB-INF/view/affprograms/orders.jsp" />
-        <put-attribute name="afflinks" value="/WEB-INF/view/affprograms/afflinks.jsp" />
+    <definition name="main" extends=".mainTemplate">
+	<put-attribute name="customInclude" value="/WEB-INF/view/main/customInclude.jsp" />
+	<put-attribute name="navBar" value="/WEB-INF/view/main/navBar.jsp" />    
+	<put-attribute name="content" value="/WEB-INF/view/main/content.jsp" />       
     </definition>
-    
-    <definition name="affprogram.overview" template="/WEB-INF/view/affprograms/overview.jsp">
-        
-    </definition>
-    
-    <definition name=""  extends=".mainTemplate">
-        <put-attribute name="title" value="Advert Manager Login" type="string" />
-        <put-attribute name="htmlInclude" value="/WEB-INF/view/mainwindow/htmlInclude.jsp" />
-        <put-attribute name="userControl" value="/WEB-INF/view/common/userLoginForm.jsp" />
-        <put-attribute name="menu" value="/WEB-INF/view/mainwindow/navMenu.jsp" />
-        <put-attribute name="content" value="/WEB-INF/view/mainwindow/content.jsp" />
-    </definition>
-   
-    <definition name="affprograms/details" extends=".mainTemplate">
-       <put-attribute name="title" value="Program Details" type="string" />
-       <put-attribute name="customInclude" value="/WEB-INF/view/affprograms/customInclude.jsp" />
-       <put-attribute name="navBar" value="/WEB-INF/view/home/navBar.jsp" />  
-       <put-attribute name="content" value="affprogram.body" />
-    </definition>
-      
-   <definition name="home" extends=".mainTemplate">
-       <put-attribute name="title" value="Activity Overview" type="string" />
-       <put-attribute name="customInclude" value="/WEB-INF/view/home/customInclude.jsp" />
-       <put-attribute name="navBar" value="/WEB-INF/view/home/navBar.jsp" />  
-       <put-attribute name="content" value="/WEB-INF/view/home/content.jsp" />
-   </definition>
-   
 
-   <definition name="main" extends=".mainTemplate">
-        <put-attribute name="customInclude" value="/WEB-INF/view/main/customInclude.jsp" />
-        <put-attribute name="navBar" value="/WEB-INF/view/main/navBar.jsp" />    
-        <put-attribute name="content" value="/WEB-INF/view/main/content.jsp" />       
-   </definition>
-   
+    <definition name="home" extends=".mainTemplate">
+	<put-attribute name="title" value="Activity Overview" type="string" />
+	<put-attribute name="customInclude" value="/WEB-INF/view/home/customInclude.jsp" />
+	<put-attribute name="navBar" value="/WEB-INF/view/home/navBar.jsp" />  
+	<put-attribute name="content" value="/WEB-INF/view/home/content.jsp" />
+    </definition>
  
-       
-   <definition name="affiliates/list" extends=".mainTemplate">
-       <put-attribute name="title" value="Affiliates" type="string" />
-       <put-attribute name="content" value="/WEB-INF/view/affiliates/list.jsp" />
-   </definition>
+    <definition name="affprograms/new" extends=".mainTemplate">
+	<put-attribute name="title" value="Program Definition" type="string" />
+	<put-attribute name="content" value="/WEB-INF/view/affprograms/new.jsp" />
+    </definition> 
+   
+            
+    <definition name="affprograms/details" extends=".mainTemplate">
+	<put-attribute name="title" value="Program Details" type="string" />
+	<put-attribute name="customInclude" value="/WEB-INF/view/affprograms/customInclude.jsp" />
+	<put-attribute name="navBar" value="/WEB-INF/view/home/navBar.jsp" />  
+	<put-attribute name="content" value="affprogram.body" />
+    </definition>
+ 
+    <definition name="affprogram.body" template="/WEB-INF/view/affprograms/programbody.jsp">
+	<put-attribute name="programspec" value="/WEB-INF/view/affprograms/programspec.jsp" />
+	<put-attribute name="overview" value="/WEB-INF/view/affprograms/overview.jsp" />
+	<put-attribute name="finance" value="/WEB-INF/view/affprograms/finance.jsp" />
+	<put-attribute name="accesses" value="/WEB-INF/view/access/list.jsp" />
+	<put-attribute name="partners" value="/WEB-INF/view/affprograms/partners.jsp" />
+	<put-attribute name="orders" value="/WEB-INF/view/affprograms/orders.jsp" />
+	<put-attribute name="afflinks" value="/WEB-INF/view/affprograms/afflinks.jsp" />
+    </definition>
+ 
+ 
+    <definition name="affiliates/new" extends=".mainTemplate">
+	<put-attribute name="title" value="Affiliate Registration" type="string" />
+	<put-attribute name="content" value="/WEB-INF/view/affiliates/new.jsp" />
+    </definition>
 
-   <definition name="affiliates/new" extends=".mainTemplate">
-       <put-attribute name="title" value="Affiliate Registration" type="string" />
-       <put-attribute name="content" value="/WEB-INF/view/affiliates/new.jsp" />
-   </definition>
-   
-   <definition name="affprograms/new" extends=".mainTemplate">
-       <put-attribute name="title" value="Program Definition" type="string" />
-       <put-attribute name="content" value="/WEB-INF/view/affprograms/new.jsp" />
-   </definition>
-   
 
+    <definition name="affiliates/list" extends=".mainTemplate">
+	<put-attribute name="title" value="Affiliates" type="string" />
+	<put-attribute name="content" value="/WEB-INF/view/affiliates/list.jsp" />
+    </definition>
 
-   <definition name="billing/list" extends=".mainTemplate">
-       <put-attribute name="title" value="Billing Sites" type="string" />
-       <put-attribute name="content" value="/WEB-INF/view/billing/list.jsp" />
-   </definition>
-   
-   <definition name="billing/new" extends=".mainTemplate">
-       <put-attribute name="title" value="Billing Sites" type="string" />
-       <put-attribute name="content" value="/WEB-INF/view/billing/new.jsp" />
-   </definition>   
-   
-   <definition name="billing/import" extends=".mainTemplate">
-       <put-attribute name="title" value="Billing Sites" type="string" />
-       <put-attribute name="content" value="/WEB-INF/view/billing/importstatus.jsp" />
-   </definition>
+    <definition name="billing/import" extends=".mainTemplate">
+	<put-attribute name="title" value="Billing Sites" type="string" />
+	<put-attribute name="content" value="/WEB-INF/view/billing/importstatus.jsp" />
+    </definition>
+
+  
+    <definition name="billing/new" extends=".mainTemplate">
+	<put-attribute name="title" value="Billing Sites" type="string" />
+	<put-attribute name="content" value="/WEB-INF/view/billing/new.jsp" />
+    </definition>   
+
+    <definition name="billing/list" extends=".mainTemplate">
+	<put-attribute name="title" value="Billing Sites" type="string" />
+	<put-attribute name="content" value="/WEB-INF/view/billing/list.jsp" />
+    </definition>
    
     <definition name="billing/details" extends=".mainTemplate">
-       <put-attribute name="title" value="Billing Site Details" type="string" />
-       <put-attribute name="content" value="/WEB-INF/view/billing/details.jsp" />
-   </definition>   
+	<put-attribute name="title" value="Billing Site Details" type="string" />
+	<put-attribute name="content" value="/WEB-INF/view/billing/details.jsp" />
+    </definition>   
+   
+   
    
 
-   <definition name="apps/parsergen" template="/WEB-INF/view/apps/parsergen.jsp"/>
+    <definition name="apps/parsergen" template="/WEB-INF/view/apps/parsergen.jsp"/>
 
 </tiles-definitions>

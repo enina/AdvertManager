@@ -83,6 +83,6 @@
        
 
     <welcome-file-list>
-        <welcome-file>/WEB-INF/view/blindex.jsp</welcome-file> <!-- /WEB-INF/view/index.jsp -->
+        <welcome-file>index.jsp</welcome-file>
     </welcome-file-list>
 </web-app>

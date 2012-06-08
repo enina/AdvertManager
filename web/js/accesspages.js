@@ -81,7 +81,7 @@ function getPageAccess(path){
         var tr = $("<tr>");
     
         tr.append($("<th>").append("Time"));
-        tr.append($("<th>").append("Location"));
+        tr.append($("<th>").append("Country Name"));
         tr.append($("<th>").append("Country Code"));  
         tr.append($("<th>").append("Referrer"));
         tr.append($("<th>").append("Query"));  
@@ -95,7 +95,7 @@ function getPageAccess(path){
             var item = accessPage.items[i];
             tr = $("<tr>");
             tr.append( $("<td>").append(item.accessTime) );
-            tr.append( $("<td>").append(item.location) );
+            tr.append( $("<td>").append(item.countryName) );
             tr.append( $("<td>").append(item.countryCode) );
             var a=$("<a>");
             a.attr("href",item.refererURL);

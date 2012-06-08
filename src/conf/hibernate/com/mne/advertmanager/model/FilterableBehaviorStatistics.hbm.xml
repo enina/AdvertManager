@@ -200,12 +200,12 @@ source_domain_id
     
     <query name="BehaviorStats.calcAffProgPeriodCountryStats"><![CDATA[
         SELECT 
-            new com.mne.advertmanager.model.FilterableBehaviorStatistics (count (acl),acl.location,acl.affProgram) 
+            new com.mne.advertmanager.model.FilterableBehaviorStatistics (count (acl),acl.countryName,acl.affProgram) 
          FROM  AccessLog acl 
          WHERE
             acl in (select acl from AccessLog acl  where acl.affProgram.id = ? and acl.accessTime > ?  group by ip_address)
          GROUP BY 
-            acl.location
+            acl.countryName
     ]]>
     </query>
     
