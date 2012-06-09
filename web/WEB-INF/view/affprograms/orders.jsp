@@ -14,8 +14,9 @@
             <tr>
                 <th> ID </th>
                 <th> IP </th>
-                <th> Country Name </th>
-                <th> Country Code </th>
+<!--                <th> Country Name </th>
+                <th> Country Code </th>-->
+                <th></th>
                 <th> Date & Time </th>
                 <th> Order sum </th>
                 <th> Commission </th>
@@ -31,12 +32,13 @@
                 <td>
                     <c:out value="${order.ipAddress}"/>
                 </td>
-                <td>
+<!--                <td>
                     <c:out value="${order.countryName}" />
-                </td>
+                </td>-->
                 <td>
-                    <c:out value="${order.countryCode}" />
-                </td>                
+                    <img src="${pageContext.request.contextPath}/images/countryFlag/${order.countryCode.toLowerCase().concat('.png')}" alt="${order.countryName}" title="${order.countryName}" />
+               
+                </td>            
                 <td>
                     <c:out value="${order.ordertime}" />
                 </td>

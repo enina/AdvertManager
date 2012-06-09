@@ -249,7 +249,7 @@ table th{
 
 #userMenu{
     
-    background-image: url("../images/userMenuBg.jpg");
+    background-image: url("../images/userMenuBg.png");
     position:relative;
     height: 19px;
     float: right;
@@ -260,12 +260,12 @@ table th{
     text-indent: 5px;
 }
 #userMenu:hover{
-    background-position:0px -140px;
+    background-position:0px -141px;
 }
 
 
 #userMenuInner{
-    background-image: url("../images/userMenuBg.jpg");
+    background-image: url("../images/userMenuBg.png");
     background-position: 0px -27px;
     position:absolute;
     top: 100%;
@@ -277,4 +277,32 @@ table th{
 
 #userMenuInner{
     
+}
+#logoutButton{
+    border: none;
+    background-color: transparent;
+}
+#logoutButton button{
+    position: absolute;
+    background-color: transparent;
+    left: 70%;
+    top: 70%;
+    height: 20px;
+    width: 54px;
+    border: none;
+    margin: 0;
+    padding: 0;
+    background-image: url("../images/userMenuBg.png");
+       background-position: -54px -167px;
+}
+#logoutButton button:hover{
+    background-position: 0px -167px;
+}
+#logoutButton span{
+    position: relative;
+    left: -9999px;
+}
+.navlink:hover{
+    
+    cursor: pointer;
 }

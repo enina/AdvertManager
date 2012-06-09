@@ -25,7 +25,9 @@
         <sec:authentication property="principal.username"/>
     </span>
     <div id="userMenuInner" class="hidden">
-    <a href="${pageContext.request.contextPath}/j_spring_security_logout" ><button type="button" value="Logout"><span>Logout</span></button></a>
+    <a id="logoutButton" href="${pageContext.request.contextPath}/j_spring_security_logout" ><button  type="button" value="Logout"><span>Logout</span></button></a>
+
+        
     </div>
 </div>
     <script type="text/javascript">

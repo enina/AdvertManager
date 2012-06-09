@@ -8,16 +8,22 @@
 #accessNavBar ul{
     display: inline;
     float: left;
-    list-style: none;     
+    list-style: none;
+    height: 21px;
 }
 #accessNavBar li{
     
     float: left;
     margin-left: 10px;
+    height: 17px;
+    padding: 2px 0px;
 }
 #accessNavBar span{
     float: right;
     display: inline;
+    height: 17px;
+    padding: 2px 0px;
+
 }
 
 
@@ -32,4 +38,34 @@
     border:none;
     background-color: #F9F9F9;
     margin-top: 0px;
+}
+
+#totalDomainAccessesTable{
+    position: relative;
+    top: 15px;
+  
+    margin-top: 35px;
+    width:300px;
+    float: right;
+}
+#chartdiv{
+    margin-top: 35px;
+    width:700px;
+    height:500px;
+   
+}
+
+.notActive { 
+   pointer-events: none; 
+   cursor: default;
+   color: #aaaaaa;
+} 
+#accessNavBar span#pageSize{
+    float: left;
+    margin: 0px 20px;
+    height: 21px;
+    padding: 0px;
+}
+#pageSize select{
+    margin: 0px 10px;
 }
