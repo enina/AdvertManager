@@ -43,13 +43,14 @@ public interface GenericDao <T, PK extends Serializable> {
     public Page<T> findPageByQuery(String queryName,PageCtrl pageCtrl,Object ...params);
     
     
-    
+    // write all data from memory to db
     public void flush();
 
+    // calculate number of pages ro given query and save in page control
     public void initPageCtrl(PageCtrl pageCtrl,String queryName,Object ... params);
-
+    // calculate how many results in query
     public int findQueryResultSetSize( String queryName, Object ... params);
-    
+    // save group of entities in db
     public void saveDataSet(Collection<T> dataSet);
     
 }

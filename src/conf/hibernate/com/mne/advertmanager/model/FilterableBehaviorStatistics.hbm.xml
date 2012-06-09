@@ -180,7 +180,7 @@
         FROM
             PurchaseOrder po 
         WHERE 
-            po.affProgram.id = ? and ordertime > ?
+            po.affProgram.id = ? and po.ordertime > ?
     ]]>
     </query>
     
@@ -196,7 +196,7 @@ group by cn
         FROM
             PurchaseOrder po
 	WHERE
-	    po in (select po from PurchaseOrder po  where po.affProgram.id = ? and ordertime > ?  group by ip_address)
+	    po in (select po from PurchaseOrder po  where po.affProgram.id = ? and po.ordertime > ?  group by po.ipAddress)
         GROUP BY
 	    po.countryName
     ]]>

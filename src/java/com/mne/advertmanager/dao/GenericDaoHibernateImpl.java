@@ -116,6 +116,7 @@ public class GenericDaoHibernateImpl<T, PK extends Serializable> implements Gene
 	try {
 	    Query q = getNamedQuery(queryName, params);
 	    if (q != null) {
+		//execute query
 		result = q.list();
 	    }
 	} catch (HibernateException e) {
@@ -146,6 +147,9 @@ public class GenericDaoHibernateImpl<T, PK extends Serializable> implements Gene
 
     @Override
     @SuppressWarnings(value = "unchecked")
+    /*
+     * needed to execute ACCESSLOG_FINDGEODATABYIP_QUERY native sql query , defined in AccessLog
+     */
     public <X> X findSingleItemByQueryString(String queryString, X target, Object... params) {
 
 	X result = null;
@@ -178,7 +182,7 @@ public class GenericDaoHibernateImpl<T, PK extends Serializable> implements Gene
 	return res;
 
     }
-
+    // Not supported yet
     @Override
     public Collection<T> findByExample(T example) {
 	throw new UnsupportedOperationException("Not supported yet.");
@@ -203,13 +207,15 @@ public class GenericDaoHibernateImpl<T, PK extends Serializable> implements Gene
     }
 
     @Override
+    //initialization page controle structure
     public void initPageCtrl(PageCtrl pageCtrl, String queryName, Object... params) {
-
+	//quantity of results from query
 	int count = findQueryResultSetSize(queryName, params);
 	pageCtrl.setTotalPages(count / pageCtrl.getPageSize() + ((count % pageCtrl.getPageSize() == 0) ? 0 : 1));
     }
 
     @Override
+    //find number of results in query
     public int findQueryResultSetSize(String queryName, Object... params) {
 	int result = 0;
 	try {
@@ -228,7 +234,10 @@ public class GenericDaoHibernateImpl<T, PK extends Serializable> implements Gene
     private Session getSession() {
 	return sessionFactory.getCurrentSession();
     }
-
+/*
+ * create and initialize object of class Query from Hibernate library
+ * This object contains query parameters inside and can be used to execute query and retrieve its results
+ */
     private Query getNamedQuery(String queryName, Object[] params) throws HibernateException {
 
 	Query q = getSession().getNamedQuery(queryName);
