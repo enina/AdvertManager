@@ -237,6 +237,7 @@
     <bean id="affProgramService" class="com.mne.advertmanager.service.AffProgramService">
         <property name="affProgramDao" ref="affProgramDao"/>
         <property name="affProgramGroupService" ref="affProgramGroupService"/>
+	<property name="fbsService" ref="behaviorStatService"/>
     </bean>    
     
     <bean id="affProgramGroupService" class="com.mne.advertmanager.service.AffProgramGroupService">

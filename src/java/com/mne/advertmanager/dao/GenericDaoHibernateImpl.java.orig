@@ -234,10 +234,14 @@ public class GenericDaoHibernateImpl<T, PK extends Serializable> implements Gene
     private Session getSession() {
 	return sessionFactory.getCurrentSession();
     }
+<<<<<<< HEAD
+//========================= getNamedQuery ======================================
+=======
 /*
  * create and initialize object of class Query from Hibernate library
  * This object contains query parameters inside and can be used to execute query and retrieve its results
  */
+>>>>>>> 30b5fa4ea2bdc40e89c90875dab7baec356104e9
     private Query getNamedQuery(String queryName, Object[] params) throws HibernateException {
 
 	Query q = getSession().getNamedQuery(queryName);

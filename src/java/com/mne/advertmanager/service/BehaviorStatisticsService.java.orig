@@ -77,9 +77,15 @@ public class BehaviorStatisticsService {
 	
 	return result;
     }
-
+<<<<<<< HEAD
+    
 //=================================== findTotalAccesAmounByDomain ==============
+    @Transactional (readOnly = true)
+=======
+
+    //in progres
     @Transactional(readOnly = true)
+>>>>>>> 30b5fa4ea2bdc40e89c90875dab7baec356104e9
     public Set<FilterableBehaviorStatistics> findTotalAccesAmounByDomain(int affProgId) {
 	
 	Set<FilterableBehaviorStatistics> result = findAccessByDomain(totalBehaviorStatsDao, "TotalBehaviorStats.findTotalAccesAmounByDomain", affProgId);
@@ -88,8 +94,14 @@ public class BehaviorStatisticsService {
 	
 	return result;
     }
+<<<<<<< HEAD
+
+//=============================== findCurMonthAffProgramStatistics =============
+    @Transactional
+=======
     
     @Transactional(readOnly = true)
+>>>>>>> 30b5fa4ea2bdc40e89c90875dab7baec356104e9
     public FilterableBehaviorStatistics findCurMonthAffProgramStatistics(int affProgramId) {
 	
 	FilterableBehaviorStatistics result = findAffProgramStatistics(curMonthBehaviorStatsDao, "CurMonthBehaviorStats.findAffProgCountryStats", affProgramId, "Filter.All");
@@ -146,9 +158,27 @@ public class BehaviorStatisticsService {
      *
      * <query name="TotalBehaviorStats.findAffProgrCountryStats"><![CDATA[ from TotalBehaviorStats where countryName=? and affProgram.id=? ]]> </query> *
      */
+<<<<<<< HEAD
 //=============================== calcDailyAffProgramStatsSet ==================
       private List<FilterableBehaviorStatistics> calcDailyAffProgramStatsSet(int affProgramId, Date refTime) {
+
+          //calculate total purchase statistics for today ( purchase amount, total commision )
+	FilterableBehaviorStatistics total = dailyBehaviorStatsDao.findSingleItemByQuery("BehaviorStats.calcAffProgPeriodTotalFinancialStats", affProgramId, refTime);
+
+	int accessCount = accessService.findDailyAffProgramAccessAmount(affProgramId, refTime);
+
+	logger.debug("Program={} , Period=After {} ::Access={}, PO={} , Commision={}",
+		new Object[]{affProgramId, refTime, accessCount, total.getPurchaseAmount(), total.getTotalCommision()});
+        
+        //set current satistict to be a total statistics  ( sum of all countries )
+	total.setCountryName("Filter.ALL");
+        //insert assess amount to statistics
+	total.setAccessAmount(accessCount);
+
+=======
+    private List<FilterableBehaviorStatistics> calcDailyAffProgramStatsSet(int affProgramId, Date refTime) {
 	
+>>>>>>> 30b5fa4ea2bdc40e89c90875dab7baec356104e9
 	ArrayList<FilterableBehaviorStatistics> result = new ArrayList<FilterableBehaviorStatistics>();
 	FilterableBehaviorStatistics total = dailyBehaviorStatsDao.findSingleItemByQuery("BehaviorStats.calcAffProgPeriodTotalFinancialStats", affProgramId, refTime);
 	
@@ -163,7 +193,6 @@ public class BehaviorStatisticsService {
 	    
 	}
 	
-        //insert assess amount to statistics
 	
 	result.addAll(dailyBehaviorStatsDao.findByQuery("BehaviorStats.calcAffProgPeriodDomainStats", affProgramId, refTime));
 
@@ -203,7 +232,10 @@ public class BehaviorStatisticsService {
 	
 	return builFBSTree(data);
     }
+<<<<<<< HEAD
 //============================== calculateAffProgramStatistics =================
+=======
+    
     @Transactional
     public void initAffProgramStats(AffProgram affProgram) {
 	totalBehaviorStatsDao.create(new FilterableBehaviorStatistics(0, 0, "Filter.All", affProgram));
@@ -212,6 +244,7 @@ public class BehaviorStatisticsService {
 	prevMonthBehaviorStatsDao.create(new FilterableBehaviorStatistics(0, 0, "Filter.All", affProgram));
     }
     
+>>>>>>> 30b5fa4ea2bdc40e89c90875dab7baec356104e9
     @Transactional
     public void calculateAffProgramStatistics(int affProgramId) {
 	
@@ -222,10 +255,11 @@ public class BehaviorStatisticsService {
 	//just for testing should be removed
 	cal.set(2012, Calendar.FEBRUARY, 1, 1, 0);
 	Date refTime = cal.getTime();
-	
+<<<<<<< HEAD
+
         //calculate today statistics
 	List<FilterableBehaviorStatistics> todayStats = calcDailyAffProgramStatsSet(affProgramId, refTime);
-	
+
         //retrive current total stats and update them 
 	TreeMap<String, FilterableBehaviorStatistics> totalStats = findAffProgramStats(totalBehaviorStatsDao, "TotalBehaviorStats.findAffProgStats", affProgramId);
 	updateStats(totalBehaviorStatsDao, totalStats, todayStats);
@@ -233,9 +267,22 @@ public class BehaviorStatisticsService {
         
         //retrive current month statistics 
 	TreeMap<String, FilterableBehaviorStatistics> cmStats = findAffProgramStats(curMonthBehaviorStatsDao, "CurMonthBehaviorStats.findAffProgStats", affProgramId);
-	
+
         //check if current month has ended, if so make it privious month and
         //begin new current month. add today statistics to current month.
+=======
+	
+	
+	
+	List<FilterableBehaviorStatistics> todayStats = calcDailyAffProgramStatsSet(affProgramId, refTime);
+	
+	TreeMap<String, FilterableBehaviorStatistics> totalStats = findAffProgramStats(totalBehaviorStatsDao, "TotalBehaviorStats.findAffProgStats", affProgramId);
+	updateStats(totalBehaviorStatsDao, totalStats, todayStats);
+	logger.info("Updated total statistics");
+	
+	TreeMap<String, FilterableBehaviorStatistics> cmStats = findAffProgramStats(curMonthBehaviorStatsDao, "CurMonthBehaviorStats.findAffProgStats", affProgramId);
+	
+>>>>>>> 30b5fa4ea2bdc40e89c90875dab7baec356104e9
 	if (cal.get(Calendar.DAY_OF_MONTH) == 1) {
 	    shiftStats(prevMonthBehaviorStatsDao, "PrevMonthBehaviorStats.deleteAffProgStats", affProgramId, cmStats.values());
 	    shiftStats(curMonthBehaviorStatsDao, "CurMonthBehaviorStats.deleteAffProgStats", affProgramId, todayStats);
@@ -253,7 +300,11 @@ public class BehaviorStatisticsService {
 	
 	logger.info("Program={}::Finished behavior statistics calculation .", affProgramId);
     }
+<<<<<<< HEAD
 //============================== shiftStats ====================================
+=======
+    
+>>>>>>> 30b5fa4ea2bdc40e89c90875dab7baec356104e9
     private void shiftStats(GenericDao<FilterableBehaviorStatistics, Integer> statsDao, String queryName, int affProgramId, Collection<FilterableBehaviorStatistics> stats) {
 	
 	cleanAffProgStats(statsDao, queryName, affProgramId);
@@ -266,7 +317,11 @@ public class BehaviorStatisticsService {
 	processFBSList(statsDao, shifted);
 	
     }
+<<<<<<< HEAD
 //============================== updateStats ===================================
+=======
+    
+>>>>>>> 30b5fa4ea2bdc40e89c90875dab7baec356104e9
     private void updateStats(GenericDao<FilterableBehaviorStatistics, Integer> statsDao,
 			     TreeMap<String, FilterableBehaviorStatistics> curStats,
 			     List<FilterableBehaviorStatistics> todayStats) {
@@ -284,14 +339,25 @@ public class BehaviorStatisticsService {
 	
 	processFBSList(statsDao, updatedStats);
     }
+<<<<<<< HEAD
 //============================== findAffProgramStatistics ======================
     @SuppressWarnings("unchecked")
     private FilterableBehaviorStatistics findAffProgramStatistics(GenericDao<FilterableBehaviorStatistics, Integer> statsDao, String query, int affProgramId, Object... params) {
-	
+
         //convert given params to array
 	ArrayList allParams = new ArrayList(Arrays.asList(params));
 	allParams.add(0, affProgramId);
        
+=======
+    
+    @SuppressWarnings("unchecked")
+    private FilterableBehaviorStatistics findAffProgramStatistics(GenericDao<FilterableBehaviorStatistics, Integer> statsDao, String query, int affProgramId, Object... params) {
+	
+	
+	ArrayList allParams = new ArrayList(Arrays.asList(params));
+	allParams.add(0, affProgramId);
+	
+>>>>>>> 30b5fa4ea2bdc40e89c90875dab7baec356104e9
 	FilterableBehaviorStatistics result = statsDao.findSingleItemByQuery(query, allParams.toArray());
 
 //	if (result == null) {
@@ -302,7 +368,10 @@ public class BehaviorStatisticsService {
 
 	return result;
     }
+<<<<<<< HEAD
 //=============================== findAffiliateStatistics ======================
+=======
+>>>>>>> 30b5fa4ea2bdc40e89c90875dab7baec356104e9
     
     @SuppressWarnings("unchecked")
     private Set<FilterableBehaviorStatistics> findAffiliateStatistics(GenericDao<FilterableBehaviorStatistics, Integer> statsDao, String query, int affProgramId, Object... params) {
@@ -317,6 +386,7 @@ public class BehaviorStatisticsService {
 	
 	return result;
     }
+<<<<<<< HEAD
 //=============================== findAccessByDomain ===========================
 //this function return statistics of first 10 items recieved from db with given query.
 //this function is a common ground to query fbs for accesses by domain in defrent
@@ -326,28 +396,51 @@ public class BehaviorStatisticsService {
 //        each item represented by FilterabaleBehaviorStatistics entity ( fbs )
     @SuppressWarnings("unchecked")
     private Set<FilterableBehaviorStatistics> findAccessByDomain(GenericDao<FilterableBehaviorStatistics, Integer> statsDao, String query, int affProgramId, Object... params) {
-	
+
         //convert param list to array
+	ArrayList allParams = new ArrayList(Arrays.asList(params));
+	allParams.add(0, affProgramId);
+
+        Collection<FilterableBehaviorStatistics> data= null;
+        //prepare page of data ( we want only 10 item, That is one page with 10 items )
+        Page<FilterableBehaviorStatistics> page = null;
+        page = statsDao.findPageByQuery(query, new PageCtrl(1,0,10), allParams.toArray());
+        data = page.getItems();
+        
+        //convert collection to hashSet
+=======
+    
+    @SuppressWarnings("unchecked")
+    private Set<FilterableBehaviorStatistics> findAccessByDomain(GenericDao<FilterableBehaviorStatistics, Integer> statsDao, String query, int affProgramId, Object... params) {
+	
+	
 	ArrayList allParams = new ArrayList(Arrays.asList(params));
 	allParams.add(0, affProgramId);
 	
 	Collection<FilterableBehaviorStatistics> data = null;
-        //prepare page of data ( we want only 10 item, That is one page with 10 items )
+	//data = statsDao.findByQuery(query, allParams.toArray());
 	Page<FilterableBehaviorStatistics> page = null;
 	page = statsDao.findPageByQuery(query, new PageCtrl(1, 0, 10), allParams.toArray());
 	data = page.getItems();
-        
-        //convert collection to hashSet
+>>>>>>> 30b5fa4ea2bdc40e89c90875dab7baec356104e9
 	HashSet<FilterableBehaviorStatistics> result = new HashSet<FilterableBehaviorStatistics>(data);
 	
 	return result;
     }
+<<<<<<< HEAD
 //=============================== cleanAffProgStats ============================
+=======
+    
+>>>>>>> 30b5fa4ea2bdc40e89c90875dab7baec356104e9
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     private void cleanAffProgStats(GenericDao<FilterableBehaviorStatistics, Integer> statsDao, String queryName, int affProgramId) {
 	statsDao.executeUpdateByQuery(queryName, affProgramId);
     }
+<<<<<<< HEAD
 //=============================== processFBSList ===============================
+=======
+    
+>>>>>>> 30b5fa4ea2bdc40e89c90875dab7baec356104e9
     private void processFBSList(GenericDao<FilterableBehaviorStatistics, Integer> statsDao, List<FilterableBehaviorStatistics> fbsList) {
 	
 	if (fbsList == null) {
@@ -367,7 +460,11 @@ public class BehaviorStatisticsService {
 	    persistItemList(statsDao, subList);
 	}
     }
+<<<<<<< HEAD
 //=============================== persistItemList ==============================
+=======
+    
+>>>>>>> 30b5fa4ea2bdc40e89c90875dab7baec356104e9
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     private void persistItemList(GenericDao<FilterableBehaviorStatistics, Integer> statsDao, List<FilterableBehaviorStatistics> itemList) {
 	statsDao.saveDataSet(itemList);

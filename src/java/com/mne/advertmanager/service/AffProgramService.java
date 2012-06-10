@@ -22,6 +22,7 @@ public class AffProgramService {
 
     private GenericDao<AffProgram, Integer> affProgramDao;
     private AffProgramGroupService afPrGrService;
+    private BehaviorStatisticsService fbsService;
 
     public void setAffProgramDao(GenericDao<AffProgram, Integer> AffProgramDao) {
         this.affProgramDao = AffProgramDao;
@@ -31,6 +32,10 @@ public class AffProgramService {
 
     public void setAffProgramGroupService(AffProgramGroupService afPrGrService) {
         this.afPrGrService = afPrGrService;
+    }
+
+    public void setFbsService(BehaviorStatisticsService fbsService) {
+	this.fbsService = fbsService;
     }
     
     
@@ -66,19 +71,19 @@ public class AffProgramService {
     }  
 //============================ createAffProgram ================================
     @Transactional
-    public void createAffProgram(AffProgram AffProgram) {
+    public void createAffProgram(AffProgram affProgram) {
         
         AffProgramGroup pg = null;
-        pg = AffProgram.getAffProgramGroup();
+        pg = affProgram.getAffProgramGroup();
         
  
         if (pg != null)
             pg = afPrGrService.createOrUpdate(pg);
         
-        AffProgram.setAffProgramGroup(pg);
-        affProgramDao.create(AffProgram);
+        affProgram.setAffProgramGroup(pg);
+        affProgramDao.create(affProgram);
+	fbsService.initAffProgramStats(affProgram);
     }
-
     @Transactional
     public void save(AffProgram program) {
         affProgramDao.update(program);

@@ -34,6 +34,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 })
 
  public class AccessLog implements Serializable {
+    //native sql query . due to Hibernate limitations cannot be defined as named query
     public static final String ACCESSLOG_FINDGEODATABYIP_QUERY = "SELECT DISTINCT cc as countryCode,cn as countryName FROM geoip.ip " +
                                                                  " natural join geoip.cc where ? BETWEEN start and end";
     private static final long serialVersionUID = 1L;

@@ -64,14 +64,6 @@ public class FilterableBehaviorStatistics {
         setCountryName(countryName);
     }     
 //=============================== FilterableBehaviorStatistics C-tor ===========
-    public FilterableBehaviorStatistics(Integer id, AffProgram affProgram, AccessSource source, String countryName, long accessAmount, long purchaseAmount) {
-        this.id = id;
-        this.affProgram = affProgram;
-        this.source = source;
-        this.countryName = countryName;
-        this.accessAmount = accessAmount;
-        this.purchaseAmount = purchaseAmount;
-    }
 //====================== FilterableBehaviorStatistics Copy C-tor ===============
     @SuppressWarnings("OverridableMethodCallInConstructor")
     public FilterableBehaviorStatistics(FilterableBehaviorStatistics source) {
