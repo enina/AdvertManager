@@ -95,10 +95,10 @@ public class ProgramDetailsController {
         mav.addObject("accessPage", accessPage);
         mav.addObject("orderList", orderList);
         mav.addObject("partnerList", program.getPartners());
-        mav.addObject("totalStats", totalStats);
-        mav.addObject("pmStats", pmStats);
-        mav.addObject("cmStats", cmStats);
-        mav.addObject("dailyStats", dailyStats);
+        mav.addObject("totalStats", (totalStats !=null) ? totalStats:new FilterableBehaviorStatistics());
+        mav.addObject("pmStats",    (pmStats    !=null) ? pmStats:new FilterableBehaviorStatistics());
+        mav.addObject("cmStats",    (cmStats    !=null) ? cmStats:new FilterableBehaviorStatistics());
+        mav.addObject("dailyStats", (dailyStats !=null) ? dailyStats:new FilterableBehaviorStatistics());
         mav.addObject("domainStats", domainStats);
 
         return mav;

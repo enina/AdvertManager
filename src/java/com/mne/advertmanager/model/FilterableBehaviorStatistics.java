@@ -14,9 +14,9 @@ public class FilterableBehaviorStatistics {
     private AffProgram affProgram;
     private AccessSource source;
     private String countryName;
-    private long accessAmount;
-    private long purchaseAmount;
-    private double totalCommision;
+    private long accessAmount = 0;
+    private long purchaseAmount = 0;
+    private double totalCommision = 0;
     
     //C-tor
     public FilterableBehaviorStatistics() {

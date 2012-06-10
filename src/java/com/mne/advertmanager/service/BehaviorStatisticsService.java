@@ -278,7 +278,7 @@ public class BehaviorStatisticsService {
 		curFbs.add(todayFbs);
 		updatedStats.add(curFbs);
 	    } else {
-		updatedStats.add(todayFbs);
+		updatedStats.add(new FilterableBehaviorStatistics(todayFbs));
 	    }
 	}
 	
@@ -358,7 +358,11 @@ public class BehaviorStatisticsService {
 	    fromIdx = toIdx;
 	    toIdx = Math.min(fromIdx + 10, setSize);
 	    subList = fbsList.subList(fromIdx, toIdx);
-	    persistItemList(statsDao, subList);
+            try {
+                persistItemList(statsDao, subList);
+            }catch(Exception e) {
+                logger.error("{} while processing FBS list.Message={}",e.getClass().getSimpleName(),e.getMessage());
+            }
 	}
     }
 //=============================== persistItemList ==============================
