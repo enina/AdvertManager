@@ -90,7 +90,31 @@
         <property name="totalCommision"/>
     </class>    
 
+<!--===========================  querys  ====================================-->
 
+<!--select *
+from behavior_stats_total
+
+inner join 
+    aff_program
+on
+    aff_program.id = behavior_stats_total.affprogram_id
+
+where 
+     behavior_stats_total.`countryName` is not null and
+     behavior_stats_total.`countryName` != "Filter.all" 
+     order by behavior_stats_total.accessAmount desc-->
+     <query name="TotalBehaviorStats.findTotalAccessesByCountry" ><![CDATA[
+        from
+            TotalBehaviorStats tbs
+            left join fetch tbs.affProgram prog
+        where
+            tbs.countryName is not null and
+            tbs.countryName != "Filter.ALL" and
+            prog.id=? 
+     ]]>
+     </query>
+     
     <query name="TotalBehaviorStats.findAffiliateCountryStats"><![CDATA[
         from
             TotalBehaviorStats tbs
@@ -109,7 +133,7 @@
             left join fetch tbs.affProgram prog
         where
             src is not null and prog.id=? 
-         order by 
+            order by 
             tbs.accessAmount desc
     ]]>
     </query>

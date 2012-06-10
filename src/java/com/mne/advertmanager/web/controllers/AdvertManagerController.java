@@ -57,6 +57,7 @@ public class AdvertManagerController {
     private static final String DG_GEN_REQ_MAPPING = DATAGEN + "/generate";
     private static final String AFFPROGRAM_NEW_REQ_MAPPING = AFFPROGRAM + ControllerSupport.NEW;
     private static final String AFFPROGRAM_ADD_REQ_MAPPING = AFFPROGRAM + ControllerSupport.ADD;
+    private static final String AFFPROGRAM_REM_REQ_MAPPING = AFFPROGRAM +"/{programId}/"+ ControllerSupport.REMOVE;
     private static final String AFFPROGRAM_LIST_REQ_MAPPING = AFFPROGRAM + ControllerSupport.LIST;
 
 
@@ -106,6 +107,19 @@ public class AdvertManagerController {
     @RequestMapping(value="main",method = RequestMethod.GET)
     public void goToMain() {
         logger.info("go to main page");
+    }
+    
+    //=========================== removeProgram ================================
+    /**
+     * this ctrl function redirect users from root URL to home page URL
+     */
+    @RequestMapping(value=AFFPROGRAM_REM_REQ_MAPPING, method = RequestMethod.GET)
+    public String removeProgram(@PathVariable int programId) {
+        logger.info("remove affProgram " + programId);
+        
+
+
+      return "redirect:mvc/home";
     }
     
 //======================== generateHome ========================================

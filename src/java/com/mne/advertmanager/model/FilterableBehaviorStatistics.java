@@ -17,29 +17,30 @@ public class FilterableBehaviorStatistics {
     private long accessAmount;
     private long purchaseAmount;
     private double totalCommision;
-
+    
+    //C-tor
     public FilterableBehaviorStatistics() {
 
     }
-    
+    //C-tor
     public FilterableBehaviorStatistics(Integer id) {
         this.id = id;
     }
-    
+//=============================== FilterableBehaviorStatistics C-tor ===========
     @SuppressWarnings("OverridableMethodCallInConstructor")
     public FilterableBehaviorStatistics(long accessAmount, AccessSource sourceDomain,AffProgram affProgram ) {
         setAccessAmount(accessAmount);
 	setSource(sourceDomain);
         setAffProgram( affProgram);
     }    
-    
+//=============================== FilterableBehaviorStatistics C-tor ===========
     @SuppressWarnings("OverridableMethodCallInConstructor")
     public FilterableBehaviorStatistics(long purchaseAmount,double totalSum,AffProgram affProgram) {
         setAffProgram(affProgram);
         setTotalCommision(totalSum);
         setPurchaseAmount(purchaseAmount);
     }    
-    
+//=============================== FilterableBehaviorStatistics C-tor ===========
     @SuppressWarnings("OverridableMethodCallInConstructor")
     public FilterableBehaviorStatistics(long accessAmount, int purchaseAmount,double totalSum,AffProgram affProgram) {
         setAffProgram(affProgram);
@@ -47,14 +48,14 @@ public class FilterableBehaviorStatistics {
         setAccessAmount(accessAmount);
         setPurchaseAmount(purchaseAmount);
     }    
-
+//=============================== FilterableBehaviorStatistics C-tor ===========
     @SuppressWarnings("OverridableMethodCallInConstructor")
     public FilterableBehaviorStatistics(long accessAmount,String countryName,AffProgram affProgram) {
         setAffProgram(affProgram);
         setAccessAmount(accessAmount);
         setCountryName(countryName);
     }
-    
+//=============================== FilterableBehaviorStatistics C-tor ===========
     @SuppressWarnings("OverridableMethodCallInConstructor")
     public FilterableBehaviorStatistics(long purchaseAmount,double totalSum,String countryName,AffProgram affProgram) {
         setAffProgram(affProgram);
@@ -62,7 +63,8 @@ public class FilterableBehaviorStatistics {
 	setTotalCommision(totalSum);
         setCountryName(countryName);
     }     
-    
+//=============================== FilterableBehaviorStatistics C-tor ===========
+//====================== FilterableBehaviorStatistics Copy C-tor ===============
     @SuppressWarnings("OverridableMethodCallInConstructor")
     public FilterableBehaviorStatistics(FilterableBehaviorStatistics source) {
 	setAffProgram(source.getAffProgram());
@@ -73,6 +75,8 @@ public class FilterableBehaviorStatistics {
 	setTotalCommision(source.getTotalCommision());
     }
 
+    
+//======================== getters & setters ===================================
     public long getAccessAmount() {
         return accessAmount;
     }
@@ -136,13 +140,13 @@ public class FilterableBehaviorStatistics {
         this.totalCommision = totalCommision;
     }
 
-        
+//============================  add ============================================
     public void add(FilterableBehaviorStatistics curStat) {
         setAccessAmount(accessAmount+curStat.getAccessAmount());
         setPurchaseAmount(purchaseAmount+curStat.getPurchaseAmount());
         setTotalCommision(totalCommision+curStat.getTotalCommision());
     }
-    
+//===============================  equals ======================================
     @Override
     public boolean equals(Object obj) {
         if (obj == null) {
@@ -157,14 +161,14 @@ public class FilterableBehaviorStatistics {
         }
         return true;
     }
-
+//===============================  hashCode ====================================
     @Override
     public int hashCode() {
         int hash = 5;
         hash = 13 * hash + (this.id != null ? this.id.hashCode() : 0);
         return hash;
     }
-
+//===============================  getKey ======================================
     public String getKey() {
 
         if (source!=null)

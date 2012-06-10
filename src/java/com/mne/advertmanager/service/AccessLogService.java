@@ -65,7 +65,7 @@ public class AccessLogService {
         return result;        
 
     }
-
+//===================================== findDailyAffProgramAccessAmount ========
     @Transactional(readOnly=true)
     int findDailyAffProgramAccessAmount(int affProgramId, Date refTime) {
         
