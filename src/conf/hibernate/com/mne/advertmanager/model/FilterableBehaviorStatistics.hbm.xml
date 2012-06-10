@@ -110,7 +110,7 @@ where
             left join fetch tbs.affProgram prog
         where
             tbs.countryName is not null and
-            tbs.countryName != "Filter.ALL" and
+            tbs.countryName != 'Filter.ALL' and
             prog.id=? 
      ]]>
      </query>
