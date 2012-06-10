@@ -28,7 +28,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "AffProgram.findAll",
         query = "SELECT p FROM AffProgram p "
-                + "left join fetch p.apg apg "
+                + "left join fetch p.apg apg "                  //apg- AffProgramGroup
                 + "left join fetch apg.affiliateId "
                 + "left join fetch p.partners"),
     @NamedQuery(name = "AffProgram.findByIdAndAffiliate",
@@ -44,7 +44,7 @@ import javax.xml.bind.annotation.XmlTransient;
 public class AffProgram implements Serializable {
     
     private static final long serialVersionUID = 1L;    
-    
+    //cascade all- if programm is deleted, all access are deleted
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "affProgram")
     private Set<AccessLog> accessLogCollection;
     
@@ -216,7 +216,8 @@ public class AffProgram implements Serializable {
     
     
     
-
+   
+    //@Override-his func' defined in base class
     @Override
     public int hashCode() {
         int hash = 0;

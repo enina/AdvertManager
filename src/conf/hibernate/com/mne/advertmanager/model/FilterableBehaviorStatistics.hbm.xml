@@ -91,6 +91,31 @@
     </class>    
 
 
+    <query name="TotalBehaviorStats.findAffiliateCountryStats"><![CDATA[
+        from
+            TotalBehaviorStats tbs
+            left join fetch tbs.affProgram prog
+            left join fetch prog.apg apg
+            left join fetch apg.affiliateId affiliate
+        where
+            affiliate.id=? and tbs.countryName=? 
+    ]]>
+    </query>
+    
+     <query name="TotalBehaviorStats.findTotalAccesAmounByDomain"><![CDATA[
+        from
+            TotalBehaviorStats tbs
+            left join fetch tbs.source src
+            left join fetch tbs.affProgram prog
+        where
+            src is not null and prog.id=? 
+         order by 
+            tbs.accessAmount desc
+    ]]>
+    </query>
+
+
+    
     <query name="TotalBehaviorStats.findAffProgCountryStats"><![CDATA[
         from TotalBehaviorStats where affProgram.id=? and countryName=? 
     ]]>
@@ -155,7 +180,7 @@
         FROM
             PurchaseOrder po 
         WHERE 
-            po.affProgram.id = ? and ordertime > ?
+            po.affProgram.id = ? and po.ordertime > ?
     ]]>
     </query>
     
@@ -171,7 +196,7 @@ group by cn
         FROM
             PurchaseOrder po
 	WHERE
-	    po in (select po from PurchaseOrder po  where po.affProgram.id = ? and ordertime > ?  group by ip_address)
+	    po in (select po from PurchaseOrder po  where po.affProgram.id = ? and po.ordertime > ?  group by po.ipAddress)
         GROUP BY
 	    po.countryName
     ]]>
@@ -200,43 +225,14 @@ source_domain_id
     
     <query name="BehaviorStats.calcAffProgPeriodCountryStats"><![CDATA[
         SELECT 
-            new com.mne.advertmanager.model.FilterableBehaviorStatistics (count (acl),acl.location,acl.affProgram) 
+            new com.mne.advertmanager.model.FilterableBehaviorStatistics (count (acl),acl.countryName,acl.affProgram) 
          FROM  AccessLog acl 
          WHERE
             acl in (select acl from AccessLog acl  where acl.affProgram.id = ? and acl.accessTime > ?  group by ip_address)
          GROUP BY 
-            acl.location
+            acl.countryName
     ]]>
     </query>
     
-<!--    <query name="GeoClassifiedPOStat.countAccessByCountry"><![CDATA[
-        SELECT 
-            new com.mne.advertmanager.model.GeoClassifiedPOStatistics (count (acl),acl.sourceDomain,acl.affProgram)
-         FROM 
-            (select acl from AccessLog acl group by ip_address) acl
-         WHERE 
-            acl.countryName is not null 
-         GROUP BY 
-            acl.countryName
-    ]]>
-    </query>    
-    
-    <query name="GeoClassifiedPOStat.countPurchaseByDomain"><![CDATA[
-        SELECT 
-            new com.mne.advertmanager.model.GeoClassifiedPOStatistics (count (po),po.affProgram)
-         FROM 
-            (select po from PurchaseOrder po group by ip_address) po
-         WHERE 
-            po.ip_address is not null 
-         GROUP BY 
-            po.countryName
-    ]]>
-    </query>-->
-        
-  
-  <!--
-  select sum(t1.count) from (select ip_address as ip, sum(affprogram_id)/affprogram_id as count from access_Log group by ip_address) t1
-where t1.count > 1
-  -->
   
 </hibernate-mapping>

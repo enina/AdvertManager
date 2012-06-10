@@ -63,15 +63,6 @@ public class FilterableBehaviorStatistics {
         setCountryName(countryName);
     }     
     
-    public FilterableBehaviorStatistics(Integer id, AffProgram affProgram, AccessSource source, String countryName, long accessAmount, long purchaseAmount) {
-        this.id = id;
-        this.affProgram = affProgram;
-        this.source = source;
-        this.countryName = countryName;
-        this.accessAmount = accessAmount;
-        this.purchaseAmount = purchaseAmount;
-    }
-    
     @SuppressWarnings("OverridableMethodCallInConstructor")
     public FilterableBehaviorStatistics(FilterableBehaviorStatistics source) {
 	setAffProgram(source.getAffProgram());

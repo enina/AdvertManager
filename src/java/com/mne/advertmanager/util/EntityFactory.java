@@ -101,7 +101,7 @@ public class EntityFactory {
 
         result.setAccessTime(Calendar.getInstance().getTime());
         result.setIpAddress(++magicNum%256+"."+ ++magicNum%256+"."+ ++magicNum%256+"."+ ++magicNum%256);
-        result.setLocation("AccessLocation"+ ++magicNum);
+        result.setCountryName("AccessLocation"+ ++magicNum);
         result.setTargetURL("http://wwww.access.com/url"+ ++magicNum);
 
         return result;

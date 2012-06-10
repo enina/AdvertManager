@@ -25,41 +25,17 @@ ul{
     background-color: #353535;
     padding: 20px 0;
 }
-.affProgGroupTable {
-        width: 1200px;
-        position: relative;
-	border-width: 1px;
-	border-style: solid;
-	border-color: black;
-        border-collapse:collapse;
-}
-.affProgGroupTable th{
-   text-align: center;
-   background-color: #818081;
-}
+
+
 
 .billingDetailsTd {
     text-align: left;
 }
-.affProgGroupTable td{
-   text-align: center;
-}
 
-.affProgGroupTable-td-1{
-    width: 148px;
-}
-.affProgGroupTable-td-2{
-    width: 348px;
-}
-.affProgGroupTable-td-3{
-    width: 398px;
-}
-.affProgGroupTable-td-4{
-    width: 149px;
-}
-.affProgGroupTable-td-5{
-    width: 148px;
-}
+
+
+
+
 
 table,td,th,tr{
     border-bottom-color: black;
@@ -138,12 +114,9 @@ table{
     width:960px;
     margin-right:auto;
     margin-left: auto;
-        
-    
 }
 
-table th{
-    
+table th{ 
     background-color: #26c516;
 }
 
@@ -152,22 +125,3 @@ table th{
     visibility: hidden;
 }
 
-#accessNavBar{
-    width: 960px;
-    margin-left: auto;
-    margin-right: auto;
-}
-#accessNavBar ul{
-    display: inline;
-    float: left;
-    list-style: none;     
-}
-#accessNavBar li{
-    
-    float: left;
-    margin-left: 10px;
-}
-#accessNavBar span{
-    float: right;
-    display: inline;
-}

@@ -25,117 +25,130 @@ drop table if exists group_members      CASCADE;
 
 
 create table affiliate (
-    id INT NOT NULL AUTO_INCREMENT,
-    affiliateName varchar(256)  not null ,
+    id		  int		not null auto_increment,
+    affiliatename varchar(256)  not null ,
     email         varchar(256)  not null ,
     password      varchar(50)   not null,
     enabled       boolean       not null,
-    CONSTRAINT AFFILIATE_PK         PRIMARY KEY (id),
-    CONSTRAINT AFFILIATE_NAME_UQ    UNIQUE affNameIdx  (affiliateName(255)),
-    CONSTRAINT AFFILIATE_EMAIL_UQ   UNIQUE affEmailIdx (email(255)) );
+    constraint affiliate_pk         primary key (id),
+    constraint affiliate_name_uq    unique affnameidx  (affiliatename(255)),
+    constraint affiliate_email_uq   unique affemailidx (email(255)) );
 
 create table affprog_group(
-    id INT NOT NULL AUTO_INCREMENT,
-    affiliate_id int not null ,
-    group_name  varchar(256),
-    description varchar(256),
-    CONSTRAINT PROGRAM_GROUP_PK PRIMARY KEY (id),
-    CONSTRAINT AFFPRGGROUP_UQ   UNIQUE affProgGroupUqIdx (affiliate_id,group_name(255)),
-    CONSTRAINT PROGRAM_GROUP_AFFILIATE_FK FOREIGN KEY (affiliate_id) REFERENCES affiliate(id) ON DELETE CASCADE);
+    id		    int not null auto_increment,
+    affiliate_id    int not null ,
+    group_name	    varchar(256),
+    description	    varchar(256),
+    constraint program_group_pk primary key (id),
+    constraint affprggroup_uq   unique affproggroupuqidx (affiliate_id,group_name(255)),
+    constraint program_group_affiliate_fk foreign key (affiliate_id) references affiliate(id) on delete cascade);
 
 create table aff_program (
-    id INT NOT NULL AUTO_INCREMENT,
-    program_group_id  int not null,
-    name varchar(256) not null,
-    description varchar(256),
-    sync_status  int not null,
-    affprogram_link varchar(256) not null,
-    redirect_link varchar(256) null,
-    CONSTRAINT PROGRAM_PK PRIMARY KEY (id),
-    CONSTRAINT AFFPRG_UQ   UNIQUE affProgNameUqIdx (program_group_id,name(255)),
-    CONSTRAINT PROGRAM_PROGRAM_GROUP_FK FOREIGN KEY (program_group_id)  REFERENCES affprog_group(id) ON DELETE CASCADE);
+    id			int not null auto_increment,
+    program_group_id	int not null,
+    name varchar(256)	not null,
+    description		varchar(256),
+    username            varchar(256),
+    password            varchar(256),
+    sync_status		int not null,
+    affprogram_link	varchar(256) not null,
+    redirect_link	varchar(256) null,
+    constraint program_pk primary key (id),
+    constraint affprg_uq   unique affprognameuqidx (program_group_id,name(255)),
+    constraint program_program_group_fk foreign key (program_group_id)  references affprog_group(id) on delete cascade);
     
 
 
 create table access_source (
-    id INT NOT NULL AUTO_INCREMENT,
+    id			 int not null auto_increment,
     access_source_domain varchar(256) not null ,
-    description  varchar(256) not null ,
-    CONSTRAINT ACCESSSOURCE_PK PRIMARY KEY (id));
+    description		 varchar(256) not null ,
+    index		 accsourcedomainidx(access_source_domain),
+    constraint accesssource_domain_uq   unique accesssourcedomainuqidx (access_source_domain(255)),
+    constraint accesssource_pk primary key (id));
 
 
 create table access_log (
-    id INT NOT NULL AUTO_INCREMENT,
-    affprogram_id  int not null ,
-    access_time TIMESTAMP , --vremya perehoda
-    ip_address varchar(256) , --client ip address
-    location  varchar(2048)  , --client geo location
-    source_domain_id int ,
-    url varchar(256)  ,
-    query varchar(256),
-    CONSTRAINT ACCESSLOG_PK PRIMARY KEY (id),
-    CONSTRAINT ACCESSLOG_AFFPROGRAM_FK FOREIGN KEY (affprogram_id) REFERENCES aff_program(id) on delete cascade,
-    CONSTRAINT ACCESSLOG_SOURCEDOMAIN_FK FOREIGN KEY (source_domain_id) REFERENCES access_source(id) ON DELETE CASCADE);
+    id			    int not null auto_increment,
+    affprogram_id	    int not null    ,
+    source_domain_id	    int		    ,
+    access_time		    timestamp	    , --vremya perehoda
+    ip_address		    varchar(256)    , --client ip address
+    countryname		    varchar(2048)   , --client country by ip address
+    target_url		    varchar(256)    ,
+    referer_url		    varchar(384)    ,
+    query		    varchar(256)    ,
+    index		    accessaffprogidx(affprogram_id),
+    index		    accesssourcedomainidx(affprogram_id),
+    index		    accessipidx(ip_address),
+    index		    accesstimeidx(access_time),
+    constraint accesslog_pk primary key (id),
+    constraint accesslog_affprogram_fk foreign key (affprogram_id) references aff_program(id) on delete cascade,
+    constraint accesslog_sourcedomain_fk foreign key (source_domain_id) references access_source(id) on delete cascade);
 
 
 create table partner (
     id          int          not null auto_increment,
     name        varchar(64)  not null ,
     email       varchar(256) not null ,
-    CONSTRAINT PARTNER_PK PRIMARY KEY (id));
+    constraint partner_pk primary key (id),
+    constraint partner_email_uq   unique partneremailuqidx (email(255)));
 
 create table purchase_order (
-    id          int not null auto_increment ,
-    affprogram_id  int not null ,
-    partner_id  int ,
-    status      varchar(256)  ,--order status
-    original_order_id varchar(256),
-    tracking_id varchar(256),
-    ip_address varchar(256),
-    ordertime   TIMESTAMP , --vremya zakaza
-    po_sum     float,
-    currency  varchar(16),
-    commision  float,
-    country varchar(256),
-    city varchar(256),
-    CONSTRAINT PURCHASEORDER_PK PRIMARY KEY (id),
-    CONSTRAINT PURCHASEORDER_AFFPROGRAM_FK FOREIGN KEY (affprogram_id)  REFERENCES aff_program(id) on delete cascade,
-    CONSTRAINT PURCHASEORDER_PARTNER_FK FOREIGN KEY (partner_id)  REFERENCES partner(id) on delete cascade);
+    id			    int not null auto_increment ,
+    affprogram_id	    int not null ,
+    partner_id		    int ,
+    status		    varchar(256)  ,--order status
+    original_order_id	    varchar(256),
+    tracking_id		    varchar(256),
+    ip_address		    varchar(256),
+    ordertime		    timestamp , --vremya zakaza
+    po_sum		    float,
+    currency		    varchar(16),
+    commision		    float,
+    country		    varchar(256),
+    city		    varchar(256),
+    index		    poaffprogidx(affprogram_id),
+    index		    poipidx(ip_address),
+    index		    potimeidx(ordertime),
+    constraint purchaseorder_pk primary key (id),
+    constraint purchaseorder_affprogram_fk foreign key (affprogram_id)  references aff_program(id) on delete cascade,
+    constraint purchaseorder_partner_fk foreign key (partner_id)  references partner(id) on delete cascade);
 
-CREATE TABLE `billing_project_spec` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `base_url` varchar(1024) NOT NULL,
-  `cookie_name` varchar(32) NOT NULL,
-  `home_page` varchar(256) NOT NULL,
-  `login_url` varchar(256) NOT NULL,
-  `logout_url` varchar(256) NOT NULL,
-  `method` varchar(8) NOT NULL,
-  `name` varchar(256) NOT NULL,
-  `password_field` varchar(16) NOT NULL,
-  `selector` varchar(256) NOT NULL,
-  `user_field` varchar(64) NOT NULL,
-  CONSTRAINT BLNGPROJECTDS_PK PRIMARY KEY (`id`));
+CREATE TABLE billing_project_spec (
+  id		    int		    not null auto_increment,
+  base_url	    varchar(1024)   not null,
+  cookie_name	    varchar(32)	    not null,
+  home_page	    varchar(256)    not null,
+  login_url	    varchar(256)    not null,
+  logout_url	    varchar(256)    not null,
+  method	    varchar(8)	    not null,
+  name		    varchar(256)    not null,
+  password_field    varchar(16)	    not null,
+  selector	    varchar(256)    not null,
+  user_field	    varchar(64)	    not null,
+  constraint blngprojectds_pk primary key (id));
 
-CREATE TABLE `billing_data_spec` (
-   `id` int(11) NOT NULL AUTO_INCREMENT,
-   `data_url` varchar(512) NOT NULL,
-   `method` varchar(8) NOT NULL,
-   `name` varchar(255) DEFAULT NULL,
-   `num_pages` int(11) DEFAULT NULL,
-   `page_param` varchar(512) DEFAULT NULL,
-   `project_id` int(11) DEFAULT NULL,
-    CONSTRAINT BLNGDATASPEC_PK PRIMARY KEY (`id`),
-    KEY `projectIdKey` (`project_id`),
-    CONSTRAINT `BLNGDATASPEC_PROJECT_FK` FOREIGN KEY (`project_id`) REFERENCES `billing_project_spec` (`id`)  ON DELETE CASCADE) ;
+CREATE TABLE billing_data_spec (
+   id		    int(11)	    not null auto_increment,
+   project_id	    int(11)	    default null,
+   data_url	    varchar(512)    not null,
+   method	    varchar(8)	    not null,
+   name		    varchar(255)    default null,
+   num_pages	    int(11)	    default null,
+   page_param	    varchar(512)    default null,
+   index	    dsprojidx	    (project_id),
+   constraint blngdataspec_pk		primary key (id),
+   constraint blngdataspec_project_fk	foreign key (project_id) references billing_project_spec (id)  on delete cascade) ;
 
-CREATE TABLE `selectable_data_item` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(256) NOT NULL,
-  `selector` varchar(256) NOT NULL,
-  `dataspec_id` int(11) DEFAULT NULL,
-  CONSTRAINT BLNGDSELECTABLEITEM_PK PRIMARY KEY (`id`),
-  KEY `dataSpecKey` (`dataspec_id`),
-  CONSTRAINT `BLNGDSELECTABLEITEM_DATASPEC_FK` FOREIGN KEY (`dataspec_id`) REFERENCES `billing_data_spec` (`id`)  ON DELETE CASCADE);
+CREATE TABLE selectable_data_item (
+  id		    int(11) not null auto_increment,
+  dataspec_id	    int(11) default null,
+  name		    varchar(256) not null,
+  selector	    varchar(256) not null,
+  index		    sidsidx (dataspec_id),
+  constraint blngdselectableitem_pk primary key (id),
+  constraint blngdselectableitem_dataspec_fk foreign key (dataspec_id) references billing_data_spec (id)  on delete cascade);
 
 --------------------------------------------------- Spring Security tables ---------------------------------------------------
 create table authorities (
@@ -174,7 +187,7 @@ insert into authorities  select id ,'ROLE_ADMIN' from affiliate where affiliateN
 insert into authorities  select id ,'ROLE_ADMIN' from affiliate where affiliateName='nina';
 insert into authorities  select id ,'ROLE_ADMIN' from affiliate where affiliateName='misha';
 insert into authorities  select id ,'ROLE_ADMIN' from affiliate where affiliateName='root';
-insert into authorities  select id ,'ROLE_USER' from affiliate where affiliateName='vasya';
+insert into authorities  select id ,'ROLE_USER'	 from affiliate where affiliateName='vasya';
 insert into authorities  select id ,'ROLE_ADMIN' from affiliate where affiliateName='hacker';
 
 insert into affprog_group(affiliate_id,group_name,description) select id,'Default','Default Group' from affiliate where affiliateName='ilya' ;
@@ -183,4 +196,5 @@ insert into affprog_group(affiliate_id,group_name,description) select id,'Defaul
 insert into affprog_group(affiliate_id,group_name,description) select id,'Default','Default Group' from affiliate where affiliateName='root' ;
 insert into affprog_group(affiliate_id,group_name,description) select id,'Default','Default Group' from affiliate where affiliateName='vasya' ;
 -----------------------------------default data-------------------------------------------------------------------------------
+
 commit;

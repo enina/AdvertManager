@@ -10,7 +10,7 @@
 
     <c:when test="${partnerList != null}" >
         
-        <table>
+        <table class="dataTable">
             <tr>
                 <th>Name</th><th>Email</th>
                 

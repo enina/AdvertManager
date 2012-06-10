@@ -1,0 +1,63 @@
+
+
+
+
+
+
+
+
+.advert{
+    padding: 29px 25px 0px 25px;
+    width: 1110px;
+    height: 460px;
+    background-color: #c4c4c4;
+    margin: 35px 0px 0px 0px;
+}
+.advert .bulletinBoard{
+
+    float: left;
+    
+    background-image: url('../images/bulletinBoardBG.png');
+    width: 390px;
+    height: 419px;
+    padding: 10px 5px 0px 5px ;
+}
+.advert img{
+    float: right;
+}
+#advert2 img{
+    position: relative;
+    left: -200px;
+    top:50px;
+}
+#advert3 img{
+    position: relative;
+    top:50px;
+}
+.bulletinHeader{
+    
+    color: #30324c;
+    font-size: 1.6em;
+    font-family: arial, sans-serif; 
+}
+
+.bulletinBody{
+    
+    color: #30324c;
+    font-size: 1.1em;
+    line-height: 1.5em;
+    font-family: arial, sans-serif; 
+    font-style: italic;
+    position: relative;
+    top: 30px;
+    
+}
+.currentAdvert{
+    
+}
+.advertFadeAvay{
+    
+  position: absolute;
+  left: -800px;
+  display: none;
+}

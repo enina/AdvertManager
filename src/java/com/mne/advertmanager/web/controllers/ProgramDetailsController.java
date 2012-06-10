@@ -11,6 +11,7 @@ import com.mne.advertmanager.util.Page;
 import com.mne.advertmanager.util.PageCtrl;
 import java.io.IOException;
 import java.util.Collection;
+import java.util.Set;
 import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,7 +30,6 @@ import org.springframework.web.servlet.ModelAndView;
  * @author Misha
  */
 @Controller
-@RequestMapping("/")
 public class ProgramDetailsController {
 
     //logger
@@ -69,21 +69,15 @@ public class ProgramDetailsController {
         //ATTENTION BE CAREFUL WITH "programId" PARAMETER THAT YOU RECEIVE BECAUSE EVE MAY INCLUDE
         //SQL INJECTION HERE SO YOU MUST CHECK IT BEFORE QUERY IT!!
 
-        //prepare all data :
-        //0.check recieved parameter
-
-        //2.get all data requiered to calculate overview ( LOT OF DATA )bu now for simplicity dont do that
-        //3.desplay program specification; 
-
-        //1.find program by id
         AffProgram program = affProgramService.findAffProgramByID(programId);
-
+//
         Page<AccessLog> accessPage = null;
         Collection<PurchaseOrder> orderList = null;
         FilterableBehaviorStatistics totalStats = null;
         FilterableBehaviorStatistics pmStats = null;
         FilterableBehaviorStatistics cmStats = null;
         FilterableBehaviorStatistics dailyStats = null;
+        Set<FilterableBehaviorStatistics> domainStats = null;
         if (program != null) {
             //only find data for valid programs
             //find all accesses related to this program
@@ -93,10 +87,10 @@ public class ProgramDetailsController {
             pmStats = fbsService.findPrevMonthAffProgramStatistics(programId);
             cmStats = fbsService.findCurMonthAffProgramStatistics(programId);
             dailyStats = fbsService.findDailyAffProgramGeneralStats(programId);
-            
+            domainStats =  fbsService.findTotalAccesAmounByDomain(programId);
         }
 
-
+        
         ModelAndView mav = ControllerSupport.forwardToView(logger, AFFPROGRAM_DETAILS_REQ_MAPPING + "/" + programId, AFFPROGRAM_DETAILS_REQ_MAPPING, "program", program);
         mav.addObject("accessPage", accessPage);
         mav.addObject("orderList", orderList);
@@ -105,6 +99,7 @@ public class ProgramDetailsController {
         mav.addObject("pmStats", pmStats);
         mav.addObject("cmStats", cmStats);
         mav.addObject("dailyStats", dailyStats);
+        mav.addObject("domainStats", domainStats);
 
         return mav;
 

@@ -4,15 +4,11 @@
  */
 package com.mne.advertmanager.service;
 
-import com.mne.advertmanager.model.AffProgram;
 import com.mne.advertmanager.dao.GenericDao;
-import com.mne.advertmanager.model.AccessLog;
-import com.mne.advertmanager.model.AccessSource;
-import com.mne.advertmanager.model.Affiliate;
-import com.mne.advertmanager.model.AffProgramGroup;
-import com.mne.advertmanager.model.PurchaseOrder;
+import com.mne.advertmanager.model.*;
 import com.mne.advertmanager.util.EntityFactory;
 import java.util.ArrayList;
+import java.util.Collection;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,7 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 public class DataGenService {
     
-    private GenericDao<AffProgram,Long> AffProgramDao;
+    private GenericDao<AffProgram,Long> affProgramDao;
     private AffiliateService        affService;
     private GenericDao<AffProgramGroup,Long> AffProgramGroupDao;
     private GenericDao<AccessSource,Long> accessSourceDao;
@@ -58,7 +54,7 @@ public class DataGenService {
     }
 
     public void setAffProgramDao(GenericDao<AffProgram,Long> AffProgramDao) {
-        this.AffProgramDao = AffProgramDao;
+        this.affProgramDao = AffProgramDao;
     }
     
     @Transactional(readOnly = false, propagation = Propagation.REQUIRED)
@@ -87,17 +83,15 @@ public class DataGenService {
 
         
         //////////////////////////////////////////////////////////////////////////////////////////////        
-        ArrayList<AffProgram> AffProgramSet = new ArrayList<AffProgram>();
+        ArrayList<AffProgram> affProgramSet = new ArrayList<AffProgram>();
+	int fromIdx=0;
+	int toIdx=0;
         for (int i = 0; i < 100;++i) {
             AffProgram curProd = entityFactory.makeAffProgram();
-            AffProgramSet.add(curProd);
+            affProgramSet.add(curProd);
             curProd.setAffProgramGroup(pgList.get(i/pgList.size()));
-            AffProgramDao.create(curProd);
             rowCounter++;
         }
-        
-        AffProgramDao.flush();
-        
         
         ///////////////////////////////////////////////////////////////////////////////////////////////        
         ArrayList<AccessSource> accessSourceList = new ArrayList<AccessSource>();
@@ -110,24 +104,30 @@ public class DataGenService {
         ///////////////////////////////////////////////////////////////////////////////////////////////        
         ArrayList<AccessLog> accessLogList = new ArrayList<AccessLog>();
         ArrayList<PurchaseOrder> orderList = new ArrayList<PurchaseOrder>();
+	fromIdx=toIdx=0;
         for (int i = 0; i < 100000;++i) {
             AccessLog curAccessLog = entityFactory.makeAccessLog();
-            AffProgram curAffProgram  = AffProgramSet.get(i%AffProgramSet.size());
+            AffProgram curAffProgram  = affProgramSet.get(i%affProgramSet.size());
             curAccessLog.setAffProgram(curAffProgram);
             curAccessLog.setSourceDomainId(accessSourceList.get(i%accessSourceList.size()));
             accessLogList.add(curAccessLog);  
-            accessLogDao.create(curAccessLog);
-            rowCounter++;
-            if ((i % 1000)==0) {
+            toIdx++;
+	    if (toIdx%10==0) {
+		saveDataSet(accessLogDao, accessLogList.subList(fromIdx, toIdx));
+		fromIdx=toIdx;
+	    }
+           if ((i % 1000)==0) {
                 PurchaseOrder curOrder = entityFactory.makePurchaseOrder();
                 curOrder.setAffProgram(curAffProgram);
                 orderList.add(curOrder);
                 purchaseOrderDao.create(curOrder);
-                rowCounter++;
             }
-            
-            if ((rowCounter% 50)==0)
-                accessLogDao.flush();
         }
+    }
+    
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    @SuppressWarnings("unchecked")
+    private void saveDataSet(GenericDao dao,Collection dataSet) {
+	dao.saveDataSet(dataSet);
     }
 }
