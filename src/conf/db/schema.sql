@@ -31,8 +31,8 @@ create table affiliate (
     password      varchar(50)   not null,
     enabled       boolean       not null,
     constraint affiliate_pk         primary key (id),
-    constraint affiliate_name_uq    unique affnameidx  (affiliatename(255)),
-    constraint affiliate_email_uq   unique affemailidx (email(255)) );
+    constraint affiliate_name_uq    unique affNameIdx  (affiliatename(255)),
+    constraint affiliate_email_uq   unique affEmailIdx (email(255)) );
 
 create table affprog_group(
     id		    int not null auto_increment,
@@ -40,7 +40,7 @@ create table affprog_group(
     group_name	    varchar(256),
     description	    varchar(256),
     constraint program_group_pk primary key (id),
-    constraint affprggroup_uq   unique affproggroupuqidx (affiliate_id,group_name(255)),
+    constraint affprggroup_uq   unique affProgGroupUQIdx (affiliate_id,group_name(255)),
     constraint program_group_affiliate_fk foreign key (affiliate_id) references affiliate(id) on delete cascade);
 
 create table aff_program (
@@ -54,7 +54,7 @@ create table aff_program (
     affprogram_link	varchar(256) not null,
     redirect_link	varchar(256) null,
     constraint program_pk primary key (id),
-    constraint affprg_uq   unique affprognameuqidx (program_group_id,name(255)),
+    constraint affprg_uq   unique affProgNameUQIdx (program_group_id,name(255)),
     constraint program_program_group_fk foreign key (program_group_id)  references affprog_group(id) on delete cascade);
     
 
@@ -63,8 +63,7 @@ create table access_source (
     id			 int not null auto_increment,
     access_source_domain varchar(256) not null ,
     description		 varchar(256) not null ,
-    index		 accsourcedomainidx(access_source_domain),
-    constraint accesssource_domain_uq   unique accesssourcedomainuqidx (access_source_domain(255)),
+    constraint accesssource_domain_uq   unique accessSourceDomainUQIdx (access_source_domain(255)),
     constraint accesssource_pk primary key (id));
 
 
@@ -78,10 +77,11 @@ create table access_log (
     target_url		    varchar(256)    ,
     referer_url		    varchar(384)    ,
     query		    varchar(256)    ,
-    index		    accessaffprogidx(affprogram_id),
-    index		    accesssourcedomainidx(affprogram_id),
-    index		    accessipidx(ip_address),
-    index		    accesstimeidx(access_time),
+    index		    accessAffProgIdx(affprogram_id),
+    index		    accessSourceDomainIdx(affprogram_id),
+    index		    accessIpIdx(ip_address),
+    index		    accessTimeIdx(access_time),
+    index		    accessCNIdx(countryname),
     constraint accesslog_pk primary key (id),
     constraint accesslog_affprogram_fk foreign key (affprogram_id) references aff_program(id) on delete cascade,
     constraint accesslog_sourcedomain_fk foreign key (source_domain_id) references access_source(id) on delete cascade);
@@ -92,7 +92,7 @@ create table partner (
     name        varchar(64)  not null ,
     email       varchar(256) not null ,
     constraint partner_pk primary key (id),
-    constraint partner_email_uq   unique partneremailuqidx (email(255)));
+    constraint partner_email_uq   unique partnerEmailUQIdx (email(255)));
 
 create table purchase_order (
     id			    int not null auto_increment ,
@@ -104,13 +104,16 @@ create table purchase_order (
     ip_address		    varchar(256),
     ordertime		    timestamp , --vremya zakaza
     po_sum		    float,
-    currency		    varchar(16),
     commision		    float,
+    currency		    varchar(16),
     country		    varchar(256),
     city		    varchar(256),
-    index		    poaffprogidx(affprogram_id),
-    index		    poipidx(ip_address),
-    index		    potimeidx(ordertime),
+    cn  		    varchar(256),
+    cc  		    varchar(2),
+    index		    poAffProgIdx(affprogram_id),
+    index		    poIpIdx(ip_address),
+    index		    poTimeIdx(ordertime),
+    index		    poCNIdx(cn),
     constraint purchaseorder_pk primary key (id),
     constraint purchaseorder_affprogram_fk foreign key (affprogram_id)  references aff_program(id) on delete cascade,
     constraint purchaseorder_partner_fk foreign key (partner_id)  references partner(id) on delete cascade);
