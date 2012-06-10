@@ -183,7 +183,7 @@ public class GenericDaoHibernateImpl<T, PK extends Serializable> implements Gene
     public Collection<T> findByExample(T example) {
 	throw new UnsupportedOperationException("Not supported yet.");
     }
-
+//================================ findPageByQuery =============================
     @Override
     @SuppressWarnings(value = "unchecked")
     public Page<T> findPageByQuery(String queryName, PageCtrl pageCtrl, Object... params) {
@@ -201,7 +201,7 @@ public class GenericDaoHibernateImpl<T, PK extends Serializable> implements Gene
 	}
 	return result;
     }
-
+//================================ initPageCtrl ================================
     @Override
     public void initPageCtrl(PageCtrl pageCtrl, String queryName, Object... params) {
 
@@ -228,21 +228,21 @@ public class GenericDaoHibernateImpl<T, PK extends Serializable> implements Gene
     private Session getSession() {
 	return sessionFactory.getCurrentSession();
     }
-
+//========================= getNamedQuery ======================================
     private Query getNamedQuery(String queryName, Object[] params) throws HibernateException {
 
 	Query q = getSession().getNamedQuery(queryName);
 	return setQueryParameters(q, params);
 
     }
-
+//=========================== createQuery ======================================
     private Query createQuery(String query, Object[] params) throws HibernateException {
 
 	Query q = getSession().createSQLQuery(query);
 	return setQueryParameters(q, params);
 
     }
-
+//=========================== setQueryParameters ===============================
     private Query setQueryParameters(Query q, Object[] params) throws HibernateException {
 	if (q != null && params != null) {
 	    for (int i = 0; i < params.length; ++i) {
@@ -251,6 +251,7 @@ public class GenericDaoHibernateImpl<T, PK extends Serializable> implements Gene
 	}
 	return q;
     }
+//=============================== saveDataSet ==================================
     @Override
     public void saveDataSet(Collection<T> dataSet) {
 

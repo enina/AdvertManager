@@ -18,6 +18,7 @@ public class ControllerSupport {
     public static final String ADD = "/add";
     public static final String NEW = "/new";
     public static final String LIST = "/list";
+    public static final String REMOVE = "/remove";
     
 //============================= handleException ================================
     public static String handleException(Logger logger,Exception e, String opType, String entityType, String entityName) {
@@ -34,8 +35,6 @@ public class ControllerSupport {
     }
 //============================= forwardToView ==================================
 
-    
-    
     public static ModelAndView forwardToView(Logger logger,String requestMapping, String viewName, String key, Object data) {
         ModelAndView mav = new ModelAndView();
         mav.setViewName(viewName);
@@ -45,6 +44,4 @@ public class ControllerSupport {
         logger.info("{} --> {}", requestMapping, viewName);
         return mav;
     }
-    
-
 }

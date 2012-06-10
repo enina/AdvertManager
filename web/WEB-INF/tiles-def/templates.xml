@@ -41,7 +41,7 @@
 	<put-attribute name="navBar" value="/WEB-INF/view/home/navBar.jsp" />  
 	<put-attribute name="content" value="affprogram.body" />
     </definition>
- 
+    
     <definition name="affprogram.body" template="/WEB-INF/view/affprograms/programbody.jsp">
 	<put-attribute name="programspec" value="/WEB-INF/view/affprograms/programspec.jsp" />
 	<put-attribute name="overview" value="/WEB-INF/view/affprograms/overview.jsp" />
