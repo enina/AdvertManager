@@ -155,7 +155,7 @@ public class BehaviorStatisticsService {
 	if (total != null) {
 	    int accessCount = accessService.findDailyAffProgramAccessAmount(affProgramId, refTime);
 	    
-	    total.setCountryName("Filter.ALL");
+	    total.setCountryName("Filter.All");
 	    total.setAccessAmount(accessCount);
 	    result.add(total);
 	    logger.debug("Program={} , Period=After {} ::Access={}, PO={} , Commision={}",
@@ -294,12 +294,6 @@ public class BehaviorStatisticsService {
        
 	FilterableBehaviorStatistics result = statsDao.findSingleItemByQuery(query, allParams.toArray());
 
-//	if (result == null) {
-//	    result = new FilterableBehaviorStatistics(0, 0, 0, new AffProgram(affProgramId));
-//	    result.setCountryName("Filter.ALL");
-//	    statsDao.create(result);
-//	}
-
 	return result;
     }
 //=============================== findAffiliateStatistics ======================
@@ -323,7 +317,7 @@ public class BehaviorStatisticsService {
 //time periods ( today, curWeek ...).
 //params:statistics Dao, query, program id, params needed for given query.
 //return: hashSet of 10 first items recieved from db with given query.
-//        each item represented by FilterabaleBehaviorStatistics entity ( fbs )
+//each item represented by FilterabaleBehaviorStatistics entity ( fbs )
     @SuppressWarnings("unchecked")
     private Set<FilterableBehaviorStatistics> findAccessByDomain(GenericDao<FilterableBehaviorStatistics, Integer> statsDao, String query, int affProgramId, Object... params) {
 	
@@ -338,7 +332,7 @@ public class BehaviorStatisticsService {
 	data = page.getItems();
         
         //convert collection to hashSet
-	HashSet<FilterableBehaviorStatistics> result = new HashSet<FilterableBehaviorStatistics>(data);
+	LinkedHashSet<FilterableBehaviorStatistics> result = new LinkedHashSet<FilterableBehaviorStatistics>(data);
 	
 	return result;
     }
