@@ -28,7 +28,11 @@
     <resources>
         <j2se version="1.6+" initial-heap-size="512m" max-heap-size="512m"/>
         <jar href="extlib/jsoup-1.6.1.jar" download="eager"/>
+        <jar href="extlib/logback-classic-1.0.0.jar" download="eager"/>
+        <jar href="extlib/logback-core-1.0.0.jar" download="eager"/>
+        <jar href="extlib/slf4j-api-1.6.4.jar" download="eager"/>
         <jar href="parsergen.jar" download="eager"/>
+        
     </resources>
     <application-desc main-class="com.mne.advertmanager.parsergen.ParserGenMainFrame"/>
 </jnlp>

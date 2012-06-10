@@ -5,8 +5,10 @@
 package com.mne.advertmanager.web.infra;
 
 import java.util.logging.Level;
+import java.util.logging.LogManager;
 import java.util.logging.Logger;
 import javax.servlet.ServletContextEvent;
+import org.slf4j.bridge.SLF4JBridgeHandler;
 //import org.quartz.*;
 //import org.quartz.impl.StdSchedulerFactory;
 //import static org.quartz.JobBuilder.newJob;
@@ -47,6 +49,9 @@ public class AdvertManagerWebContextListener  extends ContextLoaderListener {
     public void contextInitialized(ServletContextEvent event) {
         try {
             super.contextInitialized(event);
+            LogManager.getLogManager().reset();
+            SLF4JBridgeHandler.install();
+            Logger.getLogger("com.mne").setLevel(Level.FINEST);
         }catch(Exception ex) {
             logger.log(Level.SEVERE, "Context initialization failed with exception {0}", ex.getClass().getSimpleName());
         }

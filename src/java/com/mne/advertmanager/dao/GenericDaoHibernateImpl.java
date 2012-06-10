@@ -49,7 +49,7 @@ public class GenericDaoHibernateImpl<T, PK extends Serializable> implements Gene
 	    } else {
 		result = (PK) getSession().save(entityName, o);
 	    }
-	} catch (HibernateException e) {
+	} catch (Exception e) {
 	    logger.error("create ::: Entity:{}, Exception:{},Message:{}", new Object[]{o.getClass().getSimpleName(), e.getClass().getSimpleName(), e.getMessage()});
 	}
 	return result;
@@ -67,7 +67,7 @@ public class GenericDaoHibernateImpl<T, PK extends Serializable> implements Gene
 	    } else {
 		result = (T) getSession().get(entityName, id);
 	    }
-	} catch (HibernateException e) {
+	} catch (Exception e) {
 	    logger.error("read ::: ID:{}, Exception:{},Message:{}", new Object[]{id, e.getClass().getSimpleName(), e.getMessage()});
 	}
 	return result;
@@ -82,7 +82,7 @@ public class GenericDaoHibernateImpl<T, PK extends Serializable> implements Gene
 	    } else {
 		getSession().update(entityName, o);
 	    }
-	} catch (HibernateException e) {
+	} catch (Exception e) {
 	    logger.error("Update Entity:{}, Exception:{},Message:{}", new Object[]{o.getClass().getSimpleName(), e.getClass().getSimpleName(), e.getMessage()});
 	}
     }
@@ -95,7 +95,7 @@ public class GenericDaoHibernateImpl<T, PK extends Serializable> implements Gene
 	    } else {
 		getSession().delete(entityName, o);
 	    }
-	} catch (HibernateException e) {
+	} catch (Exception e) {
 	    logger.error("Delete Entity:{}, Exception:{},Message:{}", new Object[]{o, e.getClass().getSimpleName(), e.getMessage()});
 	}
     }
@@ -116,7 +116,7 @@ public class GenericDaoHibernateImpl<T, PK extends Serializable> implements Gene
 	    if (q != null) {
 		result = q.list();
 	    }
-	} catch (HibernateException e) {
+	} catch (Exception e) {
 	    logger.error("findByQuery ::: query:{}, Exception:{},Message:{}", new Object[]{queryName, e.getClass().getSimpleName(), e.getMessage()});
 	}
 
@@ -135,7 +135,7 @@ public class GenericDaoHibernateImpl<T, PK extends Serializable> implements Gene
 	    if (q != null) {
 		result = (T) q.uniqueResult();
 	    }
-	} catch (HibernateException e) {
+	} catch (Exception e) {
 	    logger.error("findSingleItemByQuery ::: query:{}, Exception:{},Message:{}", new Object[]{queryName, e.getClass().getSimpleName(), e.getMessage()});
 	}
 
@@ -155,7 +155,7 @@ public class GenericDaoHibernateImpl<T, PK extends Serializable> implements Gene
 		q.setResultTransformer(Transformers.aliasToBean(target.getClass()));
 		result = (X) q.uniqueResult();
 	    }
-	} catch (HibernateException e) {
+	} catch (Exception e) {
 	    logger.error("findSingleItemByQueryString ::: query:{}, Exception:{},Message:{}", new Object[]{queryString, e.getClass().getSimpleName(), e.getMessage()});
 	}
 
@@ -169,7 +169,7 @@ public class GenericDaoHibernateImpl<T, PK extends Serializable> implements Gene
 	try {
 	    Query q = getNamedQuery(queryName, params);
 	    res = q.executeUpdate();
-	} catch (HibernateException e) {
+	} catch (Exception e) {
 	    logger.error("executeUpdateByQuery ::: query:{}, Exception:{},Message:{}", new Object[]{queryName, e.getClass().getSimpleName(), e.getMessage()});
 	}
 
@@ -194,7 +194,7 @@ public class GenericDaoHibernateImpl<T, PK extends Serializable> implements Gene
 	    q.setFirstResult(pageCtrl.getFirstResult());
 	    List data = q.list();
 	    result = new Page<T>(data, pageCtrl);
-	} catch (HibernateException e) {
+	} catch (Exception e) {
 	    logger.error("findPageByQuery ::: query:{}, Exception:{},Message:{}", new Object[]{queryName, e.getClass().getSimpleName(), e.getMessage()});
 	}
 	return result;
@@ -213,7 +213,7 @@ public class GenericDaoHibernateImpl<T, PK extends Serializable> implements Gene
 	try {
 	    Query q = getNamedQuery(queryName, params);
 	    result = ((Long) q.uniqueResult()).intValue();
-	} catch (HibernateException e) {
+	} catch (Exception e) {
 	    logger.error("findQueryResultSetSize ::: query:{}, Exception:{},Message:{}", new Object[]{queryName, e.getClass().getSimpleName(), e.getMessage()});
 	}
 	return result;
@@ -267,7 +267,7 @@ public class GenericDaoHibernateImpl<T, PK extends Serializable> implements Gene
 		    }
 		}
 	    }
-	} catch (HibernateException e) {
+	} catch (Exception e) {
 	    logger.error("saveDataSet ::: Exception:{},Message:{}", e.getClass().getSimpleName(), e.getMessage());
 	}
     }

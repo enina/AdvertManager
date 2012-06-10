@@ -101,8 +101,7 @@
                      classpath="${javac.classpath}:${j2ee.platform.classpath}" aspectpath="${var.EXT_LIB}/spring-aspects-3.1.0.RELEASE.jar" />
         
         <copy todir="${build.dir}/web/WEB-INF/classes">
-            <fileset dir="${conf.dir}" includes="logback.xml" />
-            <fileset dir="${conf.dir}" includes="quartz.properties" />
+            <fileset dir="${conf.dir}/logging/server" includes="logback.xml" />
         </copy>
         
         <jar destfile="${build.dir}/web/apps/parsergen.jar">
@@ -110,10 +109,10 @@
                 <include name="com/mne/advertmanager/parsergen/**/*.class"/>
                 <include name="com/mne/advertmanager/util/JSoupTransport.class" />
             </fileset>
-            
+            <fileset dir="${conf.dir}/logging/parsergen" includes="logback.xml" />
             <manifest>
                 <attribute name="Main-Class"  value="com.mne.advertmanager.parsergen.ParserGenMainFrame"/>
-                <attribute name="Class-Path"  value="jsoup-1.6.1.jar"/>
+                <attribute name="Class-Path"  value="jsoup-1.6.1.jar;logback-classic-1.0.0.jar;logback-core-1.0.0.jar;slf4j-api-1.6.4.jar"/>
             </manifest>            
         </jar>
         
@@ -124,12 +123,20 @@
         </jar>        
         
         <copy todir="${build.dir}/web/apps/extlib">
-            <fileset dir="${build.dir}/web/WEB-INF/lib" includes="jsoup-1.6.1.jar" />
+            <fileset dir="${build.dir}/web/WEB-INF/lib">
+                <include name="jsoup-1.6.1.jar" />
+                <include name="logback-classic-1.0.0.jar" />
+                <include name="logback-core-1.0.0.jar" />
+                <include name="slf4j-api-1.6.4.jar" />
+            </fileset> 
         </copy>
 
         <signjar alias="mne"  keystore="${conf.dir}/keystore/mne.keystore" storepass="mneAdMan" preservelastmodified="true" >
             <fileset dir="${build.dir}/web/apps/"> 
                 <include name="extlib/jsoup-1.6.1.jar"/>
+                <include name="extlib/logback-classic-1.0.0.jar" />
+                <include name="extlib/logback-core-1.0.0.jar" />
+                <include name="extlib/slf4j-api-1.6.4.jar" />
                 <include name="parsergen.jar"/>
             </fileset>
         </signjar>

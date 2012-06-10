@@ -36,6 +36,7 @@
     <appender-ref ref="FILE"  />
   </root>
   
+  <logger name="com.mne.advertmanager.util" level="debug"/>
   
   <logger name="com.mne" level="debug"/>
   
