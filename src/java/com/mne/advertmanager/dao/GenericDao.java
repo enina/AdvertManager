@@ -8,7 +8,6 @@ import com.mne.advertmanager.util.Page;
 import com.mne.advertmanager.util.PageCtrl;
 import java.io.Serializable;
 import java.util.Collection;
-import java.util.List;
 
 /**
  *

@@ -266,7 +266,7 @@
     </bean> 
     
     <bean id="poService" class="com.mne.advertmanager.service.PurchaseOrderService">
-        <property name="poDao" ref="partnerDao"/>
+        <property name="poDao" ref="purchaseOrderDao"/>
     </bean>
     
     <bean id="billingProjectService" class="com.mne.advertmanager.service.BillingProjectService">

@@ -76,16 +76,16 @@ public class AccessLogService {
         return result;
     }
 
-    public GeoData findCountryDataByIP(String ipAddess) {
+    @Transactional(readOnly=true)
+    public GeoData findCountryDataByIP(String ipAddress) {
 
-        long ip = ip2long(ipAddess);
-        
         GeoData result = null;
+        long ip=0;
         try {
-          
+            ip = ip2long(ipAddress);
             result = accessLogDao.findSingleItemByQueryString(AccessLog.ACCESSLOG_FINDGEODATABYIP_QUERY,new GeoData(), ip);
         }catch(Exception e) {
-            logger.error("Failed to retrieve country by IP.Exception {}",e);
+            logger.error("Failed to retrieve country by IP.Exception={}, IPAddress={} , IP2Long={}",new Object[]{e,ipAddress,ip});
         }
         return result;
     }

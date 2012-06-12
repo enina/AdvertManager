@@ -204,9 +204,12 @@ public class BillingProjectService {
             org.jsoup.nodes.Document doc = JSoupTransport.retrieveDocument(con, url, ds.getMethod());
             try {
                 //extract data from current document to DB
+                logger.info("ProcessDataSpec:::Program={}:DataImport:Spec={}:Start Page={}",new Object[]{program.getName(),ds.getName(),i});
                 importPageData(program, doc, ds);
             } catch (Exception ex) {
-                logger.error(ex.toString());
+                logger.error("ProcessDataSpec:::Program={}:DataImport:Spec={}:Page={} ,Exception={}",new Object[]{program.getName(),ds.getName(),i,ex.toString()});
+            }finally {
+                logger.info("ProcessDataSpec:::Program={}:DataImport:Spec={}:Finish Page={}",new Object[]{program.getName(),ds.getName(),i});
             }
 
             i++;
@@ -230,8 +233,17 @@ public class BillingProjectService {
             return;
         }
 
-        dataElem = doc.select(dataSpec.getSelector()).first();
+        Elements dsElements = doc.select(dataSpec.getSelector());
+        if (dsElements == null || (dataElem=dsElements.first())==null) {
+            logger.error("ImportPageData:::Data root not found.DataSpec={},Selector={}",dataSpec.getName(),dataSpec.getSelector());
+            return;
+        }
+        
         dataList = dataElem.select(dataSpec.getListEntrySelector());
+        if (dataList == null ) {
+            logger.error("ImportPageData:::Item List not found.DataSpec={},Selector={}",dataSpec.getName(),dataSpec.getListEntrySelector());
+            return;
+        }        
 
         for (int i = 0; i < dataList.size(); ++i) {
 

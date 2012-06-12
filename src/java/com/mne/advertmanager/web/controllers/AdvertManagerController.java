@@ -106,7 +106,7 @@ public class AdvertManagerController {
      */
     @RequestMapping(value="main",method = RequestMethod.GET)
     public void goToMain() {
-        logger.info("go to main page");
+        logger.info("redirect to main page view");
     }
     
     //=========================== removeProgram ================================
@@ -115,11 +115,9 @@ public class AdvertManagerController {
      */
     @RequestMapping(value=AFFPROGRAM_REM_REQ_MAPPING, method = RequestMethod.GET)
     public String removeProgram(@PathVariable int programId) {
+
         logger.info("remove affProgram " + programId);
-        
-
-
-      return "redirect:mvc/home";
+        return "redirect:mvc/home";
     }
     
 //======================== generateHome ========================================
@@ -280,7 +278,7 @@ public class AdvertManagerController {
             pg.setProgramCollection(null);
             pg.setAffiliateId(null);
             String result = gson.toJson(pg);
-            logger.info(result);
+            logger.debug("getAffProgramGroup.pgId={},Result={}",pgId,result);
             response.getWriter().write(result);
         } catch (IOException e) {
             String errMsg = ",Exception:" + e.getClass().getSimpleName()
@@ -384,11 +382,10 @@ public class AdvertManagerController {
                     result = gson.toJson(ds);
                 }
             }
-            logger.info(result);
+            logger.debug("GetBillingDataSpec ProjectId={},DataSpec={},Result={}",new Object[]{bpId,ds.getName(),result});
             response.getWriter().write(result);
-
         }catch (IOException e) {
-            String errMsg = ",Exception:" + e.getClass().getSimpleName() +
+            String errMsg = "Exception:" + e.getClass().getSimpleName() +
                 ((e.getMessage() == null) ? "" :
                 " ,Message:"  + e.getMessage());
             logger.error("failed to retrieve billing project dataspec  (bpId={},dsId={},Exception:{})", new Object[]{bpId,dsId, errMsg});
@@ -428,8 +425,6 @@ public class AdvertManagerController {
 
     @Autowired
     public void setAffProgramService(AffProgramService affprogramService) {
-
-        logger.info("AdvertManagerController:setAffProgramService...");
         this.affProgramService = affprogramService;
     }
 

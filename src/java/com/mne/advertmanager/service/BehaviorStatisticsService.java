@@ -150,25 +150,34 @@ public class BehaviorStatisticsService {
       private List<FilterableBehaviorStatistics> calcDailyAffProgramStatsSet(int affProgramId, Date refTime) {
 	
 	ArrayList<FilterableBehaviorStatistics> result = new ArrayList<FilterableBehaviorStatistics>();
+        
+        logger.info("Program={}:::BehaviorStatisticsCalculation:Start Financial Statistics Calculation", affProgramId);
 	FilterableBehaviorStatistics total = dailyBehaviorStatsDao.findSingleItemByQuery("BehaviorStats.calcAffProgPeriodTotalFinancialStats", affProgramId, refTime);
+        logger.info("Program={}:::BehaviorStatisticsCalculation:Finish Financial Statistics Calculation", affProgramId);
 	
 	if (total != null) {
+            logger.info("Program={}:::BehaviorStatisticsCalculation:Start Period Access Calculation", affProgramId);
 	    int accessCount = accessService.findDailyAffProgramAccessAmount(affProgramId, refTime);
-	    
+	    logger.info("Program={}:::BehaviorStatisticsCalculation:Finish Access Calculation", affProgramId);
 	    total.setCountryName("Filter.All");
 	    total.setAccessAmount(accessCount);
 	    result.add(total);
-	    logger.debug("Program={} , Period=After {} ::Access={}, PO={} , Commision={}",
+	    logger.debug("Program={}:::BehaviorStatisticsCalculation : Period=After {} ::Access={}, PO={} , Commision={}",
 		    new Object[]{affProgramId, refTime, accessCount, total.getPurchaseAmount(), total.getTotalCommision()});
 	    
 	}
 	
-        //insert assess amount to statistics
-	
+        logger.info("Program={}:::BehaviorStatisticsCalculation:Start Period Access by Domain Stats Calculation", affProgramId); 
 	result.addAll(dailyBehaviorStatsDao.findByQuery("BehaviorStats.calcAffProgPeriodDomainStats", affProgramId, refTime));
-
+        logger.info("Program={}:::BehaviorStatisticsCalculation:Finish Period Access by  Domain Stats Calculation", affProgramId);
+        
+        logger.info("Program={}:::BehaviorStatisticsCalculation:Start Period Access by Country Stats Calculation", affProgramId); 
 	Collection<FilterableBehaviorStatistics> fsl = dailyBehaviorStatsDao.findByQuery("BehaviorStats.calcAffProgPeriodCountryStats", affProgramId, refTime);
+        logger.info("Program={}:::BehaviorStatisticsCalculation:Finish Period Access by Country Stats Calculation", affProgramId); 
+
+        logger.info("Program={}:::BehaviorStatisticsCalculation:Start Period Financial by Country Stats Calculation", affProgramId); 
 	Collection<FilterableBehaviorStatistics> countryFsl = dailyBehaviorStatsDao.findByQuery("BehaviorStats.calcAffProgPeriodFinancialStatsByCountry", affProgramId, refTime);
+        logger.info("Program={}:::BehaviorStatisticsCalculation:Finish Period Financial by Country Stats Calculation", affProgramId); 
 	TreeMap<String, FilterableBehaviorStatistics> finStat = builFBSTree(fsl);
 	
 	FilterableBehaviorStatistics countryFBS = null;
@@ -204,18 +213,11 @@ public class BehaviorStatisticsService {
 	return builFBSTree(data);
     }
 //============================== calculateAffProgramStatistics =================
-    @Transactional
-    public void initAffProgramStats(AffProgram affProgram) {
-	totalBehaviorStatsDao.create(new FilterableBehaviorStatistics(0, 0, "Filter.All", affProgram));
-	dailyBehaviorStatsDao.create(new FilterableBehaviorStatistics(0, 0, "Filter.All", affProgram));
-	curMonthBehaviorStatsDao.create(new FilterableBehaviorStatistics(0, 0, "Filter.All", affProgram));
-	prevMonthBehaviorStatsDao.create(new FilterableBehaviorStatistics(0, 0, "Filter.All", affProgram));
-    }
     
     @Transactional
     public void calculateAffProgramStatistics(int affProgramId) {
 	
-	logger.info("Program={}:::Started behavior statistics calculation", affProgramId);
+	logger.info("Program={}:::BehaviorStatisticsCalculation:Start", affProgramId);
 	Calendar cal = Calendar.getInstance();
 	//cal.add(Calendar.DATE, -1);
 	cal.clear();
@@ -224,12 +226,15 @@ public class BehaviorStatisticsService {
 	Date refTime = cal.getTime();
 	
         //calculate today statistics
+        logger.info("Program={}:::BehaviorStatisticsCalculation:Start Daily Calculation", affProgramId);
 	List<FilterableBehaviorStatistics> todayStats = calcDailyAffProgramStatsSet(affProgramId, refTime);
-	
+        logger.info("Program={}:::BehaviorStatisticsCalculation:Finish Daily Calculation", affProgramId);
+
         //retrive current total stats and update them 
 	TreeMap<String, FilterableBehaviorStatistics> totalStats = findAffProgramStats(totalBehaviorStatsDao, "TotalBehaviorStats.findAffProgStats", affProgramId);
 	updateStats(totalBehaviorStatsDao, totalStats, todayStats);
-	logger.info("Updated total statistics");
+        logger.info("Program={}:::BehaviorStatisticsCalculation:Total statistics updated", affProgramId);
+
         
         //retrive current month statistics 
 	TreeMap<String, FilterableBehaviorStatistics> cmStats = findAffProgramStats(curMonthBehaviorStatsDao, "CurMonthBehaviorStats.findAffProgStats", affProgramId);
@@ -239,19 +244,20 @@ public class BehaviorStatisticsService {
 	if (cal.get(Calendar.DAY_OF_MONTH) == 1) {
 	    shiftStats(prevMonthBehaviorStatsDao, "PrevMonthBehaviorStats.deleteAffProgStats", affProgramId, cmStats.values());
 	    shiftStats(curMonthBehaviorStatsDao, "CurMonthBehaviorStats.deleteAffProgStats", affProgramId, todayStats);
-	    logger.info("Shifted monthly statistics");
+            logger.info("Program={}:::BehaviorStatisticsCalculation:PrevMonth statistics updated",affProgramId);
+            logger.info("Program={}:::BehaviorStatisticsCalculation:CurvMonth statistics updated",affProgramId);
 	} else {
 	    updateStats(curMonthBehaviorStatsDao, cmStats, todayStats);
-	    logger.info("Updated current month statistics");
+	    logger.info("Program={}:::BehaviorStatisticsCalculation:CurvMonth statistics updated",affProgramId);
 	}
 
 	//delete outdate statistics from the daily table
 	cleanAffProgStats(dailyBehaviorStatsDao, "DailyBehaviorStats.deleteAffProgStats", affProgramId);
 	//save today statistics
 	processFBSList(dailyBehaviorStatsDao, todayStats);
-	logger.info("Updated daily statistics");
+	logger.info("Program={}:::BehaviorStatisticsCalculation:Daily statistics updated",affProgramId);
 	
-	logger.info("Program={}::Finished behavior statistics calculation .", affProgramId);
+	logger.info("Program={}:::BehaviorStatisticsCalculation:Finish", affProgramId);
     }
 //============================== shiftStats ====================================
     private void shiftStats(GenericDao<FilterableBehaviorStatistics, Integer> statsDao, String queryName, int affProgramId, Collection<FilterableBehaviorStatistics> stats) {

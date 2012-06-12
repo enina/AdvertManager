@@ -108,7 +108,7 @@
         <script type="text/javascript">
             $(document).ready(function() { 
             // call the tablesorter plugin, the magic happens in the markup 
-                $('.tablesorter').tablesorter({sortList: [[1,1]] }); 
+            // $('.tablesorter').tablesorter({sortList: [[1,1]] }); 
             }); 
         </script>
         

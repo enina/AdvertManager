@@ -200,9 +200,8 @@ public class ProgramDetailsController {
             Page<AccessLog> accessPage = accessLogService.findAccessByAffProgamId(new PageCtrl(pageNumber, 0, items), programId);
 
             String curRequest = AFFPROGRAM_ACCESS_REQ_MAPPING + "/" + programId + "/items/" + items + "/accessPage/" + pageNumber;
-            logger.info(curRequest);
             String result = gson.toJson(accessPage);
-            logger.info(result);
+            logger.debug("GetAccessPage::request={},result={}",curRequest , result);
             response.getWriter().write(result);
         } catch (IOException e) {
             String errMsg = ",Exception:" + e.getClass().getSimpleName()

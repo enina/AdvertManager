@@ -41,7 +41,7 @@ public class Partner implements Serializable {
     @Column(name = "email")
     private String email;
     
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "partner")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "partner",fetch= FetchType.LAZY)
     private Set<PurchaseOrder> poSet;
 
     public Partner() {
