@@ -133,7 +133,7 @@ public class ProgramDetailsController {
                     //set security context of this Thread
                     SecurityContextHolder.setContext(securityContext);
                     //set thread name for debug purposes
-                    setName(ControllerSupport.BILLING + "DataImportThread" + " programId " + affProgramId);
+                    setName(program.getName()+"-"+ ControllerSupport.BILLING + "DataImport");
                     //go collect data:
                     billingProjectService.importBillingData(program);
                     
@@ -174,7 +174,7 @@ public class ProgramDetailsController {
                     //set security context of this Thread
                     SecurityContextHolder.setContext(securityContext);
                     //set thread name for debug purposes
-                    setName(AFFPROGRAM + "AggrDataCalculationThread" + " programId " + programId);
+                    setName(AFFPROGRAM + "StatsCalc" + " -P" + programId);
                     //calculate aggregation data:
                     fbsService.calculateAffProgramStatistics(programId);
                 }

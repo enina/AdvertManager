@@ -131,7 +131,7 @@
             </fileset> 
         </copy>
 
-        <signjar alias="mne"  keystore="${conf.dir}/keystore/mne.keystore" storepass="mneAdMan" preservelastmodified="true" >
+        <signjar lazy="true" alias="mne"  keystore="${conf.dir}/keystore/mne.keystore" storepass="mneAdMan" preservelastmodified="true" >
             <fileset dir="${build.dir}/web/apps/"> 
                 <include name="extlib/jsoup-1.6.1.jar"/>
                 <include name="extlib/logback-classic-1.0.0.jar" />
@@ -140,6 +140,7 @@
                 <include name="parsergen.jar"/>
             </fileset>
         </signjar>
+        
     </target>
     
     <target name="-post-dist">
