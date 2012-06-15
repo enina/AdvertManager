@@ -77,8 +77,8 @@ public class AdvertManagerController {
     private BillingProjectService billingProjectService;
     private BehaviorStatisticsService fbsService;
 
-    private Gson gson = new Gson();
-    private Unmarshaller jaxbUnmarshaller;
+    private Gson gson = new Gson();        //converter of java ojects to text format readble in browser
+    private Unmarshaller jaxbUnmarshaller; //converter of xml text to java objests
     
     private static final Logger logger = LoggerFactory.getLogger(AdvertManagerController.class);
 
@@ -130,12 +130,14 @@ public class AdvertManagerController {
      */
     @RequestMapping(value = "home", method = RequestMethod.GET)
     public ModelAndView generateHome(SecurityContextHolderAwareRequestWrapper securityContext) {
+        //get login user name
         String affName = securityContext.getUserPrincipal().getName();
+        //find aff object by name
         Affiliate aff = affiliateService.findAffiliateWithAffPrograms(affName);
-        
+        // find all statistics for this aff ,get total staistics of all programs
         Set<FilterableBehaviorStatistics> statsSet = fbsService.findTotalAffiliateStatistics(aff.getId());
        
-        //get total staistics of all programs
+        //create model and view object to present by jsp aff statistics data
         ModelAndView mav = ControllerSupport.forwardToView(logger, "home", "home", "data", aff);
         
         
@@ -144,7 +146,7 @@ public class AdvertManagerController {
         for( FilterableBehaviorStatistics fbs:statsSet ){
             statMap.put(fbs.getAffProgram(), fbs);
         }
-        
+        //put statistics hash map to model and view
         mav.addObject("affStatisticsMap", statMap); 
         
         return mav;
@@ -152,7 +154,7 @@ public class AdvertManagerController {
     }
    
 //========================== generateData ======================================
-
+// test function
     @RequestMapping(value = DG_GEN_REQ_MAPPING, method = RequestMethod.GET)
     public ModelAndView generateData() {
         new Thread() {
@@ -168,6 +170,7 @@ public class AdvertManagerController {
     }
 
 //========================== viewAffProgDefintionForm ==========================
+    //
     @RequestMapping(value = AFFPROGRAM_NEW_REQ_MAPPING, method = RequestMethod.GET)
     public ModelAndView viewAffProgDefintionForm(SecurityContextHolderAwareRequestWrapper securityContext) {
 
@@ -253,7 +256,7 @@ public class AdvertManagerController {
 //============================ launchParserGenerator ===========================
 
     @RequestMapping(value = APPS_PARSERGEN_REQ_MAPPING, method = RequestMethod.GET)
-    public @ModelAttribute("codebase") String launchParserGenerator(HttpServletRequest request) {
+    public @ModelAttribute("codebase") String runParserGenerator(HttpServletRequest request) {
 
         String codebase = "http://" + request.getServerName() + ":"
                 + request.getServerPort()
