@@ -40,7 +40,10 @@
                             <td ><c:out value="${fbs.accessAmount}"/></td>   
                             <td ><c:out value="${fbs.purchaseAmount}"/></td>                    
                             <td ><c:out value="${fbs.totalCommision}"/></td>
-                            <td ><c:out value="${fbs.purchaseAmount / fbs.accessAmount}"/></td>
+			    <td>
+				<fmt:formatNumber value="${fbs.conversionRate}" maxFractionDigits="3" minFractionDigits="3" />
+			    </td>			    
+                            
                         </tr>   
                        
                     

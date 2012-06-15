@@ -9,31 +9,11 @@
 
 
 <div Id="programSpec">
-
-    
-    
-    <table>
-        
-    <tr>
-    <td>Program Name</td><td><c:out value="${program.name}" /></td>
-    </tr>
-    
-    <tr>
-    <td>Description</td><td><c:out value="${program.description}" /></td>
-    </tr>
-    
-    <tr>
-    <td>User Name</td><td><c:out value="${program.userName}" /></td>
-    </tr>
-
-    <tr>
-        <td>Back office url</td><td><a href="<c:out value='${program.affProgramLink}' />"><c:out value="${program.affProgramLink}" /></a></td>
-    </tr>
-    
-    <tr>
-    <td>Refresh Data</td><td><a href="${pageContext.request.contextPath}/mvc/billing/import/${program.id}">Refresh Button</a></td>
-    </tr>
-
-    </table>
-</div>
+    <div>
+	<a href="${pageContext.request.contextPath}/mvc/billing/import/${program.id}">Import Data for user</a>
+	<span style="margin: 0px;padding: 0px"><c:out value="${program.userName}" />@</span><a style="margin: 0px;padding: 0px" target="_blank" href="<c:out value='${program.affProgramLink}'/>" title="<c:out value='${program.description}'/>">
+	    <c:out value="${program.name}" />
+	</a>
+    </div>
+ </div>
                  

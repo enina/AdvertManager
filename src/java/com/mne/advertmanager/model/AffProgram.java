@@ -36,7 +36,7 @@ import javax.xml.bind.annotation.XmlTransient;
                 + "left join fetch p.apg apg "
                 + "left join fetch apg.affiliateId aff "
                 + "left join fetch p.partners "
-                + "WHERE p.id = ? and aff.affiliateName=?"),
+                + "WHERE p.id = ? and aff.affiliateName=? "),
     @NamedQuery(name = "AffProgram.findByDescription", query = "SELECT p FROM AffProgram p WHERE p.description = ?"),
     @NamedQuery(name = "AffProgram.findBySyncStatus", query = "SELECT p FROM AffProgram p WHERE p.syncStatus = ?"),
     @NamedQuery(name = "AffProgram.findByAffProgramLink", query = "SELECT p FROM AffProgram p WHERE p.affProgramLink = ?"),
@@ -57,6 +57,11 @@ public class AffProgram implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Integer id;
+    
+    @NotNull                        //hold affProgram name as defined by 
+    @Size(min = 1, max = 256)       //affiliate whan he added this AffProgram
+    @Column(name = "name")          //
+    private String name;            //    
     
     @Size(max = 256)
     @Column(name = "description")
@@ -95,15 +100,16 @@ public class AffProgram implements Serializable {
     @ManyToOne(fetch= FetchType.LAZY)
     private AffProgramGroup apg;
 
-    @NotNull                        //hold affProgram name as defined by 
-    @Size(min = 1, max = 256)       //affiliate whan he added this AffProgram
-    @Column(name = "name")          //
-    private String name;            //
+
     
     @ManyToMany(cascade = CascadeType.ALL)    
     @JoinTable(name = "affprogram_partner", joinColumns =
     { @JoinColumn(name = "program_id") }, inverseJoinColumns = { @JoinColumn(name = "partner_id") }) 
     private Set<Partner> partners = new HashSet<Partner>(0);
+    
+    
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "affProgram")
+    private Set<FilterableBehaviorStatistics> stats;
     
     /**C-tor: empty*/
     public AffProgram() {
@@ -212,6 +218,14 @@ public class AffProgram implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Set<FilterableBehaviorStatistics> getStats() {
+	return stats;
+    }
+
+    public void setStats(Set<FilterableBehaviorStatistics> stats) {
+	this.stats = stats;
     }
     
     

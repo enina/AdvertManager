@@ -120,10 +120,11 @@ create table purchase_order (
 
 CREATE TABLE behavior_stats (
     id               INT NOT NULL AUTO_INCREMENT,
-    stat_type        tinyInt,
     affprogram_id    INT, 
-    domain_id        INT, 
-    country_name     VARCHAR(255),
+    domain_id        INT,
+    stat_type        VARCHAR(32),
+    cn		     VARCHAR(255),
+    cc		     VARCHAR(4),
     access_amount    BIGINT,
     purchase_amount  BIGINT,
     total_commision  DOUBLE, 
@@ -131,7 +132,7 @@ CREATE TABLE behavior_stats (
     index           fbsStatTypeIdx(stat_type),
     index           fbsProgIdIdx(affprogram_id),
     index           fbsDomainIdx(domain_id),
-    index           fbsCountryNameIdx(country_name),
+    index           fbsCountryNameIdx(cn),
 
     constraint behavior_stats_pk            PRIMARY KEY (id),
     constraint behaviorstats_affprogram_fk  foreign key (affprogram_id) references aff_program(id) on delete cascade,

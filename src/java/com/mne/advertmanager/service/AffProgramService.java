@@ -55,11 +55,11 @@ public class AffProgramService {
     public AffProgram findAffProgramByID(int id) {
         
         AffProgram result = null;
-        String userName = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
-        Collection<AffProgram> tmp = affProgramDao.findByQuery("AffProgram.findByIdAndAffiliate",id,userName);
-        if (tmp != null && tmp.size()>0)
-            result = tmp.iterator().next();
-       
+        
+	String userName = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
+        
+	result = affProgramDao.findSingleItemByQuery("AffProgram.findByIdAndAffiliate",id,userName);
+        
         return result;
     }  
 //============================ createAffProgram ================================
