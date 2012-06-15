@@ -4,18 +4,56 @@
  */
 package com.mne.advertmanager.model;
 
+import java.io.Serializable;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.validation.constraints.Size;
+
 /**
  *
  * @author Nina Eidelshtein and Misha Lebedev
  */
-public class FilterableBehaviorStatistics {
+@Entity
+@Table(name = "behavior_stats") 
+public class FilterableBehaviorStatistics implements Serializable {
+
+     
+    public enum StatType {CurDay,CurMonth,PrevMonth,Total}; 
     
+    
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")    
     private Integer id;
+    
+    @JoinColumn(name = "affprogram_id", referencedColumnName = "id")
+    @ManyToOne(optional = false)
     private AffProgram affProgram;
+   
+    @JoinColumn(name = "domain_id", referencedColumnName = "id")
+    @ManyToOne(optional = false)    
     private AccessSource source;
+    
+    @Column(name = "stat_type")
+    private StatType type;
+    
+    @Size(max = 256)
+    @Column(name = "country_name")    
     private String countryName;
+    
+    @Column(name = "access_amount")
     private long accessAmount = 0;
+    
+    @Column(name = "purchase_amount")
     private long purchaseAmount = 0;
+    
+    @Column(name = "total_commision")
     private double totalCommision = 0;
     
     //C-tor
@@ -140,7 +178,15 @@ public class FilterableBehaviorStatistics {
         this.totalCommision = totalCommision;
     }
 
-//============================  add ============================================
+    public StatType getType() {
+        return type;
+    }
+
+    public void setType(StatType type) {
+        this.type = type;
+    }
+
+ //============================  add ============================================
     public void add(FilterableBehaviorStatistics curStat) {
         setAccessAmount(accessAmount+curStat.getAccessAmount());
         setPurchaseAmount(purchaseAmount+curStat.getPurchaseAmount());

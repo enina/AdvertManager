@@ -25,6 +25,7 @@ public class BehaviorStatisticsService {
     private GenericDao<FilterableBehaviorStatistics, Integer> prevMonthBehaviorStatsDao;
     private GenericDao<FilterableBehaviorStatistics, Integer> curMonthBehaviorStatsDao;
     private GenericDao<FilterableBehaviorStatistics, Integer> dailyBehaviorStatsDao;
+    private GenericDao<FilterableBehaviorStatistics, Integer> statsDao;
     private AccessLogService accessService;
     private AffProgramService affProgramService;
     private BillingProjectService blngService;
@@ -67,6 +68,18 @@ public class BehaviorStatisticsService {
 	
 	return result;
     }
+   
+    
+    @Transactional(readOnly = true)
+    public Set<FilterableBehaviorStatistics> findAffProgramStatistics(int affProgramId) {
+	
+	FilterableBehaviorStatistics result = findAffProgramStatistics(totalBehaviorStatsDao, "TotalBehaviorStats.findAffProgCountryStats", affProgramId, "Filter.All");
+	
+	logger.info("ProgramId={},Retrieved total statistics for all filters", affProgramId);
+	
+	return result;
+    }   
+    
     
     @Transactional(readOnly = true)
     public Set<FilterableBehaviorStatistics> findTotalAffiliateStatistics(int affiliateId) {

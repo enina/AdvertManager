@@ -133,7 +133,7 @@ public class ProgramDetailsController {
                     //set security context of this Thread
                     SecurityContextHolder.setContext(securityContext);
                     //set thread name for debug purposes
-                    setName(program.getName()+"-"+ ControllerSupport.BILLING + "DataImport");
+                    setName(ControllerSupport.BILLING + "Import-"+program.getName());
                     //go collect data:
                     billingProjectService.importBillingData(program);
                     
