@@ -88,7 +88,7 @@ public class ProgramDetailsController {
             pmStats = fbsService.findPrevMonthAffProgramStatistics(programId);
             cmStats = fbsService.findCurMonthAffProgramStatistics(programId);
             dailyStats = fbsService.findDailyAffProgramGeneralStats(programId);
-            domainStats =  fbsService.findTotalAccesAmounByDomain(programId);
+            domainStats =  fbsService.findTotalAccesAmountByDomain(programId);
             countryStats = fbsService.findTotalAccessByCountry(programId);
         }
 
