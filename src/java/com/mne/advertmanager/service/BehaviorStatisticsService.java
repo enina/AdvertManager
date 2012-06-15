@@ -100,6 +100,18 @@ public class BehaviorStatisticsService {
 	return result;
     }
     
+  //================================= findTotalAccessByCountry ===============
+    //in progress
+    @Transactional(readOnly =true)
+    public Collection<FilterableBehaviorStatistics> findTotalAccessByCountry(int affProgId){
+        
+        ArrayList params = new ArrayList();
+        params.add(affProgId);
+        Collection<FilterableBehaviorStatistics> result = totalBehaviorStatsDao.findByQuery("TotalBehaviorStats.findTotalAccessesByCountry", affProgId);
+        
+        return result;
+    }
+  //==================================== findPrevMonthAffProgramStatistics =====
     @Transactional(readOnly = true)
     public FilterableBehaviorStatistics findPrevMonthAffProgramStatistics(int affProgramId) {
 	
@@ -119,7 +131,7 @@ public class BehaviorStatisticsService {
 	
 	return result;
     }
-
+//================================ calculate ===================================
     //@Scheduled(cron="0 0 4 * * ?")
     public void calculate() {
 	
@@ -152,6 +164,7 @@ public class BehaviorStatisticsService {
 	ArrayList<FilterableBehaviorStatistics> result = new ArrayList<FilterableBehaviorStatistics>();
         
         logger.info("Program={}:::BehaviorStatisticsCalculation:Start Financial Statistics Calculation", affProgramId);
+        //get total purchase num and total commision amount
 	FilterableBehaviorStatistics total = dailyBehaviorStatsDao.findSingleItemByQuery("BehaviorStats.calcAffProgPeriodTotalFinancialStats", affProgramId, refTime);
         logger.info("Program={}:::BehaviorStatisticsCalculation:Finish Financial Statistics Calculation", affProgramId);
 	
@@ -167,14 +180,17 @@ public class BehaviorStatisticsService {
 	    
 	}
 	
+        //domain statistics
         logger.info("Program={}:::BehaviorStatisticsCalculation:Start Period Access by Domain Stats Calculation", affProgramId); 
 	result.addAll(dailyBehaviorStatsDao.findByQuery("BehaviorStats.calcAffProgPeriodDomainStats", affProgramId, refTime));
         logger.info("Program={}:::BehaviorStatisticsCalculation:Finish Period Access by  Domain Stats Calculation", affProgramId);
         
+        //country accesses statistics
         logger.info("Program={}:::BehaviorStatisticsCalculation:Start Period Access by Country Stats Calculation", affProgramId); 
 	Collection<FilterableBehaviorStatistics> fsl = dailyBehaviorStatsDao.findByQuery("BehaviorStats.calcAffProgPeriodCountryStats", affProgramId, refTime);
         logger.info("Program={}:::BehaviorStatisticsCalculation:Finish Period Access by Country Stats Calculation", affProgramId); 
-
+    
+        //country purchase statistics
         logger.info("Program={}:::BehaviorStatisticsCalculation:Start Period Financial by Country Stats Calculation", affProgramId); 
 	Collection<FilterableBehaviorStatistics> countryFsl = dailyBehaviorStatsDao.findByQuery("BehaviorStats.calcAffProgPeriodFinancialStatsByCountry", affProgramId, refTime);
         logger.info("Program={}:::BehaviorStatisticsCalculation:Finish Period Financial by Country Stats Calculation", affProgramId); 
@@ -193,7 +209,7 @@ public class BehaviorStatisticsService {
 	
 	return result;
     }
-    
+//============================================== builFBSTree ===================
     private TreeMap<String, FilterableBehaviorStatistics> builFBSTree(Collection<FilterableBehaviorStatistics> data) {
 	
 	TreeMap<String, FilterableBehaviorStatistics> result = new TreeMap<String, FilterableBehaviorStatistics>();

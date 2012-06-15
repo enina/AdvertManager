@@ -78,6 +78,7 @@ public class ProgramDetailsController {
         FilterableBehaviorStatistics cmStats = null;
         FilterableBehaviorStatistics dailyStats = null;
         Set<FilterableBehaviorStatistics> domainStats = null;
+        Collection<FilterableBehaviorStatistics> countryStats = null;
         if (program != null) {
             //only find data for valid programs
             //find all accesses related to this program
@@ -88,6 +89,7 @@ public class ProgramDetailsController {
             cmStats = fbsService.findCurMonthAffProgramStatistics(programId);
             dailyStats = fbsService.findDailyAffProgramGeneralStats(programId);
             domainStats =  fbsService.findTotalAccesAmountByDomain(programId);
+            countryStats = fbsService.findTotalAccessByCountry(programId);
         }
 
         
@@ -100,6 +102,7 @@ public class ProgramDetailsController {
         mav.addObject("cmStats",    (cmStats    !=null) ? cmStats:new FilterableBehaviorStatistics());
         mav.addObject("dailyStats", (dailyStats !=null) ? dailyStats:new FilterableBehaviorStatistics());
         mav.addObject("domainStats", domainStats);
+        mav.addObject("countryStats", countryStats);
 
         return mav;
 

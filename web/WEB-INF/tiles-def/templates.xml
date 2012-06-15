@@ -12,6 +12,7 @@
 	<put-attribute name="userControl" value="/WEB-INF/view/common/userMenu.jsp" />
 	<put-attribute name="navBar" value="/WEB-INF/view/common/blank.jsp" />       
 	<put-attribute name="content" value="/WEB-INF/view/common/blank.jsp" />
+        <put-attribute name="footer" value="/WEB-INF/view/common/footer.jsp" />
     </definition>
     
     <definition name="main" extends=".mainTemplate">

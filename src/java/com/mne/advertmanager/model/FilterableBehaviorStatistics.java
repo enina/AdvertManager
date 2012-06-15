@@ -14,6 +14,7 @@ public class FilterableBehaviorStatistics {
     private AffProgram affProgram;
     private AccessSource source;
     private String countryName;
+    private String countryCode;
     private long accessAmount = 0;
     private long purchaseAmount = 0;
     private double totalCommision = 0;
@@ -50,26 +51,28 @@ public class FilterableBehaviorStatistics {
     }    
 //=============================== FilterableBehaviorStatistics C-tor ===========
     @SuppressWarnings("OverridableMethodCallInConstructor")
-    public FilterableBehaviorStatistics(long accessAmount,String countryName,AffProgram affProgram) {
+    public FilterableBehaviorStatistics(long accessAmount,String countryName,String countryCode,AffProgram affProgram) {
         setAffProgram(affProgram);
         setAccessAmount(accessAmount);
         setCountryName(countryName);
+        setCountryCode(countryCode);
     }
 //=============================== FilterableBehaviorStatistics C-tor ===========
     @SuppressWarnings("OverridableMethodCallInConstructor")
-    public FilterableBehaviorStatistics(long purchaseAmount,double totalSum,String countryName,AffProgram affProgram) {
+    public FilterableBehaviorStatistics(long purchaseAmount,double totalSum,String countryName,String countryCode,AffProgram affProgram) {
         setAffProgram(affProgram);
         setPurchaseAmount(purchaseAmount);
 	setTotalCommision(totalSum);
         setCountryName(countryName);
+        setCountryCode(countryCode);
     }     
-//=============================== FilterableBehaviorStatistics C-tor ===========
 //====================== FilterableBehaviorStatistics Copy C-tor ===============
     @SuppressWarnings("OverridableMethodCallInConstructor")
     public FilterableBehaviorStatistics(FilterableBehaviorStatistics source) {
 	setAffProgram(source.getAffProgram());
 	setAccessAmount(source.getAccessAmount());
 	setCountryName(source.getCountryName());
+        setCountryCode(source.getCountryCode());
 	setPurchaseAmount(source.getPurchaseAmount());
 	setSource(source.getSource());
 	setTotalCommision(source.getTotalCommision());
@@ -99,6 +102,14 @@ public class FilterableBehaviorStatistics {
 
     public void setCountryName(String countryName) {
         this.countryName = countryName;
+    }
+
+    public String getCountryCode() {
+        return countryCode;
+    }
+
+    public void setCountryCode(String countryCode) {
+        this.countryCode = countryCode;
     }
 
     public Integer getId() {
