@@ -23,8 +23,16 @@
             </ul>
             
             <div id="content">
-            <tiles:insertAttribute name="content" />
+                <tiles:insertAttribute name="content" />
             </div>
+
+            
         </div> <!-- end of container div -->
+        <div id="footerBg">
+        
+        <div id="footer">
+        <tiles:insertAttribute name="footer" />
+        </div>
+        </div>
     </body>
 </html>

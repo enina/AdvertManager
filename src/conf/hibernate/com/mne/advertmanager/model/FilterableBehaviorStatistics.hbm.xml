@@ -18,6 +18,7 @@
                         name="source" class="com.mne.advertmanager.model.AccessSource"
                         foreign-key="DAILY_BEHAVIOR_STAT_ACCESSSOURCE_FK"/>
 
+        <property name="countryCode" column="cc"/>
         <property name="countryName"/>
         <property name="accessAmount"/>
         <property name="purchaseAmount"/>
@@ -39,7 +40,8 @@
         <many-to-one	column="domain_id"
                         name="source" class="com.mne.advertmanager.model.AccessSource"
                         foreign-key="CURMONTH_BEHAVIOR_STAT_ACCESSSOURCE_FK"/>
-
+        
+        <property name="countryCode" column="cc"/>
         <property name="countryName"/>
         <property name="accessAmount"/>
         <property name="purchaseAmount"/>
@@ -62,6 +64,7 @@
                          name="source" class="com.mne.advertmanager.model.AccessSource"
                          foreign-key="PREVMONTH_BEHAVIOR_STAT_ACCESSSOURCE_FK"/>
 
+        <property name="countryCode" column="cc"/>
         <property name="countryName"/>
         <property name="accessAmount"/>
         <property name="purchaseAmount"/>
@@ -83,7 +86,7 @@
         <many-to-one column="domain_id" lazy="false"
                      name="source" class="com.mne.advertmanager.model.AccessSource"
                      foreign-key="TOTAL_BEHAVIOR_STAT_ACCESSSOURCE_FK"/>
-
+        <property name="countryCode" column="cc"/>
         <property name="countryName"/>
         <property name="accessAmount"/>
         <property name="purchaseAmount"/>
@@ -216,7 +219,7 @@ group by cn
     
     <query name="BehaviorStats.calcAffProgPeriodFinancialStatsByCountry"><![CDATA[
         SELECT
-            new com.mne.advertmanager.model.FilterableBehaviorStatistics(count(po),sum(po.commision),po.countryName,po.affProgram)
+            new com.mne.advertmanager.model.FilterableBehaviorStatistics(count(po),sum(po.commision),po.countryName,po.countryCode,po.affProgram)
         FROM
             PurchaseOrder po
 	WHERE
@@ -249,7 +252,7 @@ source_domain_id
     
     <query name="BehaviorStats.calcAffProgPeriodCountryStats"><![CDATA[
         SELECT 
-            new com.mne.advertmanager.model.FilterableBehaviorStatistics (count (acl),acl.countryName,acl.affProgram) 
+            new com.mne.advertmanager.model.FilterableBehaviorStatistics (count (acl),acl.countryName,acl.countryCode ,acl.affProgram) 
          FROM  AccessLog acl 
          WHERE
             acl in (select acl from AccessLog acl  where acl.affProgram.id = ? and acl.accessTime > ?  group by ip_address)

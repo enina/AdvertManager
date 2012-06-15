@@ -33,7 +33,9 @@ img{
 #container{
     width: 1160px;
     margin: 0 auto;
-    height: 700px;;
+    min-height: 800px;
+    
+    
 }
 #menuBg{
     background-image: url("../images/menuLineBg.png");
@@ -305,4 +307,31 @@ table th{
 .navlink:hover{
     
     cursor: pointer;
+}
+#footer{
+    width: 1160px;
+    margin: 0 auto;
+    height: 150px;
+
+
+}
+#footerBg{
+    margin: 0px 20px 0px 0px;
+    position: absolute;
+    width: 100%;
+    height: 7px;
+    background-image: url("../images/footerSplitBg.png");
+    background-repeat: repeat-x;
+}
+#imgSlider{
+    position: relative;
+    top: 15px;
+    margin: 0px auto;
+}
+#imgSlider img{
+    margin: 0px 10px;
+    height: 35px;
+    width: auto;
+    float: left;
+    display: inline;
 }
