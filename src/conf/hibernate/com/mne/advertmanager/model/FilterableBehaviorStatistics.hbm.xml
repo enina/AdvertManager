@@ -129,7 +129,7 @@ where
     ]]>
     </query>
     
-     <query name="TotalBehaviorStats.findTotalAccesAmounByDomain"><![CDATA[
+     <query name="TotalBehaviorStats.findTotalAccesAmountByDomain"><![CDATA[
         from
             TotalBehaviorStats tbs
             left join fetch tbs.source src

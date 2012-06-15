@@ -77,7 +77,7 @@ public class BehaviorStatisticsService {
 	
 	logger.info("ProgramId={},Retrieved total statistics for all filters", affProgramId);
 	
-	return result;
+	return null;
     }   
     
     
@@ -93,9 +93,9 @@ public class BehaviorStatisticsService {
 
 //=================================== findTotalAccesAmounByDomain ==============
     @Transactional(readOnly = true)
-    public Set<FilterableBehaviorStatistics> findTotalAccesAmounByDomain(int affProgId) {
+    public Set<FilterableBehaviorStatistics> findTotalAccesAmountByDomain(int affProgId) {
 	
-	Set<FilterableBehaviorStatistics> result = findAccessByDomain(totalBehaviorStatsDao, "TotalBehaviorStats.findTotalAccesAmounByDomain", affProgId);
+	Set<FilterableBehaviorStatistics> result = findAccessByDomain(totalBehaviorStatsDao, "TotalBehaviorStats.findTotalAccesAmountByDomain", affProgId);
 	//    
 	logger.info("affProgId={},Retrieved total assecces by domain", affProgId);
 	
@@ -118,8 +118,7 @@ public class BehaviorStatisticsService {
     @Transactional(readOnly =true)
     public Collection<FilterableBehaviorStatistics> findTotalAccessByCountry(int affProgId){
         
-        ArrayList params = new ArrayList();
-        params.add(affProgId);
+
         Collection<FilterableBehaviorStatistics> result = totalBehaviorStatsDao.findByQuery("TotalBehaviorStats.findTotalAccessesByCountry", affProgId);
         
         return result;
