@@ -126,7 +126,11 @@
         </constructor-arg>
     </bean>    
     
-    
+    <bean id="searchQueryStatDao"  parent="adManGenericDao" class="com.mne.advertmanager.dao.GenericDaoHibernateImpl" >
+        <constructor-arg >
+            <value type="java.lang.Class">com.mne.advertmanager.model.SearchQueryStatistics</value>
+        </constructor-arg>
+    </bean>  
     
     <bean id="affiliateDao"  parent="adManGenericDao" class="com.mne.advertmanager.dao.GenericDaoHibernateImpl" >
         <constructor-arg >
@@ -237,6 +241,7 @@
     <bean id="affProgramService" class="com.mne.advertmanager.service.AffProgramService">
         <property name="affProgramDao" ref="affProgramDao"/>
         <property name="affProgramGroupService" ref="affProgramGroupService"/>
+        <property name="bss" ref="behaviorStatService"/>
     </bean>    
     
     <bean id="affProgramGroupService" class="com.mne.advertmanager.service.AffProgramGroupService">
@@ -267,6 +272,10 @@
     
     <bean id="poService" class="com.mne.advertmanager.service.PurchaseOrderService">
         <property name="poDao" ref="purchaseOrderDao"/>
+    </bean>
+    
+    <bean id="searchQueryStatService" class="com.mne.advertmanager.service.SearchQueryStatService">
+        <property name="searchQueryStatDao" ref="searchQueryStatDao"/>
     </bean>
     
     <bean id="billingProjectService" class="com.mne.advertmanager.service.BillingProjectService">

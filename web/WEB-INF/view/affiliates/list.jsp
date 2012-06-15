@@ -3,7 +3,8 @@
     <div style="color:red"><c:out value="${status}"/></div>
 </c:if>
  
-<table border="1" class="affTable">
+    
+<table  id="affiliateListTable" class="dataTable">
     
     
     <c:if test="${data!=null}">

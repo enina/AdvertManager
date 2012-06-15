@@ -2,7 +2,7 @@
 
 
 
-<sec:authorize access="hasRole('ROLE_ADMIN')">
+<sec:authorize access="isAuthenticated()">
 <li class=""> <a class="menuItem" href="${pageContext.request.contextPath}/mvc/home">Home</a></li>
 </sec:authorize> 
 <li > <a href="${pageContext.request.contextPath}/mvc/learn">Learn</a></li>

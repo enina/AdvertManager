@@ -7,6 +7,7 @@ package com.mne.advertmanager.web.controllers;
 import com.google.gson.Gson;
 import com.mne.advertmanager.model.*;
 import com.mne.advertmanager.service.*;
+import com.mne.advertmanager.util.NoneException;
 import com.mne.advertmanager.util.Page;
 import com.mne.advertmanager.util.PageCtrl;
 import java.io.IOException;
@@ -48,7 +49,8 @@ public class ProgramDetailsController {
     private static final String AFFPROGRAM_ORDERS_REQ_MAPPING = AFFPROGRAM + ORDERS;
     private static final String AFFPROGRAM_FINANCE_REQ_MAPPING = AFFPROGRAM + FINANCE;
     private static final String BLNG_IMPORT_REQ_MAPPING = ControllerSupport.BILLING + "/import";
-
+    private static final String AFFPROG_CALC_QUERY_STAT = AFFPROGRAM +"/{programId}"+"/calcQueryStats";
+    
     //variables and object declarations
     private Gson gson = new Gson();
     
@@ -58,6 +60,7 @@ public class ProgramDetailsController {
     private AffiliateService affiliateService;
     private BillingProjectService billingProjectService;
     private BehaviorStatisticsService fbsService;
+    private SearchQueryStatService searchQueryStatService;
 
 //functions
 //==============================================================================
@@ -194,6 +197,44 @@ public class ProgramDetailsController {
 
         return mav;
     }
+    
+//============================= calcQueryStats =================================
+    @RequestMapping(value = AFFPROG_CALC_QUERY_STAT, method = RequestMethod.GET)
+    public ModelAndView calcQueryStats(@PathVariable final int programId,SecurityContextHolderAwareRequestWrapper secCtxtWrapper){
+
+
+        //get security context data
+        final SecurityContext secContext = SecurityContextHolder.getContext();
+        
+        String status = "";
+        try{
+            new Thread() {
+                @Override
+                //prepare new thread function 
+                public void run(){
+                    AffProgram prog = null;
+                    SecurityContextHolder.setContext(secContext);
+                    prog = affProgramService.findAffProgramByID(programId);
+
+                    if(prog == null)
+                        throw new NoneException("invalid program");
+     
+                    //set thread name for debug purposes
+                    setName(AFFPROGRAM + "searchQueryStatsCalc" + " -P" + programId);
+                    searchQueryStatService.calculateQueryStats(prog);
+                }
+            }.start();
+            status = "search query statistics calculation started";
+        }catch(Exception e){
+                status = ControllerSupport.handleException(logger, e, "query statistics calculation", "Program Data", "id=" + programId);
+        }
+
+        ModelAndView mav = viewProgramDetails(programId);
+        mav.addObject("status", status);
+
+        return mav;
+
+    }
 
     //=============================== getAccessPage ================================
     @RequestMapping(value = AFFPROGRAM_ACCESS_REQ_MAPPING, method = RequestMethod.GET)
@@ -247,5 +288,10 @@ public class ProgramDetailsController {
     @Autowired
     public void setFbsService(BehaviorStatisticsService fbsService) {
         this.fbsService = fbsService;
+    }
+    
+    @Autowired
+    public void setSearchQueryStatService(SearchQueryStatService searchQueryStatService) {
+        this.searchQueryStatService = searchQueryStatService;
     }
 }

@@ -20,110 +20,97 @@ import javax.xml.bind.annotation.XmlTransient;
 /*
  * entity means that objects of this class are saved in DB
  */
-@Entity 
+@Entity
 /*
- * Table annotation means in which table this class is saved 
+ * Table annotation means in which table this class is saved
  */
-@Table(name = "aff_program") 
+@Table(name = "aff_program")
 @NamedQueries({
     @NamedQuery(name = "AffProgram.findAll",
-        query = "SELECT p FROM AffProgram p "
-                + "left join fetch p.apg apg "                  //apg- AffProgramGroup
-                + "left join fetch apg.affiliateId "
-                + "left join fetch p.partners"),
+    query = "SELECT p FROM AffProgram p "
+    + "left join fetch p.apg apg " //apg- AffProgramGroup
+    + "left join fetch apg.affiliateId "
+    + "left join fetch p.partners"),
     @NamedQuery(name = "AffProgram.findByIdAndAffiliate",
-        query = "SELECT p FROM AffProgram p "
-                + "left join fetch p.apg apg "
-                + "left join fetch apg.affiliateId aff "
-                + "left join fetch p.partners "
-                + "WHERE p.id = ? and aff.affiliateName=?"),
+    query = "SELECT p FROM AffProgram p "
+    + "left join fetch p.apg apg "
+    + "left join fetch apg.affiliateId aff "
+    + "left join fetch p.partners "
+    + "WHERE p.id = ? and aff.affiliateName=?"),
     @NamedQuery(name = "AffProgram.findByDescription", query = "SELECT p FROM AffProgram p WHERE p.description = ?"),
+    @NamedQuery(name = "AffProgram.deleteById", query = "delete AffProgram p WHERE p.id = ?"),
     @NamedQuery(name = "AffProgram.findBySyncStatus", query = "SELECT p FROM AffProgram p WHERE p.syncStatus = ?"),
     @NamedQuery(name = "AffProgram.findByAffProgramLink", query = "SELECT p FROM AffProgram p WHERE p.affProgramLink = ?"),
     @NamedQuery(name = "AffProgram.findByRedirectLink", query = "SELECT p FROM AffProgram p WHERE p.redirectLink = ?")})
 public class AffProgram implements Serializable {
-    
-    private static final long serialVersionUID = 1L;    
+
+    private static final long serialVersionUID = 1L;
     //cascade all- if programm is deleted, all access are deleted
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "affProgram")
     private Set<AccessLog> accessLogCollection;
-    
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "affProgram")
     private Set<PurchaseOrder> purchaseOrderCollection;
-    
-
-    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Integer id;
-    
     @Size(max = 256)
     @Column(name = "description")
-    private String description="";
-    
-    
-
+    private String description = "";
     @NotNull
     @Column(name = "sync_status")
     private int syncStatus;
-    
-
     @NotNull
     @Size(min = 1, max = 256)
     @Column(name = "affprogram_link")
     private String affProgramLink;
-
     @NotNull                        //hold user name of back office 
     @Size(min = 1, max = 256)       //
     @Column(name = "userName")      //
     private String userName;        //
-    
     @NotNull
     @Size(min = 1, max = 256)
     @Column(name = "password")
     private String password;
-
-   
-    
     @Size(min = 0, max = 256)
     @Column(name = "redirect_link")
-    private String redirectLink ="";
-    
-  
+    private String redirectLink = "";
     @JoinColumn(name = "program_group_id", referencedColumnName = "id")
-    @ManyToOne(fetch= FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     private AffProgramGroup apg;
-
     @NotNull                        //hold affProgram name as defined by 
     @Size(min = 1, max = 256)       //affiliate whan he added this AffProgram
     @Column(name = "name")          //
     private String name;            //
-    
-    @ManyToMany(cascade = CascadeType.ALL)    
-    @JoinTable(name = "affprogram_partner", joinColumns =
-    { @JoinColumn(name = "program_id") }, inverseJoinColumns = { @JoinColumn(name = "partner_id") }) 
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "affprogram_partner", joinColumns = {
+        @JoinColumn(name = "program_id")}, inverseJoinColumns = {
+        @JoinColumn(name = "partner_id")})
     private Set<Partner> partners = new HashSet<Partner>(0);
-    
-    /**C-tor: empty*/
+
+    /**
+     * C-tor: empty
+     */
     public AffProgram() {
-        id=-1;
+        id = -1;
         apg = new AffProgramGroup(-1);
-        
+
     }
-    /**C-tor: set id only*/
+
+    /**
+     * C-tor: set id only
+     */
     public AffProgram(Integer id) {
         this.id = id;
-    }    
-    
+    }
+
     public AffProgramGroup getApg() {
         return apg;
     }
 
     public void setApg(AffProgramGroup apg) {
         this.apg = apg;
-    }    
-    
+    }
 
     public Set<Partner> getPartners() {
         return partners;
@@ -132,9 +119,6 @@ public class AffProgram implements Serializable {
     public void setPartners(Set<Partner> partners) {
         this.partners = partners;
     }
-
-    
-
 
     public Integer getId() {
         return id;
@@ -151,10 +135,6 @@ public class AffProgram implements Serializable {
     public void setDescription(String description) {
         this.description = description;
     }
-
-
-
-
 
     public int getSyncStatus() {
         return syncStatus;
@@ -196,8 +176,6 @@ public class AffProgram implements Serializable {
         this.redirectLink = redirectLink;
     }
 
-  
-
     public AffProgramGroup getAffProgramGroup() {
         return apg;
     }
@@ -213,10 +191,7 @@ public class AffProgram implements Serializable {
     public void setName(String name) {
         this.name = name;
     }
-    
-    
-    
-   
+
     //@Override-his func' defined in base class
     @Override
     public int hashCode() {
@@ -260,5 +235,4 @@ public class AffProgram implements Serializable {
     public void setPurchaseOrderCollection(Set<PurchaseOrder> purchaseOrderCollection) {
         this.purchaseOrderCollection = purchaseOrderCollection;
     }
-    
 }

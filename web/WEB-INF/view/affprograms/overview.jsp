@@ -34,13 +34,9 @@
 <div id="" >
     
     
-    <table>
-        <tr>
-            <td>
-                <a href="${pageContext.request.contextPath}/mvc/affprograms/${program.id}/calculateAggregationData">Calculate Aggregation Data</a>
-            </td>    
-        </tr>    
-    </table>    
+
+    <a href="${pageContext.request.contextPath}/mvc/affprograms/${program.id}/calculateAggregationData">Calculate Aggregation Data</a>
+    <a href="${pageContext.request.contextPath}/mvc/affprograms/${program.id}/calcQueryStats">Calculate Search query rating</a>
     <c:if test="${totalStats!=null}">
         <table class="dataTable">
             <tr>

@@ -18,7 +18,7 @@ public class ControllerSupport {
     public static final String ADD = "/add";
     public static final String NEW = "/new";
     public static final String LIST = "/list";
-    public static final String REMOVE = "/remove";
+    public static final String DELETE = "delete";
     
 //============================= handleException ================================
     public static String handleException(Logger logger,Exception e, String opType, String entityType, String entityName) {

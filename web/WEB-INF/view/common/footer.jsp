@@ -15,7 +15,7 @@
 
 <a href="http://www.springsource.org/"><img src="${pageContext.request.contextPath}/images/credits/Spring_Framework.png" alt="Spring" title="Spring"/></a>
 
-<a href="http://en.wikipedia.org/wiki/Mentorship#Typology"><img src="${pageContext.request.contextPath}/images/credits/TieBoss6.png" alt="Tie Boss" title="Tie Boss"/></a>
+<a href="http://en.wikipedia.org/wiki/Mentorship"><img src="${pageContext.request.contextPath}/images/credits/TieBoss6.png" alt="Tie Boss" title="Tie Boss"/></a>
 <a href="http://www.amcharts.com/"><img src="${pageContext.request.contextPath}/images/credits/amCharts.png" alt="amCharts" title="amCharts"/></a>
 <a href="http://tiles.apache.org/"><img src="${pageContext.request.contextPath}/images/credits/apache_tiles.png" alt="Apache Tiles" title="Apache Tiles"/></a>
 <a href="http://tomcat.apache.org/"><img src="${pageContext.request.contextPath}/images/credits/tomcat.png" alt="Apache Tomcat Server" title="Apache Tomcat Server"/></a>

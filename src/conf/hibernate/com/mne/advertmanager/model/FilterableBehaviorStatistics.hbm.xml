@@ -47,7 +47,7 @@
         <property name="purchaseAmount"/>
         <property name="totalCommision"/>
     </class>  
-    
+
     <class name="com.mne.advertmanager.model.FilterableBehaviorStatistics"
            table="behavior_stats_prevmonth" 
            entity-name="PrevMonthBehaviorStats">
@@ -70,7 +70,7 @@
         <property name="purchaseAmount"/>
         <property name="totalCommision"/>
     </class>  
-    
+
     <class name="com.mne.advertmanager.model.FilterableBehaviorStatistics"
            table="behavior_stats_total" 
            entity-name="TotalBehaviorStats">
@@ -199,7 +199,12 @@ where
     <query name="DailyBehaviorStats.deleteAffProgStats"><![CDATA[
         delete from DailyBehaviorStats where affProgram.id=?
     ]]>
-    </query>    
+    </query>
+      
+    <query name="TotalBehaviorStats.deleteAffProgStats"><![CDATA[
+        delete from TotalBehaviorStats where affProgram.id=?
+    ]]>
+    </query>
     
     <query name="BehaviorStats.calcAffProgPeriodTotalFinancialStats"><![CDATA[
         SELECT

@@ -32,11 +32,11 @@
                     <tbody>
                     <c:forEach items="${apg.programCollection}" var="program">
                         <c:set var="fbs" value="${affStatisticsMap.get(program) }"/>
-                   <!--     <a href="${pageContext.request.contextPath}/mvc/affprograms/details/${program.id}" >  </a>  -->
+                  
                             <tr class="progOverview" onclick='window.location.href = "${pageContext.request.contextPath}/mvc/affprograms/details/${program.id}";'>
                            
-
-                            <td><c:out value="${program.name}" /></td>
+                                                                                                                           
+                                <td><c:out value="${program.name}" /><a href="${pageContext.request.contextPath}/mvc/affprograms/${program.id}/delete" style="float: right;">D</a></td>
                             <td ><c:out value="${fbs.accessAmount}"/></td>   
                             <td ><c:out value="${fbs.purchaseAmount}"/></td>                    
                             <td ><c:out value="${fbs.totalCommision}"/></td>

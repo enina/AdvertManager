@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.mne.advertmanager.dao.GenericDao;
 import com.mne.advertmanager.model.AffProgram;
 import com.mne.advertmanager.model.AffProgramGroup;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 
@@ -22,16 +23,9 @@ public class AffProgramService {
 
     private GenericDao<AffProgram, Integer> affProgramDao;
     private AffProgramGroupService afPrGrService;
+    private BehaviorStatisticsService bss;
 
-    public void setAffProgramDao(GenericDao<AffProgram, Integer> AffProgramDao) {
-        this.affProgramDao = AffProgramDao;
-    }
 
-  
-
-    public void setAffProgramGroupService(AffProgramGroupService afPrGrService) {
-        this.afPrGrService = afPrGrService;
-    }
 
 //============================ findAllAffPrograms ==============================
     @Transactional(readOnly = true)
@@ -81,5 +75,29 @@ public class AffProgramService {
     public void save(AffProgram program) {
         affProgramDao.update(program);
     }
+//==================================== delete ==================================
+
+    @Transactional
+    public void delete(int affProgId) {
+        //1. delete statistics BehaviorStatisticsService
+        //2. delete accesses, partners , purchase orders
+        //3. programm and program - partner relation
+         bss.deleteProgramStatistics(affProgId);
+         affProgramDao.executeUpdateByQuery("AffProgram.deleteById", affProgId);
+    } 
+
+    
+    public void setAffProgramDao(GenericDao<AffProgram, Integer> AffProgramDao) {
+        this.affProgramDao = AffProgramDao;
+    }
+
+    public void setAffProgramGroupService(AffProgramGroupService afPrGrService) {
+        this.afPrGrService = afPrGrService;
+    }
+    
+    public void setBss(BehaviorStatisticsService bss) {
+        this.bss = bss;
+    }
     
 }
+

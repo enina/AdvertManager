@@ -121,6 +121,10 @@ td{
     height: 25px;
     text-indent: 5px;
 }
+.dataTable{
+    
+    
+}
 
 .dataTable tr:nth-child(even){
     background: #eeedfe

@@ -46,9 +46,10 @@ public class AdvertManagerController {
     private static final String AFFILIATES = "affiliates";
     private static final String AFFPROGRAM = "affprograms";
     private static final String AFFPROG_GROUPS = "afprgroups";
-
+    
     private static final String DATAGEN = "dataGen";
     private static final String APPS = "apps";
+    
     
     private static final String APPS_PARSERGEN_REQ_MAPPING = APPS + "/parsergen";
     private static final String AFF_LIST_REQ_MAPPING = AFFILIATES + ControllerSupport.LIST;
@@ -57,7 +58,7 @@ public class AdvertManagerController {
     private static final String DG_GEN_REQ_MAPPING = DATAGEN + "/generate";
     private static final String AFFPROGRAM_NEW_REQ_MAPPING = AFFPROGRAM + ControllerSupport.NEW;
     private static final String AFFPROGRAM_ADD_REQ_MAPPING = AFFPROGRAM + ControllerSupport.ADD;
-    private static final String AFFPROGRAM_REM_REQ_MAPPING = AFFPROGRAM +"/{programId}/"+ ControllerSupport.REMOVE;
+    private static final String AFFPROGRAM_DELETE_REQ_MAPPING = AFFPROGRAM +"/{programId}/"+ ControllerSupport.DELETE;
     private static final String AFFPROGRAM_LIST_REQ_MAPPING = AFFPROGRAM + ControllerSupport.LIST;
 
 
@@ -76,6 +77,9 @@ public class AdvertManagerController {
     private AffProgramGroupService apgService;
     private BillingProjectService billingProjectService;
     private BehaviorStatisticsService fbsService;
+    private AccessLogService accessLogService;
+
+           
 
     private Gson gson = new Gson();
     private Unmarshaller jaxbUnmarshaller;
@@ -109,15 +113,19 @@ public class AdvertManagerController {
         logger.info("redirect to main page view");
     }
     
-    //=========================== removeProgram ================================
+    //=========================== deleteProgram ================================
     /**
      * this ctrl function redirect users from root URL to home page URL
      */
-    @RequestMapping(value=AFFPROGRAM_REM_REQ_MAPPING, method = RequestMethod.GET)
-    public String removeProgram(@PathVariable int programId) {
-
-        logger.info("remove affProgram " + programId);
-        return "redirect:mvc/home";
+    @RequestMapping(value=AFFPROGRAM_DELETE_REQ_MAPPING, method = RequestMethod.GET)
+    public ModelAndView deleteProgram(@PathVariable int programId,SecurityContextHolderAwareRequestWrapper sCtxWrapper) {
+        
+        logger.info("before delete affProgram " + programId);
+        affProgramService.delete(programId);
+        logger.info("after deleted affProgram " + programId);
+        
+        SecurityContextHolderAwareRequestWrapper wraper;
+        return generateHome(sCtxWrapper);
     }
     
 //======================== generateHome ========================================
@@ -167,6 +175,10 @@ public class AdvertManagerController {
         return ControllerSupport.forwardToView(logger,DG_GEN_REQ_MAPPING, "home", "status","Dummy data generation started.");
     }
 
+    
+    
+
+    
 //========================== viewAffProgDefintionForm ==========================
     @RequestMapping(value = AFFPROGRAM_NEW_REQ_MAPPING, method = RequestMethod.GET)
     public ModelAndView viewAffProgDefintionForm(SecurityContextHolderAwareRequestWrapper securityContext) {
@@ -243,7 +255,7 @@ public class AdvertManagerController {
         if (securityContext.isUserInRole("ROLE_ADMIN")) {
             mav = ControllerSupport.forwardToView(logger,AFF_ADD_REQ_MAPPING, AFF_LIST_REQ_MAPPING, "data", viewAffiliates());
         } else {
-            mav = ControllerSupport.forwardToView(logger,AFF_ADD_REQ_MAPPING, "login", null, null);
+            mav = ControllerSupport.forwardToView(logger,AFF_ADD_REQ_MAPPING, "home", null, null);
         }
 
         mav.addObject("status", status);
@@ -444,7 +456,7 @@ public class AdvertManagerController {
     public void setFbsService(BehaviorStatisticsService fbsService) {
         this.fbsService = fbsService;
     }
+    
 
-    
-    
+
 }
