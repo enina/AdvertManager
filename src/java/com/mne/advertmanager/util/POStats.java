@@ -4,6 +4,8 @@
  */
 package com.mne.advertmanager.util;
 
+import java.math.BigInteger;
+
 /**
  *
  * @author ilyae
@@ -55,8 +57,8 @@ public class POStats {
         return poAmount;
     }
 
-    public void setPoAmount(long poAmount) {
-        this.poAmount = poAmount;
+    public void setPoAmount(BigInteger poAmount) {
+        this.poAmount = poAmount.longValue();
     }
 
     public String getPurchaseDay() {
