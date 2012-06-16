@@ -116,12 +116,6 @@
             </manifest>            
         </jar>
         
-        <jar destfile="${build.dir}/web/WEB-INF/lib/adman_hibernate_mapping.jar">
-            <fileset dir="${conf.dir}/hibernate/" >
-                <include name="**/*"/>
-            </fileset>
-        </jar>        
-        
         <copy todir="${build.dir}/web/apps/extlib">
             <fileset dir="${build.dir}/web/WEB-INF/lib">
                 <include name="jsoup-1.6.1.jar" />
