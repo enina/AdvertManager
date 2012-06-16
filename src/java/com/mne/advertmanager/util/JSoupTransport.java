@@ -27,7 +27,7 @@ public class JSoupTransport {
         Document result = null;
         try {
             logger.log(Level.FINE,"RetrieveDocument:::Start : URL={0} ,Method={1}",new Object[]{docUrl,method});
-            con.url(docUrl).timeout(0);
+            con.url(docUrl).timeout(100000);
             if ("post".equals(method)) {
                 result = con.post();
             } else {
@@ -51,7 +51,7 @@ public class JSoupTransport {
             //redirect to login form
             url=proj.getBaseURL()+proj.getHomePage();
             logger.log(Level.FINE,"Login:::Retrieve HomePage::: URL:{0}",url);
-            result = Jsoup.connect(url).timeout(0);
+            result = Jsoup.connect(url).timeout(100000);
             Document doc = result.get();
             //submit login form and authenticate
             String loginUrl = proj.getBaseURL()+proj.getLoginFormUrl();
@@ -93,7 +93,7 @@ public class JSoupTransport {
         try {
             if (con != null) {
                 String logoutURL = proj.getBaseURL()+proj.getLogoutUrl();
-                con.url(logoutURL).timeout(0);
+                con.url(logoutURL).timeout(1000);
                 logger.log(Level.FINE,"Logout:::URL:{0}",logoutURL);
                 con.followRedirects(false);
                 Document result = con.get();
