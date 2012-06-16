@@ -10,6 +10,8 @@ import com.mne.advertmanager.model.FilterableBehaviorStatistics;
 import com.mne.advertmanager.util.Page;
 import com.mne.advertmanager.util.PageCtrl;
 import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,6 +29,14 @@ public class BehaviorStatisticsService {
     private AffProgramService affProgramService;
     private BillingProjectService blngService;
     private SearchQueryStatService searchQueryStatService;
+    private ExecutorService executor = null;
+    
+    private int numThread = 5;
+
+    public void setNumThread(int numThread) {
+        this.numThread = numThread;
+        executor = Executors.newFixedThreadPool(numThread);
+    }
 
     
     public void setSearchQueryStatService(SearchQueryStatService searchQueryStatService) {
@@ -89,15 +99,11 @@ public class BehaviorStatisticsService {
 	    AffProgram curAffProgram = null;
 	    while (affProgIter.hasNext()) {
 		curAffProgram = affProgIter.next();
-		if (curAffProgram != null) {
-		    blngService.importBillingData(curAffProgram);
-		    calculateAffProgramStatistics(curAffProgram.getId());
-                    searchQueryStatService.calculateQueryStats(curAffProgram);
-		}
+		executor.submit(new AffProgramTask(curAffProgram));
 	    }
 	}
 
-	logger.info("Finished behavior statistics calculation");
+	logger.info("Finished dispatching behavior statistics calculation");
     }
 
     /*
@@ -316,5 +322,24 @@ public class BehaviorStatisticsService {
 	logger.info("affProgId={},Retrieved total access by country", programId);
 
 	return new LinkedHashSet<FilterableBehaviorStatistics>(data.getItems());
+    }
+    
+    private class AffProgramTask implements Runnable {
+
+        private AffProgram prog = null;
+        
+        public AffProgramTask(AffProgram p) {
+            prog = p;
+        }
+        
+        @Override
+        public void run() {
+            if (prog != null) {
+                blngService.importBillingData(prog);
+                calculateAffProgramStatistics(prog.getId());
+                searchQueryStatService.calculateQueryStats(prog);
+            }
+        }
+        
     }
 }
