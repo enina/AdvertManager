@@ -21,6 +21,7 @@
                 <th> Order sum </th>
                 <th> Commission </th>
                 <th> Currency </th>
+                <th> Access Amount </th>
             </tr>
         </thead>
         
@@ -51,6 +52,11 @@
                 <td>
                     <c:out value="${order.currency}" />
                 </td>
+                <td>
+                    <a target="_blank" href="${pageContext.request.contextPath}/mvc/access/po/${order.id}">
+                        <c:out value="${order.accessAmount}" />
+                    </a>    
+                </td>                
             </tr>   
         </c:forEach>
     </c:if>        

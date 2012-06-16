@@ -7,9 +7,7 @@ package com.mne.advertmanager.web.controllers;
 import com.google.gson.Gson;
 import com.mne.advertmanager.model.*;
 import com.mne.advertmanager.service.*;
-import com.mne.advertmanager.util.NoneException;
-import com.mne.advertmanager.util.Page;
-import com.mne.advertmanager.util.PageCtrl;
+import com.mne.advertmanager.util.*;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.EnumMap;
@@ -47,6 +45,7 @@ public class ProgramDetailsController {
     private static final String FINANCE = "/finance";
     private static final String AFFPROGRAM_DETAILS_REQ_MAPPING = AFFPROGRAM + DETAILS;
     private static final String AFFPROGRAM_ACCESS_REQ_MAPPING = AFFPROGRAM + "/{programId}/items/{items}/accessPage/{pageNumber}";
+    private static final String ACCESS_PO_REQ_MAPPING = ACCESS + "/po/{orderId}";
     private static final String AFFPROGRAM_CALL_AGGR_DATA_REQ_MAPPING = AFFPROGRAM + "/{programId}/calculateAggregationData";
     private static final String AFFPROGRAM_ORDERS_REQ_MAPPING = AFFPROGRAM + ORDERS;
     private static final String AFFPROGRAM_FINANCE_REQ_MAPPING = AFFPROGRAM + FINANCE;
@@ -81,6 +80,8 @@ public class ProgramDetailsController {
         Set<FilterableBehaviorStatistics> domainStats = null;
         Collection<FilterableBehaviorStatistics> countryStats = null;
         Set<FilterableBehaviorStatistics> periodicStats = null;
+        Collection<POStats> poStats = null;
+        Collection<AccessStats> aclStats = null;
         if (program != null) {
             //only find data for valid programs
             //find all accesses related to this program
@@ -90,6 +91,8 @@ public class ProgramDetailsController {
            
             domainStats =  fbsService.findTotalAccessAmountByDomain(programId);
             countryStats = fbsService.findTotalAccessByCountry(programId);
+            aclStats = accessLogService.findAccessAffProgStats(program);
+            poStats = purchaseOrderService.retrieveAffProgPOByDateStats(program);
         }
 
         
@@ -108,6 +111,8 @@ public class ProgramDetailsController {
         mav.addObject("statMap", statMap);
         mav.addObject("domainStats", domainStats);
         mav.addObject("countryStats", countryStats);
+        mav.addObject("aclStats", aclStats);
+        mav.addObject("poStats", poStats);
 
         return mav;
 
@@ -245,7 +250,7 @@ public class ProgramDetailsController {
 
             Page<AccessLog> accessPage = accessLogService.findAccessByAffProgamId(new PageCtrl(pageNumber, 0, items), programId);
 
-            String curRequest = AFFPROGRAM_ACCESS_REQ_MAPPING + "/" + programId + "/items/" + items + "/accessPage/" + pageNumber;
+            String curRequest = AFFPROGRAM + "/" + programId +"/items/"+items + "/accessPage/"+pageNumber;
             String result = gson.toJson(accessPage);
             logger.debug("GetAccessPage::request={},result={}",curRequest , result);
             response.getWriter().write(result);
@@ -257,6 +262,25 @@ public class ProgramDetailsController {
             logger.error("failed to retrieve accessee of affprogram (id={},Exception:{})", programId, errMsg);
         }
     }
+    
+    @RequestMapping(value = ACCESS_PO_REQ_MAPPING, method = RequestMethod.GET)
+    void getPoAccessPage(@PathVariable int orderId,HttpServletResponse response) {
+        try {
+
+            Collection<AccessLog> accessPage = accessLogService.findAccessLogByPO(orderId);
+
+            String curRequest = ACCESS + "/po/" + orderId;
+            String result = gson.toJson(accessPage);
+            logger.debug("getPoAccessPage::request={},result={}",curRequest , result);
+            response.getWriter().write(result);
+        } catch (IOException e) {
+            String errMsg = ",Exception:" + e.getClass().getSimpleName()
+                    + ((e.getMessage() == null) ? "" : " ,Message:"
+                    + e.getMessage());
+
+            logger.error("failed to retrieve access of purchase order (id={},Exception:{})", orderId, errMsg);
+        }
+    }    
 
     //=============================== SETTERS ======================================
     @Autowired

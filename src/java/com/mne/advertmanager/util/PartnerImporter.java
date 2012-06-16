@@ -13,7 +13,7 @@ import com.mne.advertmanager.service.PartnerService;
  *
  * @author Misha
  */
-public class PartnerImporter  implements BillingDataImporter{
+public class PartnerImporter  implements BillingDataImporter <Partner>{
     
     private static final Logger logger = LoggerFactory.getLogger(BillingDataImporter.class);
     
@@ -34,24 +34,21 @@ public class PartnerImporter  implements BillingDataImporter{
 //=========================== importDataItemProperty ===========================
  //this function fill target(Partner obj) with given data(itemName:itemValue)
     @Override
-    public Object importDataItemProperty(Object target,String itemName,String itemValue) {
+    public Partner importDataItemProperty(Partner partner,String itemName,String itemValue) {
         
-        Partner partner = (Partner)target;
-
         if (("Name").equals(itemName))
             partner.setName(itemValue);
         else if (("Email").equals(itemName))
             partner.setEmail(itemValue);
 
-        return target;
+        return partner;
     }
     
 //==================================== saveDataItem ============================
 //this function save given Partner(dataItem) to DB
     @Override
-    public void saveDataItem(AffProgram program,Object dataItem) {
-        Partner partner = (Partner)dataItem;
-        
+    public void saveDataItem(AffProgram program,Partner partner) {
+                
         program.getPartners().add(partner);
         //persist partner to db
         partnerService.creatPartner(partner);

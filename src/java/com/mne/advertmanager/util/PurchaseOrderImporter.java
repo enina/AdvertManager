@@ -21,7 +21,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author ilyae
  */
-public class PurchaseOrderImporter implements BillingDataImporter {
+public class PurchaseOrderImporter implements BillingDataImporter<PurchaseOrder> {
     
     private static final Logger logger = LoggerFactory.getLogger(PurchaseOrderImporter.class);
     private SimpleDateFormat df = new SimpleDateFormat("dd.MM.yyyy HH:mm");
@@ -30,9 +30,7 @@ public class PurchaseOrderImporter implements BillingDataImporter {
     private AccessLogService aclService;
     
     @Override
-    public Object importDataItemProperty(Object target, String itemName, String itemValue) {
-        
-        PurchaseOrder po = (PurchaseOrder) target;
+    public PurchaseOrder importDataItemProperty(PurchaseOrder po, String itemName, String itemValue) {
         
         if (("ID").equals(itemName)) {
             po.setOriginalOrderId(itemValue);
@@ -57,7 +55,7 @@ public class PurchaseOrderImporter implements BillingDataImporter {
         }
         
         
-        return target;
+        return po;
     }
 
     private void processIPAddress(PurchaseOrder po, String ipAddress) {
@@ -70,8 +68,8 @@ public class PurchaseOrderImporter implements BillingDataImporter {
     }
     
     @Override
-    public void saveDataItem(AffProgram program, Object dataItem) {
-        PurchaseOrder po = (PurchaseOrder) dataItem;
+    public void saveDataItem(AffProgram program, PurchaseOrder po) {
+        
         po.setAffProgram(program);
         
         poService.createPurchaseOrder(po);

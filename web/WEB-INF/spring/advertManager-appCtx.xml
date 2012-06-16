@@ -243,7 +243,8 @@
     </bean> 
     
     <bean id="poService" class="com.mne.advertmanager.service.PurchaseOrderService">
-        <property name="poDao" ref="purchaseOrderDao"/>
+        <property name="poDao"      ref="purchaseOrderDao"/>
+        <property name="aclService" ref="accessLogService"/>  
     </bean>
     
     <bean id="searchQueryStatService" class="com.mne.advertmanager.service.SearchQueryStatService">
@@ -270,6 +271,7 @@
         <property name="affProgramService"      ref="affProgramService"/>
         <property name="blngService"            ref="billingProjectService"/>
         <property name="searchQueryStatService" ref="searchQueryStatService"/>
+        <property name="poService"              ref="poService"/>
     </bean>    
     
 <!--=============================================================  user service beans end ===============================================================--> 

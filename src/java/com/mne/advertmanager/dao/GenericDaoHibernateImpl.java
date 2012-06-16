@@ -143,10 +143,9 @@ public class GenericDaoHibernateImpl<T, PK extends Serializable> implements Gene
         X result = null;
 
         try {
-            Query q = createQuery(queryString, params);
+            Query q = prepareQuery(queryString, params, target);
 
             if (q != null) {
-                q.setResultTransformer(Transformers.aliasToBean(target.getClass()));
                 result = (X) q.uniqueResult();
             }
         } catch (Exception e) {
@@ -155,6 +154,43 @@ public class GenericDaoHibernateImpl<T, PK extends Serializable> implements Gene
 
         return result;
     }
+
+    @Override
+    @SuppressWarnings(value = "unchecked")
+    public <X> Collection<X> findByQueryString(String queryString, X target, Object... params) {
+       
+        Collection<X> result = null;
+        
+        try {
+            
+            Query q = prepareQuery(queryString, params, target);
+
+            if (q != null) 
+                result = q.list();
+            
+        } catch (Exception e) {
+            logger.error("findByQueryString ::: query:{}, Exception:{},Message:{}", new Object[]{queryString, e.getClass().getSimpleName(), e.getMessage()});
+        }
+        
+        return result;        
+
+    }
+
+    private <X> Query  prepareQuery(String queryString, Object[] params, X target) {
+        Query result = null;
+        try {
+            result = createQuery(queryString, params);
+
+            if (result != null) {
+                result.setResultTransformer(Transformers.aliasToBean(target.getClass()));
+            }
+        } catch (Exception e) {
+            logger.error("findByQueryString ::: query:{}, Exception:{},Message:{}", new Object[]{queryString, e.getClass().getSimpleName(), e.getMessage()});
+        }
+        return result;
+    }
+    
+    
 
     @Override
     public int executeUpdateByQuery(String queryName, Object... params) {

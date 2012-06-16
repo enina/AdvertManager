@@ -6,6 +6,7 @@ package com.mne.advertmanager.model;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Set;
 import javax.persistence.*;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -20,14 +21,30 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "PurchaseOrder.findAll", query = "SELECT p FROM PurchaseOrder p"),
     @NamedQuery(name = "PurchaseOrder.findById", query = "SELECT p FROM PurchaseOrder p WHERE p.id = ?"),
+    @NamedQuery(name = "PurchaseOrder.findByIdList", query = "SELECT p FROM PurchaseOrder p WHERE p.id in (?)"),    
     @NamedQuery(name = "PurchaseOrder.findByAffProgramId", query = "SELECT p FROM PurchaseOrder p WHERE p.affProgram.id = ?"),
     @NamedQuery(name = "PurchaseOrder.findByStatus", query = "SELECT p FROM PurchaseOrder p WHERE p.status = ?"),
-    @NamedQuery(name = "PurchaseOrder.findByOrdertime", query = "SELECT p FROM PurchaseOrder p WHERE p.ordertime = ?")
+    @NamedQuery(name = "PurchaseOrder.findByOrdertime", query = "SELECT p FROM PurchaseOrder p WHERE p.ordertime = ?"),
 })
+
+
+
 public class PurchaseOrder implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    public static final String PO_STAT_QUERY =
+            "select  poId, aclCount ,access_log.id as aclId " +
+            "from   access_log inner join ( select " +
+            "count(*) as aclCount,access_log.ip_address as ip , purchase_order.id as poId " +
+            "from access_log inner join purchase_order on purchase_order.ip_address = access_log.ip_address " +
+            "where purchase_order.affprogram_id = ? group by  access_log.ip_address) subQ " +
+            "on access_log.ip_address = subQ.ip";
+    
+    public static final String PO_AMOUNT_BY_DATE_QUERY = 
+            "select DATE_FORMAT(ordertime,'%Y-%m-%d') as purchaseDay ,count(*) as poAmount from  purchase_order " +
+            "where  affprogram_id=? group by purchaseDay order by purchaseDay";
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
@@ -78,6 +95,10 @@ public class PurchaseOrder implements Serializable {
     @Column(name = "currency")
     private String currency;    
     
+
+    @Column(name = "access_amount")
+    private int accessAmount;        
+    
     
     @Column(name = "ordertime")
     @Temporal(TemporalType.TIMESTAMP)
@@ -87,6 +108,8 @@ public class PurchaseOrder implements Serializable {
     @ManyToOne(optional = false)
     private AffProgram affProgram;
     
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "po")
+    private Set<AccessLog> aclSet;
     
     
     @JoinColumn(name = "partner_id", referencedColumnName = "id")
@@ -130,8 +153,9 @@ public class PurchaseOrder implements Serializable {
         this.ordertime = ordertime;
     }
 
-
-
+    public void setAclSet(Set<AccessLog> aclSet) {
+        this.aclSet = aclSet;
+    }
 
     public AffProgram getAffProgram() {
         return affProgram;
@@ -233,6 +257,14 @@ public class PurchaseOrder implements Serializable {
 
     public void setCountryName(String countryName) {
         this.countryName = countryName;
+    }
+
+    public int getAccessAmount() {
+        return accessAmount;
+    }
+
+    public void setAccessAmount(int accessAmount) {
+        this.accessAmount = accessAmount;
     }
 
     

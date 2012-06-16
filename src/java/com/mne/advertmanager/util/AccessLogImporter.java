@@ -24,7 +24,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author Nina Eidelshtein and Misha Lebedev
  */
-public class AccessLogImporter implements BillingDataImporter {
+public class AccessLogImporter implements BillingDataImporter<AccessLog> {
 
     //crate logger
     private static final Logger logger = LoggerFactory.getLogger(BillingDataImporter.class);
@@ -52,9 +52,7 @@ public class AccessLogImporter implements BillingDataImporter {
 //======================== importDataItemProperty ==============================
 //this function fill target(AccessLog obj) with given data(itemName:itemValue)
     @Override
-    public Object importDataItemProperty(Object target, String itemName, String itemValue) {
-
-        AccessLog access = (AccessLog) target;
+    public AccessLog importDataItemProperty(AccessLog access, String itemName, String itemValue) {
 
         if (("DateTime").equals(itemName)) {
             access.setAccessTime(processDate(itemValue));
@@ -66,7 +64,7 @@ public class AccessLogImporter implements BillingDataImporter {
             access.setTargetURL(itemValue);
         }
 
-        return target;
+        return access;
     }
 //================================== processReferer ============================
 
@@ -151,8 +149,8 @@ public class AccessLogImporter implements BillingDataImporter {
 //========================= saveDataItem =======================================
 
     @Override
-    public void saveDataItem(AffProgram program, Object dataItem) {
-        AccessLog access = (AccessLog) dataItem;
+    public void saveDataItem(AffProgram program, AccessLog access) {
+        
         access.setAffProgram(program);
         accessLogService.createAccessLog(access);
     }

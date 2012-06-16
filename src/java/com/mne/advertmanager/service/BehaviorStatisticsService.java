@@ -29,13 +29,14 @@ public class BehaviorStatisticsService {
     private AffProgramService affProgramService;
     private BillingProjectService blngService;
     private SearchQueryStatService searchQueryStatService;
+    private PurchaseOrderService   poService;
     private ExecutorService executor = null;
     
     private int numThread = 5;
 
     public void setNumThread(int numThread) {
         this.numThread = numThread;
-        executor = Executors.newFixedThreadPool(numThread);
+        executor = Executors.newFixedThreadPool(this.numThread);
     }
 
     
@@ -54,6 +55,10 @@ public class BehaviorStatisticsService {
 
     public void setBlngService(BillingProjectService blngService) {
 	this.blngService = blngService;
+    }
+
+    public void setPoService(PurchaseOrderService poService) {
+        this.poService = poService;
     }
 
     public void setStatsDao(GenericDao<FilterableBehaviorStatistics, Integer> statsDao) {
@@ -90,7 +95,7 @@ public class BehaviorStatisticsService {
     //@Scheduled(cron="0 0 4 * * ?")
     public void calculate() {
 
-	logger.info("Started behavior statistics calculation");
+	logger.info("Started dispatching behavior statistics calculation");
 
 	HashSet<AffProgram> affProgs = new HashSet<AffProgram>(affProgramService.findAllAffPrograms());
 	if (affProgs != null) {
@@ -338,6 +343,7 @@ public class BehaviorStatisticsService {
                 blngService.importBillingData(prog);
                 calculateAffProgramStatistics(prog.getId());
                 searchQueryStatService.calculateQueryStats(prog);
+                poService.calculatePOStats(prog);
             }
         }
         

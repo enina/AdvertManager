@@ -6,11 +6,17 @@ package com.mne.advertmanager.service;
 
 import com.mne.advertmanager.dao.GenericDao;
 import com.mne.advertmanager.model.AccessLog;
+import com.mne.advertmanager.model.AffProgram;
+import com.mne.advertmanager.model.PurchaseOrder;
+import com.mne.advertmanager.util.AccessStats;
 import com.mne.advertmanager.util.GeoData;
 import com.mne.advertmanager.util.Page;
 import com.mne.advertmanager.util.PageCtrl;
+import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 import org.slf4j.LoggerFactory;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 
@@ -89,6 +95,51 @@ public class AccessLogService {
         }
         return result;
     }
+    
+    @Transactional(readOnly=true)
+    public Collection<AccessLog> findAccessByIDList(List<Integer> idList) {
+
+        Collection<AccessLog> result = null;
+
+        try {
+            result = accessLogDao.findByQuery("AccessLog.findByIdList", idList);
+        }catch(Exception e) {
+            logger.error("Failed to retrieve access for ids .Exception={}, ids={}",e,idList.toArray(new Integer[]{}));
+        }
+        return result;
+    }    
+    
+    @Transactional(readOnly=true)
+    public Collection<AccessLog> findAccessLogByPO(int orderId) {
+
+        Collection<AccessLog> result = null;
+
+        try {
+            Page<AccessLog> aclPage = accessLogDao.findPageByQuery("AccessLog.findByPo",new PageCtrl(1,0,10) ,orderId);
+            result = aclPage.getItems();
+        }catch(Exception e) {
+            logger.error("Failed to retrieve access for ids .Exception={}, Po.Id={}",e,orderId);
+        }
+        return result;
+    }    
+    
+    @Transactional(readOnly=true)    
+    public Collection<AccessStats> findAccessAffProgStats(AffProgram prog) {
+
+        Collection<AccessStats> result = null;
+
+        try {
+            result = accessLogDao.findByQueryString(AccessLog.ACCESSLOG_STATS_QUERY,new AccessStats(), prog.getId());
+        }catch(Exception e) {
+            logger.error("Failed to find access affprogram stats  ids .Exception={}",e);
+        }
+        return result;
+    }
+    
+    @Transactional(propagation= Propagation.REQUIRES_NEW)
+    public void saveACLSet(Collection<AccessLog> aclSet) {
+        accessLogDao.saveDataSet(aclSet);
+    }        
     
     private long ip2long(String addr) {
 

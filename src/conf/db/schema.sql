@@ -71,6 +71,7 @@ create table access_log (
     id			    int not null auto_increment,
     affprogram_id	    int not null    ,
     source_domain_id	    int		    ,
+    po_id       	    int		    ,
     access_time		    timestamp	    , --vremya perehoda
     ip_address		    varchar(256)    , --client ip address
     countryname		    varchar(2048)   , --client country by ip address
@@ -82,9 +83,11 @@ create table access_log (
     index		    accessIpIdx(ip_address),
     index		    accessTimeIdx(access_time),
     index		    accessCNIdx(countryname),
-    constraint accesslog_pk primary key (id),
-    constraint accesslog_affprogram_fk foreign key (affprogram_id) references aff_program(id) on delete cascade,
-    constraint accesslog_sourcedomain_fk foreign key (source_domain_id) references access_source(id) on delete cascade);
+    constraint accesslog_pk                 primary key (id),
+    constraint accesslog_affprogram_fk      foreign key (affprogram_id)     references aff_program(id)      on delete cascade,
+    constraint accesslog_sourcedomain_fk    foreign key (source_domain_id)  references access_source(id)    on delete cascade,
+    constraint accesslog_po_fk              foreign key (po_id)             references purchase_order(id)   on delete cascade
+);
 
 
 create table partner (
@@ -110,6 +113,7 @@ create table purchase_order (
     city		    varchar(256),
     cn  		    varchar(256),
     cc  		    varchar(2),
+    access_amount           int,
     index		    poAffProgIdx(affprogram_id),
     index		    poIpIdx(ip_address),
     index		    poTimeIdx(ordertime),

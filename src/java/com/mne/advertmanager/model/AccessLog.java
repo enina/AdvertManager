@@ -24,6 +24,8 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "AccessLog.findAll", query = "SELECT a FROM AccessLog a order by a.accessTime"),
     @NamedQuery(name = "AccessLog.countAccessLog", query = "SELECT count (*) FROM AccessLog a "),
     @NamedQuery(name = "AccessLog.findById", query = "SELECT a FROM AccessLog a WHERE a.id = ?"),
+    @NamedQuery(name = "AccessLog.findByIdList", query = "SELECT a FROM AccessLog a WHERE a.id in (?)"),
+    @NamedQuery(name = "AccessLog.findByPo", query = "SELECT a FROM AccessLog a WHERE a.po.id=?"),
     @NamedQuery(name = "AccessLog.findByAccessTime", query = "SELECT a FROM AccessLog a WHERE a.accessTime = ?"),
     @NamedQuery(name = "AccessLog.findByIpAddress", query = "SELECT a FROM AccessLog a WHERE a.ipAddress = ?"),
     @NamedQuery(name = "AccessLog.findByCountry", query = "SELECT a FROM AccessLog a WHERE a.countryName = ?"),
@@ -35,8 +37,14 @@ import javax.xml.bind.annotation.XmlRootElement;
 
  public class AccessLog implements Serializable {
     //native sql query . due to Hibernate limitations cannot be defined as named query
-    public static final String ACCESSLOG_FINDGEODATABYIP_QUERY = "SELECT DISTINCT cc as countryCode,cn as countryName FROM geoip.ip " +
-                                                                 " natural join geoip.cc where ? BETWEEN start and end";
+    public static final String ACCESSLOG_FINDGEODATABYIP_QUERY = 
+            "SELECT DISTINCT cc as countryCode,cn as countryName FROM geoip.ip " +
+            " natural join geoip.cc where ? BETWEEN start and end";
+    
+    public static final String ACCESSLOG_STATS_QUERY = 
+            "select DATE_FORMAT(access_time,'%Y-%m-%d') as accessDay , count(*) as accessAmount " +
+            "from  access_log where affprogram_id=? group by accessDay order by accessDay ";
+
     private static final long serialVersionUID = 1L;
     private static DateFormat df = new SimpleDateFormat("dd.MM.yyyy HH:mm");
     @Id
@@ -85,6 +93,10 @@ import javax.xml.bind.annotation.XmlRootElement;
     @ManyToOne(optional = false)
     private AffProgram affProgram;
 
+    @JoinColumn(name = "po_id", referencedColumnName = "id")
+    @ManyToOne(optional = true)
+    private PurchaseOrder po;    
+    
     public AccessLog() {
     }
 
@@ -181,6 +193,16 @@ import javax.xml.bind.annotation.XmlRootElement;
         this.affProgram = affProgram;
     }
 
+    public void setPo(PurchaseOrder po) {
+        this.po = po;
+    }
+
+    public PurchaseOrder getPo() {
+        return po;
+    }
+
+    
+    
     @Override
     public int hashCode() {
         int hash = 0;
