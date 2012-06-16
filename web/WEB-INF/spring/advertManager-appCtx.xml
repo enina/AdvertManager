@@ -264,7 +264,8 @@
     </bean>
     
     <bean id="behaviorStatService"              class="com.mne.advertmanager.service.BehaviorStatisticsService">
-        <property name="statsDao"                   ref="statsDao"/>
+        <property name="numThread"              value="5"/>
+        <property name="statsDao"               ref="statsDao"/>
         <property name="accessService"          ref="accessLogService"/>
         <property name="affProgramService"      ref="affProgramService"/>
         <property name="blngService"            ref="billingProjectService"/>
