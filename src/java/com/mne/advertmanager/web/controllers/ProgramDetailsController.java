@@ -12,6 +12,8 @@ import com.mne.advertmanager.util.Page;
 import com.mne.advertmanager.util.PageCtrl;
 import java.io.IOException;
 import java.util.Collection;
+import java.util.EnumMap;
+import java.util.HashMap;
 import java.util.Set;
 import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
@@ -76,22 +78,17 @@ public class ProgramDetailsController {
 //
         Page<AccessLog> accessPage = null;
         Collection<PurchaseOrder> orderList = null;
-        FilterableBehaviorStatistics totalStats = null;
-        FilterableBehaviorStatistics pmStats = null;
-        FilterableBehaviorStatistics cmStats = null;
-        FilterableBehaviorStatistics dailyStats = null;
         Set<FilterableBehaviorStatistics> domainStats = null;
         Collection<FilterableBehaviorStatistics> countryStats = null;
+        Set<FilterableBehaviorStatistics> periodicStats = null;
         if (program != null) {
             //only find data for valid programs
             //find all accesses related to this program
             accessPage = accessLogService.findAccessByAffProgamId(new PageCtrl(), programId);
             orderList  = purchaseOrderService.findPurchaseOrdersByAffProgamId(programId);
-            totalStats = fbsService.findTotalAffProgramStatistics(programId);
-            pmStats = fbsService.findPrevMonthAffProgramStatistics(programId);
-            cmStats = fbsService.findCurMonthAffProgramStatistics(programId);
-            dailyStats = fbsService.findDailyAffProgramGeneralStats(programId);
-            domainStats =  fbsService.findTotalAccesAmounByDomain(programId);
+            periodicStats = fbsService.findAffProgramStatistics(programId);
+           
+            domainStats =  fbsService.findTotalAccessAmountByDomain(programId);
             countryStats = fbsService.findTotalAccessByCountry(programId);
         }
 
@@ -100,10 +97,15 @@ public class ProgramDetailsController {
         mav.addObject("accessPage", accessPage);
         mav.addObject("orderList", orderList);
         mav.addObject("partnerList", program.getPartners());
-        mav.addObject("totalStats", (totalStats !=null) ? totalStats:new FilterableBehaviorStatistics());
-        mav.addObject("pmStats",    (pmStats    !=null) ? pmStats:new FilterableBehaviorStatistics());
-        mav.addObject("cmStats",    (cmStats    !=null) ? cmStats:new FilterableBehaviorStatistics());
-        mav.addObject("dailyStats", (dailyStats !=null) ? dailyStats:new FilterableBehaviorStatistics());
+        
+        FilterableBehaviorStatistics emptyStats = new FilterableBehaviorStatistics();
+        HashMap<String,FilterableBehaviorStatistics> statMap = new HashMap<String,FilterableBehaviorStatistics>();
+        for (FilterableBehaviorStatistics fbs : periodicStats) {
+	    if (fbs != null)
+		statMap.put(fbs.getType().name(), fbs);
+        }
+        statMap.put("empty", emptyStats);
+        mav.addObject("statMap", statMap);
         mav.addObject("domainStats", domainStats);
         mav.addObject("countryStats", countryStats);
 
@@ -139,7 +141,7 @@ public class ProgramDetailsController {
                     //set security context of this Thread
                     SecurityContextHolder.setContext(securityContext);
                     //set thread name for debug purposes
-                    setName(program.getName()+"-"+ ControllerSupport.BILLING + "DataImport");
+                    setName("Import-"+program.getName());
                     //go collect data:
                     billingProjectService.importBillingData(program);
                     
@@ -180,7 +182,7 @@ public class ProgramDetailsController {
                     //set security context of this Thread
                     SecurityContextHolder.setContext(securityContext);
                     //set thread name for debug purposes
-                    setName(AFFPROGRAM + "StatsCalc" + " -P" + programId);
+                    setName("StatsCalc" + "-P" + programId);
                     //calculate aggregation data:
                     fbsService.calculateAffProgramStatistics(programId);
                 }

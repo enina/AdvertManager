@@ -118,6 +118,36 @@ create table purchase_order (
     constraint purchaseorder_affprogram_fk foreign key (affprogram_id)  references aff_program(id) on delete cascade,
     constraint purchaseorder_partner_fk foreign key (partner_id)  references partner(id) on delete cascade);
 
+CREATE TABLE behavior_stats (
+    id               INT NOT NULL AUTO_INCREMENT,
+    affprogram_id    INT, 
+    domain_id        INT,
+    stat_type        VARCHAR(32),
+    cn		     VARCHAR(255),
+    cc		     VARCHAR(4),
+    access_amount    BIGINT,
+    purchase_amount  BIGINT,
+    total_commision  DOUBLE, 
+
+    index           fbsStatTypeIdx(stat_type),
+    index           fbsProgIdIdx(affprogram_id),
+    index           fbsDomainIdx(domain_id),
+    index           fbsCountryNameIdx(cn),
+
+    constraint behavior_stats_pk            PRIMARY KEY (id),
+    constraint behaviorstats_affprogram_fk  foreign key (affprogram_id) references aff_program(id) on delete cascade,
+    constraint behaviorstats_domain_fk      foreign key (domain_id) references access_source(id) on delete cascade);
+
+
+CREATE TABLE search_query_stat(
+    id               INT NOT NULL AUTO_INCREMENT,
+    affprogram_id    INT, 
+    rating           BIGINT,
+    query            VARCHAR(255),
+    constraint search_query_stat_pk            PRIMARY KEY (id),
+    constraint search_query_stat_affprogram_fk  foreign key (affprogram_id) references aff_program(id) on delete cascade
+);
+
 CREATE TABLE billing_project_spec (
   id		    int		    not null auto_increment,
   base_url	    varchar(1024)   not null,

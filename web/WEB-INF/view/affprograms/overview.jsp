@@ -37,52 +37,80 @@
 
     <a href="${pageContext.request.contextPath}/mvc/affprograms/${program.id}/calculateAggregationData">Calculate Aggregation Data</a>
     <a href="${pageContext.request.contextPath}/mvc/affprograms/${program.id}/calcQueryStats">Calculate Search query rating</a>
-    <c:if test="${totalStats!=null}">
-        <table class="dataTable">
-            <tr>
-                <th>Period</th>
-                <th>Access Amount</th>
-                <th>Purchase Amount</th>
-                <th>Commision Sum</th>
-                <th>Rate</th>
-            </tr>
-            <tr>
-                <td>Total</td>
-                <td><c:out value="${totalStats.accessAmount}"/></td>
-                <td><c:out value="${totalStats.purchaseAmount}"/></td>
-                <td><c:out value="${totalStats.totalCommision}"/></td>
-                <td><c:out value="${totalStats.conversionRate}"/></td>
-            </tr>
-            <c:if test="${pmStats!=null}">
-                <tr>
-                    <td>Previous Month</td>
-                    <td><c:out value="${pmStats.accessAmount}"/></td>
-                    <td><c:out value="${pmStats.purchaseAmount}"/></td>
-                    <td><c:out value="${pmStats.totalCommision}"/></td>
-                    <td><c:out value="${pmStats.conversionRate}"/></td>
-                </tr>
-            </c:if>
-            <c:if test="${cmStats!=null}">
-                <tr>
-                    <td>Current Month</td>
-                    <td><c:out value="${cmStats.accessAmount}"/></td>
-                    <td><c:out value="${cmStats.purchaseAmount}"/></td>
-                    <td><c:out value="${cmStats.totalCommision}"/></td>
-                    <td><c:out value="${cmStats.conversionRate}"/></td>
-                </tr>
-            </c:if>
-            <c:if test="${dailyStats!=null}">
-                <tr>
-                    <td>Today</td>
-                    <td><c:out value="${dailyStats.accessAmount}"/></td>
-                    <td><c:out value="${dailyStats.purchaseAmount}"/></td>
-                    <td><c:out value="${dailyStats.totalCommision}"/></td>
-                    <td><c:out value="${dailyStats.conversionRate}"/></td>
-                </tr>
-            </c:if>
-        </table>
+    </table>
+    <c:set var="totalStats" value="${statMap.get('Total') }"/>
+    <c:set var="cmStats" value="${statMap.get('CurMonth') }"/>
+    <c:set var="pmStats" value="${statMap.get('PrevMonth') }"/>
+    <c:set var="dailyStats" value="${statMap.get('CurDay') }"/>
+    
+
+    <c:if test="${totalStats==null}">
+         <c:set var="totalStats" value="${statMap.get('empty') }"/>
     </c:if>
-            
+    <c:if test="${pmStats==null}">
+         <c:set var="pmStats" value="${statMap.get('empty') }"/>
+    </c:if>
+    <c:if test="${cmStats==null}">
+         <c:set var="cmStats" value="${statMap.get('empty') }"/>
+    </c:if>
+    <c:if test="${dailyStats==null}">
+         <c:set var="dailyStats" value="${statMap.get('empty') }"/>
+    </c:if>
+                
+    <table class="dataTable">
+        <tr>
+            <th>Period</th>
+            <th>Access Amount</th>
+            <th>Purchase Amount</th>
+            <th>Commision Sum</th>
+            <th>Rate</th>
+        </tr>
+        <tr>
+            <td>Total</td>
+            <td><c:out value="${totalStats.accessAmount}"/></td>
+            <td><c:out value="${totalStats.purchaseAmount}"/></td>
+            <td>
+		<fmt:formatNumber value="${totalStats.totalCommision}" maxFractionDigits="3" minFractionDigits="3" />
+	    </td>
+            <td>
+		<fmt:formatNumber value="${totalStats.conversionRate}" maxFractionDigits="3" minFractionDigits="3" />
+	    </td>
+        </tr>
+        <tr>
+            <td>Previous Month</td>
+            <td><c:out value="${pmStats.accessAmount}"/></td>
+            <td><c:out value="${pmStats.purchaseAmount}"/></td>
+            <td>
+		<fmt:formatNumber value="${pmStats.totalCommision}" maxFractionDigits="3" minFractionDigits="3" />
+	    </td>
+            <td>
+		<fmt:formatNumber value="${pmStats.conversionRate}" maxFractionDigits="3" minFractionDigits="3" />
+	    </td>
+        </tr>
+        <tr>
+            <td>Current Month</td>
+            <td><c:out value="${cmStats.accessAmount}"/></td>
+            <td><c:out value="${cmStats.purchaseAmount}"/></td>
+            <td>
+		<fmt:formatNumber value="${cmStats.totalCommision}" maxFractionDigits="3" minFractionDigits="3" />
+	    </td>
+            <td>
+		<fmt:formatNumber value="${cmStats.conversionRate}" maxFractionDigits="3" minFractionDigits="3" />
+	    </td>
+        </tr>
+        <tr>
+            <td>Today</td>
+            <td><c:out value="${dailyStats.accessAmount}"/></td>
+            <td><c:out value="${dailyStats.purchaseAmount}"/></td>
+            <td>
+		<fmt:formatNumber value="${dailyStats.totalCommision}" maxFractionDigits="3" minFractionDigits="3" />
+	    </td>
+            <td>
+		<fmt:formatNumber value="${dailyStats.conversionRate}" maxFractionDigits="3" minFractionDigits="3" />
+	    </td>
+        </tr>
+    </table>
+
 
 
 </div>

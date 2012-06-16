@@ -204,12 +204,12 @@ public class BillingProjectService {
             org.jsoup.nodes.Document doc = JSoupTransport.retrieveDocument(con, url, ds.getMethod());
             try {
                 //extract data from current document to DB
-                logger.info("ProcessDataSpec:::Program={}:DataImport:Spec={}:Start Page={}",new Object[]{program.getName(),ds.getName(),i});
+                logger.info("ProcessDataSpec:::Start Page={}:Program={}:DataImport:Spec={}",new Object[]{i,program.getName(),ds.getName()});
                 importPageData(program, doc, ds);
             } catch (Exception ex) {
                 logger.error("ProcessDataSpec:::Program={}:DataImport:Spec={}:Page={} ,Exception={}",new Object[]{program.getName(),ds.getName(),i,ex.toString()});
             }finally {
-                logger.info("ProcessDataSpec:::Program={}:DataImport:Spec={}:Finish Page={}",new Object[]{program.getName(),ds.getName(),i});
+                logger.info("ProcessDataSpec:::Finish Page={}:Program={}:DataImport:Spec={}",new Object[]{i,program.getName(),ds.getName()});
             }
 
             i++;

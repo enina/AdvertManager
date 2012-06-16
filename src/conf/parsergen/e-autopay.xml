@@ -17,7 +17,7 @@
             <name>Access</name>
             <dataURL>clicks.php?start_date=01-01-2010&amp;end_date=01-01-2035</dataURL>
             <method>get</method>
-            <numPages>10</numPages>
+            <numPages>100</numPages>
             <pageParam>page</pageParam>
             <selector>html body:eq(1)&gt;div  div:eq(4)&gt;div &gt;div  table:eq(3)&gt;tbody </selector>
             <listEntrySelector>tr:gt(0)</listEntrySelector>

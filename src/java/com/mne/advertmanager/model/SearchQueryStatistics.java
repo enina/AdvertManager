@@ -69,7 +69,7 @@ public class SearchQueryStatistics implements Serializable {
     @Column(name = "query")
     private String query;
     
-    @Column(name = "reting")
+    @Column(name = "rating")
     private long rating;
 
     //C-tor
