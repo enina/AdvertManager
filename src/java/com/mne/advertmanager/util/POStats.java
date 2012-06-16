@@ -33,8 +33,8 @@ public class POStats {
         return aclCount;
     }
 
-    public void setAclCount(int aclCount) {
-        this.aclCount = aclCount;
+    public void setAclCount(BigInteger aclCount) {
+        this.aclCount = aclCount.intValue();
     }
 
     public int getAclId() {

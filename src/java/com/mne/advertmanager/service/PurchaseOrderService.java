@@ -54,10 +54,14 @@ public class PurchaseOrderService {
     }
     
     @Transactional
-    public void calculatePOStats(AffProgram prog) {
+    public void calculatePOStats(int progId) {
         
-        Collection<POStats> stats = poDao.findByQueryString(PurchaseOrder.PO_STAT_QUERY, new POStats(),prog.getId());
+        Collection<POStats> stats = poDao.findByQueryString(PurchaseOrder.PO_STAT_QUERY, new POStats(),progId);
         
+        if (stats == null) {
+            logger.info("Program={} ,No access found for the purchases.",progId);
+            return;
+        }
         HashMap<Integer,POStats> poStatMap  = new HashMap<Integer,POStats>();
         HashMap<Integer,POStats> aclMap = new HashMap<Integer,POStats>();
         HashMap<Integer,PurchaseOrder>      poMap = new HashMap<Integer,PurchaseOrder>();
@@ -68,16 +72,22 @@ public class PurchaseOrderService {
 
         }
         
-        Collection<PurchaseOrder> poList = poDao.findByQuery("PurchaseOrder.findByIdList", poStatMap.keySet());
+        Collection<PurchaseOrder> poList = poDao.findByQuery("PurchaseOrder.findByIdList","poIdList", poStatMap.keySet());
         Collection<AccessLog> aclList = aclService.findAccessByIDList(new ArrayList<Integer>(aclMap.keySet()));
         
         POStats pos = null;
-        
+        if (poList == null || aclList == null) {
+            logger.error("No purchases or accesses were retrieved");
+            return;
+        }
         for (PurchaseOrder po:poList) {
             pos = poStatMap.get(po.getId());
             po.setAccessAmount(pos.getAclCount());
             poMap.put(po.getId(), po);
         }
+
+       
+
         
         for (AccessLog acl:aclList) {
             pos = aclMap.get(acl.getId());

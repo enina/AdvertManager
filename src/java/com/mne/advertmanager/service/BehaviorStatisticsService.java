@@ -84,8 +84,6 @@ public class BehaviorStatisticsService {
 	LinkedHashSet<FilterableBehaviorStatistics> result = new LinkedHashSet<FilterableBehaviorStatistics>(data);
 
 
-	//findAffProgramStatistics(totalBehaviorStatsDao, "TotalBehaviorStats.findAffProgCountryStats", affProgramId, "Filter.All");
-
 	logger.info("ProgramId={},Retrieved program  statistics ", affProgramId);
 
 	return result;
@@ -116,6 +114,7 @@ public class BehaviorStatisticsService {
      * <query name="TotalBehaviorStats.findAffProgrCountryStats"><![CDATA[ from TotalBehaviorStats where countryName=? and affProgram.id=? ]]> </query> *
      */
 //=============================== calcDailyAffProgramStatsSet ==================
+    @Transactional(readOnly=true)
     private List<FilterableBehaviorStatistics> calcDailyAffProgramStatsSet(int affProgramId, Date refTime) {
 
 	ArrayList<FilterableBehaviorStatistics> result = new ArrayList<FilterableBehaviorStatistics>();
@@ -180,6 +179,7 @@ public class BehaviorStatisticsService {
 	return result;
     }
 
+    @Transactional(readOnly=true)
     private TreeMap<String, FilterableBehaviorStatistics> findAffProgramTypeStats(int affProgramId, FilterableBehaviorStatistics.StatType statType) {
 
 	Collection<FilterableBehaviorStatistics> data = statsDao.findByQuery("Fbs.findAffProgTypeStats", affProgramId, statType);
@@ -188,7 +188,7 @@ public class BehaviorStatisticsService {
     }
 //============================== calculateAffProgramStatistics =================
 
-    @Transactional
+    
     public void calculateAffProgramStatistics(int affProgramId) {
 
 	logger.info("Program={}:::StatsCalc:Start", affProgramId);
@@ -204,7 +204,7 @@ public class BehaviorStatisticsService {
 	List<FilterableBehaviorStatistics> todayStats = calcDailyAffProgramStatsSet(affProgramId, refTime);
 	logger.info("Program={}:::StatsCalc:Finish Daily Calculation", affProgramId);
 
-	//retrive current total stats and update them 
+	//retrieve current total stats and update them 
 	TreeMap<String, FilterableBehaviorStatistics> totalStats = findAffProgramTypeStats(affProgramId, FilterableBehaviorStatistics.StatType.Total);
 	updateStats(totalStats, todayStats, FilterableBehaviorStatistics.StatType.Total);
 	logger.info("Program={}:::StatsCalc:Total statistics updated", affProgramId);
@@ -217,8 +217,8 @@ public class BehaviorStatisticsService {
 	//begin new current month. add today statistics to current month.
 	if (cal.get(Calendar.DAY_OF_MONTH) == 1) {
 	    shiftStats(affProgramId, FilterableBehaviorStatistics.StatType.PrevMonth, cmStats.values());
-	    shiftStats(affProgramId, FilterableBehaviorStatistics.StatType.CurMonth, todayStats);
-	    logger.info("Program={}:::StatsCalc:PrevMonth stats updated", affProgramId);
+            logger.info("Program={}:::StatsCalc:PrevMonth stats updated", affProgramId);	    
+            shiftStats(affProgramId, FilterableBehaviorStatistics.StatType.CurMonth, todayStats);
 	    logger.info("Program={}:::StatsCalc:CurvMonth stats updated", affProgramId);
 	} else {
 	    updateStats(cmStats, todayStats, FilterableBehaviorStatistics.StatType.CurMonth);
@@ -231,11 +231,13 @@ public class BehaviorStatisticsService {
 	processFBSList(todayStats);
 	logger.info("Program={}:::StatsCalc:Daily stats updated", affProgramId);
 
+        logger.info("Program={}:::ProgPOStatsCalc:Start", affProgramId);
+        poService.calculatePOStats(affProgramId);
+        logger.info("Program={}:::ProgPOStatsCalc::Finish", affProgramId);
+        
 	logger.info("Program={}:::StatsCalc:Finish", affProgramId);
     }
     //============================== shiftStats ====================================
-
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
     private void shiftStats(int affProgramId, FilterableBehaviorStatistics.StatType statType, Collection<FilterableBehaviorStatistics> stats) {
 
 	cleanAffProgStats(affProgramId, statType);
@@ -276,6 +278,7 @@ public class BehaviorStatisticsService {
     private void cleanAffProgStats(int affProgramId, FilterableBehaviorStatistics.StatType type) {
 	//delete outdate statistics from the daily table
 	statsDao.executeUpdateByQuery("Fbs.deleteAffProgTypeStats", affProgramId, type);
+        statsDao.flush();
     }
 //=============================== processFBSList ===============================
 
@@ -307,6 +310,7 @@ public class BehaviorStatisticsService {
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     private void persistItemList(List<FilterableBehaviorStatistics> itemList) {
 	statsDao.saveDataSet(itemList);
+        statsDao.flush();
     }
 
     @Transactional(readOnly = true)
@@ -343,7 +347,6 @@ public class BehaviorStatisticsService {
                 blngService.importBillingData(prog);
                 calculateAffProgramStatistics(prog.getId());
                 searchQueryStatService.calculateQueryStats(prog);
-                poService.calculatePOStats(prog);
             }
         }
         

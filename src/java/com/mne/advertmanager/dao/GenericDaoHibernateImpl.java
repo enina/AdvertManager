@@ -116,6 +116,27 @@ public class GenericDaoHibernateImpl<T, PK extends Serializable> implements Gene
 
     @Override
     @SuppressWarnings(value = "unchecked")
+    public Collection<T> findByQuery(String queryName, String listParamName, Collection valueList) {
+                Collection<T> result = null;
+
+        try {
+            Query q = getSession().getNamedQuery(queryName);
+            if (q != null) {
+                q.setParameterList(listParamName, valueList);
+                result = q.list();
+            }
+        } catch (Exception e) {
+            logger.error("findByQuery ::: query:{}, Exception:{},Message:{}", new Object[]{queryName, e.getClass().getSimpleName(), e.getMessage()});
+        }
+
+        return result;
+    }
+
+    
+    
+    
+    @Override
+    @SuppressWarnings(value = "unchecked")
     public T findSingleItemByQuery(String queryName, Object... params) {
 
         T result = null;

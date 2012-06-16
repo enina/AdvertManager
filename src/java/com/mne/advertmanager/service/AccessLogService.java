@@ -102,7 +102,7 @@ public class AccessLogService {
         Collection<AccessLog> result = null;
 
         try {
-            result = accessLogDao.findByQuery("AccessLog.findByIdList", idList);
+            result = accessLogDao.findByQuery("AccessLog.findByIdList","aclIdList", idList);
         }catch(Exception e) {
             logger.error("Failed to retrieve access for ids .Exception={}, ids={}",e,idList.toArray(new Integer[]{}));
         }

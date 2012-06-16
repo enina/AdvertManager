@@ -268,7 +268,11 @@ public class ProgramDetailsController {
         try {
 
             Collection<AccessLog> accessPage = accessLogService.findAccessLogByPO(orderId);
-
+            for (AccessLog acl:accessPage) {
+                acl.setAffProgram(null);
+                acl.setSourceDomainId(null);
+                acl.setPo(null);
+            }
             String curRequest = ACCESS + "/po/" + orderId;
             String result = gson.toJson(accessPage);
             logger.debug("getPoAccessPage::request={},result={}",curRequest , result);
