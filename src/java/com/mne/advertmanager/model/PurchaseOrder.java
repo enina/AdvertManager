@@ -24,7 +24,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "PurchaseOrder.findByIdList", query = "SELECT p FROM PurchaseOrder p WHERE p.id in (:poIdList)"),    
     @NamedQuery(name = "PurchaseOrder.findByAffProgramId", query = "SELECT p FROM PurchaseOrder p WHERE p.affProgram.id = ?"),
     @NamedQuery(name = "PurchaseOrder.findByStatus", query = "SELECT p FROM PurchaseOrder p WHERE p.status = ?"),
-    @NamedQuery(name = "PurchaseOrder.findByOrdertime", query = "SELECT p FROM PurchaseOrder p WHERE p.ordertime = ?"),
+    @NamedQuery(name = "PurchaseOrder.findByOrdertime", query = "SELECT p FROM PurchaseOrder p WHERE p.ordertime = ?")
 })
 
 
