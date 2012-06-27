@@ -201,7 +201,6 @@
 
     <bean id="adManDataGenService" class="com.mne.advertmanager.service.DataGenService">
         <property name="affiliateService" ref="affiliateService"/>
-        <property name="affProgramDao"       ref="affProgramDao"/>
         <property name="affProgramGroupDao"  ref="affProgramGroupDao"/>
         <property name="accessSourceDao"  ref="accessSourceDao"/>
         <property name="accessLogDao"     ref="accessLogDao"/>

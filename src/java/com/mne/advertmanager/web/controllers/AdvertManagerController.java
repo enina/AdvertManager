@@ -272,7 +272,7 @@ public class AdvertManagerController {
 
         String codebase = "http://" + request.getServerName() + ":"
                 + request.getServerPort()
-                + request.getServletContext().getContextPath()
+                + request.getContextPath()
                 + "/apps";
 
         logger.info("Returning codebase=" + codebase);
