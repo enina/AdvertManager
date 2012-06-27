@@ -67,28 +67,6 @@ create table access_source (
     constraint accesssource_pk primary key (id));
 
 
-create table access_log (
-    id			    int not null auto_increment,
-    affprogram_id	    int not null    ,
-    source_domain_id	    int		    ,
-    po_id       	    int		    ,
-    access_time		    timestamp	    , --vremya perehoda
-    ip_address		    varchar(256)    , --client ip address
-    countryname		    varchar(2048)   , --client country by ip address
-    target_url		    varchar(256)    ,
-    referer_url		    varchar(384)    ,
-    query		    varchar(256)    ,
-    index		    accessAffProgIdx(affprogram_id),
-    index		    accessSourceDomainIdx(affprogram_id),
-    index		    accessIpIdx(ip_address),
-    index		    accessTimeIdx(access_time),
-    index		    accessCNIdx(countryname),
-    constraint accesslog_pk                 primary key (id),
-    constraint accesslog_affprogram_fk      foreign key (affprogram_id)     references aff_program(id)      on delete cascade,
-    constraint accesslog_sourcedomain_fk    foreign key (source_domain_id)  references access_source(id)    on delete cascade,
-    constraint accesslog_po_fk              foreign key (po_id)             references purchase_order(id)   on delete cascade
-);
-
 
 create table partner (
     id          int          not null auto_increment,
@@ -121,6 +99,28 @@ create table purchase_order (
     constraint purchaseorder_pk primary key (id),
     constraint purchaseorder_affprogram_fk foreign key (affprogram_id)  references aff_program(id) on delete cascade,
     constraint purchaseorder_partner_fk foreign key (partner_id)  references partner(id) on delete cascade);
+
+create table access_log (
+    id			    int not null auto_increment,
+    affprogram_id	    int not null    ,
+    source_domain_id	    int		    ,
+    po_id       	    int		    ,
+    access_time		    timestamp	    , --vremya perehoda
+    ip_address		    varchar(256)    , --client ip address
+    country_name	    varchar(2048)   , --client country by ip address
+    target_url		    varchar(256)    ,
+    referer_url		    varchar(384)    ,
+    query		    varchar(256)    ,
+    index		    accessAffProgIdx(affprogram_id),
+    index		    accessSourceDomainIdx(source_domain_id),
+    index		    accessIpIdx(ip_address),
+    index		    accessTimeIdx(access_time),
+    index		    accessCNIdx(country_name),
+    constraint accesslog_affprogram_fk      foreign key (affprogram_id)     references aff_program(id)      on delete cascade,
+    constraint accesslog_sourcedomain_fk    foreign key (source_domain_id)  references access_source(id)    on delete cascade,
+    constraint accesslog_po_fk              foreign key (po_id)             references purchase_order(id)   on delete cascade,
+    constraint accesslog_pk                 primary key (id)
+);
 
 CREATE TABLE behavior_stats (
     id               INT NOT NULL AUTO_INCREMENT,
