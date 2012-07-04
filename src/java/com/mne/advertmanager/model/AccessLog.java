@@ -25,7 +25,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "AccessLog.countAccessLog", query = "SELECT count (*) FROM AccessLog a "),
     @NamedQuery(name = "AccessLog.findById", query = "SELECT a FROM AccessLog a WHERE a.id = ?"),
     @NamedQuery(name = "AccessLog.findByIdList", query = "SELECT a FROM AccessLog a WHERE a.id in (:aclIdList)"),
-    @NamedQuery(name = "AccessLog.findByPo", query = "SELECT a FROM AccessLog a WHERE a.po.id=?"),
+    @NamedQuery(name = "AccessLog.findByPo", query = "SELECT a FROM AccessLog a left join fetch a.sourceDomain WHERE a.po.id=?"),
     @NamedQuery(name = "AccessLog.findByAccessTime", query = "SELECT a FROM AccessLog a WHERE a.accessTime = ?"),
     @NamedQuery(name = "AccessLog.findByIpAddress", query = "SELECT a FROM AccessLog a WHERE a.ipAddress = ?"),
     @NamedQuery(name = "AccessLog.findByCountry", query = "SELECT a FROM AccessLog a WHERE a.countryName = ?"),

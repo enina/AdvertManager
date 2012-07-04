@@ -108,7 +108,7 @@ public class AccessLogService {
         }
         return result;
     }    
-    
+//=============================== findAccessLogByPO ============================
     @Transactional(readOnly=true)
     public Collection<AccessLog> findAccessLogByPO(int orderId) {
 
@@ -122,7 +122,7 @@ public class AccessLogService {
         }
         return result;
     }    
-    
+//================================== findAccessAffProgStats ====================
     @Transactional(readOnly=true)    
     public Collection<AccessStats> findAccessAffProgStats(AffProgram prog) {
 
@@ -135,7 +135,7 @@ public class AccessLogService {
         }
         return result;
     }
-    
+//=============================== saveACLSet ===================================
     @Transactional(propagation= Propagation.REQUIRES_NEW)
     public void saveACLSet(Collection<AccessLog> aclSet) {
         accessLogDao.saveDataSet(aclSet);

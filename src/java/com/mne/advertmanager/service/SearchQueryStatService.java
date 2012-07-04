@@ -7,6 +7,8 @@ package com.mne.advertmanager.service;
 import com.mne.advertmanager.dao.GenericDao;
 import com.mne.advertmanager.model.AffProgram;
 import com.mne.advertmanager.model.SearchQueryStatistics;
+import com.mne.advertmanager.util.Page;
+import com.mne.advertmanager.util.PageCtrl;
 import java.util.Collection;
 import java.util.LinkedHashSet;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,8 +33,11 @@ public class SearchQueryStatService {
 //=================================== getAllSearchQueryStats ===================
     @Transactional(readOnly = true)
     public LinkedHashSet<SearchQueryStatistics> getAllSearchQueryStats(AffProgram affProg){
-   
-        return new LinkedHashSet<SearchQueryStatistics>(searchQueryStatDao.findByQuery("SearchQueryStatistics.findAll",affProg));
+        LinkedHashSet<SearchQueryStatistics> result = null;
+        result = new LinkedHashSet<SearchQueryStatistics>();
+        Page<SearchQueryStatistics> page =  searchQueryStatDao.findPageByQuery("SearchQueryStatistics.findAll",new PageCtrl(1,0,15),affProg);
+        result.addAll(page.getItems());
+        return  result;
     }
 
     public void setSearchQueryStatDao(GenericDao<SearchQueryStatistics, Integer> searchQueryStatDao) {

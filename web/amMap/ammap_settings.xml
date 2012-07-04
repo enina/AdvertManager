@@ -30,7 +30,7 @@
   <layers></layers>																						<!-- [movies,labels,lines] Use this setting to change the sequence of layers. The left-most layer will be behind all the other layers. Please note that objects with x/y coordinates will still be placed on top of objects with long/lat coordinates. -->
     
   <background>                                                <!-- background -->
-    <color></color>                                           <!-- [#444444] (hex color code) -->
+    <color>#80868A</color>                                           <!-- [#444444] (hex color code) -->
     <alpha></alpha>                                           <!-- [0] (0 - 100) use 0 if you are using custom swf or jpg for background -->
     <border_color></border_color>                             <!-- [#000000] (hex color code) -->
     <border_alpha></border_alpha>                             <!-- [0] (0 - 100) -->
@@ -106,8 +106,8 @@
     <color_light></color_light>                               <!-- [#FFCC00] (hex color code) color of areas with value = 0 or value is not set -->
     <color_hover>#CC0000</color_hover>                        <!-- [] (hex color code) -->
     <color_selected></color_selected>                          <!-- [] (hex color code) If not specified, original area color will be used -->
-    <color_unlisted>#F5F5F5</color_unlisted>                         <!-- [] (hex color code) The color of the areas which are in the map file, but not listed in the data file. If you don't set any color here, the area will keep it's original color. Setting a color allows keeping data file smaller. -->
-    <color_no_value></color_no_value>                         <!-- [] (hex color code) The color of the areas which have no value attribute. Leave this empty if you do not use value attributes in areas. -->
+    <color_unlisted>#80868A</color_unlisted>                         <!-- #F5F5F5 [] (hex color code) The color of the areas which are in the map file, but not listed in the data file. If you don't set any color here, the area will keep it's original color. Setting a color allows keeping data file smaller. -->
+    <color_no_value>#80868A</color_no_value>                         <!-- [] (hex color code) The color of the areas which have no value attribute. Leave this empty if you do not use value attributes in areas. -->
     <disable_when_clicked>true</disable_when_clicked>         <!-- [false] (true / false) if this area is currently selected, roll over and click events of this area will be disabled if this set to true -->    
     <preserve_color></preserve_color>                         <!-- [false] (true / false) if this is set to true color_solid and color_light settings will be ignored - the area will preserve colors as they are in the original SWF -->
   </area>
@@ -186,7 +186,7 @@
     <y></y>                                                   <!-- [0] (Number / Number% / !Number)-->
     <width></width>                                           <!-- [200] (Number / Number%) -->
     <height></height>                                         <!-- [100%] (Number / Number%) -->    
-    <color></color>                                           <!-- [#FFFFFF] (hex color code) Background color-->
+    <color>#80868A</color>                                           <!-- [#FFFFFF] (hex color code) Background color-->
     <color_hover></color_hover>                               <!-- [#DADADA] (hex color code) background color of a list item when mouse is over it -->
     <color_selected></color_selected>                         <!-- [#000000] (hex color code) background color of a selected list item -->
     <alpha></alpha>                                           <!-- [100] (0 - 100) background opacity -->

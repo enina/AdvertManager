@@ -24,7 +24,7 @@ public class PageCtrl {
     
     
     public PageCtrl(int pageNumber, int totalPages, int pageSize) {
-        setCurrentPage(pageNumber);
+        setCurrentPage(pageNumber); 
         setTotalPages(totalPages);
         setPageSize(pageSize);
     }

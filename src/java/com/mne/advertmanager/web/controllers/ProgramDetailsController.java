@@ -9,10 +9,7 @@ import com.mne.advertmanager.model.*;
 import com.mne.advertmanager.service.*;
 import com.mne.advertmanager.util.*;
 import java.io.IOException;
-import java.util.Collection;
-import java.util.EnumMap;
-import java.util.HashMap;
-import java.util.Set;
+import java.util.*;
 import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,6 +42,7 @@ public class ProgramDetailsController {
     private static final String FINANCE = "/finance";
     private static final String AFFPROGRAM_DETAILS_REQ_MAPPING = AFFPROGRAM + DETAILS;
     private static final String AFFPROGRAM_ACCESS_REQ_MAPPING = AFFPROGRAM + "/{programId}/items/{items}/accessPage/{pageNumber}";
+    private static final String AFFPROGRAM_DAILY_ACCESS_REQ_MAPPING = AFFPROGRAM + "/{programId}/accessPerDay";
     private static final String ACCESS_PO_REQ_MAPPING = ACCESS + "/po/{orderId}";
     private static final String AFFPROGRAM_CALL_AGGR_DATA_REQ_MAPPING = AFFPROGRAM + "/{programId}/calculateAggregationData";
     private static final String AFFPROGRAM_ORDERS_REQ_MAPPING = AFFPROGRAM + ORDERS;
@@ -82,6 +80,8 @@ public class ProgramDetailsController {
         Set<FilterableBehaviorStatistics> periodicStats = null;
         Collection<POStats> poStats = null;
         Collection<AccessStats> aclStats = null;
+        LinkedHashSet<SearchQueryStatistics> searchQueryStats = null;
+        
         if (program != null) {
             //only find data for valid programs
             //find all accesses related to this program
@@ -90,9 +90,11 @@ public class ProgramDetailsController {
             periodicStats = fbsService.findAffProgramStatistics(programId);
            
             domainStats =  fbsService.findTotalAccessAmountByDomain(programId);
+            searchQueryStats = searchQueryStatService.getAllSearchQueryStats(program);
             countryStats = fbsService.findTotalAccessByCountry(programId);
             aclStats = accessLogService.findAccessAffProgStats(program);
             poStats = purchaseOrderService.retrieveAffProgPOByDateStats(program);
+            
         }
 
         
@@ -113,10 +115,33 @@ public class ProgramDetailsController {
         mav.addObject("countryStats", countryStats);
         mav.addObject("aclStats", aclStats);
         mav.addObject("poStats", poStats);
+        mav.addObject("queryStats", searchQueryStats);
 
         return mav;
 
     }
+    
+//=========================== getAccessPerDay ==================================
+     @RequestMapping(value = AFFPROGRAM_DAILY_ACCESS_REQ_MAPPING, method = RequestMethod.GET)
+    void getAccessPerDay(@PathVariable int programId,HttpServletResponse response) {
+         
+        try {
+            AffProgram program = affProgramService.findAffProgramByID(programId);
+            
+            Collection<AccessStats> aclStats = accessLogService.findAccessAffProgStats(program);
+                              
+            String curRequest = AFFPROGRAM + "/"+ programId+ "/accessPerDay";
+            String result = gson.toJson(aclStats);
+            logger.debug("getAccessPerDay::request={},result={}",curRequest , result);
+            response.getWriter().write(result);
+        } catch (IOException e) {
+            String errMsg = ",Exception:" + e.getClass().getSimpleName()
+                    + ((e.getMessage() == null) ? "" : " ,Message:"
+                    + e.getMessage());
+
+            logger.error("failed to retrieve access per day of program (id={},Exception:{})", programId, errMsg);
+        }
+    }   
 
 //============================= importBillingData ==============================
     /**
@@ -262,7 +287,7 @@ public class ProgramDetailsController {
             logger.error("failed to retrieve accessee of affprogram (id={},Exception:{})", programId, errMsg);
         }
     }
-    
+//================================ getPoAccessPage =========================
     @RequestMapping(value = ACCESS_PO_REQ_MAPPING, method = RequestMethod.GET)
     void getPoAccessPage(@PathVariable int orderId,HttpServletResponse response) {
         try {
@@ -270,7 +295,7 @@ public class ProgramDetailsController {
             Collection<AccessLog> accessPage = accessLogService.findAccessLogByPO(orderId);
             for (AccessLog acl:accessPage) {
                 acl.setAffProgram(null);
-                acl.setSourceDomainId(null);
+                //acl.setSourceDomainId(null);
                 acl.setPo(null);
             }
             String curRequest = ACCESS + "/po/" + orderId;

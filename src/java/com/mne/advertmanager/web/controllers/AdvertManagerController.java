@@ -117,7 +117,7 @@ public class AdvertManagerController {
     /**
      * this ctrl function redirect users from root URL to home page URL
      */
-    @RequestMapping(value=AFFPROGRAM_DELETE_REQ_MAPPING, method = RequestMethod.GET)
+    @RequestMapping(value=AFFPROGRAM_DELETE_REQ_MAPPING, method = RequestMethod.POST)
     public ModelAndView deleteProgram(@PathVariable int programId,SecurityContextHolderAwareRequestWrapper sCtxWrapper) {
         
         logger.info("before delete affProgram " + programId);
@@ -210,11 +210,7 @@ public class AdvertManagerController {
             status = ControllerSupport.handleException(logger,e, "create", "Affprogram", affprogram.getName());
         }
 
-        ModelAndView mav = ControllerSupport.forwardToView(logger,AFFPROGRAM_ADD_REQ_MAPPING, "home", "data", generateHome(securityContext));
-
-        mav.addObject("status", status);
-
-        return mav;
+        return generateHome(securityContext);
     }
 
 //=============================== viewAffPrograms ==============================

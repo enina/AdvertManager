@@ -15,31 +15,7 @@ import javax.validation.constraints.Size;
 @Entity
 @Table(name = "search_query_stat")
 
-//@NamedQueries({
-//    @NamedQuery(name = "AccessLog.findAll", query = "SELECT a FROM AccessLog a order by a.accessTime"),
-//    @NamedQuery(name = "AccessLog.countAccessLog", query = "SELECT count (*) FROM AccessLog a "),
-//    @NamedQuery(name = "AccessLog.findById", query = "SELECT a FROM AccessLog a WHERE a.id = ?"),
-//    @NamedQuery(name = "AccessLog.findByAccessTime", query = "SELECT a FROM AccessLog a WHERE a.accessTime = ?"),
-//    @NamedQuery(name = "AccessLog.findByIpAddress", query = "SELECT a FROM AccessLog a WHERE a.ipAddress = ?"),
-//    @NamedQuery(name = "AccessLog.findByCountry", query = "SELECT a FROM AccessLog a WHERE a.countryName = ?"),
-//    @NamedQuery(name = "AccessLog.findByAffProgramId", query = "SELECT a FROM AccessLog a left join fetch a.sourceDomain WHERE a.affProgram.id = ? "),
-//    @NamedQuery(name = "AccessLog.countAffProgramAccessLog", query = "SELECT count (*) FROM AccessLog a WHERE a.affProgram.id = ?"),
-//    @NamedQuery(name = "AccessLog.countAffProgramAccessByDate", query = "SELECT count (*) FROM AccessLog a WHERE a.affProgram.id = ? and accessTime > ?"),
-//    @NamedQuery(name = "AccessLog.findByUrl", query = "SELECT a FROM AccessLog a WHERE a.targetURL = ?")
-//})
-//find best 10 querys by program id
-//
-//select count(*) as accessAmount,access_log.query as query,access_log.affprogram_id as affprogram_id
-//    from 
-//     access_log 
-//    where
-//    access_log.affprogram_id = 2 and
-//    access_log.query is not null 
-//
-//    and   CHAR_LENGTH(access_log.query) > 4
-//    group by 
-//    access_log.query 
-//    order by accessAmount desc 
+
 @NamedQueries({
     @NamedQuery(name = "SearchQueryStatistics.calcStatistics", 
         query="SELECT "
@@ -97,6 +73,22 @@ public class SearchQueryStatistics implements Serializable {
 
     public void setRating(int rating) {
         this.rating = rating;
+    }
+
+    public AffProgram getAffProgram() {
+        return affProgram;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public String getQuery() {
+        return query;
+    }
+
+    public long getRating() {
+        return rating;
     }
     
     
