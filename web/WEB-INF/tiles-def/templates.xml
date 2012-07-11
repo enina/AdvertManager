@@ -46,11 +46,16 @@
     <definition name="affprogram.body" template="/WEB-INF/view/affprograms/programbody.jsp">
 	<put-attribute name="programspec" value="/WEB-INF/view/affprograms/programspec.jsp" />
 	<put-attribute name="overview" value="/WEB-INF/view/affprograms/overview.jsp" />
-	<put-attribute name="finance" value="/WEB-INF/view/affprograms/finance.jsp" />
+<!--	<put-attribute name="finance" value="/WEB-INF/view/affprograms/finance.jsp" />-->
 	<put-attribute name="accesses" value="/WEB-INF/view/access/list.jsp" />
 	<put-attribute name="partners" value="/WEB-INF/view/affprograms/partners.jsp" />
 	<put-attribute name="orders" value="/WEB-INF/view/affprograms/orders.jsp" />
-	<put-attribute name="afflinks" value="/WEB-INF/view/affprograms/afflinks.jsp" />
+<!--	<put-attribute name="afflinks" value="/WEB-INF/view/affprograms/afflinks.jsp" />-->
+        <put-attribute name="domainPooularityStat" value="/WEB-INF/view/affprograms/domainPooularityStat.jsp" />
+        <put-attribute name="accessByCountryStat" value="/WEB-INF/view/affprograms/accessByCountryStat.jsp" />
+<!--        <put-attribute name="dailyAccessStatistics" value="/WEB-INF/view/affprograms/dailyAccessStat.jsp" />-->
+<!--        <put-attribute name="dailyPoStat" value="/WEB-INF/view/affprograms/dailyPoStat.jsp" />-->
+        <put-attribute name="searchQueryRating" value="/WEB-INF/view/affprograms/searchQueryStat.jsp" />
     </definition>
  
  
