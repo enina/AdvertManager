@@ -28,7 +28,7 @@ public class AccessStats {
         return accessAmount;
     }
 
-    public void setAccessAmount(BigInteger  accessAmount) {
+    public void setAccessamount(BigInteger  accessAmount) {
         this.accessAmount = accessAmount.longValue();
     }
 
@@ -36,7 +36,7 @@ public class AccessStats {
         return accessDay;
     }
 
-    public void setAccessDay(String accessDay) {
+    public void setAccessday(String accessDay) {
         this.accessDay = accessDay;
     }
     

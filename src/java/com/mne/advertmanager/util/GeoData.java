@@ -27,7 +27,7 @@ public class GeoData {
         return countryCode;
     }
 
-    public void setCountryCode(String countryCode) {
+    public void setCountrycode(String countryCode) {
         this.countryCode = countryCode;
     }
 
@@ -35,7 +35,7 @@ public class GeoData {
         return countryName;
     }
 
-    public void setCountryName(String countryName) {
+    public void setCountryname(String countryName) {
         this.countryName = countryName;
     }
     

@@ -213,12 +213,12 @@ create table group_members (
     constraint fk_group_members_group foreign key(group_id) references groups(id));
 ------------------------------------------------------------------------------------------------------------------------------
 -----------------------------------default data-------------------------------------------------------------------------------
-insert into affiliate (affiliateName , email,password,enabled) values ('ilya','ilya@mail.com','ilya',1);
-insert into affiliate (affiliateName , email,password,enabled) values ('nina','nina@mail.com','nina',1);
-insert into affiliate (affiliateName , email,password,enabled) values ('misha','misha@mail.com','misha',1);
-insert into affiliate (affiliateName , email,password,enabled) values ('root','root@mail.com','admin',1);
-insert into affiliate (affiliateName , email,password,enabled) values ('vasya','vasya@mail.com','vasya',1);
-insert into affiliate (affiliateName , email,password,enabled) values ('hacker','hacker@mail.com','hacker',0);
+insert into affiliate (affiliateName , email,password,enabled) values ('ilya','ilya@mail.com','ilya',true);
+insert into affiliate (affiliateName , email,password,enabled) values ('nina','nina@mail.com','nina',true);
+insert into affiliate (affiliateName , email,password,enabled) values ('misha','misha@mail.com','misha',true);
+insert into affiliate (affiliateName , email,password,enabled) values ('root','root@mail.com','admin',true);
+insert into affiliate (affiliateName , email,password,enabled) values ('vasya','vasya@mail.com','vasya',true);
+insert into affiliate (affiliateName , email,password,enabled) values ('hacker','hacker@mail.com','hacker',false);
 
 insert into authorities  select id ,'ROLE_ADMIN' from affiliate where affiliateName='ilya';
 insert into authorities  select id ,'ROLE_ADMIN' from affiliate where affiliateName='nina';

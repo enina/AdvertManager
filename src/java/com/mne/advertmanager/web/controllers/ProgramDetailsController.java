@@ -5,12 +5,14 @@
 package com.mne.advertmanager.web.controllers;
 
 import com.google.gson.Gson;
-import com.mne.advertmanager.model.*;
+import com.mne.advertmanager.model.AccessLog;
+import com.mne.advertmanager.model.AffProgram;
+import com.mne.advertmanager.model.FilterableBehaviorStatistics;
+import com.mne.advertmanager.model.PurchaseOrder;
 import com.mne.advertmanager.service.*;
 import com.mne.advertmanager.util.*;
 import java.io.IOException;
 import java.util.Collection;
-import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Set;
 import javax.servlet.http.HttpServletResponse;
@@ -27,301 +29,310 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 /**
- *
+ * 
  * @author Misha
  */
 @Controller
 public class ProgramDetailsController {
 
-    //logger
-    private static Logger logger = LoggerFactory.getLogger(ProgramDetailsController.class);
+	// logger
+	private static Logger logger = LoggerFactory.getLogger(ProgramDetailsController.class);
 
-    
-    //constant declaration
-    private static final String AFFPROGRAM = "affprograms";
-    private static final String DETAILS = "/details";
-    private static final String ORDERS = "/orders";
-    private static final String ACCESS = "/access";
-    private static final String FINANCE = "/finance";
-    private static final String AFFPROGRAM_DETAILS_REQ_MAPPING = AFFPROGRAM + DETAILS;
-    private static final String AFFPROGRAM_ACCESS_REQ_MAPPING = AFFPROGRAM + "/{programId}/items/{items}/accessPage/{pageNumber}";
-    private static final String ACCESS_PO_REQ_MAPPING = ACCESS + "/po/{orderId}";
-    private static final String AFFPROGRAM_CALL_AGGR_DATA_REQ_MAPPING = AFFPROGRAM + "/{programId}/calculateAggregationData";
-    private static final String AFFPROGRAM_ORDERS_REQ_MAPPING = AFFPROGRAM + ORDERS;
-    private static final String AFFPROGRAM_FINANCE_REQ_MAPPING = AFFPROGRAM + FINANCE;
-    private static final String BLNG_IMPORT_REQ_MAPPING = ControllerSupport.BILLING + "/import";
-    private static final String AFFPROG_CALC_QUERY_STAT = AFFPROGRAM +"/{programId}"+"/calcQueryStats";
-    
-    //variables and object declarations
-    private Gson gson = new Gson();
-    
-    private AffProgramService affProgramService;
-    private AccessLogService accessLogService;
-    private PurchaseOrderService purchaseOrderService;
-    private AffiliateService affiliateService;
-    private BillingProjectService billingProjectService;
-    private BehaviorStatisticsService fbsService;
-    private SearchQueryStatService searchQueryStatService;
+	// constant declaration
+	private static final String AFFPROGRAM = "affprograms";
+	private static final String DETAILS = "/details";
+	private static final String ORDERS = "/orders";
+	private static final String ACCESS = "/access";
+	private static final String FINANCE = "/finance";
+	private static final String AFFPROGRAM_DETAILS_REQ_MAPPING = AFFPROGRAM + DETAILS;
+	private static final String AFFPROGRAM_ACCESS_REQ_MAPPING = AFFPROGRAM + "/{programId}/items/{items}/accessPage/{pageNumber}";
+	private static final String ACCESS_PO_REQ_MAPPING = ACCESS + "/po/{orderId}";
+	private static final String AFFPROGRAM_CALL_AGGR_DATA_REQ_MAPPING = AFFPROGRAM + "/{programId}/calculateAggregationData";
+	private static final String AFFPROGRAM_ORDERS_REQ_MAPPING = AFFPROGRAM + ORDERS;
+	private static final String AFFPROGRAM_FINANCE_REQ_MAPPING = AFFPROGRAM + FINANCE;
+	private static final String BLNG_IMPORT_REQ_MAPPING = ControllerSupport.BILLING + "/import";
+	private static final String AFFPROG_CALC_QUERY_STAT = AFFPROGRAM + "/{programId}" + "/calcQueryStats";
 
-//functions
-//==============================================================================
-//function that respond to access list request 
-//========================== viewAffProgDefintionForm ==========================
-    @RequestMapping(value = AFFPROGRAM_DETAILS_REQ_MAPPING + "/{programId}", method = RequestMethod.GET)
-    public ModelAndView viewProgramDetails(@PathVariable int programId) {
+	// variables and object declarations
+	private Gson gson = new Gson();
 
-        //ATTENTION BE CAREFUL WITH "programId" PARAMETER THAT YOU RECEIVE BECAUSE EVE MAY INCLUDE
-        //SQL INJECTION HERE SO YOU MUST CHECK IT BEFORE QUERY IT!!
+	private AffProgramService affProgramService;
+	private AccessLogService accessLogService;
+	private PurchaseOrderService purchaseOrderService;
+	private AffiliateService affiliateService;
+	private BillingProjectService billingProjectService;
+	private BehaviorStatisticsService fbsService;
+	private SearchQueryStatService searchQueryStatService;
 
-        AffProgram program = affProgramService.findAffProgramByID(programId);
-//
-        Page<AccessLog> accessPage = null;
-        Collection<PurchaseOrder> orderList = null;
-        Set<FilterableBehaviorStatistics> domainStats = null;
-        Collection<FilterableBehaviorStatistics> countryStats = null;
-        Set<FilterableBehaviorStatistics> periodicStats = null;
-        Collection<POStats> poStats = null;
-        Collection<AccessStats> aclStats = null;
-        if (program != null) {
-            //only find data for valid programs
-            //find all accesses related to this program
-            accessPage = accessLogService.findAccessByAffProgamId(new PageCtrl(), programId);
-            orderList  = purchaseOrderService.findPurchaseOrdersByAffProgamId(programId);
-            periodicStats = fbsService.findAffProgramStatistics(programId);
-           
-            domainStats =  fbsService.findTotalAccessAmountByDomain(programId);
-            countryStats = fbsService.findTotalAccessByCountry(programId);
-            aclStats = accessLogService.findAccessAffProgStats(program);
-            poStats = purchaseOrderService.retrieveAffProgPOByDateStats(program);
-        }
+	// functions
+	// ==============================================================================
+	// function that respond to access list request
+	// ========================== viewAffProgDefintionForm
+	// ==========================
+	@RequestMapping(value = AFFPROGRAM_DETAILS_REQ_MAPPING + "/{programId}", method = RequestMethod.GET)
+	public ModelAndView viewProgramDetails(@PathVariable int programId) {
 
-        
-        ModelAndView mav = ControllerSupport.forwardToView(logger, AFFPROGRAM_DETAILS_REQ_MAPPING + "/" + programId, AFFPROGRAM_DETAILS_REQ_MAPPING, "program", program);
-        mav.addObject("accessPage", accessPage);
-        mav.addObject("orderList", orderList);
-        mav.addObject("partnerList", program.getPartners());
-        
-        FilterableBehaviorStatistics emptyStats = new FilterableBehaviorStatistics();
-        HashMap<String,FilterableBehaviorStatistics> statMap = new HashMap<String,FilterableBehaviorStatistics>();
-        for (FilterableBehaviorStatistics fbs : periodicStats) {
-	    if (fbs != null)
-		statMap.put(fbs.getType().name(), fbs);
-        }
-        statMap.put("empty", emptyStats);
-        mav.addObject("statMap", statMap);
-        mav.addObject("domainStats", domainStats);
-        mav.addObject("countryStats", countryStats);
-        mav.addObject("aclStats", aclStats);
-        mav.addObject("poStats", poStats);
+		// ATTENTION BE CAREFUL WITH "programId" PARAMETER THAT YOU RECEIVE
+		// BECAUSE EVE MAY INCLUDE
+		// SQL INJECTION HERE SO YOU MUST CHECK IT BEFORE QUERY IT!!
 
-        return mav;
+		AffProgram program = affProgramService.findAffProgramByID(programId);
+		//
+		Page<AccessLog> accessPage = null;
+		Collection<PurchaseOrder> orderList = null;
+		Set<FilterableBehaviorStatistics> domainStats = null;
+		Collection<FilterableBehaviorStatistics> countryStats = null;
+		Set<FilterableBehaviorStatistics> periodicStats = null;
+		Collection<POStats> poStats = null;
+		Collection<AccessStats> aclStats = null;
+		if (program != null) {
+			// only find data for valid programs
+			// find all accesses related to this program
+			accessPage = accessLogService.findAccessByAffProgamId(new PageCtrl(), programId);
+			orderList = purchaseOrderService.findPurchaseOrdersByAffProgamId(programId);
+			periodicStats = fbsService.findAffProgramStatistics(programId);
 
-    }
+			domainStats = fbsService.findTotalAccessAmountByDomain(programId);
+			countryStats = fbsService.findTotalAccessByCountry(programId);
+			aclStats = accessLogService.findAccessAffProgStats(program);
+			poStats = purchaseOrderService.retrieveAffProgPOByDateStats(program);
+		}
 
-//============================= importBillingData ==============================
-    /**
-     * This function start importing process of data for specified AffProgramm this function invoked from by web link and has context variable affProgramId
-     */
-    @RequestMapping(value = BLNG_IMPORT_REQ_MAPPING + "/{affProgramId}", method = RequestMethod.GET)
-    public ModelAndView importBillingData(@PathVariable final int affProgramId, SecurityContextHolderAwareRequestWrapper securityContextWrapper, HttpServletResponse response) {
+		ModelAndView mav = ControllerSupport.forwardToView(logger, AFFPROGRAM_DETAILS_REQ_MAPPING + "/" + programId, AFFPROGRAM_DETAILS_REQ_MAPPING, "program", program);
+		mav.addObject("accessPage", accessPage);
+		mav.addObject("orderList", orderList);
+		mav.addObject("partnerList", program.getPartners());
 
-        String status = null; // hold msg that will apear to user upon failure/success.
+		FilterableBehaviorStatistics emptyStats = new FilterableBehaviorStatistics();
+		HashMap<String, FilterableBehaviorStatistics> statMap = new HashMap<String, FilterableBehaviorStatistics>();
+		for (FilterableBehaviorStatistics fbs : periodicStats) {
+			if (fbs != null)
+				statMap.put(fbs.getType().name(), fbs);
+		}
+		statMap.put("empty", emptyStats);
+		mav.addObject("statMap", statMap);
+		mav.addObject("domainStats", domainStats);
+		mav.addObject("countryStats", countryStats);
+		mav.addObject("aclStats", aclStats);
+		mav.addObject("poStats", poStats);
 
-        //get current affName
-        String affName = securityContextWrapper.getUserPrincipal().getName();
-        //find curent affiliate by name
-        final Affiliate aff = affiliateService.findAffiliateWithAffPrograms(affName);
-        //get security context data
-        final SecurityContext securityContext = SecurityContextHolder.getContext();
-        //find wanted affProgram
-        final AffProgram program = affProgramService.findAffProgramByID(affProgramId);
+		return mav;
 
-        //run data collection in separate Thread:
-        try {
-            new Thread() {
-                //prepare new thread function 
+	}
 
-                @Override
-                public void run() {
-                    //set security context of this Thread
-                    SecurityContextHolder.setContext(securityContext);
-                    //set thread name for debug purposes
-                    setName("Import-"+program.getName());
-                    //go collect data:
-                    billingProjectService.importBillingData(program);
-                    
-                    affProgramService.save(program);
-                }
-                //start thread execution
-            }.start();
+	// ============================= importBillingData
+	// ==============================
+	/**
+	 * This function start importing process of data for specified AffProgramm
+	 * this function invoked from by web link and has context variable
+	 * affProgramId
+	 */
+	@RequestMapping(value = BLNG_IMPORT_REQ_MAPPING + "/{affProgramId}", method = RequestMethod.GET)
+	public ModelAndView importBillingData(@PathVariable final int affProgramId, SecurityContextHolderAwareRequestWrapper securityContextWrapper, HttpServletResponse response) {
 
+		String status = null; // hold msg that will apear to user upon
+								// failure/success.
 
-            status = "Started importing data for program id=" + affProgramId;
-        } catch (Exception e) {
-            status = ControllerSupport.handleException(logger, e, "import", "Program Data", "id=" + affProgramId);
-        }
+		// get current affName
+		String affName = securityContextWrapper.getUserPrincipal().getName();
+		affiliateService.findAffiliateWithAffPrograms(affName);
+		// get security context data
+		final SecurityContext securityContext = SecurityContextHolder.getContext();
+		// find wanted affProgram
+		final AffProgram program = affProgramService.findAffProgramByID(affProgramId);
 
-        //transfer user back to import page(same place he came from)
-        ModelAndView mav = viewProgramDetails(affProgramId);
-        mav.addObject("status", status);
+		// run data collection in separate Thread:
+		try {
+			new Thread() {
+				// prepare new thread function
 
-        return mav;
-    }
-////=============================== calculateAggregationData ================================
+				@Override
+				public void run() {
+					// set security context of this Thread
+					SecurityContextHolder.setContext(securityContext);
+					// set thread name for debug purposes
+					setName("Import-" + program.getName());
+					// go collect data:
+					billingProjectService.importBillingData(program);
 
-    @RequestMapping(value = AFFPROGRAM_CALL_AGGR_DATA_REQ_MAPPING, method = RequestMethod.GET)
-    public ModelAndView calculateAggregationData(@PathVariable final int programId, SecurityContextHolderAwareRequestWrapper securityContextWrapper, HttpServletResponse response) {
+					affProgramService.save(program);
+				}
+				// start thread execution
+			}.start();
 
-        // hold msg that will apear to user upon failure/success.
-        String status = null; 
+			status = "Started importing data for program id=" + affProgramId;
+		} catch (Exception e) {
+			status = ControllerSupport.handleException(logger, e, "import", "Program Data", "id=" + affProgramId);
+		}
 
-        //get security context data
-        final SecurityContext securityContext = SecurityContextHolder.getContext();
-        
-        //run aggregation data calculation in separate Thread:
-        try {
-            new Thread() {
-                //prepare new thread function 
-                @Override
-                public void run() {
-                    //set security context of this Thread
-                    SecurityContextHolder.setContext(securityContext);
-                    //set thread name for debug purposes
-                    setName("StatsCalc" + "-P" + programId);
-                    //calculate aggregation data:
-                    fbsService.calculateAffProgramStatistics(programId);
-                }
-                //start thread execution
-            }.start();
-            status = "Started calculating aggregation data for program id=" + programId;
-        } catch (Exception e) {
-            status = ControllerSupport.handleException(logger, e, "AggregationCalculation", "Program Data", "id=" + programId);
-        }
+		// transfer user back to import page(same place he came from)
+		ModelAndView mav = viewProgramDetails(affProgramId);
+		mav.addObject("status", status);
 
-        //transfer user back to import page(same place he came from)
-        ModelAndView mav = viewProgramDetails(programId);
-        mav.addObject("status", status);
+		return mav;
+	}
 
-        return mav;
-    }
-    
-//============================= calcQueryStats =================================
-    @RequestMapping(value = AFFPROG_CALC_QUERY_STAT, method = RequestMethod.GET)
-    public ModelAndView calcQueryStats(@PathVariable final int programId,SecurityContextHolderAwareRequestWrapper secCtxtWrapper){
+	// //=============================== calculateAggregationData
+	// ================================
 
+	@RequestMapping(value = AFFPROGRAM_CALL_AGGR_DATA_REQ_MAPPING, method = RequestMethod.GET)
+	public ModelAndView calculateAggregationData(@PathVariable final int programId, SecurityContextHolderAwareRequestWrapper securityContextWrapper, HttpServletResponse response) {
 
-        //get security context data
-        final SecurityContext secContext = SecurityContextHolder.getContext();
-        
-        String status = "";
-        try{
-            new Thread() {
-                @Override
-                //prepare new thread function 
-                public void run(){
-                    AffProgram prog = null;
-                    SecurityContextHolder.setContext(secContext);
-                    prog = affProgramService.findAffProgramByID(programId);
+		// hold msg that will apear to user upon failure/success.
+		String status = null;
 
-                    if(prog == null)
-                        throw new NoneException("invalid program");
-     
-                    //set thread name for debug purposes
-                    setName(AFFPROGRAM + "searchQueryStatsCalc" + " -P" + programId);
-                    searchQueryStatService.calculateQueryStats(prog);
-                }
-            }.start();
-            status = "search query statistics calculation started";
-        }catch(Exception e){
-                status = ControllerSupport.handleException(logger, e, "query statistics calculation", "Program Data", "id=" + programId);
-        }
+		// get security context data
+		final SecurityContext securityContext = SecurityContextHolder.getContext();
 
-        ModelAndView mav = viewProgramDetails(programId);
-        mav.addObject("status", status);
+		// run aggregation data calculation in separate Thread:
+		try {
+			new Thread() {
+				// prepare new thread function
+				@Override
+				public void run() {
+					// set security context of this Thread
+					SecurityContextHolder.setContext(securityContext);
+					// set thread name for debug purposes
+					setName("StatsCalc" + "-P" + programId);
+					// calculate aggregation data:
+					fbsService.calculateAffProgramStatistics(programId);
+				}
+				// start thread execution
+			}.start();
+			status = "Started calculating aggregation data for program id=" + programId;
+		} catch (Exception e) {
+			status = ControllerSupport.handleException(logger, e, "AggregationCalculation", "Program Data", "id=" + programId);
+		}
 
-        return mav;
+		// transfer user back to import page(same place he came from)
+		ModelAndView mav = viewProgramDetails(programId);
+		mav.addObject("status", status);
 
-    }
+		return mav;
+	}
 
-    //=============================== getAccessPage ================================
-    @RequestMapping(value = AFFPROGRAM_ACCESS_REQ_MAPPING, method = RequestMethod.GET)
-    void getAccessPage(@PathVariable int items, @PathVariable int programId, @PathVariable int pageNumber, HttpServletResponse response) {
-        try {
+	// ============================= calcQueryStats
+	// =================================
+	@RequestMapping(value = AFFPROG_CALC_QUERY_STAT, method = RequestMethod.GET)
+	public ModelAndView calcQueryStats(@PathVariable final int programId, SecurityContextHolderAwareRequestWrapper secCtxtWrapper) {
 
-            Page<AccessLog> accessPage = accessLogService.findAccessByAffProgamId(new PageCtrl(pageNumber, 0, items), programId);
+		// get security context data
+		final SecurityContext secContext = SecurityContextHolder.getContext();
 
-            String curRequest = AFFPROGRAM + "/" + programId +"/items/"+items + "/accessPage/"+pageNumber;
-            String result = gson.toJson(accessPage);
-            logger.debug("GetAccessPage::request={},result={}",curRequest , result);
-            response.getWriter().write(result);
-        } catch (IOException e) {
-            String errMsg = ",Exception:" + e.getClass().getSimpleName()
-                    + ((e.getMessage() == null) ? "" : " ,Message:"
-                    + e.getMessage());
+		String status = "";
+		try {
+			new Thread() {
+				@Override
+				// prepare new thread function
+				public void run() {
+					AffProgram prog = null;
+					SecurityContextHolder.setContext(secContext);
+					prog = affProgramService.findAffProgramByID(programId);
 
-            logger.error("failed to retrieve accessee of affprogram (id={},Exception:{})", programId, errMsg);
-        }
-    }
-    
-    @RequestMapping(value = ACCESS_PO_REQ_MAPPING, method = RequestMethod.GET)
-    void getPoAccessPage(@PathVariable int orderId,HttpServletResponse response) {
-        try {
+					if (prog == null)
+						throw new NoneException("invalid program");
 
-            Collection<AccessLog> accessPage = accessLogService.findAccessLogByPO(orderId);
-            for (AccessLog acl:accessPage) {
-                acl.setAffProgram(null);
-                acl.setSourceDomainId(null);
-                acl.setPo(null);
-            }
-            String curRequest = ACCESS + "/po/" + orderId;
-            String result = gson.toJson(accessPage);
-            logger.debug("getPoAccessPage::request={},result={}",curRequest , result);
-            response.getWriter().write(result);
-        } catch (IOException e) {
-            String errMsg = ",Exception:" + e.getClass().getSimpleName()
-                    + ((e.getMessage() == null) ? "" : " ,Message:"
-                    + e.getMessage());
+					// set thread name for debug purposes
+					setName(AFFPROGRAM + "searchQueryStatsCalc" + " -P" + programId);
+					searchQueryStatService.calculateQueryStats(prog);
+				}
+			}.start();
+			status = "search query statistics calculation started";
+		} catch (Exception e) {
+			status = ControllerSupport.handleException(logger, e, "query statistics calculation", "Program Data", "id=" + programId);
+		}
 
-            logger.error("failed to retrieve access of purchase order (id={},Exception:{})", orderId, errMsg);
-        }
-    }    
+		ModelAndView mav = viewProgramDetails(programId);
+		mav.addObject("status", status);
 
-    //=============================== SETTERS ======================================
-    @Autowired
-    public void setAccessLogService(AccessLogService accessLogService) {
-        this.accessLogService = accessLogService;
-    }
+		return mav;
 
-    @Autowired
-    public void setAffProgramService(AffProgramService affProgramService) {
-        this.affProgramService = affProgramService;
-    }
+	}
 
-    @Autowired
-    public void setPurchaseOrderService(PurchaseOrderService purchaseOrderService) {
-        this.purchaseOrderService = purchaseOrderService;
-    }
+	// =============================== getAccessPage
+	// ================================
+	@RequestMapping(value = AFFPROGRAM_ACCESS_REQ_MAPPING, method = RequestMethod.GET)
+	void getAccessPage(@PathVariable int items, @PathVariable int programId, @PathVariable int pageNumber, HttpServletResponse response) {
+		try {
 
-    //============================= setAffiliateService ============================
-    @Autowired
-    public void setAffiliateService(AffiliateService affiliateService) {
-        this.affiliateService = affiliateService;
-    }
+			Page<AccessLog> accessPage = accessLogService.findAccessByAffProgamId(new PageCtrl(pageNumber, 0, items), programId);
 
-    //============================= setBillingProjectService =======================    
-    @Autowired
-    public void setBillingProjectService(BillingProjectService billingProjectService) {
-        this.billingProjectService = billingProjectService;
-    }
+			for (AccessLog acl : accessPage.getItems()) {
+				acl.setPo(null);
+			}
 
-    //============================= setPoAggrService =======================    
-    @Autowired
-    public void setFbsService(BehaviorStatisticsService fbsService) {
-        this.fbsService = fbsService;
-    }
-    
-    @Autowired
-    public void setSearchQueryStatService(SearchQueryStatService searchQueryStatService) {
-        this.searchQueryStatService = searchQueryStatService;
-    }
+			String curRequest = AFFPROGRAM + "/" + programId + "/items/" + items + "/accessPage/" + pageNumber;
+
+			String result = gson.toJson(accessPage);
+			logger.debug("GetAccessPage::request={},result={}", curRequest, result);
+			response.getWriter().write(result);
+		} catch (Exception e) {
+			String errMsg = ",Exception:" + e.getClass().getSimpleName() + ((e.getMessage() == null) ? "" : " ,Message:" + e.getMessage());
+
+			logger.error("failed to retrieve accesses of affprogram (id={},Exception:{})", programId, errMsg);
+		}
+	}
+
+	@RequestMapping(value = ACCESS_PO_REQ_MAPPING, method = RequestMethod.GET)
+	void getPoAccessPage(@PathVariable int orderId, HttpServletResponse response) {
+		try {
+
+			Collection<AccessLog> accessPage = accessLogService.findAccessLogByPO(orderId);
+			for (AccessLog acl : accessPage) {
+				acl.setAffProgram(null);
+				acl.setSourceDomainId(null);
+				acl.setPo(null);
+			}
+			String curRequest = ACCESS + "/po/" + orderId;
+			String result = gson.toJson(accessPage);
+			logger.debug("getPoAccessPage::request={},result={}", curRequest, result);
+			response.getWriter().write(result);
+		} catch (IOException e) {
+			String errMsg = ",Exception:" + e.getClass().getSimpleName() + ((e.getMessage() == null) ? "" : " ,Message:" + e.getMessage());
+
+			logger.error("failed to retrieve access of purchase order (id={},Exception:{})", orderId, errMsg);
+		}
+	}
+
+	// =============================== SETTERS
+	// ======================================
+	@Autowired
+	public void setAccessLogService(AccessLogService accessLogService) {
+		this.accessLogService = accessLogService;
+	}
+
+	@Autowired
+	public void setAffProgramService(AffProgramService affProgramService) {
+		this.affProgramService = affProgramService;
+	}
+
+	@Autowired
+	public void setPurchaseOrderService(PurchaseOrderService purchaseOrderService) {
+		this.purchaseOrderService = purchaseOrderService;
+	}
+
+	// ============================= setAffiliateService
+	// ============================
+	@Autowired
+	public void setAffiliateService(AffiliateService affiliateService) {
+		this.affiliateService = affiliateService;
+	}
+
+	// ============================= setBillingProjectService
+	// =======================
+	@Autowired
+	public void setBillingProjectService(BillingProjectService billingProjectService) {
+		this.billingProjectService = billingProjectService;
+	}
+
+	// ============================= setPoAggrService =======================
+	@Autowired
+	public void setFbsService(BehaviorStatisticsService fbsService) {
+		this.fbsService = fbsService;
+	}
+
+	@Autowired
+	public void setSearchQueryStatService(SearchQueryStatService searchQueryStatService) {
+		this.searchQueryStatService = searchQueryStatService;
+	}
 }

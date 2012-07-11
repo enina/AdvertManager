@@ -48,7 +48,7 @@ import javax.validation.constraints.Size;
         + " acLog.affProgram = ? and"
         + " acLog.query is not null and"
         + " length(acLog.query) >4"
-        + " group by acLog.query"
+        + " group by acLog.query,acLog.affProgram"
         ),
     @NamedQuery(name = "SearchQueryStatistics.findAll", query= "SELECT p FROM SearchQueryStatistics p WHERE p.affProgram = ? order by p.rating desc"),
     @NamedQuery(name = "SearchQueryStatistics.deleteByAffProgram", query= "DELETE SearchQueryStatistics p WHERE p.affProgram = ? ")
