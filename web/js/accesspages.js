@@ -20,9 +20,13 @@ function getPageAccess(accessCtxPath,curentPage){
     
     $.getJSON(path,function(accessPage){
         
+
         
         var container = $('#accesses');
         container.empty();
+        
+        
+
         
         //prepare page object ( add methods )
         accessPage.getCurentPage = getCurentPage;
@@ -30,12 +34,12 @@ function getPageAccess(accessCtxPath,curentPage){
         accessPage.getPrevPage = getPrevPage;
         accessPage.getTotalPages = getTotalPages;
         
-        
-        //test for emptiness
+                //test for emptiness
         if(accessPage == null || accessPage.getTotalPages() < 1){
             container.append("No access page found");
             return;
         }
+
        
         //hold imgdirectory context path
         var imgCtxPath = "http://" + window.location.host +"/AdvertManager/images/";

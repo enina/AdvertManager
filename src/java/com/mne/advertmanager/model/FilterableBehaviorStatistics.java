@@ -53,32 +53,33 @@ import javax.validation.constraints.Size;
                 query = "SELECT " +
                         "new com.mne.advertmanager.model.FilterableBehaviorStatistics(count (po),sum(po.commision),po.affProgram) " +
                         "FROM  PurchaseOrder po "  + 
-                        "WHERE po.affProgram.id = ? and po.ordertime > ?"),
+                        "WHERE po.affProgram.id = ? and po.ordertime > ? " +
+                        "group by po.affProgram"),
 
     @NamedQuery(name = "Fbs.calcAffProgPeriodFinancialCountryStats",
                 query = "SELECT " +
                         "new com.mne.advertmanager.model.FilterableBehaviorStatistics(count(po),sum(po.commision),po.countryName,po.countryCode,po.affProgram) " +
                         "FROM  PurchaseOrder po "  + 
-                        "WHERE po in  " +
-			"(select po from PurchaseOrder po  where po.affProgram.id = ? and po.ordertime > ?  group by po.ipAddress) " +
-			"GROUP BY po.countryName"),
+                        "WHERE po.ipAddress in  " +
+			"(select po.ipAddress from PurchaseOrder po  where po.affProgram.id = ? and po.ordertime > ?  group by po.ipAddress) " +
+			"GROUP BY po.countryName,po.countryCode,po.affProgram"),
 
     
     @NamedQuery(name = "Fbs.calcAffProgPeriodAccessDomainStats",
                 query = "SELECT " +
                         "new com.mne.advertmanager.model.FilterableBehaviorStatistics(count (acl),acl.sourceDomain,acl.affProgram) " +
                         "FROM  AccessLog acl "  + 
-                        "WHERE acl in " +
-                        "(select acl from AccessLog acl  where acl.affProgram.id = ? and acl.accessTime > ?  group by ip_address) " +
-                        "GROUP BY acl.sourceDomain")   ,
+                        "WHERE acl.ipAddress in " +
+                        "(select acl.ipAddress from AccessLog acl  where acl.affProgram.id = ? and acl.accessTime > ?  group by acl.ipAddress) " +
+                        "GROUP BY acl.affProgram,acl.sourceDomain")   ,
     
     @NamedQuery(name = "Fbs.calcAffProgPeriodAccessCountryStats",
                 query = "SELECT " +
                         "new com.mne.advertmanager.model.FilterableBehaviorStatistics (count (acl),acl.countryName,acl.countryCode ,acl.affProgram) " +
                         "FROM  AccessLog acl "  + 
-                        "WHERE acl in " +
-                        "(select acl from AccessLog acl  where acl.affProgram.id = ? and acl.accessTime > ?  group by ip_address) " +
-                        "GROUP BY acl.countryName") ,
+                        "WHERE acl.ipAddress in" +
+                        "(select acl.ipAddress from AccessLog acl  where acl.affProgram.id = ? and acl.accessTime > ?  group by ip_address) " +
+                        "GROUP BY acl.countryName,acl.countryCode,acl.affProgram") ,
     
     @NamedQuery(name = "Fbs.deleteAffProgTypeStats",
                 query = "delete from FilterableBehaviorStatistics fbs where fbs.affProgram.id = ? and fbs.type = ? "),
@@ -97,11 +98,11 @@ import javax.validation.constraints.Size;
 			"order by fbs.accessAmount desc")
   
 })
-/*
- * delete from PrevMonthBehaviorStats where affProgram.id=?
- */
+
+
 public class FilterableBehaviorStatistics implements Serializable {
 
+  
     public enum StatType {
 
         CurDay, CurMonth, PrevMonth, Total

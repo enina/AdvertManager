@@ -63,36 +63,42 @@
             <th>Access Amount</th>
             <th>Purchase Amount</th>
             <th>Commision Sum</th>
-            <th>Rate</th>
+            <th>Conversion Rate</th>
         </tr>
         <tr>
             <td>Total</td>
             <td><c:out value="${totalStats.accessAmount}"/></td>
-            <td><c:out value="${totalStats.purchaseAmount}"/></td>
+            <td><c:out value="${totalStats.purchaseAmount}"/><span class="curency" style="float:right">RUB</span></td>
             <td>
 		<fmt:formatNumber value="${totalStats.totalCommision}" maxFractionDigits="3" minFractionDigits="3" />
+                <span class="curency" style="float:right">RUB</span>
 	    </td>
             <td>
 		<fmt:formatNumber value="${totalStats.conversionRate}" maxFractionDigits="3" minFractionDigits="3" />
+                
 	    </td>
         </tr>
         <tr>
             <td>Previous Month</td>
             <td><c:out value="${pmStats.accessAmount}"/></td>
-            <td><c:out value="${pmStats.purchaseAmount}"/></td>
+            
+            <td><c:out value="${pmStats.purchaseAmount}"/><span class="curency" style="float:right">RUB</span></td>
             <td>
 		<fmt:formatNumber value="${pmStats.totalCommision}" maxFractionDigits="3" minFractionDigits="3" />
+                <span class="curency" style="float:right">RUB</span>
 	    </td>
             <td>
 		<fmt:formatNumber value="${pmStats.conversionRate}" maxFractionDigits="3" minFractionDigits="3" />
+                
 	    </td>
         </tr>
         <tr>
             <td>Current Month</td>
             <td><c:out value="${cmStats.accessAmount}"/></td>
-            <td><c:out value="${cmStats.purchaseAmount}"/></td>
+            <td><c:out value="${cmStats.purchaseAmount}"/><span class="curency" style="float:right">RUB</span></td>
             <td>
 		<fmt:formatNumber value="${cmStats.totalCommision}" maxFractionDigits="3" minFractionDigits="3" />
+                <span class="curency" style="float:right">RUB</span>
 	    </td>
             <td>
 		<fmt:formatNumber value="${cmStats.conversionRate}" maxFractionDigits="3" minFractionDigits="3" />
@@ -101,9 +107,10 @@
         <tr>
             <td>Today</td>
             <td><c:out value="${dailyStats.accessAmount}"/></td>
-            <td><c:out value="${dailyStats.purchaseAmount}"/></td>
+            <td><c:out value="${dailyStats.purchaseAmount}"/><span class="curency" style="float:right">RUB</span></td>
             <td>
 		<fmt:formatNumber value="${dailyStats.totalCommision}" maxFractionDigits="3" minFractionDigits="3" />
+                <span class="curency" style="float:right">RUB</span>
 	    </td>
             <td>
 		<fmt:formatNumber value="${dailyStats.conversionRate}" maxFractionDigits="3" minFractionDigits="3" />

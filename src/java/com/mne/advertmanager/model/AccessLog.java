@@ -25,7 +25,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "AccessLog.countAccessLog", query = "SELECT count (*) FROM AccessLog a "),
     @NamedQuery(name = "AccessLog.findById", query = "SELECT a FROM AccessLog a WHERE a.id = ?"),
     @NamedQuery(name = "AccessLog.findByIdList", query = "SELECT a FROM AccessLog a WHERE a.id in (:aclIdList)"),
-    @NamedQuery(name = "AccessLog.findByPo", query = "SELECT a FROM AccessLog a WHERE a.po.id=?"),
+    @NamedQuery(name = "AccessLog.findByPo", query = "SELECT a FROM AccessLog a left join fetch a.sourceDomain WHERE a.po.id=?"),
     @NamedQuery(name = "AccessLog.findByAccessTime", query = "SELECT a FROM AccessLog a WHERE a.accessTime = ?"),
     @NamedQuery(name = "AccessLog.findByIpAddress", query = "SELECT a FROM AccessLog a WHERE a.ipAddress = ?"),
     @NamedQuery(name = "AccessLog.findByCountry", query = "SELECT a FROM AccessLog a WHERE a.countryName = ?"),
@@ -38,12 +38,20 @@ import javax.xml.bind.annotation.XmlRootElement;
  public class AccessLog implements Serializable {
     //native sql query . due to Hibernate limitations cannot be defined as named query
     public static final String ACCESSLOG_FINDGEODATABYIP_QUERY = 
-            "SELECT DISTINCT cc as countryCode,cn as countryName FROM geoip.ip " +
-            " natural join geoip.cc where ? BETWEEN start and end";
+            "SELECT DISTINCT cc as countrycode,cn as countryname FROM geoip.ip " +
+            " natural join geoip.cc where ? BETWEEN startx and endx";
     
-    public static final String ACCESSLOG_STATS_QUERY = 
-            "select DATE_FORMAT(access_time,'%Y-%m-%d') as accessDay , count(*) as accessAmount " +
+    public static final String ACCESSLOG_STATS_MYSQL_QUERY = 
+            "select DATE_FORMAT(access_time,'%Y-%m-%d') as accessday , count(*) as accessamount " +
             "from  access_log where affprogram_id=? group by accessDay order by accessDay ";
+    
+
+    public static final String ACCESSLOG_STATS_PGSQL_QUERY = 
+            "select TO_CHAR(access_time,'YYYY-MM-DD') as accessDay , count(*) as accessAmount " +
+            "from  access_log where affprogram_id=? group by accessDay order by accessDay ";    
+    
+    
+    public static final String ACCESSLOG_STATS_QUERY = ACCESSLOG_STATS_MYSQL_QUERY;
 
     private static final long serialVersionUID = 1L;
     private static DateFormat df = new SimpleDateFormat("dd.MM.yyyy HH:mm");

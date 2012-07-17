@@ -33,7 +33,7 @@ public class POStats {
         return aclCount;
     }
 
-    public void setAclCount(BigInteger aclCount) {
+    public void setAclcount(BigInteger aclCount) {
         this.aclCount = aclCount.intValue();
     }
 
@@ -41,7 +41,7 @@ public class POStats {
         return aclId;
     }
 
-    public void setAclId(int aclId) {
+    public void setAclid(int aclId) {
         this.aclId = aclId;
     }
 
@@ -49,7 +49,7 @@ public class POStats {
         return poId;
     }
 
-    public void setPoId(int poId) {
+    public void setPoid(int poId) {
         this.poId = poId;
     }
 
@@ -57,7 +57,7 @@ public class POStats {
         return poAmount;
     }
 
-    public void setPoAmount(BigInteger poAmount) {
+    public void setPoamount(BigInteger poAmount) {
         this.poAmount = poAmount.longValue();
     }
 
@@ -65,7 +65,7 @@ public class POStats {
         return purchaseDay;
     }
 
-    public void setPurchaseDay(String purchaseDay) {
+    public void setPurchaseday(String purchaseDay) {
         this.purchaseDay = purchaseDay;
     }
     
