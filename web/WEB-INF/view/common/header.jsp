@@ -16,7 +16,7 @@
             <li class=""> <a class="menuItem" href="${pageContext.request.contextPath}/mvc/apps/parsergen">Configure Parser</a></li>  
             <li class=""> <a class="menuItem" href="${pageContext.request.contextPath}/mvc/billing/list">Billing sites</a></li>
         </sec:authorize> 
-        <li class=""><a name="menu" class="menuItem" href="${pageContext.request.contextPath}/j_spring_security_logout">Logout</a></li>
+        <li class=""><a  class="menuItem" href="${pageContext.request.contextPath}/j_spring_security_logout">Logout</a></li>
 
     </ul>
 

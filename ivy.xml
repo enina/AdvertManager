@@ -74,8 +74,6 @@
         <dependency org="mysql" name="mysql-connector-java" rev="5.1.18"/>
         <dependency org="com.google.code.gson" name="gson" rev="2.1"/>
         <dependency org="commons-io" name="commons-io" rev="2.2"/>
-        <dependency org="com.googlecode.juniversalchardet" name="juniversalchardet" rev="1.0.3"/>
-        <dependency org="org.quartz-scheduler" name="quartz" rev="2.1.5"/>
         <dependency org="org.aspectj" name="aspectjtools" rev="1.6.10"/>
             
             		
@@ -155,6 +153,28 @@
         <exclude org="javax.xml.ws"      module="jaxws-api"/>
         <exclude org="javax.xml"         module="jaxrpc-api"/>
         <exclude org="javax.persistence" module="persistence-api"/>
+        
+        <exclude org="org.slf4j" 		 module="slf4j-jdk14"/>
+        <exclude org="org.slf4j" 		 module="slf4j-log4j12"/>
+        
+        <exclude org="com.sun.xml.fastinfoset"/>
+        <exclude org="org.jasig.cas.client" module="org.jasig.cas.client"/>
+        <exclude org="commons-beanutils"/>
+        <exclude org="commons-codec"/>
+        <exclude org="commons-collections"/>
+        <exclude org="commons-digester"/>
+        <exclude org="commons-logging"/>
+        <exclude org="org.apache.cxf"/>
+        <exclude org="com.ibm.icu"/>
+        <exclude org="org.apache.openejb" module="javaee-api"/>
+        <exclude org="joda-time" module="joda-time"/>
+        <exclude org="net.sf.jopt-simple"/>
+        <exclude org="com.googlecode.juniversalchardet"/> 
+        <exclude org="ldapsdk"/>
+        <exclude org="org.quartz-scheduler"/>
+        <exclude org="org.apache.directory.shared"/>
+        <exclude org="org.slf4j" module="slf4j-jdk14"/>
+        <exclude org="org.slf4j" module="slf4j-log4j12"/>
         
     </dependencies>
     

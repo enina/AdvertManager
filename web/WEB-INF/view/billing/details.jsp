@@ -82,8 +82,8 @@
                             <td class="billingDetailsTd" id="ds.url"></td>
                             <td class="billingDetailsTd" id="ds.numPages"></td>
                             <td class="billingDetailsTd" id="si.name">
-                                <select id="siList" onchange="siSelected('${pageContext.request.contextPath}')" disabled="true">
-                                    <option value="0" selected="true">Select data item</option> />
+                                <select id="siList" onchange="siSelected('${pageContext.request.contextPath}')" disabled="disabled">
+                                    <option value="0" selected="selected">Select data item</option>
                                 </select>
                             </td>
                             <td class="billingDetailsTd" id="si.selector"></td>

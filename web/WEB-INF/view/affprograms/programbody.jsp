@@ -127,7 +127,7 @@
     </div>
  
 
-    <script type="text/javascript" src="${pageContext.request.contextPath}/amMap/swfobject.js""></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/amMap/swfobject.js"></script>
     <script type="text/javascript">
 
         var countries = "";

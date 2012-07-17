@@ -37,7 +37,7 @@
 
     <a href="${pageContext.request.contextPath}/mvc/affprograms/${program.id}/calculateAggregationData">Calculate Aggregation Data</a>
     <a href="${pageContext.request.contextPath}/mvc/affprograms/${program.id}/calcQueryStats">Calculate Search query rating</a>
-    </table>
+
     <c:set var="totalStats" value="${statMap.get('Total') }"/>
     <c:set var="cmStats" value="${statMap.get('CurMonth') }"/>
     <c:set var="pmStats" value="${statMap.get('PrevMonth') }"/>

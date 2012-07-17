@@ -4,16 +4,13 @@
  */
 package com.mne.advertmanager.web.controllers;
 
-import com.google.gson.Gson;
-import com.mne.advertmanager.model.*;
-import com.mne.advertmanager.service.*;
-import com.mne.advertmanager.util.*;
 import java.io.IOException;
 import java.util.Collection;
-import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Set;
+
 import javax.servlet.http.HttpServletResponse;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +22,23 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
+
+import com.google.gson.Gson;
+import com.mne.advertmanager.model.AccessLog;
+import com.mne.advertmanager.model.AffProgram;
+import com.mne.advertmanager.model.FilterableBehaviorStatistics;
+import com.mne.advertmanager.model.PurchaseOrder;
+import com.mne.advertmanager.service.AccessLogService;
+import com.mne.advertmanager.service.AffProgramService;
+import com.mne.advertmanager.service.BehaviorStatisticsService;
+import com.mne.advertmanager.service.BillingProjectService;
+import com.mne.advertmanager.service.PurchaseOrderService;
+import com.mne.advertmanager.service.SearchQueryStatService;
+import com.mne.advertmanager.util.AccessStats;
+import com.mne.advertmanager.util.NoneException;
+import com.mne.advertmanager.util.POStats;
+import com.mne.advertmanager.util.Page;
+import com.mne.advertmanager.util.PageCtrl;
 
 /**
  *
@@ -47,8 +61,10 @@ public class ProgramDetailsController {
     private static final String AFFPROGRAM_ACCESS_REQ_MAPPING = AFFPROGRAM + "/{programId}/items/{items}/accessPage/{pageNumber}";
     private static final String ACCESS_PO_REQ_MAPPING = ACCESS + "/po/{orderId}";
     private static final String AFFPROGRAM_CALL_AGGR_DATA_REQ_MAPPING = AFFPROGRAM + "/{programId}/calculateAggregationData";
-    private static final String AFFPROGRAM_ORDERS_REQ_MAPPING = AFFPROGRAM + ORDERS;
-    private static final String AFFPROGRAM_FINANCE_REQ_MAPPING = AFFPROGRAM + FINANCE;
+    @SuppressWarnings("unused")
+	private static final String AFFPROGRAM_ORDERS_REQ_MAPPING = AFFPROGRAM + ORDERS;
+    @SuppressWarnings("unused")
+	private static final String AFFPROGRAM_FINANCE_REQ_MAPPING = AFFPROGRAM + FINANCE;
     private static final String BLNG_IMPORT_REQ_MAPPING = ControllerSupport.BILLING + "/import";
     private static final String AFFPROG_CALC_QUERY_STAT = AFFPROGRAM +"/{programId}"+"/calcQueryStats";
     
@@ -58,7 +74,7 @@ public class ProgramDetailsController {
     private AffProgramService affProgramService;
     private AccessLogService accessLogService;
     private PurchaseOrderService purchaseOrderService;
-    private AffiliateService affiliateService;
+
     private BillingProjectService billingProjectService;
     private BehaviorStatisticsService fbsService;
     private SearchQueryStatService searchQueryStatService;
@@ -128,9 +144,9 @@ public class ProgramDetailsController {
         String status = null; // hold msg that will apear to user upon failure/success.
 
         //get current affName
-        String affName = securityContextWrapper.getUserPrincipal().getName();
+        //String affName = securityContextWrapper.getUserPrincipal().getName();
         //find curent affiliate by name
-        final Affiliate aff = affiliateService.findAffiliateWithAffPrograms(affName);
+        //final Affiliate aff = affiliateService.findAffiliateWithAffPrograms(affName);
         //get security context data
         final SecurityContext securityContext = SecurityContextHolder.getContext();
         //find wanted affProgram
@@ -300,12 +316,6 @@ public class ProgramDetailsController {
     @Autowired
     public void setPurchaseOrderService(PurchaseOrderService purchaseOrderService) {
         this.purchaseOrderService = purchaseOrderService;
-    }
-
-    //============================= setAffiliateService ============================
-    @Autowired
-    public void setAffiliateService(AffiliateService affiliateService) {
-        this.affiliateService = affiliateService;
     }
 
     //============================= setBillingProjectService =======================    
