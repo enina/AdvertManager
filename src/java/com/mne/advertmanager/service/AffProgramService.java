@@ -6,98 +6,88 @@ package com.mne.advertmanager.service;
 
 import java.util.Collection;
 
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.mne.advertmanager.dao.GenericDao;
 import com.mne.advertmanager.model.AffProgram;
 import com.mne.advertmanager.model.AffProgramGroup;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
 
 /**
- *
+ * 
  * @author Nina Eidelshtein and Misha Lebedev
  */
 public class AffProgramService {
 
-    private GenericDao<AffProgram, Integer> affProgramDao;
-    private AffProgramGroupService afPrGrService;
-    private BehaviorStatisticsService bss;
+	private GenericDao<AffProgram, Integer> affProgramDao;
+	private AffProgramGroupService afPrGrService;
 
 
+	// ============================ findAllAffPrograms ==============================
+	@Transactional(readOnly = true)
+	public Collection<AffProgram> findAllAffPrograms() {
+		return affProgramDao.findByQuery("AffProgram.findAll");
+	}
 
-//============================ findAllAffPrograms ==============================
-    @Transactional(readOnly = true)
-    public Collection<AffProgram> findAllAffPrograms() {
-        return affProgramDao.findByQuery("AffProgram.findAll");
-    }
-//=========================== findAffProgramByLink =============================
-    @Transactional(readOnly = true)
-    public AffProgram findAffProgramByLink(String link) {
-        
-        AffProgram result = null;
+	// =========================== findAffProgramByLink =============================
+	@Transactional(readOnly = true)
+	public AffProgram findAffProgramByLink(String link) {
 
-        Collection<AffProgram> data =  affProgramDao.findByQuery("AffProgram.findByAffProgramLink",link);
-        if (data != null && data.size()>0)
-            result = data.iterator().next();
-        
-        return result;
-    }    
-//============================= findAffProgramByID ===========================
-    @Transactional(readOnly = true)
-    public AffProgram findAffProgramByID(int id) {
-        
-        AffProgram result = null;
-        
-	String userName = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
-        
-	result = affProgramDao.findSingleItemByQuery("AffProgram.findByIdAndAffiliate",id,userName);
-        
-        return result;
-    }  
-//============================ createAffProgram ================================
-    @Transactional
-    public void createAffProgram(AffProgram affProgram) {
-        
-        AffProgramGroup pg = null;
-        pg = affProgram.getAffProgramGroup();
-        
- 
-        if (pg != null)
-            pg = afPrGrService.createOrUpdate(pg);
-        
-        affProgram.setAffProgramGroup(pg);
-        affProgramDao.create(affProgram);
-    }
-    
-    @Transactional
-    public void save(AffProgram program) {
-        affProgramDao.update(program);
-    }
-//==================================== delete ==================================
+		AffProgram result = null;
 
-    @Transactional
-    public void delete(int affProgId) {
-        //1. delete statistics BehaviorStatisticsService
-        //2. delete accesses, partners , purchase orders
-        //3. programm and program - partner relation
-     //    bss.deleteProgramStatistics(affProgId);
-         affProgramDao.executeUpdateByQuery("AffProgram.deleteById", affProgId);
-    } 
+		Collection<AffProgram> data = affProgramDao.findByQuery("AffProgram.findByAffProgramLink", link);
+		if (data != null && data.size() > 0)
+			result = data.iterator().next();
 
-    
-    public void setAffProgramDao(GenericDao<AffProgram, Integer> AffProgramDao) {
-        this.affProgramDao = AffProgramDao;
-    }
+		return result;
+	}
 
-    public void setAffProgramGroupService(AffProgramGroupService afPrGrService) {
-        this.afPrGrService = afPrGrService;
-    }
-    
-    public void setBss(BehaviorStatisticsService bss) {
-        this.bss = bss;
-    }
-    
+	// ============================= findAffProgramByID ===========================
+	@Transactional(readOnly = true)
+	public AffProgram findAffProgramByID(int id) {
+
+		AffProgram result = null;
+
+		String userName = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
+
+		result = affProgramDao.findSingleItemByQuery("AffProgram.findByIdAndAffiliate", id, userName);
+
+		return result;
+	}
+
+	// ============================ createAffProgram  ================================
+	@Transactional
+	public void createAffProgram(AffProgram affProgram) {
+
+		AffProgramGroup pg = null;
+		pg = affProgram.getAffProgramGroup();
+
+		if (pg != null)
+			pg = afPrGrService.createOrUpdate(pg);
+
+		affProgram.setAffProgramGroup(pg);
+		affProgramDao.create(affProgram);
+	}
+
+	@Transactional
+	public void save(AffProgram program) {
+		affProgramDao.update(program);
+	}
+
+	// ==================================== delete ==================================
+	@Transactional
+	public void delete(int affProgId) {
+		affProgramDao.executeUpdateByQuery("AffProgram.deleteById", affProgId);
+	}
+
+	public void setAffProgramDao(GenericDao<AffProgram, Integer> AffProgramDao) {
+		this.affProgramDao = AffProgramDao;
+	}
+
+	public void setAffProgramGroupService(AffProgramGroupService afPrGrService) {
+		this.afPrGrService = afPrGrService;
+	}
+
+
 }
-

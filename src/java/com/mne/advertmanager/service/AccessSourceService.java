@@ -4,11 +4,11 @@
  */
 package com.mne.advertmanager.service;
 
-import com.mne.advertmanager.dao.GenericDao;
-import com.mne.advertmanager.model.AccessSource;
-import java.util.Collection;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
+
+import com.mne.advertmanager.dao.GenericDao;
+import com.mne.advertmanager.model.AccessSource;
 
 /**
  *
@@ -35,9 +35,12 @@ public class AccessSourceService {
         
         AccessSource result = null;
         
-        Collection<AccessSource> data = accessSourceDao.findByQuery("AccessSource.findByAccessSourceDomain", domain);
-        if (data != null && data.size()>0 )
-            result = data.iterator().next();
+        result = accessSourceDao.findSingleItemByQuery("AccessSource.findByAccessSourceDomain", domain);
+        
+        if (result != null)
+        	logger.info("AccessSource Found ::: domain={}",domain);
+        else
+        	logger.info("AccessSource not dound ::: domain={}",domain);
         
         return result;
     }

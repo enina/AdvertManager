@@ -1,6 +1,6 @@
 
 <%@ include file="../common/taglibs.jsp" %>
-<table border="1" class="affTable">
+<table class="affTable">
     <c:if test="${data!=null}">
         <thead>
             <tr >

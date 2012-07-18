@@ -189,6 +189,28 @@
         <exclude org="org.hibernate" 	module="hibernate-annotations"/>
         <exclude org="org.hibernate"	module="ejb3-persistence"/>        	
         
+        <exclude org="org.slf4j" 		 module="slf4j-jdk14"/>
+        <exclude org="org.slf4j" 		 module="slf4j-log4j12"/>
+        
+        <exclude org="com.sun.xml.fastinfoset"/>
+        <exclude org="org.jasig.cas.client" module="org.jasig.cas.client"/>
+        <exclude org="commons-beanutils"/>
+        <exclude org="commons-codec"/>
+        <exclude org="commons-collections"/>
+        <exclude org="commons-digester"/>
+        <exclude org="commons-logging"/>
+        <exclude org="org.apache.cxf"/>
+        <exclude org="com.ibm.icu"/>
+        <exclude org="org.apache.openejb" module="javaee-api"/>
+        <exclude org="joda-time" module="joda-time"/>
+        <exclude org="net.sf.jopt-simple"/>
+        <exclude org="com.googlecode.juniversalchardet"/> 
+        <exclude org="ldapsdk"/>
+        <exclude org="org.quartz-scheduler"/>
+        <exclude org="org.apache.directory.shared"/>
+        <exclude org="org.slf4j" module="slf4j-jdk14"/>
+        <exclude org="org.slf4j" module="slf4j-log4j12"/>
+        
     </dependencies>
     
 </ivy-module>

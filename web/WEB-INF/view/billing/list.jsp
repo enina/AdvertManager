@@ -5,7 +5,7 @@
 
 
 <a href="${pageContext.request.contextPath}/mvc/billing/new" >Upload Specification</a>    
-<table border="1" class="affTable">
+<table class="affTable">
     
     <c:if test="${data!=null}">
         

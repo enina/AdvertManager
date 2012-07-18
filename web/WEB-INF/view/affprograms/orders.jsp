@@ -17,7 +17,7 @@
 <!--                <th> Country Name </th>
                 <th> Country Code </th>-->
                 <th></th>
-                <th> Date & Time </th>
+                <th> Date &amp; Time </th>
                 <th> Order sum </th>
                 <th> Commission </th>
                 <th> Currency </th>

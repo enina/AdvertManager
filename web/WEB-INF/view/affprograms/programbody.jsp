@@ -48,4 +48,5 @@
     
 
 
+    <script type="text/javascript" src="${pageContext.request.contextPath}/amMap/swfobject.js""></script>
 </div>

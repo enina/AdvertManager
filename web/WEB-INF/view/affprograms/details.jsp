@@ -14,12 +14,12 @@
         <table  class="affProgGroupTable">
             <thead>
                 <tr style="background-color: #999999;">
-                    <th class="affProgGroupTable-td-1">Program Name</td>
-                    <th class="affProgGroupTable-td-2">Description</td>
-                    <th class="affProgGroupTable-td-3">Link</td>
-                    <th class="affProgGroupTable-td-4">User Name</td>
-                    <th class="affProgGroupTable-td-5">Password</td>
-                    <th class="affProgGroupTable-td-6">Refresh Data</td>
+                    <th class="affProgGroupTable-td-1">Program Name</th>
+                    <th class="affProgGroupTable-td-2">Description</th>
+                    <th class="affProgGroupTable-td-3">Link</th>
+                    <th class="affProgGroupTable-td-4">User Name</th>
+                    <th class="affProgGroupTable-td-5">Password</th>
+                    <th class="affProgGroupTable-td-6">Refresh Data</th>
 
                 </tr>
             </thead>                
