@@ -9,12 +9,14 @@ import com.mne.advertmanager.model.AccessLog;
 import com.mne.advertmanager.model.AffProgram;
 import com.mne.advertmanager.model.PurchaseOrder;
 import com.mne.advertmanager.util.AccessStats;
+import com.mne.advertmanager.util.BatchingSaverService;
 import com.mne.advertmanager.util.GeoData;
 import com.mne.advertmanager.util.Page;
 import com.mne.advertmanager.util.PageCtrl;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,7 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
  *
  * @author Nina Eidelshtein and Misha Lebedev
  */
-public class AccessLogService {
+public class AccessLogService implements BatchingSaverService<AccessLog>{
  
     private static org.slf4j.Logger logger = LoggerFactory.getLogger(AccessLogService.class);
     
@@ -136,10 +138,13 @@ public class AccessLogService {
         return result;
     }
 //=============================== saveACLSet ===================================
+    @Override
     @Transactional(propagation= Propagation.REQUIRES_NEW)
-    public void saveACLSet(Collection<AccessLog> aclSet) {
-        accessLogDao.saveDataSet(aclSet);
-    }        
+    public void saveBatch(Set<AccessLog> batch) {
+        accessLogDao.saveDataSet(batch);
+    }
+    
+    
     
     private long ip2long(String addr) {
 

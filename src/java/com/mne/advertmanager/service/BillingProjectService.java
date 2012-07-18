@@ -15,6 +15,10 @@ import com.mne.advertmanager.parsergen.model.SelectableItem;
 import com.mne.advertmanager.util.BillingDataImporter;
 import com.mne.advertmanager.util.JSoupTransport;
 import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 import org.hibernate.Hibernate;
 import org.jsoup.Connection;
 import org.jsoup.nodes.Element;
@@ -34,6 +38,11 @@ public class BillingProjectService {
     private GenericDao<DataSpec, Integer> dataSpecDao;
     private GenericDao<SelectableItem, Integer> selectableItemDao;
     private Map<String, BillingDataImporter> importers = null;
+    private ExecutorService executor = null;
+    
+    private int numThread = 5;
+
+
 
     /**
      * empty C-tor
@@ -66,6 +75,10 @@ public class BillingProjectService {
     public void setImporters(Map<String, BillingDataImporter> importers) {
         this.importers = importers;
     }
+    public void setNumThread(int numThread) {
+        this.numThread = numThread;
+        executor = Executors.newFixedThreadPool(this.numThread);
+    }        
 //============================== findAllBillingProjects ======================== 
 
     /**
@@ -108,48 +121,14 @@ public class BillingProjectService {
     /**
      */
     public void importBillingData(AffProgram program) {
-
-        //log action
         logger.info("Looking up project data by backoffice link  {}  ", program.getAffProgramLink());
         Project project = findProjectByAffProgram(program);
         if (project == null) {
             logger.error("Failed to find project for backoffice link  {}", program.getAffProgramLink());
         } else {
-            logger.info("Started {} project data import. ", project.getName());
-            //project baseUrl = programBackOfficeUrl - projectLoginUrl:
-            String programBackOfficeUrl = program.getAffProgramLink();
-            String projectLoginUrl = project.getLoginFormUrl();
-
-            //inject to project: baseUrl of back office with userName and Password
-            project.setBaseURL(programBackOfficeUrl.replace(projectLoginUrl, ""));
-            project.setUsername(program.getUserName());
-            project.setPassword(program.getPassword());
-
-            // project
-
-            //get Progects Data spec
-            List<DataSpec> dsList = project.getDataSpecList();
-
-            //make sure we process partners first
-            DataSpec partnerDataSpec = project.getDataSpec("Partner");
-            if (partnerDataSpec != null) {
-                dsList.remove(partnerDataSpec);
-                dsList.add(0, partnerDataSpec);
-            }
-
-            //connect to src web site
-            Connection con = JSoupTransport.login(project);
-            if (con == null) {
-                logger.error("Failed to obtain connection for url:{}", project.getBaseURL() + project.getHomePage());
-            } else {
-                //get data of each dataSpec ( include all pages ) of given Project
-                for (DataSpec ds : dsList) {
-                    processDataSpec(ds, project, con, program);
-                }
-            }
-
-            JSoupTransport.logout(con, project);
-            logger.info("Finished {} project data import ", project.getName());
+            prepareProject(program, project);
+            List<DataSpec> dsList = prepareDataSpecList(project);
+            importProjectData(project, dsList, program);
         }
     }
 
@@ -174,46 +153,22 @@ public class BillingProjectService {
         return project;
     }
 
-    private void processDataSpec(DataSpec ds, Project project, Connection con, AffProgram program) {
-        int i = 1;
-        boolean hasPaging = ds.getNumPages() > 1;
+    private List<Future> processDataSpec(DataSpec ds, Project project, Connection con, AffProgram program) {
 
-        //get data from all pages of current dataSpec 
-        //if thare pages than we neet to add page var and val to end of url
-        //else thare no pages -> don't add page val to url
-        do {
-            if (i > ds.getNumPages()) {
-                break;
-            }
-
-            String url = project.getBaseURL() + ds.getDataURL();
-
-
-            //append page var and val to url(if thare is paging)
-            if (hasPaging) {
-                //calculate url with pageing:
-                if (url.indexOf('?') > 0) {
-                    url += "&";
-                } else {
-                    url += "?";
-                }
-
-                url += ds.getPageParam() + "=" + i;
-            }
-            //get document with wanted data
-            org.jsoup.nodes.Document doc = JSoupTransport.retrieveDocument(con, url, ds.getMethod());
-            try {
-                //extract data from current document to DB
-                logger.info("ProcessDataSpec:::Start Page={}:Program={}:DataImport:Spec={}",new Object[]{i,program.getName(),ds.getName()});
-                importPageData(program, doc, ds);
-            } catch (Exception ex) {
-                logger.error("ProcessDataSpec:::Program={}:DataImport:Spec={}:Page={} ,Exception={}",new Object[]{program.getName(),ds.getName(),i,ex.toString()});
-            }finally {
-                logger.info("ProcessDataSpec:::Finish Page={}:Program={}:DataImport:Spec={}",new Object[]{i,program.getName(),ds.getName()});
-            }
-
-            i++;
-        } while (true);
+        int blockSize = ds.getNumPages() / numThread + 1;
+        int firstPage = 0;
+        int lastPage = 0;
+        int nTask = Math.min(blockSize, numThread);
+        String url = buildDataSpecURL(project, ds);
+        List<Future> result = new ArrayList<Future>();
+        
+        for (int j = 0; j < nTask;++j) {
+            firstPage= j*blockSize+1;
+            lastPage = Math.min( (j+1)*blockSize,ds.getNumPages() );
+            PageDownloadTask pdTask = new PageDownloadTask(program, ds, con, url,firstPage ,lastPage);
+            result.add(executor.submit(pdTask));
+        }
+        return result;
     }
 
     /**
@@ -307,4 +262,127 @@ public class BillingProjectService {
 
         return result;
     }
+
+    private void prepareProject(AffProgram program, Project project) {
+        //project baseUrl = programBackOfficeUrl - projectLoginUrl:
+        String programBackOfficeUrl = program.getAffProgramLink();
+        String projectLoginUrl = project.getLoginFormUrl();
+
+        //inject to project: baseUrl of back office with userName and Password
+        project.setBaseURL(programBackOfficeUrl.replace(projectLoginUrl, ""));
+        project.setUsername(program.getUserName());
+        project.setPassword(program.getPassword());
+    }
+
+    private List<DataSpec> prepareDataSpecList(Project project) {
+        // project
+        //get Progects Data spec
+        List<DataSpec> dsList = project.getDataSpecList();
+        //make sure we process partners first
+        DataSpec partnerDataSpec = project.getDataSpec("Partner");
+        if (partnerDataSpec != null) {
+            dsList.remove(partnerDataSpec);
+            dsList.add(0, partnerDataSpec);
+        }
+        return dsList;
+    }
+
+    private List<Future> processDataSpecList(List<DataSpec> dsList, Project project, Connection con, AffProgram program) {
+        //get data of each dataSpec ( include all pages ) of given Project
+        List<Future> futures = new ArrayList<Future>();
+        for (DataSpec ds : dsList) {
+            List<Future> specFutures =  processDataSpec(ds, project, con, program);
+            futures.addAll(specFutures);
+        }
+        return futures;
+    }
+
+    private void awaitProcessingCompletion(Project project, List<Future> futures) {
+        try {
+            logger.debug("{} awaiting termination of {} tasks ", project.getName(),futures.size());
+            Iterator<Future> futureIter = futures.iterator();
+            while (futureIter.hasNext()) {
+                Future future = futureIter.next();
+                future.get();
+                futureIter.remove();
+            }
+            logger.debug("{} all task terminated ", project.getName());
+        }catch(Exception e) {
+            logger.error("{} download was interrupted {} ", project.getName(),e.toString());
+        }
+    }
+
+    private void finalizeImportProcessing(List<DataSpec> dsList) {
+        for (DataSpec ds : dsList) {
+            BillingDataImporter<Object> importer = importers.get(ds.getName());
+            importer.finalizeImport();
+        }
+    }
+
+    private void importProjectData(Project project, List<DataSpec> dsList, AffProgram program) {
+        //connect to src web site
+        logger.info("{} started import ", project.getName());
+        Connection con = JSoupTransport.login(project);
+        if (con == null) {
+            logger.error("Failed to obtain connection for url:{}", project.getBaseURL() + project.getHomePage());
+        } else {
+            List<Future> futures = processDataSpecList(dsList, project, con, program);
+            awaitProcessingCompletion(project, futures);
+            finalizeImportProcessing(dsList);
+        }
+        JSoupTransport.logout(con, project);
+        logger.info("{} finished  import ", project.getName());
+    }
+
+    private String buildDataSpecURL(Project project, DataSpec ds) {
+        String url = project.getBaseURL() + ds.getDataURL();
+        //calculate url with paging:
+        if (url.indexOf('?') > 0) {
+            url += "&";
+        } else {
+            url += "?";
+        }
+        return url;
+    }
+    
+    private class PageDownloadTask implements Runnable {
+
+        private int firstPage = 0;
+        private int lastPage = 0;
+        private Connection con;
+        private String dataSpecUrl="";
+        private DataSpec ds=null;
+        private AffProgram program = null;
+        
+        public PageDownloadTask(AffProgram p,DataSpec ds,Connection con,String url, int firstPage,int lastPage) {
+            program = p;
+            this.ds = ds;
+            this.con = con;
+            this.firstPage = firstPage;
+            this.lastPage = lastPage;
+            this.dataSpecUrl = url;
+        }
+        
+        @Override
+        public void run() {
+            String curPageUrl="";
+            for (int i = firstPage;i <= lastPage;++i) {
+            //get document with wanted data
+                curPageUrl = dataSpecUrl+ds.getPageParam() + "=" + i;
+                org.jsoup.nodes.Document doc = JSoupTransport.retrieveDocument(con, curPageUrl, ds.getMethod());
+                try {
+                    //extract data from current document to DB
+                    logger.info("ProcessDataSpec:::Start Page={}:Program={}:DataImport:Spec={}",new Object[]{i,program.getName(),ds.getName()});
+                    importPageData(program, doc, ds);
+                } catch (Exception ex) {
+                    logger.error("ProcessDataSpec:::Program={}:DataImport:Spec={}:Page={} ,Exception={}",new Object[]{program.getName(),ds.getName(),i,ex.toString()});
+                }finally {
+                    logger.info("ProcessDataSpec:::Finish Page={}:Program={}:DataImport:Spec={}",new Object[]{i,program.getName(),ds.getName()});
+                }
+            }
+
+            
+        }
+        
+    }    
 }

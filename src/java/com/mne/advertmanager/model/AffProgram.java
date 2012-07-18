@@ -51,7 +51,7 @@ public class AffProgram implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "affProgram")
     private Set<PurchaseOrder> purchaseOrderCollection;
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
     private Integer id;
     @NotNull                        //hold affProgram name as defined by 

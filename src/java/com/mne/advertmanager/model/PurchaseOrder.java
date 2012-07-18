@@ -45,7 +45,7 @@ public class PurchaseOrder implements Serializable {
 
 	public static final String PO_STAT_QUERY = 
                         "select  " +
-                            "poId, aclcount ,access_log.id as aclId " +
+                            "poId as \"poid\", aclcount as \"aclcount\" ,access_log.id as \"aclid\" " +
                         "from   " +
                             "access_log " +
                         "inner join ( " +
@@ -68,13 +68,20 @@ public class PurchaseOrder implements Serializable {
                 "select DATE_FORMAT(ordertime,'%Y-%m-%d') as purchaseday ,count(*) as poamount from  purchase_order " +
                 "where  affprogram_id=? group by purchaseday order by purchaseday";
         
-	public static final String PO_AMOUNT_BY_DATE_PGSQL_QUERY = "select TO_CHAR(ordertime,'YYYY-MM-DD') as purchaseday ,count(*) as poamount from  purchase_order "
-			+ "where  affprogram_id=? group by purchaseday order by purchaseday";
+	public static final String PO_AMOUNT_BY_DATE_PGSQL_QUERY = 
+                "select TO_CHAR(ordertime,'YYYY-MM-DD') as \"purchaseday\" ,count(*) as \"poamount\" from  purchase_order "
+			+ "where  affprogram_id=? group by ordertime order by ordertime";
+
+        public static final String PO_AMOUNT_BY_DATE_MSSQL_QUERY = 
+                "select CONVERT(varchar(16),ordertime,102) as \"purchaseday\" ,count(*) as \"poamount\" from  purchase_order "
+			+ "where  affprogram_id=? group by ordertime order by ordertime";        
+        
+
         
         public static final String PO_AMOUNT_BY_DATE_QUERY = PO_AMOUNT_BY_DATE_MYSQL_QUERY;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Basic(optional = false)
 	@Column(name = "id")
 	private Integer id;

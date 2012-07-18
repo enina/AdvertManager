@@ -33,7 +33,7 @@ public class POStats {
         return aclCount;
     }
 
-    public void setAclcount(BigInteger aclCount) {
+    public void setAclcount(Number aclCount) {
         this.aclCount = aclCount.intValue();
     }
 
@@ -41,23 +41,23 @@ public class POStats {
         return aclId;
     }
 
-    public void setAclid(int aclId) {
-        this.aclId = aclId;
+    public void setAclid(Number aclId) {
+        this.aclId = aclId.intValue();
     }
 
     public int getPoId() {
         return poId;
     }
 
-    public void setPoid(int poId) {
-        this.poId = poId;
+    public void setPoid(Number poId) {
+        this.poId = poId.intValue();
     }
 
     public long getPoAmount() {
         return poAmount;
     }
 
-    public void setPoamount(BigInteger poAmount) {
+    public void setPoamount(Number poAmount) {
         this.poAmount = poAmount.longValue();
     }
 

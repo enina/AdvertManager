@@ -28,12 +28,18 @@ public class PartnerService {
     }
 
     @Transactional
-    public Integer creatPartner(Partner partner) {
+    public Integer createPartner(Partner partner) {
         return partnerDao.create(partner);
     }
-
+    
+    @Transactional(readOnly = true)
     public Partner findPartnerByName(String itemValue) {
         return partnerDao.findSingleItemByQuery("Partner.findByName",itemValue);
     }
+    
+    @Transactional(readOnly = true)    
+    public Partner findPartnerByEmail(String email) {
+        return partnerDao.findSingleItemByQuery("Partner.findByEmail",email);
+    }    
     
 }

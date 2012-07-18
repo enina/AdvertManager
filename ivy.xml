@@ -29,7 +29,7 @@
         <dependency org="org.hibernate" name="hibernate-core" rev="4.0.1.Final"/>
 
        	
-       	<dependency org="org.hibernate.common" name="hibernate-commons-annotations" rev="4.0.1.Final"/>
+        <dependency org="org.hibernate.common" name="hibernate-commons-annotations" rev="4.0.1.Final"/>
        	 	            
         <dependency org="org.hibernate" name="hibernate-ehcache" rev="4.0.1.Final"/>        
         <dependency org="org.hibernate" name="hibernate-entitymanager" rev="4.0.1.Final"/>            
@@ -77,6 +77,7 @@
         <dependency org="commons-collections" name="commons-collections" rev="3.2.1"/>
         <dependency org="mysql" name="mysql-connector-java" rev="5.1.18"/>
         <dependency org="postgresql" name="postgresql" rev="9.1-901.jdbc4"/>
+        <dependency org="net.sourceforge.jtds" name="jtds" rev="1.2.4"/>
         <dependency org="com.google.code.gson" name="gson" rev="2.1"/>
         <dependency org="commons-io" name="commons-io" rev="2.2"/>
         <dependency org="org.aspectj" name="aspectjtools" rev="1.6.10"/>
@@ -164,29 +165,29 @@
         <exclude org="javax.xml.ws"      module="jaxws-api"/>
         <exclude org="javax.xml"         module="jaxrpc-api"/>
         <exclude org="javax.persistence" module="persistence-api"/>
-		<exclude org="commons-logging"/>
-		<exclude org="commons-codec"/>
-		<exclude org="commons-lang"/>
-		<exclude org="org.aspectj" module="aspectjtools"/>
-		<exclude org="org.jasig.cas.client" 	module="cas-client-core"/>	
-		<exclude org="com.sun.xml.fastinfoset"	module="FastInfoset"/>
-		<exclude org="junit"/>
-		<exclude org="ldapsdk"/>
-		<exclude org="javax.xml.soap"/>
-		<exclude org="org.slf4j" module="slf4j-jdk14"/>
-		<exclude org="org.springframework" module="spring-oxm"/>
-		<exclude org="wsdl4j" />
-		<exclude org="xalan" />
-		<exclude org="xerces"/>
-		<exclude org="xml-resolver"/>
-		<exclude org="xom"/>
-		<exclude org="asm" module="asm-commons"/>
-		<exclude org="asm" module="asm-tree"/>
-		<exclude org="asm" module="asm-util"/>
-		<exclude org="net.sf.ehcache" 	module="ehcache" />
+        <exclude org="commons-logging"/>
+        <exclude org="commons-codec"/>
+        <exclude org="commons-lang"/>
+        <exclude org="org.aspectj" module="aspectjtools"/>
+        <exclude org="org.jasig.cas.client" 	module="cas-client-core"/>	
+        <exclude org="com.sun.xml.fastinfoset"	module="FastInfoset"/>
+        <exclude org="junit"/>
+        <exclude org="ldapsdk"/>
+        <exclude org="javax.xml.soap"/>
+        <exclude org="org.slf4j" module="slf4j-jdk14"/>
+        <exclude org="org.springframework" module="spring-oxm"/>
+        <exclude org="wsdl4j" />
+        <exclude org="xalan" />
+        <exclude org="xerces"/>
+        <exclude org="xml-resolver"/>
+        <exclude org="xom"/>
+        <exclude org="asm" module="asm-commons"/>
+        <exclude org="asm" module="asm-tree"/>
+        <exclude org="asm" module="asm-util"/>
+        <exclude org="net.sf.ehcache" 	module="ehcache" />
         <exclude org="org.hibernate" 	module="hibernate-commons-annotations"/>
-     	<exclude org="org.hibernate" 	module="hibernate-annotations"/>
-		<exclude org="org.hibernate"	module="ejb3-persistence"/>        	
+        <exclude org="org.hibernate" 	module="hibernate-annotations"/>
+        <exclude org="org.hibernate"	module="ejb3-persistence"/>        	
         
     </dependencies>
     

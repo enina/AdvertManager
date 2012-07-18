@@ -37,9 +37,13 @@ import javax.xml.bind.annotation.XmlRootElement;
 
  public class AccessLog implements Serializable {
     //native sql query . due to Hibernate limitations cannot be defined as named query
-    public static final String ACCESSLOG_FINDGEODATABYIP_QUERY = 
-            "SELECT DISTINCT cc as countrycode,cn as countryname FROM geoip.ip " +
-            " natural join geoip.cc where ? BETWEEN startx and endx";
+    public static final String ACCESSLOG_FINDGEODATABYIP_MSSQL_QUERY = 
+            "SELECT DISTINCT cc as \"countrycode\",cn as \"countryname\" FROM geoip.dbo.ip ip " +
+            " inner join  geoip.dbo.cc cc on ip.ci=cc.ci where ? BETWEEN startx and endx";
+    
+    public static final String ACCESSLOG_FINDGEODATABYIP_GENERIC_QUERY = 
+            "SELECT DISTINCT cc as \"countrycode\",cn as \"countryname\" FROM geoip.ip ip " +
+            " inner join  geoip.cc cc on ip.ci=cc.ci where ? BETWEEN startx and endx";    
     
     public static final String ACCESSLOG_STATS_MYSQL_QUERY = 
             "select DATE_FORMAT(access_time,'%Y-%m-%d') as accessday , count(*) as accessamount " +
@@ -47,16 +51,22 @@ import javax.xml.bind.annotation.XmlRootElement;
     
 
     public static final String ACCESSLOG_STATS_PGSQL_QUERY = 
-            "select TO_CHAR(access_time,'YYYY-MM-DD') as accessDay , count(*) as accessAmount " +
-            "from  access_log where affprogram_id=? group by accessDay order by accessDay ";    
+            "select TO_CHAR(access_time,'YYYY-MM-DD') as \"accessday\" , count(*) as \"accessamount\" " +
+            "from  access_log where affprogram_id=? group by access_time order by access_time ";    
+    
+
+    public static final String ACCESSLOG_STATS_MSSQL_QUERY = 
+            "select CONVERT(varchar(16),access_time,102) as \"accessday\" , count(*) as \"accessamount\" " +
+            "from  access_log where affprogram_id=? group by access_time order by access_time ";    
     
     
     public static final String ACCESSLOG_STATS_QUERY = ACCESSLOG_STATS_MYSQL_QUERY;
+    public static final String ACCESSLOG_FINDGEODATABYIP_QUERY = ACCESSLOG_FINDGEODATABYIP_GENERIC_QUERY;
 
     private static final long serialVersionUID = 1L;
     private static DateFormat df = new SimpleDateFormat("dd.MM.yyyy HH:mm");
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;

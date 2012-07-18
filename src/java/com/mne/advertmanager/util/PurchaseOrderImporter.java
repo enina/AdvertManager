@@ -28,6 +28,24 @@ public class PurchaseOrderImporter implements BillingDataImporter<PurchaseOrder>
     private PurchaseOrderService poService;
     private PartnerService  partnerService;
     private AccessLogService aclService;
+    private BatchDBSaver<PurchaseOrder>     batchSaver = null;    
+    
+    private int numThread = 5;
+    private int batchSize = 50;
+    
+    public void setNumThread(int numThread) {
+        this.numThread = numThread;
+    }    
+    
+    public void setBatchSize(int batchSize) {
+        this.batchSize = batchSize;
+    }    
+    
+    public void onInit() {
+        batchSaver = new BatchDBSaver<PurchaseOrder>(numThread,batchSize,poService);
+    }
+    
+    
     
     @Override
     public PurchaseOrder importDataItemProperty(PurchaseOrder po, String itemName, String itemValue) {
@@ -53,10 +71,20 @@ public class PurchaseOrderImporter implements BillingDataImporter<PurchaseOrder>
         }else if (("Partner").equals(itemName)) {
             po.setPartner(processPartner(itemValue));
         }
-        
-        
         return po;
     }
+    
+    @Override
+    public void saveDataItem(AffProgram program, PurchaseOrder po) {
+        po.setAffProgram(program);
+        batchSaver.add(po);
+        //poService.createPurchaseOrder(po);
+    }
+    
+    @Override
+    public void finalizeImport() {
+        batchSaver.finish();
+    }     
 
     private void processIPAddress(PurchaseOrder po, String ipAddress) {
         po.setIPAddress(ipAddress);
@@ -67,13 +95,7 @@ public class PurchaseOrderImporter implements BillingDataImporter<PurchaseOrder>
         }        
     }
     
-    @Override
-    public void saveDataItem(AffProgram program, PurchaseOrder po) {
-        
-        po.setAffProgram(program);
-        
-        poService.createPurchaseOrder(po);
-    }
+   
 
     public void setPoService(PurchaseOrderService poService) {
         this.poService = poService;

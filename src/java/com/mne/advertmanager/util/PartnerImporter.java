@@ -5,17 +5,16 @@
 package com.mne.advertmanager.util;
 
 import com.mne.advertmanager.model.*;
+import com.mne.advertmanager.service.PartnerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.mne.advertmanager.service.PartnerService;
 /**
  *
  * @author Misha
  */
 public class PartnerImporter  implements BillingDataImporter <Partner>{
     
-    private static final Logger logger = LoggerFactory.getLogger(BillingDataImporter.class);
+    private static final Logger logger = LoggerFactory.getLogger(PartnerImporter.class);
     
     private PartnerService  partnerService;
 
@@ -32,14 +31,16 @@ public class PartnerImporter  implements BillingDataImporter <Partner>{
  
 
 //=========================== importDataItemProperty ===========================
- //this function fill target(Partner obj) with given data(itemName:itemValue)
+//this function fill target(Partner obj) with given data(itemName:itemValue)
     @Override
     public Partner importDataItemProperty(Partner partner,String itemName,String itemValue) {
         
-        if (("Name").equals(itemName))
+        if (("Name").equals(itemName)) {
             partner.setName(itemValue);
-        else if (("Email").equals(itemName))
+        }
+        else if (("Email").equals(itemName)) {
             partner.setEmail(itemValue);
+        }
 
         return partner;
     }
@@ -49,10 +50,18 @@ public class PartnerImporter  implements BillingDataImporter <Partner>{
     @Override
     public void saveDataItem(AffProgram program,Partner partner) {
                 
-        program.getPartners().add(partner);
-        //persist partner to db
-        partnerService.creatPartner(partner);
-
+        if (partnerService.findPartnerByEmail(partner.getEmail())==null) {
+            program.getPartners().add(partner);
+            //persist partner to db
+            partnerService.createPartner(partner);
+        }else {
+            logger.info("Partner {} already exists in db",partner.getEmail());
+        }
+    }
+    
+    @Override
+    public void finalizeImport() {
+        logger.info("Done importing partner data");
     }
     
 

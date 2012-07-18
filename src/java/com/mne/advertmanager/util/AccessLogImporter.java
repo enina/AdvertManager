@@ -15,6 +15,7 @@ import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import org.slf4j.Logger;
@@ -30,6 +31,11 @@ public class AccessLogImporter implements BillingDataImporter<AccessLog> {
     private static final Logger logger = LoggerFactory.getLogger(BillingDataImporter.class);
     private AccessLogService accessLogService;
     private AccessSourceService accessSourceService;
+    private BatchDBSaver<AccessLog>     batchSaver = null;
+    
+    private int numThread = 5;
+    private int maxAclSize = 50;
+    
     
     private DateFormat df = null;
 
@@ -39,6 +45,14 @@ public class AccessLogImporter implements BillingDataImporter<AccessLog> {
     public AccessLogImporter() {
         df = new SimpleDateFormat("dd.MM.yyyy HH:mm");
     }
+    
+    public void setNumThread(int numThread) {
+        this.numThread = numThread;
+    }    
+    
+    public void setMaxAclSize(int maxAclSize) {
+        this.maxAclSize = maxAclSize;
+    }    
 
     //seter used by Spring context injection
     public void setAccessLogService(AccessLogService accessLogService) {
@@ -47,6 +61,10 @@ public class AccessLogImporter implements BillingDataImporter<AccessLog> {
     //seter used by Spring context injection
     public void setAccessSourceService(AccessSourceService accessSourceService) {
         this.accessSourceService = accessSourceService;
+    }
+    
+    public void onInit() {
+        batchSaver = new BatchDBSaver<AccessLog>(numThread,maxAclSize,accessLogService);
     }
 
 //======================== importDataItemProperty ==============================
@@ -66,8 +84,24 @@ public class AccessLogImporter implements BillingDataImporter<AccessLog> {
 
         return access;
     }
-//================================== processReferer ============================
+    
+    //========================= saveDataItem =======================================
 
+    @Override
+    public void saveDataItem(AffProgram program, AccessLog access) {
+        
+        access.setAffProgram(program);
+        batchSaver.add(access);
+        //accessLogService.createAccessLog(access);
+    }    
+
+    @Override
+    public void finalizeImport() {
+        batchSaver.finish();
+    }
+    
+    
+    //================================== processReferer ============================
     private String decodeQuery(URL url) {
         //try to convert given access data (link string) to something readable,
         //by guessing proper encoding of link's URL
@@ -126,7 +160,6 @@ public class AccessLogImporter implements BillingDataImporter<AccessLog> {
         AccessSource result = null;
         String host = url.getHost();
 
-        logger.debug("Looking up accessSource by host {}", host);
         result = accessSourceService.findByDomain(url.getHost());
 
         //if this access source dosen't exist in DB, then create one. 
@@ -146,14 +179,7 @@ public class AccessLogImporter implements BillingDataImporter<AccessLog> {
         }
         return result;
     }
-//========================= saveDataItem =======================================
 
-    @Override
-    public void saveDataItem(AffProgram program, AccessLog access) {
-        
-        access.setAffProgram(program);
-        accessLogService.createAccessLog(access);
-    }
 //============================== processDate ===================================
 
     private Date processDate(String value) {
@@ -175,5 +201,6 @@ public class AccessLogImporter implements BillingDataImporter<AccessLog> {
             access.setCountryCode(geoData.getCountryCode());
         }
     }
+    
     
 }

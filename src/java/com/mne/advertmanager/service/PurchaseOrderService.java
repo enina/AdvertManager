@@ -8,18 +8,22 @@ import com.mne.advertmanager.dao.GenericDao;
 import com.mne.advertmanager.model.AccessLog;
 import com.mne.advertmanager.model.AffProgram;
 import com.mne.advertmanager.model.PurchaseOrder;
+import com.mne.advertmanager.util.BatchingSaverService;
 import com.mne.advertmanager.util.POStats;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 import org.slf4j.LoggerFactory;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
  *
  * @author ilyae
  */
-public class PurchaseOrderService {
+public class PurchaseOrderService implements BatchingSaverService<PurchaseOrder> {
  
 
     private static org.slf4j.Logger logger = LoggerFactory.getLogger(PurchaseOrderService.class);
@@ -53,7 +57,7 @@ public class PurchaseOrderService {
         return poDao.findByQuery("PurchaseOrder.findByAffProgramId",affProgramId);
     }
     
-    @Transactional
+    @Transactional(readOnly = true)
     public void calculatePOStats(int progId) {
         
         Collection<POStats> stats = poDao.findByQueryString(PurchaseOrder.PO_STAT_QUERY, new POStats(),progId);
@@ -72,8 +76,8 @@ public class PurchaseOrderService {
 
         }
         
-        Collection<PurchaseOrder> poList = poDao.findByQuery("PurchaseOrder.findByIdList","poIdList", poStatMap.keySet());
-        Collection<AccessLog> aclList = aclService.findAccessByIDList(new ArrayList<Integer>(aclMap.keySet()));
+        Set<PurchaseOrder> poList = new HashSet<PurchaseOrder>(poDao.findByQuery("PurchaseOrder.findByIdList","poIdList", poStatMap.keySet()));
+        HashSet<AccessLog> aclList = new HashSet<AccessLog>(aclService.findAccessByIDList(new ArrayList<Integer>(aclMap.keySet())));
         
         POStats pos = null;
         if (poList == null || aclList == null) {
@@ -94,8 +98,11 @@ public class PurchaseOrderService {
             acl.setPo(poMap.get(pos.getPoId()));
         }        
         
+        //saveBatch(poList);
+        logger.debug("Saving po batch.Size={}",poList.size());
         poDao.saveDataSet(poList);
-        aclService.saveACLSet(aclList);
+        logger.debug("Saving acl batch.Size={}",aclList.size());
+        aclService.saveBatch(aclList);
     }    
     
     @Transactional (readOnly = true)
@@ -106,5 +113,10 @@ public class PurchaseOrderService {
         return result;
     }
     
+    @Override
+    @Transactional(propagation= Propagation.REQUIRES_NEW)
+    public void saveBatch(Set<PurchaseOrder> batch) {
+        poDao.saveDataSet(batch);
+    }    
 
 }

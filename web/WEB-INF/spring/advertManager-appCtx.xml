@@ -261,6 +261,7 @@
                 <entry key="PurchaseOrder"  value-ref="purchaseOrderImporter"/>
             </map>
         </property>
+        <property name="numThread"          value="5"/>
     </bean>
     
     <bean id="behaviorStatService"              class="com.mne.advertmanager.service.BehaviorStatisticsService">
@@ -277,15 +278,20 @@
     
     <!-- Utility Bean , Used by dataGenService to create objects -->
     <bean id="adManEntityFactory" class="com.mne.advertmanager.util.EntityFactory"/>
-    <bean id="accessLogImporter" class="com.mne.advertmanager.util.AccessLogImporter">
+
+    <bean id="accessLogImporter" class="com.mne.advertmanager.util.AccessLogImporter" init-method="onInit">
         <property name="accessLogService"       ref="accessLogService"/>        
-        <property name="accessSourceService"    ref="accessSourceService"/>                
+        <property name="accessSourceService"    ref="accessSourceService"/>
+        <property name="numThread"              value="5"/>
+        <property name="maxAclSize"             value="50"/>
     </bean>
     
-    <bean id="purchaseOrderImporter" class="com.mne.advertmanager.util.PurchaseOrderImporter">
+    <bean id="purchaseOrderImporter" class="com.mne.advertmanager.util.PurchaseOrderImporter" init-method="onInit">
         <property name="aclService"         ref="accessLogService"/>        
         <property name="partnerService"     ref="partnerService"/>                
         <property name="poService"          ref="poService"/>        
+        <property name="numThread"          value="1"/>
+        <property name="batchSize"         value="50"/>
     </bean>
     
     

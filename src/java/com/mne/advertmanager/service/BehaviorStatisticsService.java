@@ -349,6 +349,5 @@ public class BehaviorStatisticsService {
                 searchQueryStatService.calculateQueryStats(prog);
             }
         }
-        
     }
 }

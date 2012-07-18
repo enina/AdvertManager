@@ -21,7 +21,7 @@ SET IMPORT_OPTS=%IMPORT_OPTS% --lines-terminated-by="\n"
 SET IMPORT_OPTS=%IMPORT_OPTS% %DB_NAME% %GEOIP.CSV% 
 
 %MYSQL.HOME%\bin\mysql.exe 			%SCRIPT_OPTS% mysql < ..\db\geoipSchema.sql
-%MYSQL.HOME%\bin\mysqlimport.exe 	%IMPORT_OPTS%
+%MYSQL.HOME%\bin\mysqlimport.exe                %IMPORT_OPTS%
 %MYSQL.HOME%\bin\mysql.exe 			%SCRIPT_OPTS% geoip < ..\db\loadGeoIP.sql
 popd
 

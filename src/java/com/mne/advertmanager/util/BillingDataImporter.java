@@ -14,4 +14,5 @@ public interface BillingDataImporter<T> {
     
     public T importDataItemProperty(T dataItem,String itemName,String itemValue);
     public void saveDataItem(AffProgram program,T dataItem);
+    public void finalizeImport();
 }

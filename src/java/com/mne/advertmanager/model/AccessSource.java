@@ -36,7 +36,7 @@ public class AccessSource implements Serializable {
     
     
     @Id                                                 //id: unique key
-    @GeneratedValue(strategy = GenerationType.IDENTITY) //in DB.
+    @GeneratedValue(strategy = GenerationType.AUTO) //in DB.
     @Basic(optional = false)                            //
     @Column(name = "id")                                //
     private Integer id;                                 //

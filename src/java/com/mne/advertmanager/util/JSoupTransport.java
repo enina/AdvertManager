@@ -59,17 +59,19 @@ public class JSoupTransport {
             result.followRedirects(false);
             String firstCookie = result.response().cookie(proj.getCookieName());
 
-            logger.log(Level.FINE,"Login:::Submit Login ::: Form:{0},user:{1},password:{2}",new Object[]{loginUrl,proj.getUsername(), proj.getPassword()});
+            logger.log(Level.FINE,"Login:::Submit Login ::: Form:{0},user:{1},password:{2}",new Object[]{loginUrl,proj.getUsername(), "******"});
             doc = result.data(proj.getUserField(), proj.getUsername(), proj.getPasswordField(), proj.getPassword()).post();
             String secondCookie = result.response().cookie(proj.getCookieName());
             String sesId="";
             if (secondCookie != null) {
                 sesId=secondCookie;
             }else {
-                if (firstCookie!=null)
+                if (firstCookie!=null) {
                     sesId=firstCookie;
-                else
+                }
+                else {
                     sesId="";
+                }
             }
                  
 
@@ -77,8 +79,9 @@ public class JSoupTransport {
 
             result.request().data().clear();
             
-            if (sesId != null && sesId.length() > 0)
+            if (sesId != null && sesId.length() > 0) {
                 result.cookie(proj.getCookieName(), sesId);
+            }
 
             return result;
         } catch (Exception e) {
@@ -87,8 +90,6 @@ public class JSoupTransport {
         }
     }
 //=============================== logout =======================================
-/**
- */
     public static void logout(Connection con, Project proj) {
         try {
             if (con != null) {
@@ -98,7 +99,7 @@ public class JSoupTransport {
                 con.followRedirects(false);
                 Document result = con.get();
                 String resDoc = result.toString();
-                logger.log(Level.FINE ,"Logout:::ResultDoc:{}",resDoc);
+                logger.log(Level.FINE ,"Logout:::ResultDoc:{0}",resDoc);
             }
         } catch (Exception e) {
             logger.log(Level.SEVERE,"Failed to logout::: Exception {0}:::Message {1}" ,new Object[]{e.getClass().getSimpleName(),e.getMessage()});
